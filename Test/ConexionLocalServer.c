@@ -7,10 +7,10 @@ main() {
    MYSQL_ROW row;
 
 	/* CONFIGURACION DE SERVIDOR Y BASE DE DATOS */
-   char *server = "5.231.69.226";
-   char *user = "alex";
-   char *password = "alex"; 
-   char *database = "devPreview";
+   char *server = "1.111.11.111";
+   char *user = "usuario";
+   char *password = "pass"; 
+   char *database = "bd";
 
 
    conn = mysql_init(NULL);
