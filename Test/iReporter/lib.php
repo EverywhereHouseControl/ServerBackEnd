@@ -1,8 +1,8 @@
 <?
 
 //setup db connection
-$link = mysqli_connect("mysql.nixiweb.com","u307940852_irepo","1c28729j7");
-mysqli_select_db($link, "u307940852_ireport");
+$link = mysqli_connect("server","user","pwd");
+mysqli_select_db($link, "tabla");
 //$mysqli = new mysqli("mysql.nixiweb.com", "u307940852_irepo", "1c28729j7", "u307940852_ireport");
 //executes a given sql query with the params and returns an array as result
 function query() {
