@@ -1,8 +1,8 @@
 <?
 
 //setup db connection
-$link = mysqli_connect("localhost","alex","alex");
-mysqli_select_db($link, "devPreview");
+$link = mysqli_connect("localhost","phpconect","tcenocphp");
+mysqli_select_db($link, "ehcontrol");
 //$mysqli = new mysqli("mysql.nixiweb.com", "u307940852_irepo", "1c28729j7", "u307940852_ireport");
 //executes a given sql query with the params and returns an array as result
 function query() {
