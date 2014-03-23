@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-03-2014 a las 14:28:02
+-- Tiempo de generación: 23-03-2014 a las 15:24:08
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
   `IDHOUSE` int(11) NOT NULL DEFAULT '0',
   `ACCESSNUMBER` int(11) DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDUSER`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -38,11 +39,12 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 -- Volcado de datos para la tabla `ACCESSHOUSE`
 --
 
-INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`) VALUES
-(1, 1, 3),
-(10, 2, 1),
-(10, 6, 6),
-(12, 2, 4);
+INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES
+(1, 1, 3, '0000-00-00 00:00:00'),
+(1, 2, 3, '0000-00-00 00:00:00'),
+(10, 2, 1, '0000-00-00 00:00:00'),
+(10, 6, 0, '0000-00-00 00:00:00'),
+(12, 2, 4, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -224,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Volcado de datos para la tabla `HOUSES`
@@ -236,7 +238,8 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IPADRESS`, `GPS`, `DATE
 (3, 11, 'house', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
 (4, 11, 'home', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
 (5, 11, 'hause', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(6, 11, 'shack', '255.255.255.255', NULL, '2014-03-11 04:00:00');
+(6, 11, 'shack', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
+(8, 1, 'micasa', '', NULL, '2014-03-23 19:09:25');
 
 -- --------------------------------------------------------
 
@@ -438,8 +441,8 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `JSON`, 
 -- Filtros para la tabla `ACCESSHOUSE`
 --
 ALTER TABLE `ACCESSHOUSE`
-  ADD CONSTRAINT `ACCESSHOUSE_ibfk_2` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`),
-  ADD CONSTRAINT `ACCESSHOUSE_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`);
+  ADD CONSTRAINT `ACCESSHOUSE_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`),
+  ADD CONSTRAINT `ACCESSHOUSE_ibfk_2` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
 
 --
 -- Filtros para la tabla `ACTIONMESSAGES`
