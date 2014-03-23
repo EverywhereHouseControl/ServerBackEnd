@@ -15,10 +15,13 @@ switch ($_POST['command']) {
 		lostpass($_POST['username']); 
 	break;	
 	
+    case "createuser":
+		a($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']); 
+	break;
+	
 	case "doaction":
 		doaction($_POST['username'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
 	break;
-
 	/*
     case "downloadconfiguration":
 		a($_POST['arg1'],$_POST['arg2']); 
@@ -39,10 +42,7 @@ switch ($_POST['command']) {
     case "logout":
 		a($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-		/*
-    case "createuser":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+
 		/*
     case "deleteuser":
 		a($_POST['arg1'],$_POST['arg2']); 

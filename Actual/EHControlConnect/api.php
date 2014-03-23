@@ -23,7 +23,7 @@ function login($user, $pass) {
 	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
 		//correct pass, authorized
 		$_SESSION['IdUser'] = $SQLuser['result'][0]['IdUser'];
-		$error = 1;
+		$error = 0;
 	}
 	else{
 		//incorrect pass. hint password
@@ -40,7 +40,7 @@ function login($user, $pass) {
 						FROM ERRORS
 						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 	// return error
-	if ($error = 1) {
+	if ($error <> 0) {
 		print json_encode($message);
 		exit();
 	}
@@ -68,18 +68,35 @@ function lostpass($user){
 }
 
 //--------------------------------------------------------------------------------------
-function pulsadoMando($idUser,$idMando,$estado) {
-    $tiempo = date("Y-m-d H:i:s");
-    $result = query("UPDATE items SET status='%s' WHERE idTable='%s'",$estado,$idMando);
-    
-     if ($result == TRUE) {
-        //authorized
-        //	 $_SESSION['IdUser'] = $result['result'][0]['IdUser'];
-        print json_encode($result);
-    } else {
-        //not authorized
-        errorJson('Actualization failed');
-    }
+function createuser($user, $pass, $email, $hint){
+/* create a new user*/
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$num	 = count($SQLuser['result']);
+	
+	switch ($num){
+		case 0:		$error = 0;	break;
+		default:	$error = 6;	break;//this user already exists.
+	}
+	
+	// TEST NO ERROR AT THIS POINT
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+	
+	//INSERT NEW USER
+	$sql = query("INSERT INTO USERS
+			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT, JSON,     DATEBEGIN) 
+			VALUES (NULL,      '%s',    '%s',    '%s', '%s',   '', CURRENT_TIMESTAMP)"
+			, $user, $pass, $email, $hint);
+	//if (count($sql['error'])>0)  $error = 1;
+	print json_encode($sql);
 }
 
 //--------------------------------------------------------------------------------------
