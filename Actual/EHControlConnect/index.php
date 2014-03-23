@@ -43,171 +43,168 @@ switch ($_POST['command']) {
 		// ::> returns a message
 		break;
 	
-	case "createhose":
+	case "createhouse":
 		createuser($_POST['username'],$_POST['housename']);
 		//**create a new house with an existing user
 		// ::> returns a message | returns the result of the operation
 		break;
-		
-	case "deletehose":
-		deletehose($_POST['username'],$_POST['password'],$_POST['housename']);
+//-------------------------------------------------------------------------------------------------	
+	case "deletehouse":
+		deletehouse($_POST['username'],$_POST['password'],$_POST['housename']);
 		//**delete a existing house by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
 		
-	case "modifyhose":
-		modifyhose($_POST['username'],$_POST['password'],$_POST['housename']);
+	case "modifyhouse":
+		modifyhouse($_POST['username'],$_POST['password'],$_POST['housename']);
 		//**modify setings of an existing the house
 		// ::> returns a message | returns the result of the operation
 		break;
-	/*
+	
+	case "createroom":
+		createroom($_POST['username'],$_POST['roomname']);
+		//**create a new room with an existing user
+		// ::> returns a message | returns the result of the operation
+		break;
+	
+	case "deleteroom":
+		deleteroom($_POST['username'],$_POST['password'],$_POST['roomname']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+	
+	case "modifyroom":
+		modifyroom($_POST['username'],$_POST['password'],$_POST['roomname']);
+		//**modify setings of an existing the room
+		// ::> returns a message | returns the result of the operation
+		break;
+	
     case "downloadconfiguration":
-		a($_POST['arg1'],$_POST['arg2']); 
+		downloadconfiguration($_POST['username'], $_POST['snoopy_username']); 
+		//**download the json configuration of username by snoopy_username
+		// ::> returns a message | returns JSON
+	break;
 		
-	break;*/
-		/*
     case "downloadstadistics":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+		downloadstadistics($_POST['username']);
+		//**download the STADISTICS of username by using and more
+		// ::> returns a message | returns JSON 
+	break;
 		/*
     case "downloadhousetask":
-		a($_POST['arg1'],$_POST['arg2']); 
+		downloadhousetask($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "downloadusertask":
-		a($_POST['arg1'],$_POST['arg2']); 
+		downloadusertask($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "logout":
-		a($_POST['arg1'],$_POST['arg2']); 
+		logout($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 
 		
 
 		/*
     case "modifyuserconfiguration":
-		a($_POST['arg1'],$_POST['arg2']); 
+		modifyuserconfiguration($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "modifyhouseconfiguration":
-		a($_POST['arg1'],$_POST['arg2']); 
+		modifyhouseconfiguration($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "createtask":
-		a($_POST['arg1'],$_POST['arg2']); 
+		createtask($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "deletetask":
-		a($_POST['arg1'],$_POST['arg2']); 
+		deletetask($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "modifytask":
-		a($_POST['arg1'],$_POST['arg2']); 
+		modifytask($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "createprogramaction":
-		a($_POST['arg1'],$_POST['arg2']); 
+		createprogramaction($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "deleteprogramaction":
-		a($_POST['arg1'],$_POST['arg2']); 
+		deleteprogramaction($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "update":
-		a($_POST['arg1'],$_POST['arg2']); 
+		update($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "notify":
-		a($_POST['arg1'],$_POST['arg2']); 
+		notify($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "sendmessage":
-		a($_POST['arg1'],$_POST['arg2']); 
+		sendmessage($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "createdevice":
-		a($_POST['arg1'],$_POST['arg2']); 
+		createdevice($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "deletedevice":
-		a($_POST['arg1'],$_POST['arg2']); 
+		deletedevice($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
-    case "createhouse":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "deletehouse":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "modifyhouse":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "createroom":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "deleteroom":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "modifyroom":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+
+
 		/*
     case "createpermission":
-		a($_POST['arg1'],$_POST['arg2']); 
+		createpermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "deletepermission":
-		a($_POST['arg1'],$_POST['arg2']); 
+		deletepermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "modifypermission":
-		a($_POST['arg1'],$_POST['arg2']); 
+		modifypermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "createaccess":
-		a($_POST['arg1'],$_POST['arg2']); 
+		createaccess($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "modifyaccess":
-		a($_POST['arg1'],$_POST['arg2']); 
+		modifyaccess($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "requestaccess":
-		a($_POST['arg1'],$_POST['arg2']); 
+		requestaccess($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "requestpermission":
-		a($_POST['arg1'],$_POST['arg2']); 
+		requestpermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "generatebackup":
-		a($_POST['arg1'],$_POST['arg2']); 
+		generatebackup($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "loadbackup":
-		a($_POST['arg1'],$_POST['arg2']); 
+		loadbackup($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "redo":
-		a($_POST['arg1'],$_POST['arg2']); 
+		redo($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "undo":
-		a($_POST['arg1'],$_POST['arg2']); 
+		undo($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "listdo":
-		a($_POST['arg1'],$_POST['arg2']); 
+		listdo($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-		/*
-    case "doaction":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+//_-------------------------
 		/*
     case "a":
 		a($_POST['arg1'],$_POST['arg2']); 

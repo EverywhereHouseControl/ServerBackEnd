@@ -240,7 +240,7 @@ function doaction($user,$service,$action,$data) {
 }
 
 //--------------------------------------------------------------------------------------
-function createhose($user, $house){
+function createhouse($user, $house){
 	/* create a new user*/
 
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
