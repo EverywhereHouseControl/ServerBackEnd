@@ -10,9 +10,9 @@ function errorJson($msg){
 function login($user, $pass) {
 /* make de server conexion*/
 
-	$result = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser = $result['result'][0]['IdUser'];
-	$num	= count($result['result']);
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$num	 = count($SQLuser['result']);
 	
 	switch ($num){
 		case 0:	$error = 3;	break;
@@ -20,9 +20,9 @@ function login($user, $pass) {
 	}
 
 	//** TEST correct password **
-	if ($result['result'][0]['PASSWORD'] = $pass){
+	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
 		//correct pass, authorized
-		$_SESSION['IdUser'] = $result['result'][0]['IdUser'];
+		$_SESSION['IdUser'] = $SQLuser['result'][0]['IdUser'];
 		$error = 1;
 	}
 	else{
@@ -39,14 +39,14 @@ function login($user, $pass) {
 	$message = query(	"SELECT ENGLISH, SPANISH
 						FROM ERRORS
 						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	//select return
+	// return error
 	if ($error = 1) {
-		print json_encode($result);
-	}
-	else{
 		print json_encode($message);
 		exit();
 	}
+	
+	//successful function
+	print json_encode($SQLuser);
 }
 
 //--------------------------------------------------------------------------------------
@@ -85,91 +85,61 @@ function pulsadoMando($idUser,$idMando,$estado) {
 //--------------------------------------------------------------------------------------
 function doaction($user,$service,$action,$data) {
 /* a user send a specific action aobut a service with or without data*/
+	$error = 0;
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$num	 = count($SQLuser['result']);
+	$idaction =  query("SELECT  `FCODE` 
+					    FROM    `ACTIONS` 
+					    WHERE   `ACTIONNAME`='%s'", $action);
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
+	}
 	
-	$sqluser = query("SELECT IDUSER FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$code = query("SELECT  `FCODE` 
+				   FROM    `ACTIONS` 
+				   WHERE   `ACTIONNAME`='%s' AND 
+						   `IDSERVICE` IN 
+							(SELECT `IDSERVICE` 
+							 FROM   `SERVICES` 
+							 WHERE  `SERVICENAME` = '%s') limit 2", $action, $service);
+	$num	 = count($code['result']);
+	switch ($num){
+		case 0:	$error = 5;	break;
+		case 2:	$error = 4;	break;
+	}
 	
-	//** TEST USER EXIST **
-	if (count($sqluser['result'])<=0) {
-		//insert information about result of doaction.
-		$error = 3;
+	//return
+	if ($error <> 0) {
 		$sql = query("INSERT INTO HISTORYACCESS
-							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
-					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
-				, $sqluser['result'][0]['IdUser'], $error);
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH 
-							 FROM ERRORS 
-							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-		}
-		
-	//** TEST USER UNIQUE **
-	if (count($sqluser['result'])>1) {
-		//insert information about result of login.
-		$error = 4;
-		$sql = query("INSERT INTO HISTORYACCESS
-							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
-					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
-				, $sqluser['result'][0]['IdUser'], $error);
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH 
-							 FROM ERRORS 
-							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
+						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
+				VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
+				, $iduser, $error);
+		$message = query(	"SELECT ENGLISH, SPANISH
+						FROM ERRORS
+						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode(array('EXIT'=>$error).concat($message));
 		exit();
 	}
-		
-	$code = query("SELECT  `FCODE` 
-					 FROM    `ACTIONS` 
-					 WHERE 	 `ACTIONNAME`='%s' AND 
-							 `IDSERVICE` NOT IN 
-								(SELECT `IDSERVICE` 
-								 FROM   `SERVICES` 
-								 WHERE  `SERVICENAME` = '%s') limit 2", $action, $service);
-	//** TEST ACTION-SERVICE EXIST**
-	if (count($code['result'])<=0) {
-		//insert information about result of doaction.
-		$error = 5;
-		$sql = query("INSERT INTO HISTORYACCESS
-							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
-					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
-				, $result['result'][0]['IdUser'], $error);
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							 FROM ERRORS
-							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-		}
-		
-	//** TEST ACTION-SERVICE UNIQUE **
-	if (count($code['result'])>1) {
-		//insert information about result of login.
-		$error = 4;
-		$sql = query("INSERT INTO HISTORYACCESS
-							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
-					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
-				, $result['result'][0]['IdUser'], $error);
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH 
-							 FROM ERRORS 
-							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-		}
-		
+	
+
 	//ENVIAR ACCION AL ARDUINO 
-	//print json_encode($code);
+	//** print json_encode($code.concat(array('DATA'=>$data)));
+	
 	//ESPERAR RESPUESTA DEL ARDUINO.
-	//$arduino = ...	
+	$returncode = "0X000001";	
+	
 	//COTEJAR RESPUESTA ARDUINO
+	$sql = query("INSERT INTO HISTORYACCESS
+						(`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
+				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
+			, $idaction, $returncode, $iduser);	
 	//ENVIAR MENSAJE AL MOVIL.
+	$result = query("SELECT `EXIT`,ENGLISH`,`SPANISH` 
+					  FROM `ACTIONMESSAGES` 
+					  WHERE `IDACTION`='%s' AND `RETURNCODE` = '%s'",  $idaction, $returncode);
 	print json_encode($result);
-	/*
-		coger FCODE y concatenar con data y enviar a raspberry pi.
-		ESPERAR CODIGO DE ENVIO Y DEVOLVER CODIGO DE ENVIO
-		REGISTRAR EN LA BASE DE DATOS LA ACCION CON EL CODIGO DE RETORNO.*/
 	
 }
 
