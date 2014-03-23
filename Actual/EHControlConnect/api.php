@@ -6,35 +6,50 @@ function errorJson($msg){
 	exit();
 }
 
+//--------------------------------------------------------------------------------------
 function login($user, $pass) {
-/* REALIZA LA CONEXION CON EL SERVIDOR*/
+/* make de server conexion*/
 
 	$result = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser = $result['result'][0]['IdUser'];
+	$num	= count($result['result']);
 	
-	if (count($result['result'])<=0) {
-		errorJson('The user does not exist.');
-
-	} 
-	if (count($result['result'])>1) {
-		errorJson('Database ACTIONS integrity broken.');
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
 	}
-	//usuario incorrecto
-		//existe al menos un usuario con ese nombre
-	//**TEST correct password.**
+
+	//** TEST correct password **
 	if ($result['result'][0]['PASSWORD'] = $pass){
-	
-	//correct pass, authorized
+		//correct pass, authorized
 		$_SESSION['IdUser'] = $result['result'][0]['IdUser'];
-		print json_encode($result);//<- OJO MODIFICAR , NO SE PUEDE VOLCAR TODA INFORMACION DEL USUARIO
+		$error = 1;
 	}
 	else{
-	
-	//incorrect pass. hint password
-		print json_encode($result['result'][0]['HINT']);
+		//incorrect pass. hint password
+		$error = 2;
 	}
-
+	
+	//insert information about result of login.
+	$sql = query("INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
+				VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error);
+	// take de error message
+	$message = query(	"SELECT ENGLISH, SPANISH
+						FROM ERRORS
+						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	//select return
+	if ($error = 1) {
+		print json_encode($result);
+	}
+	else{
+		print json_encode($message);
+		exit();
+	}
 }
 
+//--------------------------------------------------------------------------------------
 function lostpass($user){
 /* envia un email al usuario que ha olvidado el password*/
 
@@ -52,7 +67,7 @@ function lostpass($user){
 	}
 }
 
-
+//--------------------------------------------------------------------------------------
 function pulsadoMando($idUser,$idMando,$estado) {
     $tiempo = date("Y-m-d H:i:s");
     $result = query("UPDATE items SET status='%s' WHERE idTable='%s'",$estado,$idMando);
@@ -67,30 +82,89 @@ function pulsadoMando($idUser,$idMando,$estado) {
     }
 }
 
+//--------------------------------------------------------------------------------------
 function doaction($user,$service,$action,$data) {
-/* manda ejecutar una accion al arduino, sobre un servicio concreto*/
-	$resultuser = query("SELECT IDUSER FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	//EXISTE EL USUARIOBUSCAMOS LA ACCION. 
-	if (count($resultuser['result'])<=0) {
-		errorJson('The user does not exist.');
-		}
-	if (count($resultuser['result'])>1) {
-		errorJson('Database USERS integrity broken.');
+/* a user send a specific action aobut a service with or without data*/
+	
+	$sqluser = query("SELECT IDUSER FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	
+	//** TEST USER EXIST **
+	if (count($sqluser['result'])<=0) {
+		//insert information about result of doaction.
+		$error = 3;
+		$sql = query("INSERT INTO HISTORYACCESS
+							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
+					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
+				, $sqluser['result'][0]['IdUser'], $error);
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH 
+							 FROM ERRORS 
+							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
 		}
 		
-	$result = query("SELECT  `FCODE` 
+	//** TEST USER UNIQUE **
+	if (count($sqluser['result'])>1) {
+		//insert information about result of login.
+		$error = 4;
+		$sql = query("INSERT INTO HISTORYACCESS
+							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
+					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
+				, $sqluser['result'][0]['IdUser'], $error);
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH 
+							 FROM ERRORS 
+							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+		
+	$code = query("SELECT  `FCODE` 
 					 FROM    `ACTIONS` 
 					 WHERE 	 `ACTIONNAME`='%s' AND 
 							 `IDSERVICE` NOT IN 
 								(SELECT `IDSERVICE` 
 								 FROM   `SERVICES` 
 								 WHERE  `SERVICENAME` = '%s') limit 2", $action, $service);
-	if (count($result['result'])<=0) {
-		errorJson('The action or service does not exist.');
+	//** TEST ACTION-SERVICE EXIST**
+	if (count($code['result'])<=0) {
+		//insert information about result of doaction.
+		$error = 5;
+		$sql = query("INSERT INTO HISTORYACCESS
+							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
+					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
+				, $result['result'][0]['IdUser'], $error);
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							 FROM ERRORS
+							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
 		}
-	if (count($result['result'])>1) {
-		errorJson('Database ACTIONS integrity broken.');
+		
+	//** TEST ACTION-SERVICE UNIQUE **
+	if (count($code['result'])>1) {
+		//insert information about result of login.
+		$error = 4;
+		$sql = query("INSERT INTO HISTORYACCESS
+							(IDHISTORY,   IDUSER,    IDHOUSE, ACCESSRESULT, DATESTAMP)
+					VALUES  (NULL, 			'%s', 		NULL, 	'%s', 	CURRENT_TIMESTAMP)"
+				, $result['result'][0]['IdUser'], $error);
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH 
+							 FROM ERRORS 
+							 WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
 		}
+		
+	//ENVIAR ACCION AL ARDUINO 
+	//print json_encode($code);
+	//ESPERAR RESPUESTA DEL ARDUINO.
+	//$arduino = ...	
+	//COTEJAR RESPUESTA ARDUINO
+	//ENVIAR MENSAJE AL MOVIL.
 	print json_encode($result);
 	/*
 		coger FCODE y concatenar con data y enviar a raspberry pi.
