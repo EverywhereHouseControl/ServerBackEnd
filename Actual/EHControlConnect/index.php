@@ -9,22 +9,43 @@ header("Content-Type: application/json");
 switch ($_POST['command']) {
 	case "login":
 		login($_POST['username'], $_POST['password']); 
+		//**grant a user access to the aplication 
+		// ::> returns a message | return JSON configuration
 	break;
 	
     case "lostpass":
 		lostpass($_POST['username']); 
+		//**send an email to the email of the username
+		// ::> returns a message | returns the result of the operation
 	break;	
 	
     case "createuser":
-		a($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']); 
+		createuser($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']); 
+		//**create a new user account
+		// ::> returns a message | returns the result of the operation
+	break;
+	
+	case "deleteuser":
+		deleteuser($_POST['username'],$_POST['password']);
+		//**delete a existing user
+		// ::> returns a message | returns the result of the operation
+	break;
+	
+	case "modifyuser":
+		modifyuser($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
+		//**modify all fields
+		// ::> returns a message | returns the result of the operation
 	break;
 	
 	case "doaction":
 		doaction($_POST['username'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
+		//**send an action to the arduino to be done
+		// ::> returns a message
 	break;
 	/*
     case "downloadconfiguration":
 		a($_POST['arg1'],$_POST['arg2']); 
+		
 	break;*/
 		/*
     case "downloadstadistics":
@@ -43,14 +64,8 @@ switch ($_POST['command']) {
 		a($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 
-		/*
-    case "deleteuser":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "modifyuser":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+		
+
 		/*
     case "modifyuserconfiguration":
 		a($_POST['arg1'],$_POST['arg2']); 

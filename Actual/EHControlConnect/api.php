@@ -80,7 +80,7 @@ function createuser($user, $pass, $email, $hint){
 		default:	$error = 6;	break;//this user already exists.
 	}
 	
-	// TEST NO ERROR AT THIS POINT
+	//** TEST NO ERROR AT THIS POINT **
 	if ($error <> 0) {
 		// take de error message
 		$message = query(	"SELECT ENGLISH, SPANISH
@@ -90,11 +90,90 @@ function createuser($user, $pass, $email, $hint){
 		exit();
 	}
 	
-	//INSERT NEW USER
+	//** INSERT NEW USER **
 	$sql = query("INSERT INTO USERS
 			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT, JSON,     DATEBEGIN) 
 			VALUES (NULL,      '%s',    '%s',    '%s', '%s',   '', CURRENT_TIMESTAMP)"
 			, $user, $pass, $email, $hint);
+	//if (count($sql['error'])>0)  $error = 1;
+	print json_encode($sql);
+}
+
+//--------------------------------------------------------------------------------------
+function deleteuser($user, $pass){
+	/* create a new user*/
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+	
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
+		$error = 0;
+	}
+	else{
+		$error = 2;//incorrect pass.
+	}
+	
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+
+	//DELETE USER
+	$sql = query("DELETE FROM USERS
+			       WHERE USERNAME='%s'"
+			, $user);
+	//if (count($sql['error'])>0)  $error = 1;
+	print json_encode($sql);
+}
+
+//--------------------------------------------------------------------------------------
+function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
+	/* create a new user*/
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
+		$error = 0;
+	}
+	else{
+		$error = 2;//incorrect pass.
+	}
+
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+
+	//UPDATE USER
+	$sql = query("UPDATE USERS 
+				SET USERNAME='%s', PASSWORD='%s', EMAIL='%s', HINT='%s'
+			    WHERE USERNAME='%s'"
+			, $n_user, $n_pass, $n_email, $n_hint, $user);
 	//if (count($sql['error'])>0)  $error = 1;
 	print json_encode($sql);
 }
