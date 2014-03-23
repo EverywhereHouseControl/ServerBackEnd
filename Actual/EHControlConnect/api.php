@@ -11,7 +11,7 @@ function login($user, $pass) {
 /* make de server conexion*/
 
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 	
 	switch ($num){
@@ -22,7 +22,7 @@ function login($user, $pass) {
 	//** TEST correct password **
 	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
 		//correct pass, authorized
-		$_SESSION['IdUser'] = $SQLuser['result'][0]['IdUser'];
+		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
 		$error = 0;
 	}
 	else{
@@ -72,7 +72,7 @@ function createuser($user, $pass, $email, $hint){
 /* create a new user*/
 
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 	
 	switch ($num){
@@ -104,7 +104,7 @@ function deleteuser($user, $pass){
 	/* create a new user*/
 
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 
 	switch ($num){
@@ -143,7 +143,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	/* create a new user*/
 
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 
 	switch ($num){
@@ -183,7 +183,7 @@ function doaction($user,$service,$action,$data) {
 /* a user send a specific action aobut a service with or without data*/
 	$error = 0;
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IdUser'];
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 	$idaction =  query("SELECT  `FCODE` 
 					    FROM    `ACTIONS` 
@@ -237,6 +237,63 @@ function doaction($user,$service,$action,$data) {
 					  WHERE `IDACTION`='%s' AND `RETURNCODE` = '%s'",  $idaction, $returncode);
 	print json_encode($result);
 	
+}
+
+//--------------------------------------------------------------------------------------
+function createhose($user, $house){
+	/* create a new user*/
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+
+	//** CREATE NEW HOUSE BY THIS USER **
+	$sql = query("INSERT INTO HOUSES
+			       (IDHOUSE, IDUSER, HOUSENAME, IPADRESS, GPS,       DATEBEGIN)
+			VALUES (NULL,      '%s',    '%s',     '',    NULL, CURRENT_TIMESTAMP)"
+			, $iduser, $house);
+	//<-- OJO : IF SQL ERROR == TRUE//if (count($sql['error'])>0)  $error = 1;
+	$SQLhouse = query("SELECT * FROM HOUSES WHERE HOUSENAME='%s' limit 2", $house);
+	$idhouse  = $SQLhouse['result'][0]['IDHOUSE'];
+	$num	  = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		case 2:		$error = 4;	break;//DATA BASE INTEGRITY BREAK
+		default:	$error = 8;	break;//this user does not exists.
+	}
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+	
+	//CREATE PERMISSION TO ACCESS
+	$sql = query("INSERT INTO ACCESSHOUSE
+			       (IDUSER, IDHOUSE, ACCESSNUMBER,       DATEBEGIN)
+			VALUES ('%s',      '%s',    1,       CURRENT_TIMESTAMP)"
+			, $iduser, $house);
+	//<-- OJO : IF SQL ERROR == TRUE//if (count($sql['error'])>0)  $error = 1;
+	print json_encode($sql);
 }
 
 ?>

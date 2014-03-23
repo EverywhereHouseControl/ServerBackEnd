@@ -11,37 +11,55 @@ switch ($_POST['command']) {
 		login($_POST['username'], $_POST['password']); 
 		//**grant a user access to the aplication 
 		// ::> returns a message | return JSON configuration
-	break;
+		break;
 	
     case "lostpass":
 		lostpass($_POST['username']); 
 		//**send an email to the email of the username
 		// ::> returns a message | returns the result of the operation
-	break;	
+		break;	
 	
     case "createuser":
 		createuser($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']); 
 		//**create a new user account
 		// ::> returns a message | returns the result of the operation
-	break;
+		break;
 	
 	case "deleteuser":
 		deleteuser($_POST['username'],$_POST['password']);
 		//**delete a existing user
 		// ::> returns a message | returns the result of the operation
-	break;
+		break;
 	
 	case "modifyuser":
 		modifyuser($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
 		//**modify all fields
 		// ::> returns a message | returns the result of the operation
-	break;
+		break;
 	
 	case "doaction":
 		doaction($_POST['username'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
 		//**send an action to the arduino to be done
 		// ::> returns a message
-	break;
+		break;
+	
+	case "createhose":
+		createuser($_POST['username'],$_POST['housename']);
+		//**create a new house with an existing user
+		// ::> returns a message | returns the result of the operation
+		break;
+		
+	case "deletehose":
+		deletehose($_POST['username'],$_POST['password'],$_POST['housename']);
+		//**delete a existing house by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+		
+	case "modifyhose":
+		modifyhose($_POST['username'],$_POST['password'],$_POST['housename']);
+		//**modify setings of an existing the house
+		// ::> returns a message | returns the result of the operation
+		break;
 	/*
     case "downloadconfiguration":
 		a($_POST['arg1'],$_POST['arg2']); 
