@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-03-2014 a las 15:24:08
+-- Tiempo de generación: 23-03-2014 a las 17:58:12
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -44,7 +44,8 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 (1, 2, 3, '0000-00-00 00:00:00'),
 (10, 2, 1, '0000-00-00 00:00:00'),
 (10, 6, 0, '0000-00-00 00:00:00'),
-(12, 2, 4, '0000-00-00 00:00:00');
+(12, 2, 4, '0000-00-00 00:00:00'),
+(29, 9, 1, '2014-03-23 19:56:06');
 
 -- --------------------------------------------------------
 
@@ -62,13 +63,6 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   PRIMARY KEY (`IDMESSAGE`),
   UNIQUE KEY `IDACTION_RETURNCODE` (`IDACTION`,`RETURNCODE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Volcado de datos para la tabla `ACTIONMESSAGES`
---
-
-INSERT INTO `ACTIONMESSAGES` (`IDMESSAGE`, `IDACTION`, `RETURNCODE`, `EXIT`, `ENGLISH`, `SPANISH`) VALUES
-(1, 1, '0X000001', 0, 'SUCCESS', 'CORRECTO');
 
 -- --------------------------------------------------------
 
@@ -92,20 +86,12 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
 --
 
 INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANISH`, `FCODE`) VALUES
-(1, 1, 'ENCENDER', '', '', '0x0020301'),
 (2, NULL, 'APAGAR', '', '', '0x002443'),
 (3, NULL, 'RESET', '', '', '0x002221'),
-(4, 1, 'RESET', '', '', '0x0025766'),
-(6, 1, 'APAGAR', '', '', '0x002121'),
-(7, 4, 'APAGAR', '', '', '0x00211'),
-(8, 3, 'RESET', '', '', '0x002543'),
-(9, 9, 'APAGAR', '', '', '0x00243'),
 (10, NULL, 'ENCENDER', '', '', '0x002314'),
 (11, NULL, 'ENVIAR', '', '', '0x002123'),
 (12, NULL, 'RECIBIR', '', '', '0x002456'),
-(13, NULL, 'CONFIGURAR', '', '', '0x002787'),
-(14, 6, 'ENCENDER', '', '', '0x002223'),
-(15, 3, 'CONFIGURAR', '', '', '0x0026556');
+(13, NULL, 'CONFIGURAR', '', '', '0x002787');
 
 -- --------------------------------------------------------
 
@@ -115,23 +101,28 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 
 CREATE TABLE IF NOT EXISTS `DEVICES` (
   `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
-  `SERIAL` varchar(11) DEFAULT NULL,
-  `NAME` varchar(10) DEFAULT NULL,
-  `ENGLISH` varchar(50) DEFAULT NULL,
-  `SPANISH` varchar(50) DEFAULT NULL,
+  `IPADDRESS` varchar(20) DEFAULT NULL,
+  `SERIAL` varchar(20) DEFAULT NULL,
+  `NAME` varchar(20) DEFAULT NULL,
+  `ENGLISH` varchar(500) DEFAULT NULL,
+  `SPANISH` varchar(500) DEFAULT NULL,
   `DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
   UNIQUE KEY `SERIAL` (`SERIAL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `DEVICES`
 --
 
-INSERT INTO `DEVICES` (`IDDEVICE`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
-(1, '25.6.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0),
-(4, '25.2.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0);
+INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
+(1, NULL, '25.6.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0),
+(4, NULL, '25.2.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0),
+(5, NULL, '33.9', 'arduino a', NULL, NULL, '2014-03-23 20:02:50', 1),
+(7, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(8, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
+(9, '12.45.34.123', NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1);
 
 -- --------------------------------------------------------
 
@@ -144,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -158,7 +149,8 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (4, 'Database integrity break.', 'Integridad de la base de datos rota.'),
 (5, 'The action or service does not exist.', 'La acción o servicio no esiste.'),
 (6, 'This user already exists.', 'Este usuario ya existe.'),
-(7, 'This email already has an account associated.', 'Este email ya tiene una cuenta asociada.');
+(7, 'This email already has an account associated.', 'Este email ya tiene una cuenta asociada.'),
+(8, 'This house does not exist.', 'La casa no existe.');
 
 -- --------------------------------------------------------
 
@@ -202,14 +194,6 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   KEY `IDUSER` (`IDUSER`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
---
--- Volcado de datos para la tabla `HISTORYACTION`
---
-
-INSERT INTO `HISTORYACTION` (`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`) VALUES
-(1, 3, NULL, 10, '0x077', '2014-03-23 15:49:10'),
-(2, 2, NULL, 1, '0x0078', '2014-03-23 15:50:00');
-
 -- --------------------------------------------------------
 
 --
@@ -219,27 +203,27 @@ INSERT INTO `HISTORYACTION` (`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCOD
 CREATE TABLE IF NOT EXISTS `HOUSES` (
   `IDHOUSE` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
-  `HOUSENAME` varchar(10) NOT NULL,
-  `IPADRESS` varchar(15) NOT NULL,
+  `HOUSENAME` varchar(15) NOT NULL,
   `GPS` varchar(10) DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `HOUSES`
 --
 
-INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IPADRESS`, `GPS`, `DATEBEGIN`) VALUES
-(1, 1, 'mi casa', '158.107.108.98', '37.6735925', '2014-03-04 05:00:00'),
-(2, 11, 'otto', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(3, 11, 'house', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(4, 11, 'home', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(5, 11, 'hause', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(6, 11, 'shack', '255.255.255.255', NULL, '2014-03-11 04:00:00'),
-(8, 1, 'micasa', '', NULL, '2014-03-23 19:09:25');
+INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALUES
+(1, 1, 'mi casa', '37.6735925', '2014-03-04 05:00:00'),
+(2, 11, 'otto', NULL, '2014-03-11 04:00:00'),
+(3, 11, 'house', NULL, '2014-03-11 04:00:00'),
+(4, 11, 'home', NULL, '2014-03-11 04:00:00'),
+(5, 11, 'hause', NULL, '2014-03-11 04:00:00'),
+(6, 11, 'shack', NULL, '2014-03-11 04:00:00'),
+(8, 1, 'micasa', NULL, '2014-03-23 19:09:25'),
+(9, 29, 'casaBertoldo', NULL, '2014-03-23 19:51:49');
 
 -- --------------------------------------------------------
 
@@ -255,14 +239,6 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   PRIMARY KEY (`IDUSER`,`IDSERVICE`),
   KEY `IDSERVICE` (`IDSERVICE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `PERMISSIONS`
---
-
-INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `LEVELNUMBER`, `DATEBEGIN`) VALUES
-(1, 3, 6, NULL),
-(10, 1, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -315,10 +291,10 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   `ROOMNAME` varchar(10) NOT NULL,
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDROOM`),
-  UNIQUE KEY `ROOMNAME` (`ROOMNAME`),
+  UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `ROOMS`
@@ -326,7 +302,9 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
 
 INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VALUES
 (1, 3, 11, 'SALOON', '2014-03-12 04:00:00'),
-(2, 2, 10, 'WC', '2014-03-10 04:00:00');
+(2, 2, 10, 'WC', '2014-03-10 04:00:00'),
+(4, 9, 29, 'cocina', '2014-03-23 20:00:53'),
+(6, 9, 29, 'terraza', '2014-03-23 20:01:32');
 
 -- --------------------------------------------------------
 
@@ -344,21 +322,19 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   PRIMARY KEY (`IDSERVICE`),
   UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
   KEY `IDDEVICE` (`IDDEVICE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Volcado de datos para la tabla `SERVICES`
 --
 
 INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `ENGLISH`, `SPANISH`) VALUES
-(1, 1, 1, 'SALOON', 'DIVERSE', ''),
-(2, NULL, NULL, 'TV', 'TV for soccer', ''),
-(3, NULL, NULL, 'riego', 'For plant drink.', ''),
-(4, NULL, NULL, 'infrarrojo', 'For control all infr', ''),
-(5, 1, 4, 'infrarrojos', '', ''),
-(6, 1, 1, 'infrarrojos', '', ''),
-(9, 2, 4, 'infrarrojos', 'For plant drink.', ''),
-(10, NULL, NULL, 'LUCES', 'Control de las luces.', '');
+(2, NULL, NULL, 'TV', 'Universal remote for TV.', 'Mando universal para televición.'),
+(3, NULL, NULL, 'IRRIGATION', 'For plant drink.', 'Riego de plantas.'),
+(4, NULL, NULL, 'INFRARED', 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
+(10, NULL, NULL, 'LIGTHS', 'Ligths control.', 'Control de las luces.'),
+(11, NULL, NULL, 'SENSOR', 'Control safety sensors.', 'Control de sensores de seguridad.'),
+(12, NULL, NULL, 'BLINDS', 'Control motorized blinds.', 'Control de persianas motorizadas.');
 
 -- --------------------------------------------------------
 
@@ -431,7 +407,7 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `JSON`, 
 (11, 'alex2', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@hotmail.co', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-01-11 05:00:00'),
 (12, 'alex3', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@ehc.com', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-01 05:00:00'),
 (28, 'luis2', '502ff82f7f1f8218dd41201fe4353687', 'luis@hotmail.co', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-03 05:00:00'),
-(29, 'bertoldoG', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmaiGl', 'thats not fun.G', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '0000-00-00 00:00:00');
+(29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.', 'thats not fun.', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-23 04:00:01');
 
 --
 -- Restricciones para tablas volcadas
