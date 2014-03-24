@@ -7,6 +7,18 @@ function errorJson($msg){
 }
 
 //--------------------------------------------------------------------------------------
+function testNoERROR($error){
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		// take de error message
+		$message = query(	"SELECT ENGLISH, SPANISH
+							FROM ERRORS
+							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode($message);
+		exit();
+	}
+}
+//--------------------------------------------------------------------------------------
 function createJSON($iduser){
 /* make the json of the user*/
 	// "Rooms":{R1...R3{"name":"", "items":[]} } 
@@ -29,8 +41,9 @@ function createJSON($iduser){
 //--------------------------------------------------------------------------------------
 function login($user, $pass) {
 /* make de server conexion*/
-
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$error = 0;
+	
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 	
@@ -39,8 +52,10 @@ function login($user, $pass) {
 		case 2:	$error = 4;	break;
 	}
 
+	testNoERROR($error);
+	
 	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
 		//correct pass, authorized
 		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
 		$error = 0;
@@ -49,6 +64,8 @@ function login($user, $pass) {
 		//incorrect pass. hint password
 		$error = 2;
 	}
+	
+	testNoERROR($error);
 	
 	//insert information about result of login.
 	$sql = query("INSERT INTO HISTORYACCESS
@@ -60,10 +77,7 @@ function login($user, $pass) {
 						FROM ERRORS
 						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 	// return error
-	if ($error <> 0) {
-		print json_encode($message);
-		exit();
-	}
+	testNoERROR($error);
 	
 	//successful function
 	print json_encode($SQLuser);
@@ -91,7 +105,7 @@ function lostpass($user){
 //--------------------------------------------------------------------------------------
 function createuser($user, $pass, $email, $hint){
 /* create a new user*/
-
+	$error = 0;
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -100,16 +114,8 @@ function createuser($user, $pass, $email, $hint){
 		case 0:		$error = 0;	break;
 		default:	$error = 6;	break;//this user already exists.
 	}
-	
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-	}
+
+	testNoERROR($error);
 	
 	//** INSERT NEW USER **
 	$sql = query("INSERT INTO USERS
@@ -123,7 +129,7 @@ function createuser($user, $pass, $email, $hint){
 //--------------------------------------------------------------------------------------
 function deleteuser($user, $pass){
 	/* create a new user*/
-
+	$error = 0;
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -133,23 +139,18 @@ function deleteuser($user, $pass){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 	
+	testNoERROR($error);
+	
 	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
+	if ($SQLuser['result'][0]['PASSWORD']== $pass){
 		$error = 0;
 	}
 	else{
-		$error = 2;//incorrect pass.
+		//incorrect pass. hint password
+		$error = 2;
 	}
 	
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-	}
+	testNoERROR($error);
 
 	//DELETE USER
 	$sql = query("DELETE FROM USERS
@@ -172,23 +173,17 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 
+	testNoERROR($error);
+	
 	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD'] = $pass){
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
 		$error = 0;
 	}
 	else{
 		$error = 2;//incorrect pass.
 	}
 
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-	}
+	testNoERROR($error);
 
 	//UPDATE USER
 	$sql = query("UPDATE USERS 
@@ -273,15 +268,7 @@ function createhouse($user, $house){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-	}
+	testNoERROR($error);
 
 	//** CREATE NEW HOUSE BY THIS USER **
 	$sql = query("INSERT INTO HOUSES
@@ -298,15 +285,8 @@ function createhouse($user, $house){
 		case 2:		$error = 4;	break;//DATA BASE INTEGRITY BREAK
 		default:	$error = 8;	break;//this user does not exists.
 	}
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
-		exit();
-	}
+	
+	testNoERROR($error);
 	
 	//CREATE PERMISSION TO ACCESS
 	$sql = query("INSERT INTO ACCESSHOUSE
