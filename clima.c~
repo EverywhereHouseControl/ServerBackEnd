@@ -1,3 +1,4 @@
+//json data procesing
 #include <stdlib.h>
 #include <string.h>
 
@@ -5,13 +6,11 @@
 #include <curl/curl.h>
 
 #define BUFFER_SIZE  (256 * 1024)
-#define URL_FORMAT   "http://api.openweathermap.org/data/2.5/weather?q=%s&lang=%s&mode=json"
+#define URL_FORMAT   "http://api.openweathermap.org/data/2.5/weather?q=%s&mode=json"
 #define URL_SIZE   256
 
 
-/* Return the offset of the first newline in text or the length of
-   text if there's no newline */
-//static char *request(const char *url);
+//we create struct Cclima  
 struct coordinate{
 	float lat;
 	float lon;	
@@ -67,6 +66,8 @@ struct Cclima{
 	const char *name;
 	int cod;
 };
+//this is the end of Cclima 
+
 struct write_result
 {
     char *data;
@@ -161,17 +162,14 @@ int main(int argc, char *argv[])
     json_t *root;
     json_error_t error;
 
-    if(argc > 3 || argc < 2)
+    if(argc != 2)
     {
         fprintf(stderr, "usage: %s USEr\n\n", argv[0]);
         fprintf(stderr, " ejemplojson ciudad.\n\n");
         return 2;
     }
 
-	if(argv[2]="")
-	snprintf(url,URL_SIZE,URL_FORMAT,argv[1],"sp");
-	else
-	snprintf(url,URL_SIZE,URL_FORMAT,argv[1],argv[2]);
+	snprintf(url,URL_SIZE,URL_FORMAT,argv[1]);
 	text = request(url);
 	if(!text)
 	return 1;
@@ -495,26 +493,28 @@ int main(int argc, char *argv[])
 		}
 	clima.cod=json_number_value(cod);
 	
+	//Here is the test done if everything is working
 	printf("length %.2f\n",clima.coord.lon);
 	printf("latitude %.2f\n",clima.coord.lat);
 	printf("message %.2f\n",clima.sys.message);
-	printf("country %s\n",clima.sys.country);
-	printf("sunrise %d\n",clima.sys.sunrise);
-	printf("sunset %d\n",clima.sys.sunset);
-	printf("id %.2f\n",clima.weather.id);
-	printf("main %s\n",clima.weather.main);	
-	printf("description %s\n",clima.weather.description);
-	printf("icon %s\n",clima.weather.icon);
-	printf("base %s\n",clima.base);
-	printf("temperature %.2f\n",clima.main.temp);
-	printf("pressure %d\n",clima.main.pressure);
-	printf("humidity %d\n",clima.main.humidity);
-	printf("temp min %.2f\n",clima.main.temp_min);
-	printf("temp max %.2f\n",clima.main.temp_max);
-	printf("temp min %.2f\n",clima.wind.speed);
-	printf("temp min %d\n",clima.wind.deg);
+	printf("country %s",clima.sys.country);
+	printf("sunrise %d",clima.sys.sunrise);
+	printf("sunset %d",clima.sys.sunset);
+	printf("id %.2f",clima.weather.id);
+	printf("main %s",clima.weather.main);	
+	printf("description %s",clima.weather.description);
+	printf("icon %s",clima.weather.icon);
+	printf("base %s",clima.base);
+	printf("temperature %.2f",clima.main.temp);
+	printf("pressure %d",clima.main.pressure);
+	printf("humidity %d",clima.main.humidity);
+	printf("temp min %.2f",clima.main.temp_min);
+	printf("temp max %.2f",clima.main.temp_max);
+	printf("temp min %.2f",clima.wind.speed);
+	printf("temp min %d",clima.wind.deg);
 	
 	json_decref(root);
+	
 	return 0;
 	
 }
