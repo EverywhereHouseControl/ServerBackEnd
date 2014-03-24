@@ -7,6 +7,12 @@ header("Content-Type: application/json");
 
 //API
 switch ($_POST['command']) {
+//-------------------------------------------------------------------------------------------------	
+	case "ipcheck":
+		ipcheck(); 
+		// ::> returns real client ip
+		break;
+//-------------------------------------------------------------------------------------------------	
 	case "login":
 		login($_POST['username'], $_POST['password']); 
 		//**grant a user access to the aplication 

@@ -1,6 +1,12 @@
 <?
 //API implementation to come here
 
+/* Returs Real Client IP */
+function ipcheck(){
+	print json_encode($_SERVER['REMOTE_ADDR']);
+	exit();
+}
+
 function errorJson($msg){
 	print json_encode(array('error'=>$msg));
 	exit();
