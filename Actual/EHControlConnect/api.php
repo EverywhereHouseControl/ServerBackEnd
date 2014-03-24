@@ -7,6 +7,26 @@ function errorJson($msg){
 }
 
 //--------------------------------------------------------------------------------------
+function createJSON($iduser){
+/* make the json of the user*/
+	// "Rooms":{R1...R3{"name":"", "items":[]} } 
+	// "User":"username"
+	$SQLjson = query("SELECT HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME
+						FROM ACTIONS 
+						JOIN (SERVICES ,ROOMS ,	(SELECT IDHOUSE, HOUSENAME
+												 FROM HOUSES
+												 WHERE IDHOUSE IN (	SELECT IDHOUSE
+																	FROM ACCESSHOUSE
+																	WHERE IDUSER='%s')) as T 
+												)
+						ON ( ACTIONS.IDSERVICE=SERVICES.IDSERVICE AND
+							SERVICES.IDROOM=ROOMS.IDROOM AND 
+							ROOMS.IDHOUSE=T.IDHOUSE)", $iduser);
+	print json_encode($SQLjson);
+}
+
+
+//--------------------------------------------------------------------------------------
 function login($user, $pass) {
 /* make de server conexion*/
 
@@ -47,6 +67,7 @@ function login($user, $pass) {
 	
 	//successful function
 	print json_encode($SQLuser);
+	//createJSON($iduser);
 }
 
 //--------------------------------------------------------------------------------------
