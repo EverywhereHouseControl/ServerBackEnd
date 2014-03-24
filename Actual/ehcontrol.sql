@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-03-2014 a las 17:58:12
+-- Tiempo de generación: 23-03-2014 a las 21:54:28
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -40,11 +40,6 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 --
 
 INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES
-(1, 1, 3, '0000-00-00 00:00:00'),
-(1, 2, 3, '0000-00-00 00:00:00'),
-(10, 2, 1, '0000-00-00 00:00:00'),
-(10, 6, 0, '0000-00-00 00:00:00'),
-(12, 2, 4, '0000-00-00 00:00:00'),
 (29, 9, 1, '2014-03-23 19:56:06');
 
 -- --------------------------------------------------------
@@ -62,7 +57,32 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   `SPANISH` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`IDMESSAGE`),
   UNIQUE KEY `IDACTION_RETURNCODE` (`IDACTION`,`RETURNCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+
+--
+-- Volcado de datos para la tabla `ACTIONMESSAGES`
+--
+
+INSERT INTO `ACTIONMESSAGES` (`IDMESSAGE`, `IDACTION`, `RETURNCODE`, `EXIT`, `ENGLISH`, `SPANISH`) VALUES
+(2, 0, '0', 0, 'Service off.', 'Servicio apagado.'),
+(3, 0, '1', 1, 'Conexion error.', 'Error de conexión.'),
+(4, 0, '2', 1, 'Device out of conection.', 'Dispositivo fuera de conexión.'),
+(5, 0, '4', 1, 'The function have a bug.', 'La función tiene un bug.'),
+(6, 1, '0', 0, 'Reset success.', 'Reseteo satisfactorio.'),
+(7, 1, '1', 1, 'Conection failure.', 'Fallo de conexión.'),
+(8, 1, '2', 1, 'Connection out.', 'Fuera de conexión.'),
+(9, 2, '0', 0, 'Service on.', 'Servicio encendido.'),
+(10, 2, '1', 1, 'Service can''t be on.', 'El servicio no puede encenderse.'),
+(11, 2, '2', 1, 'Service without battery.', 'Servicio sin batería.'),
+(12, 3, '0', 0, 'Proper Shipping.', 'Envío correcto.'),
+(13, 3, '1', 1, 'Send failure.', 'Fallo en el envío.'),
+(15, 3, '3', 1, 'Shipping unanswered.', 'Envío sin respuesta.'),
+(16, 4, '0', 0, 'Data received.', 'Datos recibidos.'),
+(17, 4, '1', 1, ' Incorrect data.', 'Datos incorrectos'),
+(18, 4, '3', 1, ' Failed connection.', 'Conexión fallida.'),
+(19, 5, '0', 0, ' Updated configuration.', 'Configuración actualizada.'),
+(20, 5, '2', 1, 'Denial of permission.', 'Denegación de permiso.'),
+(21, 5, '1', 1, ' The device does not respond.', 'El dispositivo no responde.');
 
 -- --------------------------------------------------------
 
@@ -79,19 +99,60 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `FCODE` varchar(20) NOT NULL,
   PRIMARY KEY (`IDACTION`),
   UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
 
 --
 -- Volcado de datos para la tabla `ACTIONS`
 --
 
 INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANISH`, `FCODE`) VALUES
-(2, NULL, 'APAGAR', '', '', '0x002443'),
-(3, NULL, 'RESET', '', '', '0x002221'),
-(10, NULL, 'ENCENDER', '', '', '0x002314'),
-(11, NULL, 'ENVIAR', '', '', '0x002123'),
-(12, NULL, 'RECIBIR', '', '', '0x002456'),
-(13, NULL, 'CONFIGURAR', '', '', '0x002787');
+(0, NULL, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(1, NULL, 'RESETEAR', 'RESET', 'RESETEAR', '0x002221'),
+(2, NULL, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(3, NULL, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(4, NULL, 'RECIBIR', 'RECIVE', 'RECIBIR', '0x002456'),
+(5, NULL, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002787'),
+(24, 0, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(25, 0, 'RESETEAR', 'RESET', 'RESETEAR', '0x002221'),
+(26, 0, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(27, 0, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(28, 0, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002334'),
+(29, 1, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(30, 1, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(31, 1, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002787'),
+(32, 2, 'APAGAR', 'OFF', 'APAGAR', '0x118000'),
+(33, 2, 'RESETEAR', 'RESET', 'RESETEAR', '0x180001'),
+(34, 2, 'ENCENDER', 'ON', 'ENCENDER', '0x002300'),
+(35, 2, 'ENVIAR', 'SEND', 'ENVIAR', '0x001010'),
+(36, 2, 'RECIBIR', 'RECIVE', 'RECIBIR', '0x002456'),
+(37, 2, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002787'),
+(38, 3, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(39, 3, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(40, 4, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(41, 4, 'RESETEAR', 'RESET', 'RESETEAR', '0x002221'),
+(42, 4, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(43, 4, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(44, 4, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002787'),
+(45, 4, 'RECIBIR', 'RECIVE', 'RECIBIR', '0x002456'),
+(46, 5, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(49, 5, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(50, 5, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(51, 13, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(52, 13, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(53, 14, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(54, 14, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(55, 14, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(56, 15, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(57, 15, 'RESETEAR', 'RESET', 'RESETEAR', '0x002221'),
+(58, 15, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(59, 15, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(60, 15, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002334'),
+(61, 16, 'APAGAR', 'OFF', 'APAGAR', '0x002443'),
+(62, 16, 'RESETEAR', 'RESET', 'RESETEAR', '0x002221'),
+(63, 16, 'ENCENDER', 'ON', 'ENCENDER', '0x002314'),
+(64, 16, 'ENVIAR', 'SEND', 'ENVIAR', '0x002123'),
+(65, 16, 'CONFIGURAR', 'CONFIGURE', 'CONFIGURAR', '0x002787'),
+(66, 16, 'RECIBIR', 'RECIVE', 'RECIBIR', '0x002456');
 
 -- --------------------------------------------------------
 
@@ -117,11 +178,8 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
 --
 
 INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
-(1, NULL, '25.6.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0),
-(4, NULL, '25.2.LR', 'JARDUINO', 'NOT EXISTING YET', NULL, '0000-00-00 00:00:00', 0),
-(5, NULL, '33.9', 'arduino a', NULL, NULL, '2014-03-23 20:02:50', 1),
-(7, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(8, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
+(0, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(1, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
 (9, '12.45.34.123', NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1);
 
 -- --------------------------------------------------------
@@ -135,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -150,7 +208,10 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (5, 'The action or service does not exist.', 'La acción o servicio no esiste.'),
 (6, 'This user already exists.', 'Este usuario ya existe.'),
 (7, 'This email already has an account associated.', 'Este email ya tiene una cuenta asociada.'),
-(8, 'This house does not exist.', 'La casa no existe.');
+(8, 'This house does not exist.', 'La casa no existe.'),
+(9, 'This room does not exist.', 'Esta habitación no existe.'),
+(10, 'Requires permission.', 'Necesita permisos.'),
+(11, 'Requires access.', 'Necesita acceso.');
 
 -- --------------------------------------------------------
 
@@ -301,10 +362,8 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
 --
 
 INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VALUES
-(1, 3, 11, 'SALOON', '2014-03-12 04:00:00'),
-(2, 2, 10, 'WC', '2014-03-10 04:00:00'),
-(4, 9, 29, 'cocina', '2014-03-23 20:00:53'),
-(6, 9, 29, 'terraza', '2014-03-23 20:01:32');
+(1, 9, 29, 'cocina', '2014-03-23 20:00:53'),
+(2, 9, 29, 'terraza', '2014-03-23 20:01:32');
 
 -- --------------------------------------------------------
 
@@ -317,24 +376,29 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDROOM` int(11) DEFAULT NULL,
   `IDDEVICE` int(11) DEFAULT NULL,
   `SERVICENAME` varchar(20) NOT NULL,
-  `ENGLISH` varchar(50) NOT NULL,
-  `SPANISH` varchar(50) NOT NULL,
+  `ENGLISH` varchar(50) DEFAULT NULL,
+  `SPANISH` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`IDSERVICE`),
   UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
   KEY `IDDEVICE` (`IDDEVICE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Volcado de datos para la tabla `SERVICES`
 --
 
 INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `ENGLISH`, `SPANISH`) VALUES
-(2, NULL, NULL, 'TV', 'Universal remote for TV.', 'Mando universal para televición.'),
-(3, NULL, NULL, 'IRRIGATION', 'For plant drink.', 'Riego de plantas.'),
-(4, NULL, NULL, 'INFRARED', 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
-(10, NULL, NULL, 'LIGTHS', 'Ligths control.', 'Control de las luces.'),
-(11, NULL, NULL, 'SENSOR', 'Control safety sensors.', 'Control de sensores de seguridad.'),
-(12, NULL, NULL, 'BLINDS', 'Control motorized blinds.', 'Control de persianas motorizadas.');
+(0, NULL, NULL, 'TV', 'Universal remote for TV.', 'Mando universal para televición.'),
+(1, NULL, NULL, 'IRRIGATION', 'For plant drink.', 'Riego de plantas.'),
+(2, NULL, NULL, 'INFRARED', 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
+(3, NULL, NULL, 'LIGTHS', 'Ligths control.', 'Control de las luces.'),
+(4, NULL, NULL, 'SENSOR', 'Control safety sensors.', 'Control de sensores de seguridad.'),
+(5, NULL, NULL, 'BLINDS', 'Control motorized blinds.', 'Control de persianas motorizadas.'),
+(13, 1, 9, 'LIGTHS', NULL, NULL),
+(14, 2, 9, 'BLINDS', NULL, NULL),
+(15, 1, 9, 'TV', NULL, NULL),
+(16, 2, 9, 'SENSOR', NULL, NULL),
+(17, 2, 9, 'LIGTHS', NULL, NULL);
 
 -- --------------------------------------------------------
 
