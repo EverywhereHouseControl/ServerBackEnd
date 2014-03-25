@@ -7,6 +7,7 @@ function ipcheck(){
 	exit();
 }
 
+//--------------------------------------------------------------------------------------
 function errorJson($msg){
 	print json_encode(array('error'=>$msg));
 	exit();
@@ -25,22 +26,59 @@ function testNoERROR($error){
 	}
 }
 //--------------------------------------------------------------------------------------
-function createJSON($iduser){
-/* make the json of the user*/
-	// "Rooms":{R1...R3{"name":"", "items":[]} } 
+function createJSON($iduser) {
+	/* make the json of the user */
+	// "Rooms":{R1...R3{"name":"", "items":[]} }
 	// "User":"username"
-	$SQLjson = query("SELECT HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME
+	$SQLjson = query ( "SELECT USERNAME,HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME
 						FROM ACTIONS 
-						JOIN (SERVICES ,ROOMS ,	(SELECT IDHOUSE, HOUSENAME
-												 FROM HOUSES
-												 WHERE IDHOUSE IN (	SELECT IDHOUSE
-																	FROM ACCESSHOUSE
-																	WHERE IDUSER='%s')) as T 
-												)
-						ON ( ACTIONS.IDSERVICE=SERVICES.IDSERVICE AND
-							SERVICES.IDROOM=ROOMS.IDROOM AND 
-							ROOMS.IDHOUSE=T.IDHOUSE)", $iduser);
-	print json_encode($SQLjson);
+						JOIN ( USERS, SERVICES , ROOMS, IDHOUSES ,ACCESSHOUSE)
+						ON ( ACTIONS.IDSERVICE	= SERVICES.IDSERVICE 	AND
+							SERVICES.IDROOM		= ROOMS.IDROOM 			AND 
+							ROOMS.IDHOUSE		= IDHOUSES .IDHOUSE 	AND 
+                            HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE 	AND
+                            ACCESSHOUSE.IDUSER	= '%s')
+			ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC", $iduser );
+	
+	//** creation of firt type of json aplication uses**
+	$json = "{\n";
+	$json .= "\"User\":\"".$SQLjson['result'][0]['USERNAME']."\",\n";
+	$json .= "\"Rooms\":{\n";
+	$json .= "\"R1\":{\n";
+	$json .= "\"name\":\"".$SQLjson['result'][0]['ROOMNAME']."\",\n";
+	$json .= "\"items\":[\n";
+	$json .= "\"".$SQLjson['result'][0]['SERVICENAME']."\"";
+	
+	$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
+	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
+	$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+	for($i = 1; $i < count ( $data ); $i++){
+		/*if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
+			$json .= "]}}";
+		}*/
+		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
+			$json .= "]},\n";
+			$json .= "\"R".($i-1)."\":{\n";
+			$json .= "\"name\":\"".$SQLjson['result'][$i]['ROOMNAME']."\",\n";
+			$json .= "\"items\":[\n";
+			$json .= "\"".$SQLjson['result'][$i]['SERVICENAME']."\"";
+			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
+			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
+			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			continue;
+		}
+		if ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']) {
+			$json .= ",\n";
+			$json .= "\"".$SQLjson['result'][$i]['SERVICENAME']."\"";
+			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
+			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
+			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			continue;
+		}
+	}
+	$json .= "]}}}\n";
+	
+	print json_encode ( $json );
 }
 
 
@@ -86,8 +124,8 @@ function login($user, $pass) {
 	testNoERROR($error);
 	
 	//successful function
-	print json_encode($SQLuser);
-	//createJSON($iduser);
+	//print json_encode($SQLuser);
+	createJSON($iduser);
 }
 
 //--------------------------------------------------------------------------------------
