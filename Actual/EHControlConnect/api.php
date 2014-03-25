@@ -23,7 +23,11 @@ function testNoERROR($iduser, $error, $funct){
 		$message = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode(array('EXIT'=>$error).concat($message));
+		//print json_encode(array('EXIT'=>$error).concat($message));
+		//$error = 0;
+		//$json = "{".'"'."result".'"'.":{".'"'."error".'"'.":".'"'."".$error."".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."}}";
+		//print json_decode($json);
+		print json_encode($message);
 		exit();
 	}
 }
@@ -51,12 +55,12 @@ function createJSON($iduser) {
 	}
 	//** creation of firt type of json aplication uses**
 	$json = "{\n";
-	$json .= "\"User\":\"".$SQLjson['result'][0]['USERNAME']."\",\n";
-	$json .= "\"Rooms\":{\n";
-	$json .= "\"R1\":{\n";
-	$json .= "\"name\":\"".$SQLjson['result'][0]['ROOMNAME']."\",\n";
-	$json .= "\"items\":[\n";
-	$json .= "\"".$SQLjson['result'][0]['SERVICENAME']."\"";
+	$json .= "".'"'."User".'"'.":".'"'."".$SQLjson['result'][0]['USERNAME']."".'"'.",\n";
+	$json .= "".'"'."Rooms".'"'.":{\n";
+	$json .= "".'"'."R1".'"'.":{\n";
+	$json .= "".'"'."name".'"'.":".'"'."".$SQLjson['result'][0]['ROOMNAME']."".'"'.",\n";
+	$json .= "".'"'."items".'"'.":[\n";
+	$json .= "".'"'."".$SQLjson['result'][0]['SERVICENAME']."".'"'."";
 	
 	$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
@@ -69,10 +73,10 @@ function createJSON($iduser) {
 		}
 		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
 			$json .= "]},\n";
-			$json .= "\"R".(++$r)."\":{\n";
-			$json .= "\"name\":\"".$SQLjson['result'][$i]['ROOMNAME']."\",\n";
-			$json .= "\"items\":[\n";
-			$json .= "\"".$SQLjson['result'][$i]['SERVICENAME']."\"";
+			$json .= "".'"'."R".(++$r)."".'"'.":{\n";
+			$json .= "".'"'."name".'"'.":".'"'."".$SQLjson['result'][$i]['ROOMNAME']."".'"'.",\n";
+			$json .= "".'"'."items".'"'.":[\n";
+			$json .= "".'"'."".$SQLjson['result'][$i]['SERVICENAME']."".'"'."";
 			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
@@ -81,7 +85,7 @@ function createJSON($iduser) {
 		}
 		if ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']) {
 			$json .= ",\n";
-			$json .= "\"".$SQLjson['result'][$i]['SERVICENAME']."\"";
+			$json .= "".'"'."".$SQLjson['result'][$i]['SERVICENAME']."".'"'."";
 			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
@@ -169,7 +173,8 @@ function lostpass($user){
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	
+	print json_encode($message);
 }
 
 //--------------------------------------------------------------------------------------
@@ -195,6 +200,10 @@ function createuser($user, $pass, $email, $hint){
 			VALUES (NULL,      '%s',    '%s',    '%s', '%s',   '', CURRENT_TIMESTAMP)"
 			, $user, $pass, $email, $hint);
 	
+	//iduser UPDATE FOR NEW USER
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -206,7 +215,11 @@ function createuser($user, $pass, $email, $hint){
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	
+	$error = 0;
+	$json = "{".'"'."result".'"'.":{".'"'."error".'"'.":".'"'."".$error."".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."}}";
+	//print json_decode($json);
+	print json_encode($message);
 }
 
 //--------------------------------------------------------------------------------------
@@ -253,7 +266,9 @@ function deleteuser($user, $pass){
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	$error = 0;
+	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
+	print json_decode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -300,7 +315,10 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	
+	$error = 0;
+	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
+	print json_decode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -364,7 +382,9 @@ function doaction($user,$service,$action,$data) {
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	$error = 0;
+	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
+	print json_decode($json);
 
 }
 
@@ -420,7 +440,9 @@ function createhouse($user, $house){
 	$message = query(	"SELECT ENGLISH, SPANISH
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	print json_encode(array('EXIT'=>0).concat($message));
+	$error = 0;
+	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
+	print json_decode($json);
 }
 
 //--------------------------------------------------------------------------------------
