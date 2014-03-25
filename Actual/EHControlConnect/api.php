@@ -54,21 +54,24 @@ function createJSON($iduser) {
 	
 	//TEST QUERY HAS AT LEAST one VALUE
 	if (count($SQLuser['result']) < 1){
-		$json = "";
+		$json = '';
 		print json_encode ( $json );
 	}
 	//** creation of firt type of json aplication uses**
-	$json = "{\n";
-	$json .= "".'"'."User".'"'.":".'"'."".$SQLjson['result'][0]['USERNAME']."".'"'.",\n";
-	$json .= "".'"'."Rooms".'"'.":{\n";
-	$json .= "".'"'."R1".'"'.":{\n";
-	$json .= "".'"'."name".'"'.":".'"'."".$SQLjson['result'][0]['ROOMNAME']."".'"'.",\n";
-	$json .= "".'"'."items".'"'.":[\n";
-	$json .= "".'"'."".$SQLjson['result'][0]['SERVICENAME']."".'"'."";
+	$json = '{';
+	$json .= '"User":"'.$SQLjson['result'][0]['USERNAME'].'"'; // "User":"username"
+	$json .= '"Rooms":{';// "Rooms":{R1...R3{"name":"", "items":[]} }
+	$json .= '"R1":{';
+	$json .= '"name":"'.$SQLjson['result'][0]['ROOMNAME'].'",';
+	$json .= '"items":[';
+	$json .= '"'.$SQLjson['result'][0]['SERVICENAME'].'"';
 	
+	//var for register distinct service
 	$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 	$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+	
+	//var for write "R1" R1...R3
 	$r = 1;
 	for($i = 1; $i < $num; $i++){
 		if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
@@ -76,11 +79,12 @@ function createJSON($iduser) {
 			continue;
 		}
 		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
-			$json .= "]},\n";
-			$json .= "".'"'."R".(++$r)."".'"'.":{\n";
-			$json .= "".'"'."name".'"'.":".'"'."".$SQLjson['result'][$i]['ROOMNAME']."".'"'.",\n";
-			$json .= "".'"'."items".'"'.":[\n";
-			$json .= "".'"'."".$SQLjson['result'][$i]['SERVICENAME']."".'"'."";
+			$json .= ']},';
+			$json .= '"R'.(++$r).'":{';
+			$json .= '"name":"'.$SQLjson['result'][$i]['ROOMNAME'].'",';
+			$json .= '"items":[';
+			$json .= '"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
+			
 			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
@@ -88,18 +92,21 @@ function createJSON($iduser) {
 			continue;
 		}
 		if ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']) {
-			$json .= ",\n";
-			$json .= "".'"'."".$SQLjson['result'][$i]['SERVICENAME']."".'"'."";
+			$json .= ',"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
+			
 			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			
 			continue;
 		}
 	}
-	$json .= "]}}}\n";
+	$json .= ']}}}';
 	
 	//send json config to phone
-	print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
+	//$json = '{"result":[{"error":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
+	print json_encode( (array) json_decode($json));
+	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
 
 //--------------------------------------------------------------------------------------
@@ -371,7 +378,7 @@ function doaction($user,$service,$action,$data) {
 
 //--------------------------------------------------------------------------------------
 function createhouse($user, $house){
-	/* create a new user*/
+	/* create a new house + create access for this user to the house*/
 	$error = 0;
 	$funct = 7;
 	
@@ -437,4 +444,62 @@ function ipcheck(){
 	print json_encode($_SERVER['REMOTE_ADDR']);
 	exit();
 }
+
+//--------------------------------------------------------------------------------------
+function deletehouse($user, $pass, $house){
+	/*delete a existing house by an administrator user <-- user with access number 1*/
+	$error = 0;
+	$funct = 9;
+	
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+	
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+	
+	testNoERROR($iduser, $error, $funct);
+	
+	//** THIS USER HAS PERMISSION IN THE HOUSE **
+	$sql = query("SELECT * 
+				FROM ACCESSHOUSE 
+				WHERE 	IDUSER IN 
+						   (SELECT IDUSER
+							FROM USERS 
+							WHERE USERNAME='%s') AND
+						IDHOUSE IN 
+						   (SELECT IDHOUSE
+							FROM HOUSES 
+							WHERE HOUSENAME='%s') limit 2", $user);
+	if (count($sql['result'])) {
+		$error = 18;//access require you have not access to this house
+	}
+	
+	testNoERROR($iduser, $error, $funct);
+	
+	$idhouse = $sql['result'][0]['IDHOUSE'];
+	if ($sql['result'][0]['ACCESSNUMBER'] <> 1){
+		$error = 10;//permission require you are not a administrator
+	}
+	
+	testNoERROR($iduser, $error, $funct);
+	
+	//DELETE HOUSE
+	$sql = query("DELETE FROM HOUSES WHERE IDHOUSE='%s'"
+			, $idhouse);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 19;//delete house
+	message($error, 0);
+}
+
 ?>
+

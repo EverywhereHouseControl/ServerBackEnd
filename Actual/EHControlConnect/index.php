@@ -65,13 +65,13 @@ switch ($_POST['command']) {
 		ipcheck();
 		// ::> returns real client ip
 		break;
-//-------------------------------------------------------------------------------------------------	
+	//9
 	case "deletehouse":
 		deletehouse($_POST['username'],$_POST['password'],$_POST['housename']);
 		//**delete a existing house by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
-		
+//-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":
 		modifyhouse($_POST['username'],$_POST['password'],$_POST['housename']);
 		//**modify setings of an existing the house
