@@ -14,14 +14,19 @@ function errorJson($msg){
 }
 
 //--------------------------------------------------------------------------------------
-function testNoERROR($error){
+function testNoERROR($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
 	if ($error <> 0) {
+		//REGISTER THE ACTIVITY
+		$sql = query("INSERT INTO HISTORYACCESS
+					(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, FUNCTION, DATESTAMP        )
+			VALUES  (     NULL,   '%s',    NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
+				, $iduser, $error, $funct);
 		// take de error message
 		$message = query(	"SELECT ENGLISH, SPANISH
-							FROM ERRORS
-							WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode($message);
+					FROM ERRORS
+					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+		print json_encode(array('EXIT'=>$error).concat($message));
 		exit();
 	}
 }
@@ -30,16 +35,20 @@ function createJSON($iduser) {
 	/* make the json of the user */
 	// "Rooms":{R1...R3{"name":"", "items":[]} }
 	// "User":"username"
-	$SQLjson = query ( "SELECT USERNAME,HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME
-						FROM ACTIONS 
-						JOIN ( USERS, SERVICES , ROOMS, IDHOUSES ,ACCESSHOUSE)
-						ON ( ACTIONS.IDSERVICE	= SERVICES.IDSERVICE 	AND
-							SERVICES.IDROOM		= ROOMS.IDROOM 			AND 
-							ROOMS.IDHOUSE		= IDHOUSES .IDHOUSE 	AND 
-                            HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE 	AND
-                            ACCESSHOUSE.IDUSER	= '%s')
-			ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC", $iduser );
-	
+	$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
+						FROM USERS 
+						JOIN (SERVICES, ROOMS, HOUSES ,ACCESSHOUSE)
+						ON (
+							SERVICES.IDROOM		= ROOMS.IDROOM 		 AND 
+							ROOMS.IDHOUSE		= HOUSES .IDHOUSE	 AND 
+                            HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE AND
+                            ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
+							USERS.IDUSER		= '%s')
+						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
+	if (count($SQLuser['result']) < 1){
+		$json = "";
+		print json_encode ( $json );
+	}
 	//** creation of firt type of json aplication uses**
 	$json = "{\n";
 	$json .= "\"User\":\"".$SQLjson['result'][0]['USERNAME']."\",\n";
@@ -53,9 +62,10 @@ function createJSON($iduser) {
 	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 	$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
 	for($i = 1; $i < count ( $data ); $i++){
-		/*if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
-			$json .= "]}}";
-		}*/
+		if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
+			//$json .= "]}}";
+			continue;
+		}
 		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
 			$json .= "]},\n";
 			$json .= "\"R".($i-1)."\":{\n";
@@ -86,6 +96,7 @@ function createJSON($iduser) {
 function login($user, $pass) {
 /* make de server conexion*/
 	$error = 0;
+	$funct = 1;
 	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
@@ -96,7 +107,7 @@ function login($user, $pass) {
 		case 2:	$error = 4;	break;
 	}
 
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//** TEST correct password **
 	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
@@ -109,19 +120,19 @@ function login($user, $pass) {
 		$error = 2;
 	}
 	
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//insert information about result of login.
 	$sql = query("INSERT INTO HISTORYACCESS
-						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
-				VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error);
+						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, FUNCTION, DATESTAMP        )
+				VALUES  (     NULL,   '%s',    NULL,         '%s',    '%s' , CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
 	// take de error message
 	$message = query(	"SELECT ENGLISH, SPANISH
 						FROM ERRORS
 						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 	// return error
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//successful function
 	//print json_encode($SQLuser);
@@ -131,7 +142,9 @@ function login($user, $pass) {
 //--------------------------------------------------------------------------------------
 function lostpass($user){
 /* envia un email al usuario que ha olvidado el password*/
-
+	$error = 0;
+	$funct = 2;
+	
 	$result = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 1", $user);
 	
 	if (count($result['result'])>0) {
@@ -150,6 +163,8 @@ function lostpass($user){
 function createuser($user, $pass, $email, $hint){
 /* create a new user*/
 	$error = 0;
+	$funct = 3;
+	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -159,7 +174,7 @@ function createuser($user, $pass, $email, $hint){
 		default:	$error = 6;	break;//this user already exists.
 	}
 
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//** INSERT NEW USER **
 	$sql = query("INSERT INTO USERS
@@ -174,6 +189,8 @@ function createuser($user, $pass, $email, $hint){
 function deleteuser($user, $pass){
 	/* create a new user*/
 	$error = 0;
+	$funct = 4;
+	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -183,7 +200,7 @@ function deleteuser($user, $pass){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 	
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//** TEST correct password **
 	if ($SQLuser['result'][0]['PASSWORD']== $pass){
@@ -194,7 +211,7 @@ function deleteuser($user, $pass){
 		$error = 2;
 	}
 	
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 
 	//DELETE USER
 	$sql = query("DELETE FROM USERS
@@ -207,7 +224,9 @@ function deleteuser($user, $pass){
 //--------------------------------------------------------------------------------------
 function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	/* create a new user*/
-
+	$error = 0;
+	$funct = 5;
+	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -217,7 +236,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//** TEST correct password **
 	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
@@ -227,7 +246,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 		$error = 2;//incorrect pass.
 	}
 
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 
 	//UPDATE USER
 	$sql = query("UPDATE USERS 
@@ -242,6 +261,8 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 function doaction($user,$service,$action,$data) {
 /* a user send a specific action aobut a service with or without data*/
 	$error = 0;
+	$funct = 6;
+	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -252,6 +273,8 @@ function doaction($user,$service,$action,$data) {
 		case 0:	$error = 3;	break;
 		case 2:	$error = 4;	break;
 	}
+	
+	testNoERROR($iduser, $error, $funct);
 	
 	$code = query("SELECT  `FCODE` 
 				   FROM    `ACTIONS` 
@@ -265,21 +288,9 @@ function doaction($user,$service,$action,$data) {
 		case 0:	$error = 5;	break;
 		case 2:	$error = 4;	break;
 	}
-	
-	//return
-	if ($error <> 0) {
-		$sql = query("INSERT INTO HISTORYACCESS
-						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
-				VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
-				, $iduser, $error);
-		$message = query(	"SELECT ENGLISH, SPANISH
-						FROM ERRORS
-						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		print json_encode(array('EXIT'=>$error).concat($message));
-		exit();
-	}
-	
 
+	testNoERROR($iduser, $error, $funct);
+	
 	//ENVIAR ACCION AL ARDUINO 
 	//** print json_encode($code.concat(array('DATA'=>$data)));
 	
@@ -287,22 +298,33 @@ function doaction($user,$service,$action,$data) {
 	$returncode = "0X000001";	
 	
 	//COTEJAR RESPUESTA ARDUINO
-	$sql = query("INSERT INTO HISTORYACCESS
+	$sql = query("INSERT INTO HISTORYACTION
 						(`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
 				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
 			, $idaction, $returncode, $iduser);	
-	//ENVIAR MENSAJE AL MOVIL.
-	$result = query("SELECT `EXIT`,ENGLISH`,`SPANISH` 
-					  FROM `ACTIONMESSAGES` 
-					  WHERE `IDACTION`='%s' AND `RETURNCODE` = '%s'",  $idaction, $returncode);
-	print json_encode($result);
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+					(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
+			VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error);
 	
+	// take de error message
+	$message = query(	"SELECT ENGLISH, SPANISH
+					FROM ERRORS
+					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	
+	//ENVIAR MENSAJE AL MOVIL.
+	print json_encode(array('EXIT'=>$error).concat($message));
+
 }
 
 //--------------------------------------------------------------------------------------
 function createhouse($user, $house){
 	/* create a new user*/
-
+	$error = 0;
+	$funct = 7;
+	
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
@@ -312,7 +334,7 @@ function createhouse($user, $house){
 		default:	$error = 3;	break;//this user does not exists.
 	}
 
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 
 	//** CREATE NEW HOUSE BY THIS USER **
 	$sql = query("INSERT INTO HOUSES
@@ -330,7 +352,7 @@ function createhouse($user, $house){
 		default:	$error = 8;	break;//this user does not exists.
 	}
 	
-	testNoERROR($error);
+	testNoERROR($iduser, $error, $funct);
 	
 	//CREATE PERMISSION TO ACCESS
 	$sql = query("INSERT INTO ACCESSHOUSE
