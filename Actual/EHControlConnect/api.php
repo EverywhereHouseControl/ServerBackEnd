@@ -19,18 +19,22 @@ function testNoERROR($iduser, $error, $funct){
 			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 				, $iduser, $error, $funct);
 		
-		// take de error message
-		$message = query(	"SELECT ENGLISH, SPANISH
-					FROM ERRORS
-					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-		//print json_encode(array('EXIT'=>$error).concat($message));
-		//$error = 0;
-		//$json = "{".'"'."result".'"'.":{".'"'."error".'"'.":".'"'."".$error."".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."}}";
-		//print json_decode($json);
-		print json_encode($message);
+		message($error, $error);
 		exit();
 	}
 }
+//--------------------------------------------------------------------------------------
+function message($error, $return){
+	// take de error message and return the error code to app
+	$message = query(	"SELECT ENGLISH, SPANISH
+					FROM ERRORS
+					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+
+	$json = '{"result":[{"error":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
+	print json_encode( (array) json_decode($json));
+	//print json_encode($message);
+}
+
 //--------------------------------------------------------------------------------------
 function createJSON($iduser) {
 	/* make the json of the user */
@@ -174,7 +178,7 @@ function lostpass($user){
 				FROM ERRORS
 				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 	
-	print json_encode($message);
+	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -212,14 +216,7 @@ function createuser($user, $pass, $email, $hint){
 	
 	// take de error message
 	$error = 13;//create new user
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	
-	$error = 0;
-	$json = "{".'"'."result".'"'.":{".'"'."error".'"'.":".'"'."".$error."".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."}}";
-	//print json_decode($json);
-	print json_encode($message);
+	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -263,12 +260,7 @@ function deleteuser($user, $pass){
 	
 	// take de error message
 	$error = 14;//deleted user
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	$error = 0;
-	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
-	print json_decode($json);
+	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -312,13 +304,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	
 	// take de error message
 	$error = 15;//user MODIFY
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	
-	$error = 0;
-	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
-	print json_decode($json);
+	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -379,12 +365,7 @@ function doaction($user,$service,$action,$data) {
 	
 	// take de error message
 	$error = 16;//acction sent
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	$error = 0;
-	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
-	print json_decode($json);
+	message($error, 0);
 
 }
 
@@ -437,12 +418,7 @@ function createhouse($user, $house){
 	
 	// take de error message
 	$error = 17;//create new house
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	$error = 0;
-	$json = "{".'"'."result".'"'.":[".'"'."error".'"'.":".'"'."$error".'"'.",".'"'."ENGLISH".'"'.":".'"'."".$message['result'][0]['ENGLISH']."".'"'.",".'"'."SPANISH".'"'.":".'"'."".$message['result'][0]['SPANISH']."".'"'."]}";
-	print json_decode($json);
+	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
