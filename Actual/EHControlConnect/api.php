@@ -46,6 +46,8 @@ function createJSON($iduser) {
                             ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
 							USERS.IDUSER		= '%s')
 						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
+	$num	 = count($SQLjson['result']);
+	
 	//TEST QUERY HAS AT LEAST one VALUE
 	if (count($SQLuser['result']) < 1){
 		$json = "";
@@ -63,20 +65,22 @@ function createJSON($iduser) {
 	$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 	$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
-	for($i = 1; $i < count ( $data ); $i++){
+	$r = 1;
+	for($i = 1; $i < $num; $i++){
 		if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
 			//$json .= "]}}";
 			continue;
 		}
 		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
 			$json .= "]},\n";
-			$json .= "\"R".($i-1)."\":{\n";
+			$json .= "\"R".(++$r)."\":{\n";
 			$json .= "\"name\":\"".$SQLjson['result'][$i]['ROOMNAME']."\",\n";
 			$json .= "\"items\":[\n";
 			$json .= "\"".$SQLjson['result'][$i]['SERVICENAME']."\"";
 			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			
 			continue;
 		}
 		if ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']) {
@@ -91,7 +95,7 @@ function createJSON($iduser) {
 	$json .= "]}}}\n";
 	
 	//send json config to phone
-	print json_encode ( $json );//<---esto tendria que devolver un concat con EXIT
+	print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
 
 //--------------------------------------------------------------------------------------
@@ -131,8 +135,8 @@ function login($user, $pass) {
 			, $iduser, $error, $funct);
 	
 	//successful function
-	//print json_encode($SQLuser);
-	createJSON($iduser);
+	print json_encode($SQLuser);
+	//createJSON($iduser);
 }
 
 //--------------------------------------------------------------------------------------
