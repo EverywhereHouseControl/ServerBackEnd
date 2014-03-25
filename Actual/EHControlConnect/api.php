@@ -19,9 +19,10 @@ function testNoERROR($iduser, $error, $funct){
 	if ($error <> 0) {
 		//REGISTER THE ACTIVITY
 		$sql = query("INSERT INTO HISTORYACCESS
-					(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, FUNCTION, DATESTAMP        )
-			VALUES  (     NULL,   '%s',    NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
+					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 				, $iduser, $error, $funct);
+		
 		// take de error message
 		$message = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
@@ -45,6 +46,7 @@ function createJSON($iduser) {
                             ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
 							USERS.IDUSER		= '%s')
 						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
+	//TEST QUERY HAS AT LEAST one VALUE
 	if (count($SQLuser['result']) < 1){
 		$json = "";
 		print json_encode ( $json );
@@ -88,9 +90,9 @@ function createJSON($iduser) {
 	}
 	$json .= "]}}}\n";
 	
-	print json_encode ( $json );
+	//send json config to phone
+	print json_encode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
-
 
 //--------------------------------------------------------------------------------------
 function login($user, $pass) {
@@ -122,17 +124,11 @@ function login($user, $pass) {
 	
 	testNoERROR($iduser, $error, $funct);
 	
-	//insert information about result of login.
+	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
-						(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, FUNCTION, DATESTAMP        )
-				VALUES  (     NULL,   '%s',    NULL,         '%s',    '%s' , CURRENT_TIMESTAMP)"
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
-	// take de error message
-	$message = query(	"SELECT ENGLISH, SPANISH
-						FROM ERRORS
-						WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	// return error
-	testNoERROR($iduser, $error, $funct);
 	
 	//successful function
 	//print json_encode($SQLuser);
@@ -145,18 +141,35 @@ function lostpass($user){
 	$error = 0;
 	$funct = 2;
 	
-	$result = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 1", $user);
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
 	
-	if (count($result['result'])>0) {
-	//existe al menos un usuario con ese nombre
-		//ENVIAR CORREO AL USUARIO
-		print json_encode($result['result'][0]['EMAIL']);
-		
-	} 
-	else {
-	//usuario incorrecto
-		errorJson('The user does not exist.');
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
 	}
+
+	testNoERROR($iduser, $error, $funct);
+	
+	/*
+	 * 
+	 * server send an email recovery pasword
+	 * 
+	 */
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 12;//email password recovery sent.
+	$message = query(	"SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 }
 
 //--------------------------------------------------------------------------------------
@@ -181,8 +194,19 @@ function createuser($user, $pass, $email, $hint){
 			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT, JSON,     DATEBEGIN) 
 			VALUES (NULL,      '%s',    '%s',    '%s', '%s',   '', CURRENT_TIMESTAMP)"
 			, $user, $pass, $email, $hint);
-	//if (count($sql['error'])>0)  $error = 1;
-	print json_encode($sql);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 13;//create new user
+	$message = query(	"SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 }
 
 //--------------------------------------------------------------------------------------
@@ -217,8 +241,19 @@ function deleteuser($user, $pass){
 	$sql = query("DELETE FROM USERS
 			       WHERE USERNAME='%s'"
 			, $user);
-	//if (count($sql['error'])>0)  $error = 1;
-	print json_encode($sql);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 14;//deleted user
+	$message = query(	"SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 }
 
 //--------------------------------------------------------------------------------------
@@ -253,8 +288,19 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 				SET USERNAME='%s', PASSWORD='%s', EMAIL='%s', HINT='%s'
 			    WHERE USERNAME='%s'"
 			, $n_user, $n_pass, $n_email, $n_hint, $user);
-	//if (count($sql['error'])>0)  $error = 1;
-	print json_encode($sql);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 15;//user MODIFY
+	$message = query(	"SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 }
 
 //--------------------------------------------------------------------------------------
@@ -292,12 +338,16 @@ function doaction($user,$service,$action,$data) {
 	testNoERROR($iduser, $error, $funct);
 	
 	//ENVIAR ACCION AL ARDUINO 
-	//** print json_encode($code.concat(array('DATA'=>$data)));
+	/*
+	 * 
+	 * print json_encode($code.concat(array('DATA'=>$data)));
+	 * 
+	 */
 	
 	//ESPERAR RESPUESTA DEL ARDUINO.
 	$returncode = "0X000001";	
 	
-	//COTEJAR RESPUESTA ARDUINO
+	//REGISTER ARDUINO ANSWER
 	$sql = query("INSERT INTO HISTORYACTION
 						(`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
 				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
@@ -305,17 +355,16 @@ function doaction($user,$service,$action,$data) {
 
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
-					(IDHISTORY, IDUSER, IDHOUSE, ACCESSRESULT, DATESTAMP        )
-			VALUES  (     NULL,   '%s',    NULL,         '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error);
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
 	
 	// take de error message
+	$error = 16;//acction sent
 	$message = query(	"SELECT ENGLISH, SPANISH
-					FROM ERRORS
-					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	
-	//ENVIAR MENSAJE AL MOVIL.
-	print json_encode(array('EXIT'=>$error).concat($message));
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 
 }
 
@@ -341,7 +390,7 @@ function createhouse($user, $house){
 			       (IDHOUSE, IDUSER, HOUSENAME, IPADRESS, GPS,       DATEBEGIN)
 			VALUES (NULL,      '%s',    '%s',     '',    NULL, CURRENT_TIMESTAMP)"
 			, $iduser, $house);
-	//<-- OJO : IF SQL ERROR == TRUE//if (count($sql['error'])>0)  $error = 1;
+	
 	$SQLhouse = query("SELECT * FROM HOUSES WHERE HOUSENAME='%s' limit 2", $house);
 	$idhouse  = $SQLhouse['result'][0]['IDHOUSE'];
 	$num	  = count($SQLuser['result']);
@@ -359,8 +408,19 @@ function createhouse($user, $house){
 			       (IDUSER, IDHOUSE, ACCESSNUMBER,       DATEBEGIN)
 			VALUES ('%s',      '%s',    1,       CURRENT_TIMESTAMP)"
 			, $iduser, $house);
-	//<-- OJO : IF SQL ERROR == TRUE//if (count($sql['error'])>0)  $error = 1;
-	print json_encode($sql);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	// take de error message
+	$error = 17;//create new house
+	$message = query(	"SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	print json_encode(array('EXIT'=>0).concat($message));
 }
 
 ?>

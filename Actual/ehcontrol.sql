@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-03-2014 a las 21:22:15
+-- Tiempo de generación: 24-03-2014 a las 22:40:10
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -211,7 +211,13 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (8, 'This house does not exist.', 'La casa no existe.'),
 (9, 'This room does not exist.', 'Esta habitación no existe.'),
 (10, 'Requires permission.', 'Necesita permisos.'),
-(11, 'Requires access.', 'Necesita acceso.');
+(11, 'Requires access.', 'Necesita acceso.'),
+(12, 'Email password recovery sent.', 'Correo de recuperacion de contraseña enviado.'),
+(13, 'Create new user.', 'Nuevo usuario creado.'),
+(14, 'Deleted user.', 'Usuario eliminado.'),
+(15, 'User modified.', 'Usuario modificado.'),
+(16, 'Action sent.', 'Acción enviada.'),
+(17, 'Create new house.', 'Nueva casa creada.');
 
 -- --------------------------------------------------------
 
@@ -247,17 +253,17 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 
 CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   `IDHISTORY` int(11) NOT NULL AUTO_INCREMENT,
-  `IDUSER` int(11) NOT NULL DEFAULT '0',
+  `IDUSER` int(11) NOT NULL,
   `IDHOUSE` int(11) DEFAULT NULL,
-  `ACCESSRESULT` int(11) NOT NULL DEFAULT '0',
-  `FUNCT` int(11) NOT NULL DEFAULT '0',
+  `ERROR` int(11) NOT NULL,
+  `FUNCT` int(11) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORY`),
   KEY `IDUSER` (`IDUSER`),
   KEY `IDHOUSE` (`IDHOUSE`),
-  KEY `ACCESSRESULT` (`ACCESSRESULT`),
-  KEY `FUNCTION` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=142 ;
+  KEY `ERROR` (`ERROR`),
+  KEY `FUNCT` (`FUNCT`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -525,7 +531,7 @@ ALTER TABLE `HISTORYACCESS`
   ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`),
   ADD CONSTRAINT `HISTORYACCESS_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`),
   ADD CONSTRAINT `HISTORYACCESS_ibfk_2` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`),
-  ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ACCESSRESULT`) REFERENCES `ERRORS` (`ERRORCODE`);
+  ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`);
 
 --
 -- Filtros para la tabla `HISTORYACTION`
