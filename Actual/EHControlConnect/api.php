@@ -40,7 +40,7 @@ function createJSON($iduser) {
 	/* make the json of the user */
 	// "Rooms":{R1...R3{"name":"", "items":[]} }
 	// "User":"username"
-	$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
+	/*$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
 						FROM USERS 
 						JOIN (SERVICES, ROOMS, HOUSES ,ACCESSHOUSE)
 						ON (
@@ -49,7 +49,16 @@ function createJSON($iduser) {
                             HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE AND
                             ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
 							USERS.IDUSER		= '%s')
-						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
+						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );*/
+	$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
+						FROM USERS
+						JOIN (SERVICES, ROOMS, HOUSES, ACCESSHOUSE) 
+						ON ( 		SERVICES.IDROOM = ROOMS.IDROOM
+								AND ROOMS.IDHOUSE = HOUSES.IDHOUSE
+								AND HOUSES.IDHOUSE = ACCESSHOUSE.IDHOUSE
+								AND ACCESSHOUSE.IDUSER = USERS.IDUSER 
+								AND USERS.USERNAME = '%s')
+						ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
 	$num	 = count($SQLjson['result']);
 	
 	//TEST QUERY HAS AT LEAST one VALUE
@@ -101,7 +110,9 @@ function createJSON($iduser) {
 			continue;
 		}
 	}
-	$json .= ']}}}';
+	$json .= ']}}';
+	$json .= ',"error":0';
+	$json .= '}';
 	
 	//send json config to phone
 	//$json = '{"result":[{"error":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
