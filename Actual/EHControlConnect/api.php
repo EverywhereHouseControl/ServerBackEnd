@@ -1,11 +1,7 @@
 <?
 //API implementation to come here
 
-/* Returs Real Client IP */
-function ipcheck(){
-	print json_encode($_SERVER['REMOTE_ADDR']);
-	exit();
-}
+
 
 //--------------------------------------------------------------------------------------
 function errorJson($msg){
@@ -427,4 +423,20 @@ function createhouse($user, $house){
 	print json_encode(array('EXIT'=>0).concat($message));
 }
 
+//--------------------------------------------------------------------------------------
+function ipcheck(){
+/* Returs Real Client IP */
+	$error = 0;
+	$funct = 8;
+	$iduser = 0;//administrator
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	print json_encode($_SERVER['REMOTE_ADDR']);
+	exit();
+}
 ?>
