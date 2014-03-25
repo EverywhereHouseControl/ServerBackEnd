@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-03-2014 a las 13:50:15
+-- Tiempo de generación: 25-03-2014 a las 18:03:21
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 --
 
 INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES
+(2, 10, 1, '2014-03-25 21:39:58'),
 (29, 9, 1, '2014-03-23 19:56:06');
 
 -- --------------------------------------------------------
@@ -99,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `FCODE` varchar(20) NOT NULL,
   PRIMARY KEY (`IDACTION`),
   UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=69 ;
 
 --
 -- Volcado de datos para la tabla `ACTIONS`
@@ -171,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
   UNIQUE KEY `SERIAL` (`SERIAL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `DEVICES`
@@ -180,7 +181,8 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
 INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
 (0, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
 (1, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
-(9, '12.45.34.123', NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1);
+(9, '12.45.34.123', NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(10, '12.45.34.123', '52.33PL', 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1);
 
 -- --------------------------------------------------------
 
@@ -265,48 +267,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=91 ;
-
---
--- Volcado de datos para la tabla `HISTORYACCESS`
---
-
-INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-(56, 10, NULL, 0, 1, '2014-03-25 12:01:22'),
-(57, 45, NULL, 6, 3, '2014-03-25 12:01:31'),
-(58, 10, NULL, 0, 1, '2014-03-25 12:28:56'),
-(59, 50, NULL, 0, 3, '2014-03-25 12:28:57'),
-(60, 10, NULL, 0, 1, '2014-03-25 12:29:26'),
-(61, 50, NULL, 6, 3, '2014-03-25 12:29:27'),
-(62, 10, NULL, 0, 1, '2014-03-25 12:36:53'),
-(63, 50, NULL, 6, 3, '2014-03-25 12:36:54'),
-(64, 10, NULL, 0, 1, '2014-03-25 12:37:25'),
-(65, 51, NULL, 0, 3, '2014-03-25 12:37:26'),
-(66, 10, NULL, 0, 1, '2014-03-25 12:43:38'),
-(67, 51, NULL, 6, 3, '2014-03-25 12:43:40'),
-(68, 10, NULL, 0, 1, '2014-03-25 12:49:25'),
-(69, 52, NULL, 0, 3, '2014-03-25 12:49:27'),
-(70, 10, NULL, 0, 1, '2014-03-25 12:54:02'),
-(71, 52, NULL, 6, 3, '2014-03-25 12:54:03'),
-(72, 10, NULL, 0, 1, '2014-03-25 12:55:24'),
-(73, 52, NULL, 6, 3, '2014-03-25 12:55:25'),
-(74, 10, NULL, 0, 1, '2014-03-25 13:17:19'),
-(75, 10, NULL, 0, 1, '2014-03-25 14:37:53'),
-(76, 52, NULL, 6, 3, '2014-03-25 14:37:55'),
-(77, 10, NULL, 0, 1, '2014-03-25 14:40:45'),
-(78, 52, NULL, 6, 3, '2014-03-25 14:40:50'),
-(79, 53, NULL, 0, 3, '2014-03-25 14:49:41'),
-(80, 54, NULL, 0, 3, '2014-03-25 15:02:30'),
-(81, 10, NULL, 0, 1, '2014-03-25 15:09:49'),
-(82, 55, NULL, 0, 3, '2014-03-25 15:29:59'),
-(83, 56, NULL, 0, 3, '2014-03-25 15:33:04'),
-(84, 57, NULL, 0, 3, '2014-03-25 15:35:38'),
-(85, 58, NULL, 0, 3, '2014-03-25 15:39:15'),
-(86, 58, NULL, 6, 3, '2014-03-25 15:39:34'),
-(87, 56, NULL, 6, 3, '2014-03-25 15:43:15'),
-(88, 10, NULL, 0, 1, '2014-03-25 15:50:47'),
-(89, 10, NULL, 0, 1, '2014-03-25 15:57:04'),
-(90, 10, NULL, 0, 1, '2014-03-25 16:34:59');
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
 
 -- --------------------------------------------------------
 
@@ -341,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `HOUSES`
@@ -355,7 +316,8 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALU
 (5, 11, 'hause', NULL, '2014-03-11 04:00:00'),
 (6, 11, 'shack', NULL, '2014-03-11 04:00:00'),
 (8, 1, 'micasa', NULL, '2014-03-23 19:09:25'),
-(9, 29, 'casaBertoldo', NULL, '2014-03-23 19:51:49');
+(9, 29, 'casaBertoldo', NULL, '2014-03-23 19:51:49'),
+(10, 2, 'Mansión', NULL, '2014-03-25 21:39:22');
 
 -- --------------------------------------------------------
 
@@ -426,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `ROOMS`
@@ -434,7 +396,11 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
 
 INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VALUES
 (1, 9, 29, 'cocina', '2014-03-23 20:00:53'),
-(2, 9, 29, 'terraza', '2014-03-23 20:01:32');
+(2, 9, 29, 'terraza', '2014-03-23 20:01:32'),
+(7, 10, 2, 'Livingroom', '2014-03-25 21:40:27'),
+(8, 10, 2, 'Kitchen', '2014-03-25 21:41:04'),
+(9, 10, 2, 'Garage', '2014-03-25 21:41:17'),
+(10, 10, 2, 'Garden', '2014-03-25 21:41:31');
 
 -- --------------------------------------------------------
 
@@ -452,7 +418,7 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   PRIMARY KEY (`IDSERVICE`),
   UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
   KEY `IDDEVICE` (`IDDEVICE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
 
 --
 -- Volcado de datos para la tabla `SERVICES`
@@ -469,7 +435,25 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `ENGLI
 (14, 2, 9, 'BLINDS', NULL, NULL),
 (15, 1, 9, 'TV', NULL, NULL),
 (16, 2, 9, 'SENSOR', NULL, NULL),
-(17, 2, 9, 'LIGTHS', NULL, NULL);
+(17, 2, 9, 'LIGTHS', NULL, NULL),
+(29, 7, 10, 'TV', NULL, NULL),
+(30, 7, 10, 'DVD', NULL, NULL),
+(31, 7, 10, 'Stereo', NULL, NULL),
+(32, 7, 10, 'AirConditioning', NULL, NULL),
+(33, 7, 10, 'Lights', NULL, NULL),
+(34, 7, 10, 'Heating', NULL, NULL),
+(35, 8, 10, 'TV', NULL, NULL),
+(36, 8, 10, 'Microhondas', NULL, NULL),
+(37, 8, 10, 'Stereo', NULL, NULL),
+(38, 8, 10, 'AirConditioning', NULL, NULL),
+(39, 8, 10, 'Heating', NULL, NULL),
+(40, 8, 10, 'Lights', NULL, NULL),
+(41, 9, 10, 'Stereo', NULL, NULL),
+(42, 9, 10, 'Door', NULL, NULL),
+(43, 9, 10, 'Lights', NULL, NULL),
+(44, 9, 10, 'Heating', NULL, NULL),
+(45, 10, 10, 'Lights', NULL, NULL),
+(46, 10, 10, 'Video', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -523,14 +507,14 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
   `USERNAME` varchar(15) NOT NULL,
   `PASSWORD` varchar(32) NOT NULL,
-  `EMAIL` varchar(15) NOT NULL,
+  `EMAIL` varchar(40) NOT NULL,
   `HINT` varchar(30) DEFAULT NULL,
   `JSON` varchar(1000) NOT NULL DEFAULT '{     "Rooms": {         "R1": {             "name": "Livingroom",             "items": [                 "TV",                 "DVD",                 "Stereo",                 "AirConditioning",                 "Lights",                 "Heating"             ]         },         "R2": {             "name": "Kitchen",             "items": [                 "TV",                 "Microhondas",                 "Stereo",                 "AirConditioning",                 "Heating",                 "Lights",                 "Heating"             ]         },         "R3": {             "name": "Garage",             "items": [                 "Stereo",                 "Door",                 "Lights",                 "Heating"             ]         },         "R4": {             "name": "Garden",             "items": [                 "Lights",                 "Video"             ]         }     },     "User": "Colin Tirado" }',
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=60 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -539,18 +523,12 @@ CREATE TABLE IF NOT EXISTS `USERS` (
 INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `JSON`, `DATEBEGIN`) VALUES
 (0, 'administrator', '', '', NULL, '', '2014-03-25 10:36:01'),
 (1, 'alex', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@gmail.com', 'what about me?', '{     "Rooms": {         "R1": {             "name": "Livingroom",             "items": [                 "TV",                 "DVD",                 "Stereo",                 "AirConditioning",                 "Lights",                 "Heating"             ]         },         "R2": {             "name": "Kitchen",             "items": [                 "TV",                 "Microhondas",                 "Stereo",                 "AirConditioning",                 "Heating",                 "Lights",                 "Heating"             ]         },         "R3": {             "name": "Garage",             "items": [                 "Stereo",                 "Door",                 "Lights",                 "Heating"             ]         },         "R4": {             "name": "Garden",             "items": [                 "Lights",                 "Video"             ]         }     },     "User": "Colin Tirado" }', '2014-03-11 04:00:00'),
+(2, 'Colin Tirado', '5aa46322bc95081a9913330cfa3efc09', 'ctiradocaa@gmail.com', 'Adivina adivinanza.', '{     "Rooms": {         "R1": {             "name": "Livingroom",             "items": [                 "TV",                 "DVD",                 "Stereo",                 "AirConditioning",                 "Lights",                 "Heating"             ]         },         "R2": {             "name": "Kitchen",             "items": [                 "TV",                 "Microhondas",                 "Stereo",                 "AirConditioning",                 "Heating",                 "Lights",                 "Heating"             ]         },         "R3": {             "name": "Garage",             "items": [                 "Stereo",                 "Door",                 "Lights",                 "Heating"             ]         },         "R4": {             "name": "Garden",             "items": [                 "Lights",                 "Video"             ]         }     },     "User": "Colin Tirado" }', '2014-03-25 21:36:35'),
 (10, 'luis', '502ff82f7f1f8218dd41201fe4353687', 'luis@gmail.com', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-11-13 05:00:00'),
 (11, 'alex2', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@hotmail.co', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-01-11 05:00:00'),
 (12, 'alex3', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@ehc.com', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-01 05:00:00'),
 (28, 'luis2', '502ff82f7f1f8218dd41201fe4353687', 'luis@hotmail.co', 'what about me?', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-03 05:00:00'),
-(29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.', 'thats not fun.', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-23 04:00:01'),
-(52, 'a', 'cc175b9c0f1b6a831c399e269772661', 'a', 'caca', '', '2014-03-25 12:49:27'),
-(53, 'q', '7694f4a66316e53c8cdd9d9954bd611d', 'q@h', 'caca', '', '2014-03-25 14:49:41'),
-(54, 'j', '363b122c528f54df4a446b6bab05515', 'j@', 'caca', '', '2014-03-25 15:02:30'),
-(55, 'x', '9dd4e461268c8034f5c8564e155c67a6', 'x@', 'caca', '', '2014-03-25 15:29:59'),
-(56, 'z', 'fbade9e36a3f36d3d676c1b88451dd7', 'z@', 'caca', '', '2014-03-25 15:33:04'),
-(57, 'n', '7b8b965ad4bca0e41ab51de7b31363a1', 'n@', 'caca', '', '2014-03-25 15:35:37'),
-(58, 'm', '6f8f57715090da2632453988d9a1501b', 'm@', 'caca', '', '2014-03-25 15:39:15');
+(29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.', 'thats not fun.', '{\n    "Rooms": {\n        "R1": {\n            "name": "Livingroom",\n            "items": [\n                "TV",\n                "DVD",\n                "Stereo",\n                "AirConditioning",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R2": {\n            "name": "Kitchen",\n            "items": [\n                "TV",\n                "Microhondas",\n                "Stereo",\n                "AirConditioning",\n                "Heating",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R3": {\n            "name": "Garage",\n            "items": [\n                "Stereo",\n                "Door",\n                "Lights",\n                "Heating"\n            ]\n        },\n        "R4": {\n            "name": "Garden",\n            "items": [\n                "Lights",\n                "Video"\n            ]\n        }\n    },\n    "User": "Colin Tirado"\n}', '2014-03-23 04:00:01');
 
 --
 -- Restricciones para tablas volcadas
