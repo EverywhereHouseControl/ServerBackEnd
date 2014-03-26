@@ -10,6 +10,7 @@ function query() {
 	$debug = false;
 	
 	//get the sql query
+	
 	$args = func_get_args();
 	$sql = array_shift($args);
 
