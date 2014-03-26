@@ -71,6 +71,7 @@ function createJSON($iduser) {
 	//** creation of firt type of json aplication uses**
 	$json = '{';
 	$json .= '"User":"'.$SQLjson['result'][0]['USERNAME'].'",'; // "User":"username"
+	$json .= '"House":"'.$SQLjson['result'][0]['HOUSENAME'].'",'; 
 	$json .= '"Rooms":{';// "Rooms":{R1...R3{"name":"", "items":[]} }
 	$json .= '"R1":{';
 	$json .= '"name":"'.$SQLjson['result'][0]['ROOMNAME'].'",';
