@@ -29,10 +29,12 @@ function message($error, $return){
 	$message = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-
-	$json = '{"result":[{"error":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	print json_encode( (array) json_decode($json));
+	
+	$json = '{"result":[{"ERROR":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
+	//$json = '{"result":[{"error":9}]}';
+	print $json;
 	//print json_encode($message);
+	//print json_encode( (array) json_decode($json));
 }
 
 //--------------------------------------------------------------------------------------
@@ -57,18 +59,18 @@ function createJSON($iduser) {
 								AND ROOMS.IDHOUSE = HOUSES.IDHOUSE
 								AND HOUSES.IDHOUSE = ACCESSHOUSE.IDHOUSE
 								AND ACCESSHOUSE.IDUSER = USERS.IDUSER 
-								AND USERS.USERNAME = '%s')
+								AND USERS.IDUSER = '%s')
 						ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
 	$num	 = count($SQLjson['result']);
 	
 	//TEST QUERY HAS AT LEAST one VALUE
-	if (count($SQLuser['result']) < 1){
+	if ($num == 0){
 		$json = '';
-		print json_encode ( $json );
+		return $json;
 	}
 	//** creation of firt type of json aplication uses**
 	$json = '{';
-	$json .= '"User":"'.$SQLjson['result'][0]['USERNAME'].'"'; // "User":"username"
+	$json .= '"User":"'.$SQLjson['result'][0]['USERNAME'].'",'; // "User":"username"
 	$json .= '"Rooms":{';// "Rooms":{R1...R3{"name":"", "items":[]} }
 	$json .= '"R1":{';
 	$json .= '"name":"'.$SQLjson['result'][0]['ROOMNAME'].'",';
@@ -83,40 +85,40 @@ function createJSON($iduser) {
 	//var for write "R1" R1...R3
 	$r = 1;
 	for($i = 1; $i < $num; $i++){
-		if ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']) {
+		if (!($tmpHOUSENAME == $SQLjson['result'][$i]['HOUSENAME'])) {
 			//$json .= "]}}";
-			continue;
+			break;
 		}
-		if ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']) {
+		if (!($tmpROOMNAME == $SQLjson['result'][$i]['ROOMNAME'])) {
 			$json .= ']},';
 			$json .= '"R'.(++$r).'":{';
 			$json .= '"name":"'.$SQLjson['result'][$i]['ROOMNAME'].'",';
 			$json .= '"items":[';
 			$json .= '"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
 			
-			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
-			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
-			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
+			$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
+			$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
 			
 			continue;
 		}
-		if ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']) {
+		if (!($tmpSERVICENAME == $SQLjson['result'][$i]['SERVICENAME'])) {
 			$json .= ',"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
 			
-			$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
-			$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
-			$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
+			$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
+			$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
+			$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
 			
 			continue;
 		}
 	}
 	$json .= ']}}';
-	$json .= ',"error":0';
 	$json .= '}';
-	
+	return  $json;
+	//return json_encode( (array) json_decode($json));
 	//send json config to phone
-	//$json = '{"result":[{"error":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	print json_encode( (array) json_decode($json));
+	//$return = '{"result":[{"JSON":'.$json.',"ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
+	//print json_encode( (array) json_decode($json));
 	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
 
@@ -157,8 +159,10 @@ function login($user, $pass) {
 			, $iduser, $error, $funct);
 	
 	//successful function
+	$SQLuser['result'][0]['JSON'] = createJSON($iduser);
+	$SQLuser['result'][0]['ERROR'] = '0';
 	print json_encode($SQLuser);
-	//createJSON($iduser);
+	//print createJSON($iduser);
 }
 
 //--------------------------------------------------------------------------------------
@@ -226,7 +230,7 @@ function createuser($user, $pass, $email, $hint){
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	
-	//REGISTER THE ACTIVITY
+		//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
