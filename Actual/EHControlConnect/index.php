@@ -50,7 +50,7 @@ switch ($_POST['command']) {
 		break;
 	//6
 	case "doaction":
-		doaction($_POST['username'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
+		doaction($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
 		//**send an action to the arduino to be done
 		// ::> returns a message
 		break;

@@ -330,7 +330,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 }
 
 //--------------------------------------------------------------------------------------
-function doaction($user,$service,$action,$data) {
+function doaction($user,$house,$room,$service,$action,$data) {
 /* a user send a specific action aobut a service with or without data*/
 	$error = 0;
 	$funct = 6;
@@ -354,7 +354,7 @@ function doaction($user,$service,$action,$data) {
 						   `IDSERVICE` IN 
 							(SELECT `IDSERVICE` 
 							 FROM   `SERVICES` 
-							 WHERE  `SERVICENAME` = '%s') limit 2", $action, $service);
+							 WHERE  `SERVICENAME` = '%s') limit 2", $user,$house,$room,$service,$action);
 	$num	 = count($code['result']);
 	switch ($num){
 		case 0:	$error = 5;	break;
