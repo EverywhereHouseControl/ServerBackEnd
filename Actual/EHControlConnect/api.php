@@ -38,6 +38,19 @@ function message($error, $return){
 }
 
 //--------------------------------------------------------------------------------------
+function testEXIST( $where, $something, $id) {
+	/*TEST $somothing(IDUSER/IDHOUSE/ID..../HOUSENAME/ROOM....) EXIST ON TABLE $where BY THIS ENTRY $id*/
+	$error = 0;
+	$SQLuser = query("SELECT * FROM %s WHERE %s='%s' limit 2", $where, $something, $id);
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 1;	break;
+		case 2:	$error = 4;	break;
+	}
+	return $error;
+}
+
+//--------------------------------------------------------------------------------------
 function createJSON($iduser) {
 	/* make the json of the user */
 	// "Rooms":{R1...R3{"name":"", "items":[]} }
@@ -123,20 +136,22 @@ function createJSON($iduser) {
 	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
 
-//--------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------
 function login($user, $pass) {
 /* make de server conexion*/
 	$error = 0;
 	$funct = 1;
 	
+	switch (testEXIST( 'USERS', 'USERNAME', $user)){
+		case 1:	$error = 3;	break;
+		case 4:	$error = 4;	break;
+	}
+	
+	//only for save the iduser becouse we need that
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-	
-	switch ($num){
-		case 0:	$error = 3;	break;
-		case 2:	$error = 4;	break;
-	}
 
 	testNoERROR($iduser, $error, $funct);
 	
@@ -172,13 +187,9 @@ function lostpass($user){
 	$error = 0;
 	$funct = 2;
 	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-	
-	switch ($num){
-		case 0:	$error = 3;	break;
-		case 2:	$error = 4;	break;
+	switch (testEXIST( 'USERS', 'USERNAME', $user)){
+		case 1:	$error = 3;	break;
+		case 4:	$error = 4;	break;
 	}
 
 	testNoERROR($iduser, $error, $funct);
@@ -339,9 +350,6 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
-	$idaction =  query("SELECT  `FCODE` 
-					    FROM    `ACTIONS` 
-					    WHERE   `ACTIONNAME`='%s'", $action);
 	switch ($num){
 		case 0:	$error = 3;	break;
 		case 2:	$error = 4;	break;
@@ -349,18 +357,85 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	testNoERROR($iduser, $error, $funct);
 	
+	//TEST HOUSE EXIST
+	switch (testEXIST( 'HOUSES', 'HOUSENAME', $house)){
+		case 1:	$error = 8;	break;
+		case 4:	$error = 4;	break;
+	}
+	testNoERROR($iduser, $error, $funct);
+	
+	//TEST ROOM EXIST
+	$SQLuser = query("SELECT * 
+						FROM ROOMS, HOUSES 
+						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
+								AND ROOMS.ROOMNAME='%s'
+								AND HOUSES.HOUSENAME='%s' limit 2", $room, $house);
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 9;break;
+		case 2:	$error = 4;	break;
+	}
+	testNoERROR($iduser, $error, $funct);
+	
+	//TEST SERVICE EXIST
+	$SQLuser = query("SELECT * 
+						FROM ROOMS, HOUSES, SERVICES 
+						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
+								AND SERVICES.IDROOM=ROOMS.IDROOM
+								AND SERVICES.SERVICENAME='%s'
+								AND ROOMS.ROOMNAME='%s'
+								AND HOUSES.HOUSENAME='%s' limit 2", $service, $room, $house);
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 20;break;
+		case 2:	$error = 4;	break;
+	}
+	testNoERROR($iduser, $error, $funct);
+	
+	//TEST ACTION EXIST
+	$SQLuser = query("SELECT * 
+						FROM ROOMS, HOUSES, SERVICES, ACTIONS
+						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
+								AND SERVICES.IDROOM=ROOMS.IDROOM
+								AND ACTIONS.IDSERVICE=SERVICES.IDSERVICE
+								AND ACTIONS.ACTIONNAME='%s'
+								AND SERVICES.SERVICENAME='%s'
+								AND ROOMS.ROOMNAME='%s'
+								AND HOUSES.HOUSENAME='%s' limit 2", $action, $service, $room, $house);
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 21;break;
+		case 2:	$error = 4;	break;
+	}
+	testNoERROR($iduser, $error, $funct);
+	
+	//TEST HAVE ACCESS
+	$SQLuser = query("SELECT * 
+						FROM ACCESSHOUSE, USERS, HOUSES 
+						WHERE ACCESSHOUSE.IDUSER=USERS.IDUSER 
+								AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE 
+								AND USERS.USERNAME='%s'
+								AND HOUSES.HOUSENAME='%s' limit 2", $user, $house);
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 11;break;
+		case 2:	$error = 4;	break;
+	}
+	testNoERROR($iduser, $error, $funct);
+	
+	//GET THE FUNCTION CODE 
 	$code = query("SELECT  `FCODE` 
 				   FROM    `ACTIONS` , HOUSES, ROOMS, SERVICES, ACCESSHOUSE, USERS
 				   WHERE  ACTIONS.IDSERVICE=SERVICES.IDSERVICE 
-AND SERVICES.IDROOM=ROOMS.IDROOM
-AND ROOMS.IDHOUSE=HOUSES.IDHOUSE
-AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE
-AND ACCESSHOUSE.IDUSER= USERS.IDUSER
-AND USERS.USERNAME='%s'
-AND HOUSES.HOUSENAME='%s'
-AND ROOMS.ROOMNAME='%s'
-AND SERVICES.SERVICENAME = '%s'
-AND ACTIONS.ACTIONNAME='%s' limit 2", $user,$house,$room,$service,$action);
+							AND SERVICES.IDROOM=ROOMS.IDROOM
+							AND ROOMS.IDHOUSE=HOUSES.IDHOUSE
+							AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE
+							AND ACCESSHOUSE.IDUSER= USERS.IDUSER
+							AND USERS.USERNAME='%s'
+							AND HOUSES.HOUSENAME='%s'
+							AND ROOMS.ROOMNAME='%s'
+							AND SERVICES.SERVICENAME = '%s'
+							AND ACTIONS.ACTIONNAME='%s' limit 2", $user,$house,$room,$service,$action);
 	$num	 = count($code['result']);
 	switch ($num){
 		case 0:	$error = 5;	break;
