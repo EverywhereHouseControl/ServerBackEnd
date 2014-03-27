@@ -470,7 +470,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	//REGISTER ARDUINO ANSWER
 	$sql = query("INSERT INTO HISTORYACTION
-						(`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
+						(`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
 				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
 			, $idaction, $FCODE.$IRCODE, $iduser);	
 
