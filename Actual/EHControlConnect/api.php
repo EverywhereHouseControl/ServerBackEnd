@@ -462,7 +462,7 @@ function ipcheck(){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 	
-	print json_encode($_SERVER['REMOTE_ADDR']);
+	print $_SERVER['REMOTE_ADDR'];
 	exit();
 }
 
