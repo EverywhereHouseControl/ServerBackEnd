@@ -465,7 +465,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 		$idaction = 0;
 	}
 	
-	//$IRCODE.$FCODE;
+	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
 	header("Location: http://192.168.2.117/ejecuta.php?valor=".$FCODE.$IRCODE);
 	
 	//REGISTER ARDUINO ANSWER
