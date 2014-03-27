@@ -71,6 +71,9 @@ switch ($_POST['command']) {
 		//**delete a existing house by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
+	case "testEXIST":
+		print testEXIST( $_POST['username'],$_POST['password'],$_POST['n_username']);
+		break;
 //-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":
 		modifyhouse($_POST['username'],$_POST['password'],$_POST['housename']);
