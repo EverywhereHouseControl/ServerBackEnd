@@ -23,8 +23,8 @@
   actionname: <input type="text" name="actionname" /></br>
   data: <input type="text" name="data" /></br>
   device: <input type="text" name="device" /></br>
-  ciudad: <input type="text" name="ciudad" /></br>
-  pais: <input type="text" name="pais" /></br>
+  ciudad: <input type="text" name="city" /></br>
+  pais: <input type="text" name="country" /></br>
   idioma: <input type="text" name="idioma" /></br>
 
   <input type="submit" />

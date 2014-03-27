@@ -71,6 +71,12 @@ switch ($_POST['command']) {
 		//**delete a existing house by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
+	//10
+	case "getweather":
+		getweather($_POST['city'],$_POST['country']);
+		// ::> returns the weather of a specific city and country
+		break;
+
 	case "testEXIST":
 		print testEXIST( $_POST['username'],$_POST['password'],$_POST['n_username']);
 		break;

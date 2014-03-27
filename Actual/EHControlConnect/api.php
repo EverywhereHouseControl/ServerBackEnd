@@ -537,7 +537,7 @@ function ipcheck(){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 	
-	print $_SERVER['REMOTE_ADDR'];
+	print json_encode ($_SERVER['REMOTE_ADDR']);
 	exit();
 }
 
@@ -595,6 +595,23 @@ function deletehouse($user, $pass, $house){
 	// take de error message
 	$error = 19;//delete house
 	message($error, 0);
+}
+
+function getweather($city,$country){
+/* returns the weather of a specific city and country */
+	$error = 0;
+	$funct = 10;
+	$iduser = 0;//administrator
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	exec('clima "' . $city . '"', $output);
+	print json_encode ($output[0]);
+	exit();
 }
 
 ?>
