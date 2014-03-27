@@ -440,6 +440,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 
 	testNoERROR($iduser, $error, $funct);
 	
+	//GETN THE IDENTIFICATOR
 	$FCODE = $code['result'][0]['FCODE'];
 
 	//GET THE IRCODE CODE
@@ -456,7 +457,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 		}
 		testNoERROR($iduser, $error, $funct);
 		
-		$IRCODE = $code['result'][0][$data];
+		$IRCODE = '0132'.$code['result'][0][$data];
 		$idaction = 1;
 	}
 	else{
@@ -466,13 +467,16 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	}
 	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
-	header("Location: http://192.168.2.117/ejecuta.php?valor=".$FCODE.$IRCODE);
+	//header("Location: http://192.168.2.117/ejecuta.php?valor=".$IRCODE.$FCODE);
+	header("Location: http://mykelly.sytes.net/ejecuta.php?valor=".$IRCODE.$FCODE);
+	header("Content-Type: application/json");
+	
 	
 	//REGISTER ARDUINO ANSWER
 	$sql = query("INSERT INTO HISTORYACTION
 						(`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
-				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
-			, $idaction, $FCODE.$IRCODE, $iduser);	
+				VALUES  (NULL,                '%s',      NULL,           '%s',  '%s',  CURRENT_TIMESTAMP)"
+			, $idaction, $iduser, $IRCODE.$FCODE);	
 
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
@@ -483,6 +487,8 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	// take de error message
 	$error = 16;//acction sent
 	message($error, 0);
+	
+	
 
 }
 
