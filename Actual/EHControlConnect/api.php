@@ -234,8 +234,8 @@ function createuser($user, $pass, $email, $hint){
 	
 	//** INSERT NEW USER **
 	$sql = query("INSERT INTO USERS
-			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT, JSON,     DATEBEGIN) 
-			VALUES (NULL,      '%s',    '%s',    '%s', '%s',   '', CURRENT_TIMESTAMP)"
+			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT,     DATEBEGIN) 
+			VALUES (NULL,      '%s',    '%s',    '%s', '%s', CURRENT_TIMESTAMP)"
 			, $user, $pass, $email, $hint);
 	
 	//iduser UPDATE FOR NEW USER
@@ -422,20 +422,16 @@ function doaction($user,$house,$room,$service,$action,$data) {
 		case 2:	$error = 4;	break;
 	}
 	testNoERROR($iduser, $error, $funct);
-	
+	//if action == ENVIAR
 	//GET THE FUNCTION CODE 
-	$code = query("SELECT  `FCODE` 
-				   FROM    `ACTIONS` , HOUSES, ROOMS, SERVICES, ACCESSHOUSE, USERS
-				   WHERE  ACTIONS.IDSERVICE=SERVICES.IDSERVICE 
-							AND SERVICES.IDROOM=ROOMS.IDROOM
+	$code = query("SELECT  FCODE 
+				   FROM    HOUSES, ROOMS, SERVICES, USERS
+				   WHERE   SERVICES.IDROOM=ROOMS.IDROOM
 							AND ROOMS.IDHOUSE=HOUSES.IDHOUSE
-							AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE
-							AND ACCESSHOUSE.IDUSER= USERS.IDUSER
 							AND USERS.USERNAME='%s'
 							AND HOUSES.HOUSENAME='%s'
 							AND ROOMS.ROOMNAME='%s'
-							AND SERVICES.SERVICENAME = '%s'
-							AND ACTIONS.ACTIONNAME='%s' limit 2", $user,$house,$room,$service,$action);
+							AND SERVICES.SERVICENAME = '%s' limit 2", $user,$house,$room,$service);
 	$num	 = count($code['result']);
 	switch ($num){
 		case 0:	$error = 5;	break;
@@ -444,21 +440,39 @@ function doaction($user,$house,$room,$service,$action,$data) {
 
 	testNoERROR($iduser, $error, $funct);
 	
-	//ENVIAR ACCION AL ARDUINO 
-	/*
-	 * 
-	 * print json_encode($code.concat(array('DATA'=>$data)));
-	 * 
-	 */
+	$FCODE = $code['result'][0]['FCODE'];
+
+	//GET THE IRCODE CODE
+	if ($service == TV){
+		//sent infrared code
+		$code = query("SELECT  %s
+					   FROM   IRCODES
+					   WHERE  TYPE='%s' limit 2", $data,'TV NPG');
+		$num	 = count($code['result']);
+		
+		switch ($num){
+			case 0:	$error = 4;	break;
+			case 2:	$error = 4;	break;
+		}
+		testNoERROR($iduser, $error, $funct);
+		
+		$IRCODE = $code['result'][0][$data];
+		$idaction = 1;
+	}
+	else{
+		//sent on code
+		$IRCODE = 0;
+		$idaction = 0;
+	}
 	
-	//ESPERAR RESPUESTA DEL ARDUINO.
-	$returncode = "0X000001";	
+	//$IRCODE.$FCODE;
+	header("Location: http://192.168.2.117/ejecuta.php?valor=".$FCODE.$IRCODE);
 	
 	//REGISTER ARDUINO ANSWER
 	$sql = query("INSERT INTO HISTORYACTION
 						(`ID`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
 				VALUES  (NULL,   '%s',      NULL,         '%s',    '%s',  CURRENT_TIMESTAMP)"
-			, $idaction, $returncode, $iduser);	
+			, $idaction, $FCODE.$IRCODE, $iduser);	
 
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
@@ -597,7 +611,7 @@ function deletehouse($user, $pass, $house){
 	message($error, 0);
 }
 
-function getweather($city,$country){
+function getweather($city,$language){
 /* returns the weather of a specific city and country */
 	$error = 0;
 	$funct = 10;
@@ -609,8 +623,11 @@ function getweather($city,$country){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 	
-	exec('clima "' . $city . '"', $output);
-	print json_encode ($output[0]);
+	exec('./clima ' .$city.' '. $language,$output);
+	foreach($output as &$valor){
+		echo ($valor);
+		echo ("\n");
+	}
 	exit();
 }
 

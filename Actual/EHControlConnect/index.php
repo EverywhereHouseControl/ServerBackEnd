@@ -73,7 +73,7 @@ switch ($_POST['command']) {
 		break;
 	//10
 	case "getweather":
-		getweather($_POST['city'],$_POST['country']);
+		getweather($_POST['city'],$_POST['language']);
 		// ::> returns the weather of a specific city and country
 		break;
 

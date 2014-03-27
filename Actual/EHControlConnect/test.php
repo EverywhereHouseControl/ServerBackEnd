@@ -25,7 +25,7 @@
   device: <input type="text" name="device" /></br>
   ciudad: <input type="text" name="city" /></br>
   pais: <input type="text" name="country" /></br>
-  idioma: <input type="text" name="idioma" /></br>
+  idioma: <input type="text" name="language" /></br>
 
   <input type="submit" />
   </form>
