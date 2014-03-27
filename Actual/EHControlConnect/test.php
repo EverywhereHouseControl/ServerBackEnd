@@ -17,10 +17,10 @@
   n_password: <input type="text" name="n_password" /></br>
   n_email: <input type="text" name="n_email" /></br>
   n_hint: <input type="text" name="n_hint" /></br>
-  house_name: <input type="text" name="house_name" /></br>
-  room_name: <input type="text" name="room_name" /></br>
-  service_name: <input type="text" name="service_name" /></br>
-  action_name: <input type="text" name="action_name" /></br>
+  housename: <input type="text" name="housename" /></br>
+  roomname: <input type="text" name="roomname" /></br>
+  servicename: <input type="text" name="servicename" /></br>
+  actionname: <input type="text" name="actionname" /></br>
   data: <input type="text" name="data" /></br>
   device: <input type="text" name="device" /></br>
   ciudad: <input type="text" name="ciudad" /></br>

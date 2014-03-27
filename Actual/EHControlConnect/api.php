@@ -350,12 +350,17 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	testNoERROR($iduser, $error, $funct);
 	
 	$code = query("SELECT  `FCODE` 
-				   FROM    `ACTIONS` 
-				   WHERE   `ACTIONNAME`='%s' AND 
-						   `IDSERVICE` IN 
-							(SELECT `IDSERVICE` 
-							 FROM   `SERVICES` 
-							 WHERE  `SERVICENAME` = '%s') limit 2", $user,$house,$room,$service,$action);
+				   FROM    `ACTIONS` , HOUSES, ROOMS, SERVICES, ACCESSHOUSE, USERS
+				   WHERE  ACTIONS.IDSERVICE=SERVICES.IDSERVICE 
+AND SERVICES.IDROOM=ROOMS.IDROOM
+AND ROOMS.IDHOUSE=HOUSES.IDHOUSE
+AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE
+AND ACCESSHOUSE.IDUSER= USERS.IDUSER
+AND USERS.USERNAME='%s'
+AND HOUSES.HOUSENAME='%s'
+AND ROOMS.ROOMNAME='%s'
+AND SERVICES.SERVICENAME = '%s'
+AND ACTIONS.ACTIONNAME='%s' limit 2", $user,$house,$room,$service,$action);
 	$num	 = count($code['result']);
 	switch ($num){
 		case 0:	$error = 5;	break;
