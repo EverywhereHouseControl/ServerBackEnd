@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-03-2014 a las 20:35:01
+-- Tiempo de generación: 29-03-2014 a las 09:20:54
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=952 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1030 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACCESS`
@@ -1147,7 +1147,85 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (948, 10, NULL, 0, 6, '2014-03-28 00:14:41'),
 (949, 10, NULL, 0, 6, '2014-03-28 00:14:43'),
 (950, 0, NULL, 3, 1, '2014-03-28 00:23:18'),
-(951, 29, NULL, 0, 1, '2014-03-28 00:23:30');
+(951, 29, NULL, 0, 1, '2014-03-28 00:23:30'),
+(952, 10, NULL, 0, 1, '2014-03-28 00:41:08'),
+(953, 29, NULL, 0, 1, '2014-03-28 00:43:27'),
+(954, 0, NULL, 3, 1, '2014-03-28 00:43:56'),
+(955, 29, NULL, 2, 1, '2014-03-28 00:44:11'),
+(956, 29, NULL, 0, 1, '2014-03-28 00:44:18'),
+(957, 10, NULL, 0, 1, '2014-03-28 00:47:07'),
+(958, 29, NULL, 0, 1, '2014-03-28 00:48:47'),
+(959, 10, NULL, 0, 1, '2014-03-28 01:00:11'),
+(960, 10, NULL, 0, 1, '2014-03-28 01:18:24'),
+(961, 10, NULL, 0, 1, '2014-03-28 01:20:03'),
+(962, 0, NULL, 3, 1, '2014-03-28 01:22:13'),
+(963, 29, NULL, 0, 1, '2014-03-28 01:22:23'),
+(964, 10, NULL, 0, 1, '2014-03-28 01:23:04'),
+(965, 0, NULL, 3, 1, '2014-03-28 02:39:44'),
+(966, 29, NULL, 2, 1, '2014-03-28 02:39:54'),
+(967, 29, NULL, 0, 1, '2014-03-28 02:40:01'),
+(968, 0, NULL, 3, 1, '2014-03-28 02:41:32'),
+(969, 29, NULL, 2, 1, '2014-03-28 02:41:55'),
+(970, 29, NULL, 0, 1, '2014-03-28 02:42:18'),
+(971, 29, NULL, 0, 1, '2014-03-28 02:43:44'),
+(972, 29, NULL, 0, 1, '2014-03-28 02:45:54'),
+(973, 29, NULL, 0, 1, '2014-03-28 02:46:43'),
+(974, 29, NULL, 0, 1, '2014-03-28 02:52:10'),
+(975, 29, NULL, 0, 1, '2014-03-28 02:55:45'),
+(976, 29, NULL, 0, 1, '2014-03-28 02:58:08'),
+(977, 29, NULL, 0, 1, '2014-03-28 03:00:07'),
+(978, 29, NULL, 0, 1, '2014-03-28 03:17:28'),
+(979, 29, NULL, 0, 1, '2014-03-28 03:18:29'),
+(980, 29, NULL, 0, 1, '2014-03-28 03:19:41'),
+(981, 29, NULL, 0, 1, '2014-03-28 03:21:06'),
+(982, 10, NULL, 0, 1, '2014-03-28 09:08:52'),
+(983, 10, NULL, 0, 6, '2014-03-28 09:09:03'),
+(984, 10, NULL, 0, 6, '2014-03-28 09:09:07'),
+(985, 10, NULL, 0, 6, '2014-03-28 09:09:19'),
+(986, 10, NULL, 0, 1, '2014-03-28 09:16:59'),
+(987, 10, NULL, 0, 6, '2014-03-28 09:17:34'),
+(988, 10, NULL, 0, 1, '2014-03-28 09:18:57'),
+(989, 10, NULL, 0, 6, '2014-03-28 09:19:06'),
+(990, 10, NULL, 0, 6, '2014-03-28 09:19:08'),
+(991, 10, NULL, 0, 1, '2014-03-28 09:20:19'),
+(992, 10, NULL, 0, 1, '2014-03-28 09:26:15'),
+(993, 10, NULL, 0, 6, '2014-03-28 10:52:40'),
+(994, 10, NULL, 0, 1, '2014-03-28 10:53:52'),
+(995, 67, NULL, 0, 6, '2014-03-28 10:54:22'),
+(996, 10, NULL, 0, 6, '2014-03-28 10:54:26'),
+(997, 10, NULL, 0, 6, '2014-03-28 10:56:13'),
+(998, 60, NULL, 6, 3, '2014-03-28 12:15:33'),
+(999, 68, NULL, 0, 3, '2014-03-28 12:15:56'),
+(1000, 68, NULL, 0, 1, '2014-03-28 12:16:08'),
+(1001, 10, NULL, 0, 1, '2014-03-28 12:16:47'),
+(1002, 10, NULL, 0, 6, '2014-03-28 12:17:08'),
+(1003, 10, NULL, 0, 6, '2014-03-28 12:17:10'),
+(1004, 69, NULL, 0, 3, '2014-03-28 12:22:15'),
+(1005, 69, NULL, 0, 1, '2014-03-28 12:22:30'),
+(1006, 10, NULL, 0, 1, '2014-03-28 12:23:00'),
+(1007, 10, NULL, 0, 6, '2014-03-28 12:23:19'),
+(1008, 10, NULL, 0, 6, '2014-03-28 12:23:22'),
+(1009, 1, NULL, 2, 1, '2014-03-28 15:02:51'),
+(1010, 10, NULL, 0, 1, '2014-03-28 15:03:09'),
+(1011, 10, NULL, 0, 6, '2014-03-28 15:03:27'),
+(1012, 10, NULL, 0, 6, '2014-03-28 15:03:28'),
+(1013, 29, NULL, 0, 1, '2014-03-28 15:06:06'),
+(1014, 29, NULL, 21, 6, '2014-03-28 15:08:29'),
+(1015, 29, NULL, 21, 6, '2014-03-28 15:08:45'),
+(1016, 29, NULL, 21, 6, '2014-03-28 15:08:58'),
+(1017, 29, NULL, 0, 1, '2014-03-28 15:13:11'),
+(1018, 10, NULL, 0, 1, '2014-03-28 15:13:39'),
+(1019, 65, NULL, 0, 1, '2014-03-28 16:25:24'),
+(1020, 65, NULL, 0, 1, '2014-03-28 16:26:42'),
+(1021, 65, NULL, 0, 1, '2014-03-28 16:35:29'),
+(1022, 0, NULL, 0, 3, '2014-03-28 16:36:33'),
+(1023, 65, NULL, 6, 3, '2014-03-28 16:37:46'),
+(1024, 1, NULL, 2, 1, '2014-03-28 16:38:22'),
+(1025, 1, NULL, 2, 1, '2014-03-28 16:38:33'),
+(1026, 10, NULL, 0, 1, '2014-03-28 16:39:03'),
+(1027, 10, NULL, 0, 1, '2014-03-28 16:39:35'),
+(1028, 1, NULL, 2, 1, '2014-03-28 16:54:56'),
+(1029, 10, NULL, 0, 1, '2014-03-28 20:30:55');
 
 -- --------------------------------------------------------
 
@@ -1164,7 +1242,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=160 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=176 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACTION`
@@ -1325,7 +1403,23 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 (156, 0, NULL, 67, '01', '2014-03-27 23:49:09'),
 (157, 0, NULL, 67, '01', '2014-03-27 23:49:10'),
 (158, 0, NULL, 10, '03', '2014-03-28 00:14:41'),
-(159, 0, NULL, 10, '03', '2014-03-28 00:14:43');
+(159, 0, NULL, 10, '03', '2014-03-28 00:14:43'),
+(160, 0, NULL, 10, '03', '2014-03-28 09:09:02'),
+(161, 0, NULL, 10, '03', '2014-03-28 09:09:06'),
+(162, 0, NULL, 10, '03', '2014-03-28 09:09:19'),
+(163, 0, NULL, 10, '03', '2014-03-28 09:17:34'),
+(164, 0, NULL, 10, '03', '2014-03-28 09:19:06'),
+(165, 0, NULL, 10, '03', '2014-03-28 09:19:08'),
+(166, 1, NULL, 10, '0132167221352', '2014-03-28 10:52:40'),
+(167, 1, NULL, 67, '0132167221352', '2014-03-28 10:54:21'),
+(168, 0, NULL, 10, '03', '2014-03-28 10:54:26'),
+(169, 1, NULL, 10, '0132167486552', '2014-03-28 10:56:13'),
+(170, 0, NULL, 10, '03', '2014-03-28 12:17:07'),
+(171, 0, NULL, 10, '03', '2014-03-28 12:17:10'),
+(172, 0, NULL, 10, '03', '2014-03-28 12:23:19'),
+(173, 0, NULL, 10, '03', '2014-03-28 12:23:22'),
+(174, 0, NULL, 10, '03', '2014-03-28 15:03:27'),
+(175, 0, NULL, 10, '03', '2014-03-28 15:03:28');
 
 -- --------------------------------------------------------
 
@@ -1518,14 +1612,14 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `FCODE
 (0, NULL, NULL, 'TV', NULL, 'Universal remote for TV.', 'Mando universal para televición.'),
 (1, NULL, NULL, 'IRRIGATION', NULL, 'For plant drink.', 'Riego de plantas.'),
 (2, NULL, NULL, 'INFRARED', NULL, 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
-(3, NULL, NULL, 'LIGTHS', NULL, 'Ligths control.', 'Control de las luces.'),
+(3, NULL, NULL, 'LIGHTS', NULL, 'Ligths control.', 'Control de las luces.'),
 (4, NULL, NULL, 'SENSOR', NULL, 'Control safety sensors.', 'Control de sensores de seguridad.'),
 (5, NULL, NULL, 'BLINDS', NULL, 'Control motorized blinds.', 'Control de persianas motorizadas.'),
-(13, 1, 9, 'LIGTHS', NULL, NULL, NULL),
+(13, 1, 9, 'LIGHTS', NULL, NULL, NULL),
 (14, 2, 9, 'BLINDS', NULL, NULL, NULL),
 (15, 1, 9, 'TV', NULL, NULL, NULL),
 (16, 2, 9, 'SENSOR', NULL, NULL, NULL),
-(17, 2, 9, 'LIGTHS', NULL, NULL, NULL),
+(17, 2, 9, 'LIGHTS', NULL, NULL, NULL),
 (29, 7, 10, 'TV', NULL, NULL, NULL),
 (30, 7, 10, 'DVD', NULL, NULL, NULL),
 (31, 7, 10, 'Stereo', NULL, NULL, NULL),
@@ -1544,10 +1638,10 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `FCODE
 (44, 9, 10, 'Heating', NULL, NULL, NULL),
 (45, 10, 10, 'Lights', NULL, NULL, NULL),
 (46, 10, 10, 'Video', NULL, NULL, NULL),
-(47, 11, 9, 'LIGTHS', NULL, NULL, NULL),
-(48, 11, 9, 'TV', NULL, NULL, NULL),
-(49, 12, 11, 'TV', NULL, 'Universal remote for TV.', 'Mando universal para televición.'),
-(51, 12, 11, 'LIGTHS', NULL, 'Ligths control.', 'Control de las luces.'),
+(47, 11, 9, 'LIGHTS', 0, NULL, NULL),
+(48, 11, 9, 'TV', 0, NULL, NULL),
+(49, 12, 11, 'TV', 1, 'Universal remote for TV.', 'Mando universal para televición.'),
+(51, 12, 11, 'LIGHTS', 1, 'Ligths control.', 'Control de las luces.'),
 (52, 13, 11, 'TV', 0, NULL, NULL),
 (53, 13, 11, 'LIGHTS', 1, NULL, NULL),
 (54, 14, 12, 'TV', 2, NULL, NULL),
@@ -1615,7 +1709,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=68 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -1636,7 +1730,9 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (64, 'sobek', '69dafe8b5866478aea48f3df384820', 'Sergioprimo23@Gmail.com', NULL, '2014-03-27 15:17:28'),
 (65, 'beaordepe', 'b32676f518207bc993997bf8b58adacc', 'beaordepe@gmail.com', NULL, '2014-03-27 15:58:12'),
 (66, 'Ismael', 'e1adc3949ba59abbe56e057f2f883e', 'irequena@outlook.com', NULL, '2014-03-27 16:14:53'),
-(67, 'example', '1a79a4d60de6718e8e5b326e338ae533', 'example@gmail.com', 'about me.', '2014-03-27 20:49:06');
+(67, 'example', '1a79a4d60de6718e8e5b326e338ae533', 'example@gmail.com', 'about me.', '2014-03-27 20:49:06'),
+(68, 'asd', '7815696ecbf1c96e6894b779456d33e', 'asd@', '', '2014-03-28 12:15:55'),
+(69, 'miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguel@gmail.com', '', '2014-03-28 12:22:15');
 
 --
 -- Restricciones para tablas volcadas
