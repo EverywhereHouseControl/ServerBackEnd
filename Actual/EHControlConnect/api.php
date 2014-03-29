@@ -468,8 +468,8 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
 	//header("Location: http://192.168.2.117/ejecuta.php?valor=".$IRCODE.$FCODE);
-	header("Location: http://mykelly.sytes.net/ejecuta.php?valor=".$IRCODE.$FCODE);
-	header("Content-Type: application/json");
+	//header("Location: http://mykelly.sytes.net/ejecuta.php?valor=".$IRCODE.$FCODE);
+	//header("Content-Type: application/json");
 	
 	
 	//REGISTER ARDUINO ANSWER
