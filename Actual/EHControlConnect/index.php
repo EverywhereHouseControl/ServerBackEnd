@@ -24,6 +24,12 @@ switch ($_POST['command']) {
 		//**grant a user access to the aplication 
 		// ::> returns a message | return JSON configuration
 		break;
+		//1
+		case "login2":
+			login2($_POST['username'], $_POST['password']);
+			//**grant a user access to the aplication
+			// ::> returns a message | return JSON configuration
+			break;
 	//2
     case "lostpass":
 		lostpass($_POST['username']); 

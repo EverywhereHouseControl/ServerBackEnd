@@ -135,6 +135,111 @@ function createJSON($iduser) {
 	//print json_encode( (array) json_decode($json));
 	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
+//--------------------------------------------------------------------------------------
+function createJSON2($user) {
+//** creation of second type of json aplication uses**//
+
+	$SQLjson = query ( "CALL loginJSON('%s')", $user );
+	$num	 = count($SQLjson['result']);
+	
+	//TEST QUERY HAS AT LEAST one VALUE
+	if ($num == 0){
+		$JSON = null;
+		return $JSON;
+	}
+	
+	//var for register distinct SOCKET
+	$tmpHOUSENAME 	= NULL;
+	$tmpROOMNAME	= NULL;
+	$tmpSERVICENAME = NULL;
+	$tmpACTIONNAME  = NULL;
+	
+	//initialice values
+	$JSON["houses"] = null;
+	$h = -1;
+	$r = -1;
+	$s = -1;
+	$a = -1;
+
+	//print json_encode($JSON).$num;
+	for($i = 0; $i < $num; $i++){
+		
+		switch (true) {
+			
+			case ($SQLjson['result'][$i]['HOUSENAME'] == NULL):
+				continue;
+				
+			case ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']):
+				$r = 0;
+				$s = 0;
+				$a = 0;
+				$h++;
+				
+				$JSON["houses"][$h]["name"]   = $SQLjson['result'][$i]['HOUSENAME'];
+				$JSON["houses"][$h]["access"] = $SQLjson['result'][$i]['ACCESSNUMBER'];
+				
+				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"] = null;
+					break;
+				}
+				
+				goto roomlabel;
+				
+			case ($SQLjson['result'][$i]['ROOMNAME'] == NULL):
+				break;
+				
+			case ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']):
+				$s = 0;
+				$a = 0;
+				$r++;
+				
+	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"]     = $SQLjson['result'][$i]['ROOMNAME'];
+				
+				if ($SQLjson['result'][$i]['SERVICENAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"][$r]["services"] = null;
+					break;
+				}
+				
+				goto servicelabel;
+				
+			case ($SQLjson['result'][$i]['SERVICENAME'] == NULL):	
+				break;
+				
+			case ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']):
+				$a = 0;
+				$s++;
+				
+servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]   = $SQLjson['result'][$i]['SERVICENAME'];
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["id"]     = $s;//$SQLjson['result'][$i]['SERVICEINTERFACE'];
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["access"] = 1;//$SQLjson['result'][$i]['PERMISSIONNUMBER'];
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["state"]  = 1;//servicestate();print 'null';
+				
+				if ($SQLjson['result'][$i]['ACTIONNAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"] = null;
+					break;
+				}
+				
+				goto actionlabel;
+				
+			case ($SQLjson['result'][$i]['ACTIONNAME'] == NULL):
+				break;
+				
+			case ($tmpACTIONNAME <> $SQLjson['result'][$i]['ACTIONNAME']):
+				$a++;
+				
+actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= $SQLjson['result'][$i]['ACTIONNAME'];
+			default:
+				
+		}
+		$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
+		$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
+		$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
+		$tmpACTIONNAME  = $SQLjson['result'][$i]['ACTIONNAME'];
+	}
+	//print json_encode($JSON);
+	//print $JSON;
+	return $JSON;
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +285,56 @@ function login($user, $pass) {
 	print json_encode($SQLuser);
 	//print createJSON($iduser);
 }
+//--------------------------------------------------------------------------------------
+function login2($user, $pass) {
+/* make de server conexion*/
+	$error = 0;
+	$funct = 1;
+	
+	switch (testEXIST( 'USERS', 'USERNAME', $user)){
+		case 1:	$error = 3;	break;
+		case 4:	$error = 4;	break;
+	}
+	
+	//only for save the iduser becouse we need that
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
 
+	testNoERROR($iduser, $error, $funct);
+	
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
+		//correct pass, authorized
+		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
+		$error = 0;
+	}
+	else{
+		//incorrect pass. hint password
+		$error = 2;
+	}
+	
+	testNoERROR($iduser, $error, $funct);
+	
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+	
+	//successful function
+	$result['result'] = $SQLuser['result'][0];
+	$result['result']['JSON'] = createJSON2($user);
+	
+	$message = query("SELECT *
+					FROM ERRORS
+					WHERE ERRORCODE = %s  ", $error);
+	$result['error'] = $message['result'][0];
+	$result['error']['ERROR'] = 0;
+	
+	//print count($message['result']).$error;
+	
+	print json_encode($result);
+}
 //--------------------------------------------------------------------------------------
 function lostpass($user){
 /* envia un email al usuario que ha olvidado el password*/
