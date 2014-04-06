@@ -29,7 +29,7 @@ switch ($_POST['command']) {
 			login2($_POST['username'], $_POST['password']);
 			//**grant a user access to the aplication
 			// ::> returns a message | return JSON configuration
-			break;
+		break;
 	//2
     case "lostpass":
 		lostpass($_POST['username']); 
