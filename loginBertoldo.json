@@ -1,0 +1,322 @@
+{
+  "error": {
+    "ERROR": 0,
+    "ENGLISH": "SUCCESS",
+    "SPANISH": "Correcto"
+  },
+  "result": {
+    "IDUSER": "61",
+    "USERNAME": "bertoldo",
+    "PASSWORD": "6e1fd914c4532f9325e4107bd68e32c7",
+    "EMAIL": "bertoldo@gmail.com",
+    "HINT": "what about me?",
+    "DATEBEGIN": "2014-03-23 00:00:01",
+    "JSON": {
+      "houses": [
+        {
+          "name": "casaBertoldo",
+          "access": 1,
+          "rooms": [
+            {
+              "name": "terraza",
+              "services": [
+                {
+                  "name": "BLINDS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR",
+                    "ENCENDER",
+                    "APAGAR"
+                  ]
+                },
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "SENSOR",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "RESETEAR",
+                    "RECIBIR",
+                    "ENVIAR",
+                    "ENCENDER",
+                    "CONFIGURAR",
+                    "APAGAR"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "cocina",
+              "services": [
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    0
+                  ],
+                  "actions": [
+                    "APAGAR",
+                    "ENCENDER"
+                  ]
+                },
+                {
+                  "name": "TV",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    12
+                  ],
+                  "actions": [
+                    "RESETEAR",
+                    "ENVIAR",
+                    "ENCENDER",
+                    "CONFIGURAR",
+                    "APAGAR"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Mansión",
+          "access": 1,
+          "rooms": [
+            {
+              "name": "Garage",
+              "services": [
+                {
+                  "name": "AIRCONDITIONING",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "HEATING",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "MICROWAVE",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "STEREO",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "TV",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Garden",
+              "services": [
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "VIDEO",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Kitchen",
+              "services": [
+                {
+                  "name": "DOOR",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "HEATING",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1,
+                    3
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "STEREO",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Livingroom",
+              "services": [
+                {
+                  "name": "AIRCONDITIONING",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "DVD",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "HEATING",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": [
+                    "ENVIAR"
+                  ]
+                },
+                {
+                  "name": "LIGHTS",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "STEREO",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                },
+                {
+                  "name": "TV",
+                  "id": 3,
+                  "access": 1,
+                  "state": [
+                    1
+                  ],
+                  "actions": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
