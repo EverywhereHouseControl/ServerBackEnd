@@ -42,18 +42,36 @@ switch ($_POST['command']) {
 		//**create a new user account
 		// ::> returns a message | returns the result of the operation
 		break;
+		//3
+		case "createuser2":
+			createuser2($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']);
+			//**create a new user account
+			// ::> returns a message | returns the result of the operation
+			break;
 	//4
 	case "deleteuser":
 		deleteuser($_POST['username'],$_POST['password']);
 		//**delete a existing user
 		// ::> returns a message | returns the result of the operation
 		break;
+		//4
+		case "deleteuser2":
+			deleteuser2($_POST['username'],$_POST['password']);
+			//**delete a existing user
+			// ::> returns a message | returns the result of the operation
+			break;
 	//5	
 	case "modifyuser":
 		modifyuser($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
 		//**modify all fields
 		// ::> returns a message | returns the result of the operation
 		break;
+		//5
+		case "modifyuser2":
+			modifyuser2($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
+			//**modify all fields
+			// ::> returns a message | returns the result of the operation
+			break;
 	//6
 	case "doaction":
 		doaction($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
