@@ -408,6 +408,17 @@ function createuser($user, $pass, $email, $hint){
 }
 
 //--------------------------------------------------------------------------------------
+function createuser2($user, $pass, $email, $hint){
+	/* create a new user*/
+	$error = 0;
+	$funct = 3;
+
+	$message = query("CALL createuser (%s, %s, %s, %s)", $user, $pass, $email, $hint);
+	// take de error message
+	$json = '{"result":[{"ERROR":"'.$message['result'][0]['ERRORCODE'].'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
+	print $json;
+}
+//--------------------------------------------------------------------------------------
 function deleteuser($user, $pass){
 	/* create a new user*/
 	$error = 0;
