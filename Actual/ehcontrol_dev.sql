@@ -39,7 +39,7 @@ ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC;
 
 end$$
 
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), hint VARCHAR(30), OUT err INTEGER, OUT en VARCHAR(50), OUT sp VARCHAR(50))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), h VARCHAR(30), OUT err INTEGER, OUT en VARCHAR(50), OUT sp VARCHAR(50))
 begin
 
 	DECLARE num INTEGER;
@@ -57,8 +57,9 @@ begin
 	WHEN 0 THEN 
 		begin
 			INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-								(NULL, u, p, mail, hint, CURRENT_TIMESTAMP);
+								(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
 			SET err = 0;
+			
 		end
 	WHEN 1 THEN
 		SET err = 6;
@@ -99,8 +100,13 @@ begin
 			--NATURAL JOIN ACCESSHOUSE
 			--WHERE  USERS.IDUSER = id;
 			-- ELIMINAR LA INFORMACION DEPENDIENTE DEL USUARION ANTES DE ELIMINAR EL USUARIO.
-			DELETE FROM `USERS` WHERE IDUSER = id;
-			SET err = 0;
+			IF pass = p THEN 
+				DELETE FROM `USERS` WHERE IDUSER = id;
+				SET err = 0;
+			ELSE 
+				SET err = 2;
+			END IF;
+			
 		end
 	WHEN 0 THEN
 		SET err = 3;
@@ -114,10 +120,51 @@ begin
 	
 	INSERT INTO HISTORYACCESS
 					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-			VALUES  (     NULL,   id,    NULL,  err,  3, CURRENT_TIMESTAMP);
+			VALUES  (     NULL,   id,    NULL,  err,  4, CURRENT_TIMESTAMP);
 
 end$$
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN n_u VARCHAR(15), IN n_p VARCHAR(40), IN n_mail VARCHAR(40), n_h VARCHAR(30), OUT err INTEGER, OUT en VARCHAR(50), OUT sp VARCHAR(50))
+begin
+
+	DECLARE num INTEGER;
+	SET num = 0;
+	DECLARE id INTEGER;
+	SET id = 0;
+	DECLARE pass INTEGER DEFAULT 0;
+
+	SELECT COUNT(*) INTO num 
+	FROM (
+			SELECT IDUSER INTO id, PASSWORD INTO pass
+			FROM USERS
+			WHERE IDUSER = u);
+			
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			IF pass = p THEN 
+				UPDATE USERS SET USERNAME=n_u, PASSWORD=n_p, EMAIL=n_mail, HINT=n_h
+					WHERE IDUSER = id;
+				SET err = 0;
+			ELSE 
+				SET err = 2;
+			END IF;
+		end
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT ENGLISH INTO en, SPANISH INTO sp 
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+	
+	INSERT INTO HISTORYACCESS
+					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+			VALUES  (     NULL,   id,    NULL,  err,  5, CURRENT_TIMESTAMP);
+
+end$$
 
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
