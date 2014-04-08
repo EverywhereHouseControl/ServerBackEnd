@@ -84,6 +84,12 @@ switch ($_POST['command']) {
 		//**create a new house with an existing user
 		// ::> returns a message | returns the result of the operation
 		break;
+		//7
+		case "createhouse2":
+			createhouse2($_POST['username'],$_POST['housename']);
+			//**create a new house with an existing user
+			// ::> returns a message | returns the result of the operation
+			break;
 	//8
 	case "ipcheck":
 		ipcheck();

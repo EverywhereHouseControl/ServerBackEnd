@@ -325,7 +325,7 @@ function login2($user, $pass) {
 	$result['result'] = $SQLuser['result'][0];
 	$result['result']['JSON'] = createJSON2($user);
 	
-	$message = query("SELECT *
+	$message = query("SELECT ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE = %s  ", $error);
 	$result['error'] = $message['result'][0];
@@ -410,10 +410,11 @@ function createuser($user, $pass, $email, $hint){
 //--------------------------------------------------------------------------------------
 function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
-	$message = query("CALL createuser (%s, %s, %s, %s)", $user, $pass, $email, $hint);
+	$message = query("CALL createuser ('%s','%s', '%s', '%s')", $user, $pass, $email, $hint);
 	// take de error message
-	$json = '{"result":[{"ERROR":"'.$message['result'][0]['ERRORCODE'].'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	print $json;
+	
+	$json['result'] = $message['result'][0];
+	print json_encode($json);
 }
 //--------------------------------------------------------------------------------------
 function deleteuser($user, $pass){
@@ -462,10 +463,10 @@ function deleteuser($user, $pass){
 //--------------------------------------------------------------------------------------
 function deleteuser2($user, $pass){
 	/* create a new user*/
-	$message = query("CALL deleteuser (%s, %s)", $user, $pass);
+	$message = query("CALL deleteuser ('%s', '%s')", $user, $pass);
 	// take de error message
-	$json = '{"result":[{"ERROR":"'.$message['result'][0]['ERRORCODE'].'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	print $json;
+	$json['result'] = $message['result'][0];
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -515,10 +516,10 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 //--------------------------------------------------------------------------------------
 function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	/* create a new user*/
-	$message = query("CALL modifyuser (%s, %s, %s, %s, %s, %s)", $user, $pass, $n_user, $n_pass, $n_email, $n_hint);
+	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint);
 	// take de error message
-	$json = '{"result":[{"ERROR":"'.$message['result'][0]['ERRORCODE'].'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	print $json;
+	$json['result'] = $message['result'][0];
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -671,9 +672,60 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 
 }
-
 //--------------------------------------------------------------------------------------
 function createhouse($user, $house){
+	/* create a new house + create access for this user to the house*/
+	$error = 0;
+	$funct = 7;
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//** CREATE NEW HOUSE BY THIS USER **
+	$sql = query("INSERT INTO HOUSES
+			       (IDHOUSE, IDUSER, HOUSENAME, IPADRESS, GPS,       DATEBEGIN)
+			VALUES (NULL,      '%s',    '%s',     '',    NULL, CURRENT_TIMESTAMP)"
+			, $iduser, $house);
+
+	$SQLhouse = query("SELECT * FROM HOUSES WHERE HOUSENAME='%s' limit 2", $house);
+	$idhouse  = $SQLhouse['result'][0]['IDHOUSE'];
+	$num	  = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		case 2:		$error = 4;	break;//DATA BASE INTEGRITY BREAK
+		default:	$error = 8;	break;//this user does not exists.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//CREATE PERMISSION TO ACCESS
+	$sql = query("INSERT INTO ACCESSHOUSE
+			       (IDUSER, IDHOUSE, ACCESSNUMBER,       DATEBEGIN)
+			VALUES ('%s',      '%s',    1,       CURRENT_TIMESTAMP)"
+			, $iduser, $house);
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	// take de error message
+	$error = 17;//create new house
+	message($error, 0);
+}
+
+//--------------------------------------------------------------------------------------
+function createhouse2($user, $house){
 	/* create a new house + create access for this user to the house*/
 	$error = 0;
 	$funct = 7;
@@ -740,6 +792,7 @@ function ipcheck(){
 	print json_encode ($_SERVER['REMOTE_ADDR']);
 	exit();
 }
+
 
 //--------------------------------------------------------------------------------------
 function deletehouse($user, $pass, $house){

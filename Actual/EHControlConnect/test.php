@@ -11,8 +11,10 @@
   <form action="http://ehcontrol.net/EHControlConnect/index.php" method="POST">
 
   Command: <input type="text" name="command" /></br>
-  Username: <input type="text" name="username" /></br>
-  Password: <input type="text" name="password" /></br>
+  username: <input type="text" name="username" /></br>
+  password: <input type="text" name="password" /></br>
+  email: <input type="text" name="email" /></br>
+  hint: <input type="text" name="hint" /></br>
   n_username: <input type="text" name="n_username" /></br>
   n_password: <input type="text" name="n_password" /></br>
   n_email: <input type="text" name="n_email" /></br>
