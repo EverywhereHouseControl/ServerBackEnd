@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-04-2014 a las 11:22:47
+-- Tiempo de generación: 09-04-2014 a las 16:27:59
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -24,6 +24,59 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN t timestamp, IN d timestamp)
+    COMMENT 'Program an action to be done.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s AND ACTIONNAME = a;
+	
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+			FROM USERS
+			WHERE USERNAME = u ;
+			
+			CASE num
+			WHEN 1 THEN 
+				INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `DATEBEGIN`) VALUES (NULL, idu, ida, t, d);
+				
+				SET err = 27;
+			WHEN 0 THEN
+				SET err = 3; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 0 THEN
+		SET err = 21;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDHOUSE, 0) INTO  idh
+	FROM HOUSES
+	WHERE HOUSENAME = h;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 27, 0, err),  14, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 27, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), h VARCHAR(30))
     COMMENT 'Create a new user if not exist.'
 begin
@@ -211,6 +264,22 @@ end$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `ProG`()
 begin 
 SELECT * FROM USERS;
+end$$
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
+    COMMENT 'Request for all task afected to a house, by a user.'
+begin
+
+SELECT *
+	FROM  HOUSES
+	LEFT JOIN ROOMS USING ( IDHOUSE )
+	LEFT JOIN SERVICES USING ( IDROOM  )
+	LEFT JOIN ACTIONS USING ( IDSERVICE  )
+	LEFT JOIN PROGRAMACTIONS USING ( IDACTION  )
+	LEFT JOIN TASKS USING ( IDPROGRAM  )
+	WHERE HOUSES.HOUSENAME = h
+	ORDER BY TASKNAME DESC;
+
 end$$
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
@@ -484,10 +553,10 @@ INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SP
 
 CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ERRORCODE` int(11) NOT NULL AUTO_INCREMENT,
-  `ENGLISH` varchar(50) NOT NULL,
-  `SPANISH` varchar(50) NOT NULL,
+  `ENGLISH` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `SPANISH` varchar(50) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -515,7 +584,14 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (18, 'You have not access to this house.', 'No tiene acceso a la casa.'),
 (19, 'House deleted.', 'Casa eliminada.'),
 (20, 'This service does not exist for the room.', 'Este servicio no existe para la habitación.'),
-(21, 'This action does not exist for this service.', 'Esta acción no existe para este servicio.');
+(21, 'This action does not exist for this service.', 'Esta acción no existe para este servicio.'),
+(22, 'This house already exists.', 'Esta casa ya existe.'),
+(23, 'This program action already exists.', 'Esta accion programada ya existe.'),
+(24, 'This task already exists.', 'Esta tarea ya existe.'),
+(25, 'Not allowed to create cyclic tasks.', 'No esta permitido crear tareas ciclicas.'),
+(26, 'Next program action does not exist.', 'La accion programada siguiente no existe.'),
+(27, 'Create new program action.', 'Nueva acción programada creada.'),
+(28, 'Program action deleted.', 'Acción programada eliminada.');
 
 -- --------------------------------------------------------
 
@@ -526,8 +602,9 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCT` int(11) NOT NULL AUTO_INCREMENT,
   `FUNCTION` varchar(20) NOT NULL,
-  PRIMARY KEY (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+  PRIMARY KEY (`FUNCT`),
+  UNIQUE KEY `FUNCTION` (`FUNCTION`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -535,16 +612,26 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
 
 INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (0, '----'),
+(7, 'createhouse'),
+(14, 'createprogramaction'),
+(17, 'createroom'),
+(11, 'createtask'),
+(3, 'createuser'),
+(9, 'deletehouse'),
+(15, 'deleteprogramaction'),
+(18, 'deleteroom'),
+(12, 'deletetask'),
+(4, 'deleteuser'),
+(6, 'doaction'),
+(10, 'getweather'),
+(8, 'ipcheck'),
 (1, 'login'),
 (2, 'lostpass'),
-(3, 'createuser'),
-(4, 'deleteuser'),
-(5, 'modifyuser'),
-(6, 'doaction'),
-(7, 'createhouse'),
-(8, 'ipcheck'),
-(9, 'deletehouse'),
-(10, 'getweather');
+(20, 'modifyhouse'),
+(16, 'modifyprogramaction'),
+(19, 'modifyroom'),
+(13, 'modifytask'),
+(5, 'modifyuser');
 
 -- --------------------------------------------------------
 
@@ -562,16 +649,14 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1664 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2355 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACCESS`
 --
 
 INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-(1235, 10, NULL, 0, 1, '2014-04-02 15:05:50');
-
-
+(2354, 29, NULL, 0, 1, '2014-04-09 14:27:57');
 
 -- --------------------------------------------------------
 
@@ -605,7 +690,7 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 CREATE TABLE IF NOT EXISTS `HOUSES` (
   `IDHOUSE` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
-  `HOUSENAME` varchar(15) NOT NULL,
+  `HOUSENAME` varchar(15) CHARACTER SET utf8 NOT NULL,
   `GPS` varchar(10) DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
@@ -625,7 +710,7 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALU
 (6, 11, 'shack', NULL, '2014-03-11 04:00:00'),
 (8, 1, 'micasa', NULL, '2014-03-23 19:09:25'),
 (9, 29, 'casaBertoldo', NULL, '2014-03-23 19:51:49'),
-(10, 2, 'Mansion', NULL, '2014-03-25 21:39:22'),
+(10, 2, 'Mansión', NULL, '2014-03-25 21:39:22'),
 (11, 0, 'demoHouse', NULL, '2014-03-27 14:48:48'),
 (12, 0, 'basicHouse0', NULL, '2014-03-27 20:32:40'),
 (13, 0, 'basicHouse1', NULL, '2014-03-27 20:32:51'),
@@ -694,35 +779,62 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
 
 CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT,
-  `NEXT` int(11) DEFAULT NULL,
   `IDUSER` int(11) NOT NULL,
   `IDACTION` int(11) NOT NULL,
-  `DESCRIPTION` varchar(50) DEFAULT NULL,
-  `STARTTIME` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `PERIODICITY` int(1) DEFAULT NULL,
-  PRIMARY KEY (`IDPROGRAM`),
-  UNIQUE KEY `NEXT` (`NEXT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+  `STARTTIME` timestamp NULL DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDPROGRAM`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
 
 --
 -- Volcado de datos para la tabla `PROGRAMACTIONS`
 --
 
-INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `NEXT`, `IDUSER`, `IDACTION`, `DESCRIPTION`, `STARTTIME`, `PERIODICITY`) VALUES
-(1, NULL, 1, 3, NULL, NULL, NULL),
-(2, NULL, 1, 1, NULL, NULL, NULL),
-(3, NULL, 12, 4, NULL, NULL, NULL),
-(4, NULL, 12, 3, NULL, NULL, NULL),
-(5, 1, 1, 15, NULL, NULL, NULL),
-(6, 5, 12, 2, NULL, NULL, NULL),
-(7, 2, 29, 3, NULL, NULL, NULL),
-(10, 3, 10, 2, NULL, NULL, NULL),
-(11, 4, 29, 2, NULL, NULL, NULL),
-(12, 6, 1, 3, NULL, NULL, NULL),
-(13, 7, 10, 4, NULL, NULL, NULL),
-(14, NULL, 11, 2, NULL, NULL, NULL),
-(15, NULL, 11, 2, NULL, NULL, NULL),
-(16, NULL, 10, 2, NULL, NULL, NULL);
+INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `DATEBEGIN`) VALUES
+(1, 1, 3, NULL, '0000-00-00 00:00:00'),
+(2, 1, 1, NULL, '0000-00-00 00:00:00'),
+(3, 12, 4, NULL, '0000-00-00 00:00:00'),
+(4, 12, 3, NULL, '0000-00-00 00:00:00'),
+(5, 1, 0, NULL, '0000-00-00 00:00:00'),
+(6, 12, 2, NULL, '0000-00-00 00:00:00'),
+(7, 29, 3, NULL, '0000-00-00 00:00:00'),
+(10, 10, 2, NULL, '0000-00-00 00:00:00'),
+(11, 29, 2, NULL, '0000-00-00 00:00:00'),
+(12, 1, 3, NULL, '0000-00-00 00:00:00'),
+(13, 10, 4, NULL, '0000-00-00 00:00:00'),
+(14, 11, 2, NULL, '0000-00-00 00:00:00'),
+(15, 11, 2, NULL, '0000-00-00 00:00:00'),
+(16, 10, 2, NULL, '0000-00-00 00:00:00'),
+(17, 29, 52, '2014-04-09 10:47:29', '0000-00-00 00:00:00'),
+(18, 29, 52, '2014-04-09 10:50:25', '0000-00-00 00:00:00'),
+(19, 29, 52, '2014-04-09 10:50:30', '0000-00-00 00:00:00'),
+(20, 29, 52, NULL, '2014-04-09 10:57:11'),
+(21, 29, 52, '2014-04-09 13:43:36', '2014-04-09 13:43:36'),
+(22, 29, 52, '2014-04-09 13:43:53', '2014-04-09 13:43:53'),
+(23, 29, 52, '2014-04-09 13:46:03', '2014-04-09 13:46:03'),
+(24, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(25, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(26, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(27, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(28, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(29, 0, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(30, 60, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(31, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(32, 29, 52, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(33, 29, 52, '2014-04-09 14:05:24', '0000-00-00 00:00:00'),
+(34, 29, 52, '2014-04-09 14:05:35', '0000-00-00 00:00:00'),
+(35, 29, 52, '2014-04-09 14:06:05', '0000-00-00 00:00:00'),
+(36, 29, 52, '2014-04-09 14:11:00', '2014-04-09 14:11:00'),
+(37, 29, 52, '2014-04-09 14:12:13', '2014-04-09 14:12:13'),
+(38, 29, 52, NULL, '2014-04-09 14:13:21'),
+(39, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:13:33'),
+(40, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:14:58'),
+(41, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:15:30'),
+(42, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:16:14'),
+(43, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:16:26'),
+(44, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:21:26'),
+(45, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:22:38'),
+(46, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:24:40');
 
 -- --------------------------------------------------------
 
@@ -914,18 +1026,30 @@ INSERT INTO `STADISTICS` (`Y`, `X`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `TASKPROGRAM`
+--
+
+CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
+  `IDTASK` int(11) NOT NULL,
+  `IDPROGRAM` int(11) NOT NULL,
+  UNIQUE KEY `1_ACTION_1_TASK` (`IDTASK`,`IDPROGRAM`),
+  KEY `IDPROGRAM` (`IDPROGRAM`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `TASKS`
 --
 
 CREATE TABLE IF NOT EXISTS `TASKS` (
   `IDTASK` int(11) NOT NULL AUTO_INCREMENT,
+  `TASKNAME` varchar(15) NOT NULL,
   `IDUSER` int(11) DEFAULT NULL,
-  `IDPROGRAM` int(11) DEFAULT NULL,
   `DESCRIPTION` varchar(50) DEFAULT NULL,
-  `STARTTIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `PERIODICITY` int(1) DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDTASK`),
-  KEY `IDPROGRAM` (`IDPROGRAM`),
   KEY `IDUSER` (`IDUSER`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
@@ -933,12 +1057,12 @@ CREATE TABLE IF NOT EXISTS `TASKS` (
 -- Volcado de datos para la tabla `TASKS`
 --
 
-INSERT INTO `TASKS` (`IDTASK`, `IDUSER`, `IDPROGRAM`, `DESCRIPTION`, `STARTTIME`, `PERIODICITY`) VALUES
-(1, 1, 7, NULL, '2014-03-13 16:45:44', NULL),
-(2, 29, 12, NULL, '2014-03-13 16:45:44', NULL),
-(4, 1, 1, NULL, '2014-03-13 16:45:44', NULL),
-(5, 1, 12, NULL, '2014-03-13 16:45:44', NULL),
-(6, NULL, NULL, NULL, '2014-03-13 16:45:44', NULL);
+INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, `PERIODICITY`, `DATEBEGIN`) VALUES
+(1, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
+(2, '', 29, NULL, NULL, '0000-00-00 00:00:00'),
+(4, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
+(5, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
+(6, '', NULL, NULL, NULL, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -948,15 +1072,15 @@ INSERT INTO `TASKS` (`IDTASK`, `IDUSER`, `IDPROGRAM`, `DESCRIPTION`, `STARTTIME`
 
 CREATE TABLE IF NOT EXISTS `USERS` (
   `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
-  `USERNAME` varchar(15) NOT NULL,
-  `PASSWORD` varchar(40) NOT NULL,
-  `EMAIL` varchar(40) NOT NULL,
-  `HINT` varchar(30) DEFAULT NULL,
+  `USERNAME` varchar(15) CHARACTER SET utf8 NOT NULL,
+  `PASSWORD` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `EMAIL` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `HINT` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=81 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=84 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -983,7 +1107,9 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (71, 'Sam', 'ba0e0cde1bf72c28d435c89a66afc61a', 'sam@gmail.com', 'Remember me.', '2014-04-02 09:29:18'),
 (75, 'd', 's', 'd', 'd', '2014-04-08 09:59:21'),
 (77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
-(80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05');
+(80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05'),
+(82, 'ó', '', 'oóbn', 'oóoóo', '2014-04-09 13:22:58'),
+(83, 'x', '06d2143154327a64d86a264aea225f3', 'z@f', ' ', '2014-04-09 13:33:28');
 
 --
 -- Restricciones para tablas volcadas
@@ -1023,12 +1149,6 @@ ALTER TABLE `PERMISSIONS`
   ADD CONSTRAINT `PERMISSIONS_ibfk_2` FOREIGN KEY (`IDSERVICE`) REFERENCES `SERVICES` (`IDSERVICE`);
 
 --
--- Filtros para la tabla `PROGRAMACTIONS`
---
-ALTER TABLE `PROGRAMACTIONS`
-  ADD CONSTRAINT `PROGRAMACTIONS_ibfk_1` FOREIGN KEY (`NEXT`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`);
-
---
 -- Filtros para la tabla `ROOMS`
 --
 ALTER TABLE `ROOMS`
@@ -1040,6 +1160,13 @@ ALTER TABLE `ROOMS`
 ALTER TABLE `SERVICES`
   ADD CONSTRAINT `SERVICES_ibfk_1` FOREIGN KEY (`IDROOM`) REFERENCES `ROOMS` (`IDROOM`),
   ADD CONSTRAINT `SERVICES_ibfk_2` FOREIGN KEY (`IDDEVICE`) REFERENCES `DEVICES` (`IDDEVICE`);
+
+--
+-- Filtros para la tabla `TASKPROGRAM`
+--
+ALTER TABLE `TASKPROGRAM`
+  ADD CONSTRAINT `TASKPROGRAM_ibfk_1` FOREIGN KEY (`IDTASK`) REFERENCES `TASKS` (`IDTASK`),
+  ADD CONSTRAINT `TASKPROGRAM_ibfk_2` FOREIGN KEY (`IDPROGRAM`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`);
 
 --
 -- Filtros para la tabla `TASKS`

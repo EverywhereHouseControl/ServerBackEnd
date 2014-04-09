@@ -443,7 +443,7 @@ function createuser2($user, $pass, $email, $hint){
 	$message = query("CALL createuser ('%s','%s', '%s', '%s')", $user, $pass, $email, $hint);
 	// take de error message
 	
-	$json['error'] = $message['result'][0];
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 //--------------------------------------------------------------------------------------
@@ -495,7 +495,7 @@ function deleteuser2($user, $pass){
 	/* create a new user*/
 	$message = query("CALL deleteuser ('%s', '%s')", $user, $pass);
 	// take de error message
-	$json['error'] = $message['result'][0];
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 
@@ -548,7 +548,7 @@ function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	/* create a new user*/
 	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint);
 	// take de error message
-	$json['error'] = $message['result'][0];
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 
@@ -880,6 +880,7 @@ function deletehouse($user, $pass, $house){
 	message($error, 0);
 }
 
+//--------------------------------------------------------------------------------------
 function getweather($city,$language){
 /* returns the weather of a specific city and country */
 	$error = 0;
@@ -898,6 +899,15 @@ function getweather($city,$language){
 		echo ("\n");
 	}
 	exit();
+}
+
+//--------------------------------------------------------------------------------------
+function createprogramaction($user, $house, $room, $service, $action, $start){
+	/* create a new user*/
+	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $user, $house, $room, $service, $action, date("Y-m-d H:i:s",strtotime($start)) );
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
 }
 
 ?>

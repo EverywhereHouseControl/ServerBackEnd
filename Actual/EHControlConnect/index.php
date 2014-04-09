@@ -107,8 +107,8 @@ switch ($_POST['command']) {
 		// ::> returns the weather of a specific city and country
 		break;
 
-	case "testEXIST":
-		print testEXIST( $_POST['username'],$_POST['password'],$_POST['n_username']);
+	case "createprogramaction":
+		createprogramaction( $_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['start']);
 		break;
 //-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":

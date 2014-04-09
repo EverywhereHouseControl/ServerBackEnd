@@ -363,7 +363,7 @@ SELECT *
 
 end $$
 
-call createprogramaction('acion prog', null, 'bertoldo','casaBertoldo','cocina','LIGHTS', 'ENCENDER','primera', null, CURRENT_TIMESTAMP)
+call createprogramaction( 'bertoldo','casaBertoldo','cocina','LIGHTS', 'ENCENDER', null, CURRENT_TIMESTAMP)
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE createprogramaction
 ( IN pa VARCHAR(15), IN x INTEGER, IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN des VARCHAR(15), IN d VARCHAR(15), IN t timestamp)
@@ -422,26 +422,75 @@ begin
 
 end $$
 
-CREATE DEFINER=`alex`@`localhost` PROCEDURE deleteprogramaction
-( IN h VARCHAR(15))
-LANGUAGE SQL
-NOT DETERMINISTIC
-SQL SECURITY DEFINER
-COMMENT 'Request for all task afected to a house, by a user.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN t timestamp, IN d timestamp)
+    COMMENT 'Program an action to be done.'
 begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s AND ACTIONNAME = a;
+	
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+			FROM USERS
+			WHERE USERNAME = u ;
+			
+			CASE num
+			WHEN 1 THEN 
+				INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `DATEBEGIN`) VALUES (NULL, idu, ida, t, d);
+				
+				SET err = 27;
+			WHEN 0 THEN
+				SET err = 3; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 0 THEN
+		SET err = 21;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDHOUSE, 0) INTO  idh
+	FROM HOUSES
+	WHERE HOUSENAME = h;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 27, 0, err),  14, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 27, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
 
 
-end $$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE modifyprogramaction
-( IN h VARCHAR(15))
-LANGUAGE SQL
-NOT DETERMINISTIC
-SQL SECURITY DEFINER
-COMMENT 'Request for all task afected to a house, by a user.'
-begin
 
 
-end $$
+
+
+
+ 	Cotejamiento
+UPDATE USERS 
+latin1_swedish_ci 	
+
+
+
+ 	utf8_general_ci
+
+
+
 
 
 DELIMITER ;
