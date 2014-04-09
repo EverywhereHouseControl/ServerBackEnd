@@ -491,48 +491,7 @@ begin
 end$$
 
 
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(15), IN ta VARCHAR(15),IN des VARCHAR(50),IN fre timestamp)
-    COMMENT 'Create a task, will group programaction.'
-begin
-	DECLARE num INTEGER DEFAULT 0;
-	DECLARE idu INTEGER DEFAULT 0;
-	DECLARE err INTEGER DEFAULT 0;
-	
-	SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
-	FROM USERS
-	WHERE USERNAME = u;
-	
-	CASE num 
-	WHEN 1 THEN 
-		SELECT COUNT(*) INTO num
-		FROM TASKS
-		WHERE IDUSER = idu AND TASKNAME = ta;
-		
-		CASE num 
-		WHEN 0 THEN 
-			INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, `PERIODICITY`, `DATEBEGIN`) 
-					VALUES	(NULL, ta, idu, des, fre, CURRENT_TIMESTAMP);
-			SET err = 29;
-		WHEN 1 THEN 
-			SET err = 24;
-		ELSE
-			SET err = 4;
-		END CASE;
-	WHEN 0 THEN
-		SET err = 3;
-	ELSE
-		SET err = 4;
-	END CASE;
 
-	INSERT INTO HISTORYACCESS
-						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,  idu,    null,  IF(err = 29, 0, err),  11, CURRENT_TIMESTAMP);
-				
-	SELECT IF(ERRORCODE = 29, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
-	FROM ERRORS
-	WHERE ERRORCODE = err;
-
-end$$
 
 
 
