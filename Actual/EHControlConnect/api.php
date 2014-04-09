@@ -57,9 +57,12 @@ function message2($error, $return){
 					FROM ERRORS
 					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 
-	$json = '{"error":{"ERROR":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}}';
-	//$json = '{"result":[{"error":9}]}';
-	print $json;
+	//$json = '{"error":{"ERROR":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}}';
+	//$json = '{"result":[{"error":9}]}';utf8_encode(
+	$json['error']['ENGLISH'] = utf8_encode($message['result'][0]['ENGLISH']);
+	$json['error']['SPANISH'] = utf8_encode($message['result'][0]['SPANISH']);
+	$json['error']['ERROR'] = $return;
+	print json_encode($json);
 	//print json_encode($message);
 	//print json_encode( (array) json_decode($json));
 }
@@ -201,7 +204,7 @@ function createJSON2($user) {
 				$a = 0;
 				$h++;
 				
-				$JSON["houses"][$h]["name"]   = $SQLjson['result'][$i]['HOUSENAME'];
+				$JSON["houses"][$h]["name"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON["houses"][$h]["access"] = $SQLjson['result'][$i]['ACCESSNUMBER'];
 				
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
@@ -219,7 +222,7 @@ function createJSON2($user) {
 				$a = 0;
 				$r++;
 				
-	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"]     = $SQLjson['result'][$i]['ROOMNAME'];
+	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"]     = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
 				
 				if ($SQLjson['result'][$i]['SERVICENAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"][$r]["services"] = null;
@@ -235,7 +238,7 @@ function createJSON2($user) {
 				$a = 0;
 				$s++;
 				
-servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]   = $SQLjson['result'][$i]['SERVICENAME'];
+servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]   = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["id"]     = $SQLjson['result'][$i]['SERVICEINTERFACE'];
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["access"] = $SQLjson['result'][$i]['PERMISSIONNUMBER'];
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["state"]  = 1;//servicestate();print 'null';
@@ -253,7 +256,7 @@ servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]   = $SQLj
 			case ($tmpACTIONNAME <> $SQLjson['result'][$i]['ACTIONNAME']):
 				$a++;
 				
-actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= $SQLjson['result'][$i]['ACTIONNAME'];
+actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
 			default:
 				
 		}
@@ -347,15 +350,15 @@ function login2($user, $pass) {
 			, $iduser, $error, $funct);
 	
 	//successful function
-	$result['result'] = $SQLuser['result'][0];
+	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
 	$result['result']['JSON'] = createJSON2($user);
 	
 	$m = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE='%s' LIMIT 1 ", 0);
 	
-	$result['error']['ENGLISH'] = $m['result'][0]['ENGLISH'];
-	$result['error']['SPANISH'] = $m['result'][0]['SPANISH'];
+	$result['error']['ENGLISH'] = utf8_encode($m['result'][0]['ENGLISH']);
+	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
 	$result['error']['ERROR'] = 0;
 	
 	//print count($message['result']).$error;
