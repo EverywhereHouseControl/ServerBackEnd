@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-04-2014 a las 16:27:59
+-- Tiempo de generación: 09-04-2014 a las 17:16:42
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -134,6 +134,74 @@ begin
 	SELECT IF(ERRORCODE = 13, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
+end$$
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(15), IN idpa INTEGER)
+    COMMENT 'Delete program action.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, acc, per INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
+	FROM PROGRAMACTIONS
+	WHERE IDPROGRAM = idpa ;
+	
+	CASE num 
+	WHEN 1 THEN
+		SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
+		FROM HOUSES
+		JOIN ROOMS 		USING ( IDHOUSE )
+		JOIN SERVICES	USING ( IDROOM )
+		JOIN ACTIONS	USING ( IDSERVICE )
+		JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
+		JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+		WHERE IDACTION = ida AND USERNAME = u;
+	
+		CASE num
+		WHEN 1 THEN
+			CASE acc
+			WHEN 1 THEN 
+				DELETE FROM PROGRAMACTIONS WHERE IDACTION = idpa;
+				SET err = 28;
+			WHEN 0 THEN
+				SET err = 11;
+			ELSE
+				SELECT COUNT(*), IFNULL(PERMISSIONNUMBER, 0) INTO num, per
+				FROM USERS 
+				JOIN PERMISSIONS USING (IDUSER)
+				JOIN ACTIONS	USING ( IDSERVICE )
+				WHERE IDACTION = ida AND USERNAME=u;
+				
+				CASE num
+				WHEN 1 THEN
+					CASE per
+					WHEN 1 THEN
+						DELETE FROM PROGRAMACTIONS WHERE IDACTION = idpa;
+						SET err = 28;
+					ELSE
+						SET err = 10;
+					END CASE;
+				ELSE
+					SET err = 10;
+				END CASE;
+			END CASE;
+		ELSE
+			SET err = 11;
+		END CASE;
+	ELSE 
+		SET err = 21;
+	END CASE;
+	
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 28, 0, err),  15, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 28, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
 end$$
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(15), IN p VARCHAR(40))
@@ -649,14 +717,14 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2355 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2372 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACCESS`
 --
 
 INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-(2354, 29, NULL, 0, 1, '2014-04-09 14:27:57');
+(2371, 0, 0, 11, 15, '2014-04-09 15:16:11');
 
 -- --------------------------------------------------------
 
@@ -770,6 +838,13 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   PRIMARY KEY (`IDUSER`,`IDSERVICE`),
   KEY `IDSERVICE` (`IDSERVICE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `PERMISSIONS`
+--
+
+INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+(29, 13, 1, NULL);
 
 -- --------------------------------------------------------
 

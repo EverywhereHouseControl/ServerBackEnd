@@ -106,9 +106,13 @@ switch ($_POST['command']) {
 		getweather($_POST['city'],$_POST['language']);
 		// ::> returns the weather of a specific city and country
 		break;
-
+	//14
 	case "createprogramaction":
 		createprogramaction( $_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['start']);
+		break;
+	//15
+	case "deleteprogramaction":
+		deleteprogramaction( $_POST['username'],$_POST['idaction']);
 		break;
 //-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":

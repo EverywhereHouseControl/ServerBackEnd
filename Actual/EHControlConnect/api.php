@@ -910,5 +910,14 @@ function createprogramaction($user, $house, $room, $service, $action, $start){
 	print json_encode($json);
 }
 
+//--------------------------------------------------------------------------------------
+function deleteprogramaction($user, $idaction){
+	/* create a new user*/
+	$message = query("CALL deleteprogramaction ('%s','%s')", $user, $idaction);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
 ?>
 
