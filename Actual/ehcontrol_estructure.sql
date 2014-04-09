@@ -1,0 +1,870 @@
+-- phpMyAdmin SQL Dump
+-- version 3.4.10.1deb1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: localhost
+-- Tiempo de generación: 09-04-2014 a las 12:58:22
+-- Versión del servidor: 5.5.35
+-- Versión de PHP: 5.3.10-1ubuntu3.10
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de datos: `ehcontrol`
+--
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+DROP PROCEDURE IF EXISTS `createprogramaction`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(15), IN idx INTEGER, IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN des VARCHAR(15), IN d timestamp, IN t timestamp)
+    COMMENT 'Request for all task afected to a house, by a user.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s AND ACTIONNAME = a;
+	
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+			FROM USERS
+			WHERE USERNAME = u ;
+			
+			CASE num
+			WHEN 1 THEN 
+				INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `PROGRAMNAME`, `NEXT`, `IDUSER`, `IDACTION`, `DESCRIPTION`, `STARTTIME`, `DATEBEGIN`) VALUES (NULL, pa, idx, idu, ida, des, t, d);
+				
+				SET err = 27;
+			WHEN 0 THEN
+				SET err = 3; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 0 THEN
+		SET err = 21;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDHOUSE, 0) INTO  idh
+	FROM HOUSES
+	WHERE HOUSENAME = h;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 27, 0, err),  14, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 27, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `createuser`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), h VARCHAR(30))
+    COMMENT 'Create a new user if not exist.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE id INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+
+        SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, id
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 0 THEN 
+		begin
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*) INTO num
+			FROM USERS
+			WHERE EMAIL = mail ;
+			CASE num
+			WHEN 0 THEN 
+				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
+									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE USERNAME = u;
+
+				SET err = 13;
+			WHEN 1 THEN
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE EMAIL = mail;
+
+				SET err = 7; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 1 THEN
+		SET err = 6;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDUSER, 0) INTO  id
+	FROM USERS
+	WHERE USERNAME = u;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  id,    NULL,  IF(err = 13, 0, err),  3, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 13, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `deleteuser`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(15), IN p VARCHAR(40))
+    COMMENT 'Delete user if posible by deleting all information restring.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE id INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	DECLARE pass VARCHAR(40);
+
+	
+	SELECT COUNT(*), IFNULL(IDUSER,0), IFNULL(PASSWORD,0) INTO num , id, pass
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+			IF (pass = p) THEN 
+				DELETE FROM `ACCESSHOUSE` WHERE IDUSER = id;
+				DELETE FROM `PERMISSIONS` WHERE IDUSER = id;
+				DELETE FROM `TASKS` WHERE IDUSER = id;
+				DELETE FROM `USERS` WHERE IDUSER = id;
+				SET err = 14;
+			ELSE 
+				SET err = 2;
+			END IF;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,   id,    NULL,  IF(err = 14, 0, err),  4, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH, p, pass
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `loginJSON`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(15))
+begin
+
+SELECT *
+	FROM  USERS
+	LEFT JOIN ACCESSHOUSE USING (IDUSER)
+	LEFT JOIN HOUSES USING ( IDHOUSE )
+	LEFT JOIN ROOMS USING ( IDHOUSE )
+	LEFT JOIN SERVICES USING ( IDROOM  )
+	LEFT JOIN DEVICES USING (IDDEVICE)
+	LEFT JOIN ACTIONS USING ( IDSERVICE  )
+	LEFT JOIN PERMISSIONS ON (PERMISSIONS.IDUSER = USERS.IDUSER AND  PERMISSIONS.IDSERVICE=SERVICES.IDSERVICE)
+	WHERE USERS.USERNAME = u 
+	ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `modifyuser`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN n_u VARCHAR(15), IN n_p VARCHAR(40), IN n_mail VARCHAR(40), n_h VARCHAR(30))
+    COMMENT 'Mdify the especcification of an existing user.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE id INTEGER DEFAULT 0;
+	DECLARE pass VARCHAR(40);
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IFNULL(IDUSER, 0), IFNULL(PASSWORD, 0) INTO num, id, pass
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		IF (pass = p) THEN 
+			begin 
+				DECLARE num INTEGER DEFAULT 0;
+
+				SELECT COUNT(*) INTO num
+				FROM USERS
+				WHERE USERNAME = n_u AND IDUSER <> id;
+						
+				CASE num 
+				WHEN 0 THEN 
+					begin
+						DECLARE num INTEGER DEFAULT 0;
+						SELECT COUNT(*) INTO num
+						FROM USERS
+						WHERE EMAIL = n_mail AND IDUSER <> id;
+						CASE num
+						WHEN 0 THEN 
+							UPDATE USERS SET USERNAME=n_u, PASSWORD=n_p, EMAIL=n_mail, HINT=n_h
+								WHERE IDUSER = id;
+							SET err = 15;
+						WHEN 1 THEN
+							SET err = 7; 
+						ELSE
+							SET err = 4;
+						END CASE;
+					end;
+				WHEN 1 THEN
+					SET err = 6;
+				ELSE
+					SET err = 4;
+				END CASE;
+				
+			end;
+		ELSE 
+			SET err = 2;
+		END IF;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,   id,    NULL,  IF(err = 15, 0, err),  5, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 15, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `ProG`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `ProG`()
+begin 
+SELECT * FROM USERS;
+end$$
+
+DROP PROCEDURE IF EXISTS `schedule`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
+    COMMENT 'Request for all task afected to a house, by a user.'
+begin
+
+SELECT *
+	FROM  HOUSES
+	LEFT JOIN ROOMS USING ( IDHOUSE )
+	LEFT JOIN SERVICES USING ( IDROOM  )
+	LEFT JOIN ACTIONS USING ( IDSERVICE  )
+	LEFT JOIN PROGRAMACTIONS USING ( IDACTION  )
+	LEFT JOIN TASKS USING ( IDPROGRAM  )
+	WHERE HOUSES.HOUSENAME = h
+	ORDER BY TASKNAME DESC;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `selectiduser`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
+BEGIN
+DECLARE idu INTEGER;
+SELECT IDUSER into idu FROM USERS WHERE USERNAME=u;
+set id = idu;
+END$$
+
+DROP PROCEDURE IF EXISTS `streaminghour`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
+BEGIN
+DROP  TABLE IF EXISTS STADISTICS  ;
+CREATE TABLE STADISTICS SELECT COUNT(*) AS Y, X
+FROM (SELECT TRUNC_N_MINUTES(DATESTAMP, 60/p) AS X
+		FROM HISTORYACCESS 
+		WHERE DATESTAMP>= ini)AS T
+GROUP BY X
+ORDER BY X; 
+END$$
+
+DROP PROCEDURE IF EXISTS `userexist`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
+BEGIN 
+declare pass varchar(40);
+SELECT PASSWORD INTO pass FROM USERS WHERE USERNAME=u;
+IF (pass <> p) THEN 
+  set error = 2;
+ELSE 
+SET error = 0;
+END IF;
+
+
+
+END$$
+
+--
+-- Funciones
+--
+DROP FUNCTION IF EXISTS `ROUND_HOUR`$$
+CREATE DEFINER=`alex`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
+    NO SQL
+    DETERMINISTIC
+    COMMENT 'returns nearest hour'
+RETURN DATE_FORMAT(datestamp + INTERVAL 30 MINUTE, '%Y-%m-%d %H:00')$$
+
+DROP FUNCTION IF EXISTS `TRUNC_N_HOURS`$$
+CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
+    NO SQL
+    DETERMINISTIC
+    COMMENT 'truncate to N hour boundary. For example,\n           TRUNCATE_N_HOURS(sometime, 12) gives the nearest\n           preceding half-day (noon, or midnight'
+RETURN DATE(datestamp) +
+                INTERVAL (HOUR(datestamp) -
+                          HOUR(datestamp) MOD n) HOUR$$
+
+DROP FUNCTION IF EXISTS `TRUNC_N_MINUTES`$$
+CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
+    NO SQL
+    DETERMINISTIC
+    COMMENT 'truncate to N minute boundary. For example,\n           TRUNCATE_N_MINUTES(sometime, 15) gives the nearest\n           preceding quarter hour'
+RETURN DATE_FORMAT(datestamp,'%Y-%m-%d %H:00') +
+                INTERVAL (MINUTE(datestamp) -
+                          MINUTE(datestamp) MOD n) MINUTE$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ACCESSHOUSE`
+--
+-- Creación: 23-03-2014 a las 19:19:34
+--
+
+DROP TABLE IF EXISTS `ACCESSHOUSE`;
+CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
+  `IDUSER` int(11) NOT NULL DEFAULT '0',
+  `IDHOUSE` int(11) NOT NULL DEFAULT '0',
+  `ACCESSNUMBER` int(11) DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDUSER`,`IDHOUSE`),
+  KEY `IDHOUSE` (`IDHOUSE`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACIONES PARA LA TABLA `ACCESSHOUSE`:
+--   `IDHOUSE`
+--       `HOUSES` -> `IDHOUSE`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ACTIONMESSAGES`
+--
+-- Creación: 23-03-2014 a las 16:09:18
+--
+
+DROP TABLE IF EXISTS `ACTIONMESSAGES`;
+CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
+  `IDMESSAGE` int(11) NOT NULL AUTO_INCREMENT,
+  `IDACTION` int(11) NOT NULL,
+  `RETURNCODE` varchar(20) NOT NULL,
+  `EXIT` tinyint(1) NOT NULL,
+  `ENGLISH` varchar(50) DEFAULT NULL,
+  `SPANISH` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`IDMESSAGE`),
+  UNIQUE KEY `IDACTION_RETURNCODE` (`IDACTION`,`RETURNCODE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+
+--
+-- RELACIONES PARA LA TABLA `ACTIONMESSAGES`:
+--   `IDACTION`
+--       `ACTIONS` -> `IDACTION`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ACTIONS`
+--
+-- Creación: 23-03-2014 a las 15:29:32
+--
+
+DROP TABLE IF EXISTS `ACTIONS`;
+CREATE TABLE IF NOT EXISTS `ACTIONS` (
+  `IDACTION` int(11) NOT NULL AUTO_INCREMENT,
+  `IDSERVICE` int(11) DEFAULT NULL,
+  `ACTIONNAME` varchar(10) NOT NULL,
+  `ENGLISH` varchar(50) NOT NULL,
+  `SPANISH` varchar(50) NOT NULL,
+  `FCODE` varchar(20) NOT NULL,
+  PRIMARY KEY (`IDACTION`),
+  UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=93 ;
+
+--
+-- RELACIONES PARA LA TABLA `ACTIONS`:
+--   `IDSERVICE`
+--       `SERVICES` -> `IDSERVICE`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `DEVICES`
+--
+-- Creación: 23-03-2014 a las 21:40:50
+--
+
+DROP TABLE IF EXISTS `DEVICES`;
+CREATE TABLE IF NOT EXISTS `DEVICES` (
+  `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
+  `IPADDRESS` varchar(20) DEFAULT NULL,
+  `SERIAL` varchar(20) DEFAULT NULL,
+  `NAME` varchar(20) DEFAULT NULL,
+  `ENGLISH` varchar(500) DEFAULT NULL,
+  `SPANISH` varchar(500) DEFAULT NULL,
+  `DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `VERSION` int(11) NOT NULL,
+  PRIMARY KEY (`IDDEVICE`),
+  UNIQUE KEY `SERIAL` (`SERIAL`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ERRORS`
+--
+-- Creación: 23-03-2014 a las 12:57:54
+--
+
+DROP TABLE IF EXISTS `ERRORS`;
+CREATE TABLE IF NOT EXISTS `ERRORS` (
+  `ERRORCODE` int(11) NOT NULL AUTO_INCREMENT,
+  `ENGLISH` varchar(50) NOT NULL,
+  `SPANISH` varchar(50) NOT NULL,
+  PRIMARY KEY (`ERRORCODE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `FUNCTIONS`
+--
+-- Creación: 09-04-2014 a las 10:50:14
+--
+
+DROP TABLE IF EXISTS `FUNCTIONS`;
+CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
+  `FUNCT` int(11) NOT NULL AUTO_INCREMENT,
+  `FUNCTION` varchar(20) NOT NULL,
+  PRIMARY KEY (`FUNCT`),
+  UNIQUE KEY `FUNCTION` (`FUNCTION`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `HISTORYACCESS`
+--
+-- Creación: 25-03-2014 a las 10:51:52
+--
+
+DROP TABLE IF EXISTS `HISTORYACCESS`;
+CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
+  `IDHISTORY` int(11) NOT NULL AUTO_INCREMENT,
+  `IDUSER` int(11) NOT NULL,
+  `IDHOUSE` int(11) DEFAULT NULL,
+  `ERROR` int(11) NOT NULL,
+  `FUNCT` int(11) NOT NULL,
+  `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDHISTORY`),
+  KEY `ERROR` (`ERROR`),
+  KEY `FUNCT` (`FUNCT`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1700 ;
+
+--
+-- RELACIONES PARA LA TABLA `HISTORYACCESS`:
+--   `IDHOUSE`
+--       `HOUSES` -> `IDHOUSE`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `ERROR`
+--       `ERRORS` -> `ERRORCODE`
+--   `FUNCT`
+--       `FUNCTIONS` -> `FUNCT`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `HISTORYACTION`
+--
+-- Creación: 09-04-2014 a las 09:21:03
+--
+
+DROP TABLE IF EXISTS `HISTORYACTION`;
+CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
+  `IDHISTORYACTION` int(11) NOT NULL AUTO_INCREMENT,
+  `IDACTION` int(11) NOT NULL,
+  `IDPROGRAM` int(11) DEFAULT NULL,
+  `IDUSER` int(11) DEFAULT NULL,
+  `RETURNCODE` varchar(20) NOT NULL,
+  `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDHISTORYACTION`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=225 ;
+
+--
+-- RELACIONES PARA LA TABLA `HISTORYACTION`:
+--   `IDACTION`
+--       `ACTIONS` -> `IDACTION`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `HOUSES`
+--
+-- Creación: 09-04-2014 a las 08:34:57
+--
+
+DROP TABLE IF EXISTS `HOUSES`;
+CREATE TABLE IF NOT EXISTS `HOUSES` (
+  `IDHOUSE` int(11) NOT NULL AUTO_INCREMENT,
+  `IDUSER` int(11) NOT NULL,
+  `HOUSENAME` varchar(15) NOT NULL,
+  `GPS` varchar(10) DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDHOUSE`),
+  UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- RELACIONES PARA LA TABLA `HOUSES`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `IRCODES`
+--
+-- Creación: 27-03-2014 a las 09:29:44
+--
+
+DROP TABLE IF EXISTS `IRCODES`;
+CREATE TABLE IF NOT EXISTS `IRCODES` (
+  `IDCODE` int(11) NOT NULL AUTO_INCREMENT,
+  `TYPE` varchar(20) NOT NULL,
+  `POWER` int(11) DEFAULT NULL,
+  `SETUP` int(11) DEFAULT NULL,
+  `MUTE` int(11) DEFAULT NULL,
+  `FUNCTION` int(11) DEFAULT NULL,
+  `UNO` int(11) DEFAULT NULL,
+  `DOS` int(11) DEFAULT NULL,
+  `TRES` int(11) DEFAULT NULL,
+  `CUATRO` int(11) DEFAULT NULL,
+  `CINCO` int(11) DEFAULT NULL,
+  `SEIS` int(11) DEFAULT NULL,
+  `SIETE` int(11) DEFAULT NULL,
+  `OCHO` int(11) DEFAULT NULL,
+  `NUEVE` int(11) DEFAULT NULL,
+  `CERO` int(11) DEFAULT NULL,
+  `FAV` int(11) DEFAULT NULL,
+  `UP` int(11) DEFAULT NULL,
+  `LEFT` int(11) DEFAULT NULL,
+  `PLAY` int(11) DEFAULT NULL,
+  `RIGHT` int(11) DEFAULT NULL,
+  PRIMARY KEY (`IDCODE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `PERMISSIONS`
+--
+-- Creación: 04-04-2014 a las 09:01:27
+--
+
+DROP TABLE IF EXISTS `PERMISSIONS`;
+CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
+  `IDUSER` int(11) NOT NULL DEFAULT '0',
+  `IDSERVICE` int(11) NOT NULL,
+  `PERMISSIONNUMBER` int(11) NOT NULL,
+  `DATEBEGIN` date DEFAULT NULL,
+  PRIMARY KEY (`IDUSER`,`IDSERVICE`),
+  KEY `IDSERVICE` (`IDSERVICE`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACIONES PARA LA TABLA `PERMISSIONS`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `IDSERVICE`
+--       `SERVICES` -> `IDSERVICE`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `PROGRAMACTIONS`
+--
+-- Creación: 09-04-2014 a las 10:56:06
+--
+
+DROP TABLE IF EXISTS `PROGRAMACTIONS`;
+CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
+  `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT,
+  `PROGRAMNAME` varchar(15) NOT NULL,
+  `NEXT` int(11) DEFAULT NULL,
+  `IDUSER` int(11) NOT NULL,
+  `IDACTION` int(11) NOT NULL,
+  `DESCRIPTION` varchar(50) DEFAULT NULL,
+  `STARTTIME` timestamp NULL DEFAULT NULL,
+  `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDPROGRAM`),
+  UNIQUE KEY `NEXT` (`NEXT`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+
+--
+-- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
+--   `IDACTION`
+--       `ACTIONS` -> `IDACTION`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `NEXT`
+--       `PROGRAMACTIONS` -> `IDPROGRAM`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ROOMS`
+--
+-- Creación: 09-04-2014 a las 08:37:10
+--
+
+DROP TABLE IF EXISTS `ROOMS`;
+CREATE TABLE IF NOT EXISTS `ROOMS` (
+  `IDROOM` int(11) NOT NULL AUTO_INCREMENT,
+  `IDHOUSE` int(11) DEFAULT NULL,
+  `IDUSER` int(11) DEFAULT NULL,
+  `ROOMNAME` varchar(10) NOT NULL,
+  `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDROOM`),
+  UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
+  KEY `IDHOUSE` (`IDHOUSE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+
+--
+-- RELACIONES PARA LA TABLA `ROOMS`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `IDHOUSE`
+--       `HOUSES` -> `IDHOUSE`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `SERVICES`
+--
+-- Creación: 09-04-2014 a las 07:56:47
+--
+
+DROP TABLE IF EXISTS `SERVICES`;
+CREATE TABLE IF NOT EXISTS `SERVICES` (
+  `IDSERVICE` int(11) NOT NULL AUTO_INCREMENT,
+  `IDROOM` int(11) DEFAULT NULL,
+  `IDDEVICE` int(11) DEFAULT NULL,
+  `SERVICENAME` varchar(20) NOT NULL,
+  `SERVICEINTERFACE` int(11) NOT NULL,
+  `FCODE` int(11) DEFAULT NULL,
+  `ENGLISH` varchar(50) DEFAULT NULL,
+  `SPANISH` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`IDSERVICE`),
+  UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
+  KEY `IDDEVICE` (`IDDEVICE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=61 ;
+
+--
+-- RELACIONES PARA LA TABLA `SERVICES`:
+--   `IDROOM`
+--       `ROOMS` -> `IDROOM`
+--   `IDDEVICE`
+--       `DEVICES` -> `IDDEVICE`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `SOFTWARE`
+--
+-- Creación: 23-03-2014 a las 15:23:12
+--
+
+DROP TABLE IF EXISTS `SOFTWARE`;
+CREATE TABLE IF NOT EXISTS `SOFTWARE` (
+  `DEVICE` int(11) NOT NULL,
+  `VERSION` int(11) NOT NULL,
+  `PACKAGE` varchar(1000) NOT NULL,
+  UNIQUE KEY `DEVICE` (`DEVICE`,`VERSION`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `STADISTICS`
+--
+-- Creación: 05-04-2014 a las 17:48:55
+--
+
+DROP TABLE IF EXISTS `STADISTICS`;
+CREATE TABLE IF NOT EXISTS `STADISTICS` (
+  `Y` bigint(21) NOT NULL DEFAULT '0',
+  `X` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `TASKS`
+--
+-- Creación: 09-04-2014 a las 09:36:37
+--
+
+DROP TABLE IF EXISTS `TASKS`;
+CREATE TABLE IF NOT EXISTS `TASKS` (
+  `IDTASK` int(11) NOT NULL AUTO_INCREMENT,
+  `TASKNAME` varchar(15) NOT NULL,
+  `IDUSER` int(11) DEFAULT NULL,
+  `IDPROGRAM` int(11) DEFAULT NULL,
+  `DESCRIPTION` varchar(50) DEFAULT NULL,
+  `STARTTIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `PERIODICITY` int(1) DEFAULT NULL,
+  PRIMARY KEY (`IDTASK`),
+  KEY `IDPROGRAM` (`IDPROGRAM`),
+  KEY `IDUSER` (`IDUSER`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- RELACIONES PARA LA TABLA `TASKS`:
+--   `IDPROGRAM`
+--       `PROGRAMACTIONS` -> `IDPROGRAM`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `USERS`
+--
+-- Creación: 04-04-2014 a las 13:18:40
+--
+
+DROP TABLE IF EXISTS `USERS`;
+CREATE TABLE IF NOT EXISTS `USERS` (
+  `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(15) NOT NULL,
+  `PASSWORD` varchar(40) NOT NULL,
+  `EMAIL` varchar(40) NOT NULL,
+  `HINT` varchar(30) DEFAULT NULL,
+  `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`IDUSER`),
+  UNIQUE KEY `USERNAME` (`USERNAME`),
+  UNIQUE KEY `EMAIL` (`EMAIL`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=82 ;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `ACCESSHOUSE`
+--
+ALTER TABLE `ACCESSHOUSE`
+  ADD CONSTRAINT `ACCESSHOUSE_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`),
+  ADD CONSTRAINT `ACCESSHOUSE_ibfk_2` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
+
+--
+-- Filtros para la tabla `ACTIONMESSAGES`
+--
+ALTER TABLE `ACTIONMESSAGES`
+  ADD CONSTRAINT `ACTIONMESSAGES_ibfk_1` FOREIGN KEY (`IDACTION`) REFERENCES `ACTIONS` (`IDACTION`);
+
+--
+-- Filtros para la tabla `ACTIONS`
+--
+ALTER TABLE `ACTIONS`
+  ADD CONSTRAINT `ACTIONS_ibfk_1` FOREIGN KEY (`IDSERVICE`) REFERENCES `SERVICES` (`IDSERVICE`);
+
+--
+-- Filtros para la tabla `HISTORYACCESS`
+--
+ALTER TABLE `HISTORYACCESS`
+  ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`),
+  ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
+
+--
+-- Filtros para la tabla `PERMISSIONS`
+--
+ALTER TABLE `PERMISSIONS`
+  ADD CONSTRAINT `PERMISSIONS_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`),
+  ADD CONSTRAINT `PERMISSIONS_ibfk_2` FOREIGN KEY (`IDSERVICE`) REFERENCES `SERVICES` (`IDSERVICE`);
+
+--
+-- Filtros para la tabla `PROGRAMACTIONS`
+--
+ALTER TABLE `PROGRAMACTIONS`
+  ADD CONSTRAINT `PROGRAMACTIONS_ibfk_1` FOREIGN KEY (`NEXT`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`);
+
+--
+-- Filtros para la tabla `ROOMS`
+--
+ALTER TABLE `ROOMS`
+  ADD CONSTRAINT `ROOMS_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`);
+
+--
+-- Filtros para la tabla `SERVICES`
+--
+ALTER TABLE `SERVICES`
+  ADD CONSTRAINT `SERVICES_ibfk_1` FOREIGN KEY (`IDROOM`) REFERENCES `ROOMS` (`IDROOM`),
+  ADD CONSTRAINT `SERVICES_ibfk_2` FOREIGN KEY (`IDDEVICE`) REFERENCES `DEVICES` (`IDDEVICE`);
+
+--
+-- Filtros para la tabla `TASKS`
+--
+ALTER TABLE `TASKS`
+  ADD CONSTRAINT `TASKS_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

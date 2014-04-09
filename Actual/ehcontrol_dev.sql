@@ -341,6 +341,109 @@ SELECT `PERMISSIONS`.`PERMISSIONNUMBER`,`ACCESSHOUSE`.`ACCESSNUMBER`,`USERS`.`ID
 	ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC
 end $$
 
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE schedule
+( IN h VARCHAR(15))
+LANGUAGE SQL
+NOT DETERMINISTIC
+SQL SECURITY DEFINER
+COMMENT 'Request for all task afected to a house, by a user.'
+begin
+
+SELECT *
+	FROM  HOUSES
+	LEFT JOIN ROOMS USING ( IDHOUSE )
+	LEFT JOIN SERVICES USING ( IDROOM  )
+	LEFT JOIN ACTIONS USING ( IDSERVICE  )
+	LEFT JOIN PROGRAMACTIONS USING ( IDACTION  )
+	LEFT JOIN TASKS USING ( IDPROGRAM  )
+	WHERE HOUSES.HOUSENAME = h
+	ORDER BY TASKNAME DESC;
+
+end $$
+
+call createprogramaction('acion prog', null, 'bertoldo','casaBertoldo','cocina','LIGHTS', 'ENCENDER','primera', null, CURRENT_TIMESTAMP)
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE createprogramaction
+( IN pa VARCHAR(15), IN x INTEGER, IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN des VARCHAR(15), IN d VARCHAR(15), IN t timestamp)
+LANGUAGE SQL
+NOT DETERMINISTIC
+SQL SECURITY DEFINER
+COMMENT 'Request for all task afected to a house, by a user.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idx INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s AND ACTIONNAME = a;
+	
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+			FROM USERS
+			WHERE USERNAME = u ;
+			
+			CASE num
+			WHEN 1 THEN 
+				INSERT INTO `PROGRAMACTION(`IDPROGRAM`, `PROGRAMNAME`, `NEXT`, `IDUSER`, `IDACTION`, `DESCRIPTION`, `STARTTIME`) VALUES (NULL, pa, idx, idu, ida, des, t);
+				
+				SET err = 27;
+			WHEN 0 THEN
+				SET err = 3; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 0 THEN
+		SET err = 21;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDUSER, 0) INTO  id
+	FROM USERS
+	WHERE USERNAME = u;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  id,    NULL,  IF(err = 27, 0, err),  3, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 27, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end $$
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE deleteprogramaction
+( IN h VARCHAR(15))
+LANGUAGE SQL
+NOT DETERMINISTIC
+SQL SECURITY DEFINER
+COMMENT 'Request for all task afected to a house, by a user.'
+begin
+
+
+end $$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE modifyprogramaction
+( IN h VARCHAR(15))
+LANGUAGE SQL
+NOT DETERMINISTIC
+SQL SECURITY DEFINER
+COMMENT 'Request for all task afected to a house, by a user.'
+begin
+
+
+end $$
+
+
 DELIMITER ;
 
 -- --------------------------------------------------------
