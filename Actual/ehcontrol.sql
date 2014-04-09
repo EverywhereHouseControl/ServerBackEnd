@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-04-2014 a las 12:40:15
+-- Tiempo de generación: 09-04-2014 a las 11:22:47
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -47,8 +47,18 @@ begin
 			WHEN 0 THEN 
 				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
 									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE USERNAME = u;
+
 				SET err = 13;
 			WHEN 1 THEN
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE EMAIL = mail;
+
 				SET err = 7; 
 			ELSE
 				SET err = 4;
@@ -59,10 +69,14 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
-	
+
+	SELECT IFNULL(IDUSER, 0) INTO  id
+	FROM USERS
+	WHERE USERNAME = u;
+
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  err,  3, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,  id,    NULL,  IF(err = 13, 0, err),  3, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 13, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
@@ -85,15 +99,15 @@ begin
 			
 	CASE num 
 	WHEN 1 THEN 
-		begin
 			IF (pass = p) THEN 
+				DELETE FROM `ACCESSHOUSE` WHERE IDUSER = id;
+				DELETE FROM `PERMISSIONS` WHERE IDUSER = id;
+				DELETE FROM `TASKS` WHERE IDUSER = id;
 				DELETE FROM `USERS` WHERE IDUSER = id;
 				SET err = 14;
 			ELSE 
 				SET err = 2;
 			END IF;
-			
-		end;
 	WHEN 0 THEN
 		SET err = 3;
 	ELSE
@@ -102,9 +116,9 @@ begin
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  err,  4, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,   id,    NULL,  IF(err = 14, 0, err),  4, CURRENT_TIMESTAMP);
 				
-	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH, p, pass
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 
@@ -119,7 +133,9 @@ SELECT *
 	LEFT JOIN HOUSES USING ( IDHOUSE )
 	LEFT JOIN ROOMS USING ( IDHOUSE )
 	LEFT JOIN SERVICES USING ( IDROOM  )
+	LEFT JOIN DEVICES USING (IDDEVICE)
 	LEFT JOIN ACTIONS USING ( IDSERVICE  )
+	LEFT JOIN PERMISSIONS ON (PERMISSIONS.IDUSER = USERS.IDUSER AND  PERMISSIONS.IDSERVICE=SERVICES.IDSERVICE)
 	WHERE USERS.USERNAME = u 
 	ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME, ACTIONNAME DESC;
 
@@ -131,7 +147,7 @@ begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE id INTEGER DEFAULT 0;
-	DECLARE pass INTEGER DEFAULT 0;
+	DECLARE pass VARCHAR(40);
 	DECLARE err INTEGER DEFAULT 0;
 
 	SELECT COUNT(*), IFNULL(IDUSER, 0), IFNULL(PASSWORD, 0) INTO num, id, pass
@@ -140,45 +156,42 @@ begin
 			
 	CASE num 
 	WHEN 1 THEN 
-		begin
-			
-			IF (pass = p) THEN 
-				begin 
-					DECLARE num INTEGER DEFAULT 0;
+		IF (pass = p) THEN 
+			begin 
+				DECLARE num INTEGER DEFAULT 0;
 
-					SELECT COUNT(*) INTO num 
-					FROM USERS
-					WHERE USERNAME = n_u AND IDUSER <> id;
-							
-					CASE num 
-					WHEN 0 THEN 
-						begin
-							DECLARE num INTEGER DEFAULT 0;
-							SELECT COUNT(*) INTO num
-							FROM USERS
-							WHERE EMAIL = n_mail AND IDUSER <> id;
-							CASE num
-							WHEN 0 THEN 
-								UPDATE USERS SET USERNAME=n_u, PASSWORD=n_p, EMAIL=n_mail, HINT=n_h
-									WHERE IDUSER = id;
-								SET err = 15;
-							WHEN 1 THEN
-								SET err = 7; 
-							ELSE
-								SET err = 4;
-							END CASE;
-						end;
-					WHEN 1 THEN
-						SET err = 6;
-					ELSE
-						SET err = 4;
-					END CASE;
-					
-				end;
-			ELSE 
-				SET err = 2;
-			END IF;
-		end;
+				SELECT COUNT(*) INTO num
+				FROM USERS
+				WHERE USERNAME = n_u AND IDUSER <> id;
+						
+				CASE num 
+				WHEN 0 THEN 
+					begin
+						DECLARE num INTEGER DEFAULT 0;
+						SELECT COUNT(*) INTO num
+						FROM USERS
+						WHERE EMAIL = n_mail AND IDUSER <> id;
+						CASE num
+						WHEN 0 THEN 
+							UPDATE USERS SET USERNAME=n_u, PASSWORD=n_p, EMAIL=n_mail, HINT=n_h
+								WHERE IDUSER = id;
+							SET err = 15;
+						WHEN 1 THEN
+							SET err = 7; 
+						ELSE
+							SET err = 4;
+						END CASE;
+					end;
+				WHEN 1 THEN
+					SET err = 6;
+				ELSE
+					SET err = 4;
+				END CASE;
+				
+			end;
+		ELSE 
+			SET err = 2;
+		END IF;
 	WHEN 0 THEN
 		SET err = 3;
 	ELSE
@@ -187,7 +200,7 @@ begin
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  err,  5, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,   id,    NULL,  IF(err = 15, 0, err),  5, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 15, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
@@ -549,18 +562,16 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1583 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1664 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACCESS`
 --
 
 INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-
 (1235, 10, NULL, 0, 1, '2014-04-02 15:05:50');
-INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
 
-(1582, 29, NULL, 0, 1, '2014-04-08 10:35:52');
+
 
 -- --------------------------------------------------------
 
@@ -575,8 +586,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `IDUSER` int(11) DEFAULT NULL,
   `RETURNCODE` varchar(20) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`IDHISTORYACTION`),
-  KEY `IDUSER` (`IDUSER`)
+  PRIMARY KEY (`IDHISTORYACTION`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=225 ;
 
 --
@@ -599,8 +609,7 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   `GPS` varchar(10) DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
-  UNIQUE KEY `HOUSENAME` (`HOUSENAME`),
-  KEY `IDUSER` (`IDUSER`)
+  UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
@@ -729,8 +738,7 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
-  KEY `IDHOUSE` (`IDHOUSE`),
-  KEY `IDUSER` (`IDUSER`)
+  KEY `IDHOUSE` (`IDHOUSE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
@@ -763,6 +771,7 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDROOM` int(11) DEFAULT NULL,
   `IDDEVICE` int(11) DEFAULT NULL,
   `SERVICENAME` varchar(20) NOT NULL,
+  `SERVICEINTERFACE` int(11) NOT NULL,
   `FCODE` int(11) DEFAULT NULL,
   `ENGLISH` varchar(50) DEFAULT NULL,
   `SPANISH` varchar(50) DEFAULT NULL,
@@ -775,49 +784,49 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
 -- Volcado de datos para la tabla `SERVICES`
 --
 
-INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `FCODE`, `ENGLISH`, `SPANISH`) VALUES
-(0, NULL, NULL, 'TV', NULL, 'Universal remote for TV.', 'Mando universal para televición.'),
-(1, NULL, NULL, 'IRRIGATION', NULL, 'For plant drink.', 'Riego de plantas.'),
-(2, NULL, NULL, 'INFRARED', NULL, 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
-(3, NULL, NULL, 'LIGHTS', NULL, 'Ligths control.', 'Control de las luces.'),
-(4, NULL, NULL, 'SENSOR', NULL, 'Control safety sensors.', 'Control de sensores de seguridad.'),
-(5, NULL, NULL, 'BLINDS', NULL, 'Control motorized blinds.', 'Control de persianas motorizadas.'),
-(13, 1, 9, 'LIGHTS', NULL, NULL, NULL),
-(14, 2, 9, 'BLINDS', NULL, NULL, NULL),
-(15, 1, 9, 'TV', 132, NULL, NULL),
-(16, 2, 9, 'SENSOR', NULL, NULL, NULL),
-(17, 2, 9, 'LIGHTS', NULL, NULL, NULL),
-(29, 7, 10, 'TV', NULL, NULL, NULL),
-(30, 7, 10, 'DVD', NULL, NULL, NULL),
-(31, 7, 10, 'STEREO', NULL, NULL, NULL),
-(32, 7, 10, 'AIRCONDITIONING', NULL, NULL, NULL),
-(33, 7, 10, 'LIGHTS', NULL, NULL, NULL),
-(34, 7, 10, 'HEATING', NULL, NULL, NULL),
-(35, 8, 10, 'TV', NULL, NULL, NULL),
-(36, 8, 10, 'MICROWAVE', NULL, NULL, NULL),
-(37, 8, 10, 'STEREO', NULL, NULL, NULL),
-(38, 8, 10, 'AIRCONDITIONING', NULL, NULL, NULL),
-(39, 8, 10, 'HEATING', NULL, NULL, NULL),
-(40, 8, 10, 'LIGHTS', NULL, NULL, NULL),
-(41, 9, 10, 'STEREO', NULL, NULL, NULL),
-(42, 9, 10, 'DOOR', NULL, NULL, NULL),
-(43, 9, 10, 'LIGHTS', NULL, NULL, NULL),
-(44, 9, 10, 'HEATING', NULL, NULL, NULL),
-(45, 10, 10, 'LIGHTS', NULL, NULL, NULL),
-(46, 10, 10, 'VIDEO', NULL, NULL, NULL),
-(47, 11, 9, 'LIGHTS', 0, NULL, NULL),
-(48, 11, 9, 'TV', 0, NULL, NULL),
-(49, 12, 11, 'TV', 1, 'Universal remote for TV.', 'Mando universal para televición.'),
-(51, 12, 11, 'LIGHTS', 1, 'Ligths control.', 'Control de las luces.'),
-(52, 13, 11, 'TV', 0, NULL, NULL),
-(53, 13, 11, 'LIGHTS', 1, NULL, NULL),
-(54, 14, 12, 'TV', 2, NULL, NULL),
-(55, 15, 13, 'TV', 4, NULL, NULL),
-(56, 16, 14, 'TV', 6, NULL, NULL),
-(57, 14, 12, 'LIGHTS', 3, NULL, NULL),
-(58, 15, 13, 'LIGHTS', 5, NULL, NULL),
-(59, 16, 14, 'LIGHTS', 7, NULL, NULL),
-(60, 17, 15, 'LIGHTS', 0, NULL, NULL);
+INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `SERVICEINTERFACE`, `FCODE`, `ENGLISH`, `SPANISH`) VALUES
+(0, NULL, NULL, 'TV', 0, NULL, 'Universal remote for TV.', 'Mando universal para televición.'),
+(1, NULL, NULL, 'IRRIGATION', 0, NULL, 'For plant drink.', 'Riego de plantas.'),
+(2, NULL, NULL, 'INFRARED', 0, NULL, 'For control all infrared devices.', 'Control generico de dispositivos infrarrojos.'),
+(3, NULL, NULL, 'LIGHTS', 0, NULL, 'Ligths control.', 'Control de las luces.'),
+(4, NULL, NULL, 'SENSOR', 0, NULL, 'Control safety sensors.', 'Control de sensores de seguridad.'),
+(5, NULL, NULL, 'BLINDS', 0, NULL, 'Control motorized blinds.', 'Control de persianas motorizadas.'),
+(13, 1, 9, 'LIGHTS', 0, NULL, NULL, NULL),
+(14, 2, 9, 'BLINDS', 0, NULL, NULL, NULL),
+(15, 1, 9, 'TV', 0, 132, NULL, NULL),
+(16, 2, 9, 'SENSOR', 0, NULL, NULL, NULL),
+(17, 2, 9, 'LIGHTS', 0, NULL, NULL, NULL),
+(29, 7, 10, 'TV', 0, NULL, NULL, NULL),
+(30, 7, 10, 'DVD', 0, NULL, NULL, NULL),
+(31, 7, 10, 'STEREO', 0, NULL, NULL, NULL),
+(32, 7, 10, 'AIRCONDITIONING', 0, NULL, NULL, NULL),
+(33, 7, 10, 'LIGHTS', 0, NULL, NULL, NULL),
+(34, 7, 10, 'HEATING', 0, NULL, NULL, NULL),
+(35, 8, 10, 'TV', 0, NULL, NULL, NULL),
+(36, 8, 10, 'MICROWAVE', 0, NULL, NULL, NULL),
+(37, 8, 10, 'STEREO', 0, NULL, NULL, NULL),
+(38, 8, 10, 'AIRCONDITIONING', 0, NULL, NULL, NULL),
+(39, 8, 10, 'HEATING', 0, NULL, NULL, NULL),
+(40, 8, 10, 'LIGHTS', 0, NULL, NULL, NULL),
+(41, 9, 10, 'STEREO', 0, NULL, NULL, NULL),
+(42, 9, 10, 'DOOR', 0, NULL, NULL, NULL),
+(43, 9, 10, 'LIGHTS', 0, NULL, NULL, NULL),
+(44, 9, 10, 'HEATING', 0, NULL, NULL, NULL),
+(45, 10, 10, 'LIGHTS', 0, NULL, NULL, NULL),
+(46, 10, 10, 'VIDEO', 0, NULL, NULL, NULL),
+(47, 11, 9, 'LIGHTS', 0, 0, NULL, NULL),
+(48, 11, 9, 'TV', 0, 0, NULL, NULL),
+(49, 12, 11, 'TV', 0, 1, 'Universal remote for TV.', 'Mando universal para televición.'),
+(51, 12, 11, 'LIGHTS', 0, 1, 'Ligths control.', 'Control de las luces.'),
+(52, 13, 11, 'TV', 0, 0, NULL, NULL),
+(53, 13, 11, 'LIGHTS', 0, 1, NULL, NULL),
+(54, 14, 12, 'TV', 0, 2, NULL, NULL),
+(55, 15, 13, 'TV', 0, 4, NULL, NULL),
+(56, 16, 14, 'TV', 0, 6, NULL, NULL),
+(57, 14, 12, 'LIGHTS', 0, 3, NULL, NULL),
+(58, 15, 13, 'LIGHTS', 0, 5, NULL, NULL),
+(59, 16, 14, 'LIGHTS', 0, 7, NULL, NULL),
+(60, 17, 15, 'LIGHTS', 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -918,7 +927,7 @@ CREATE TABLE IF NOT EXISTS `TASKS` (
   PRIMARY KEY (`IDTASK`),
   KEY `IDPROGRAM` (`IDPROGRAM`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Volcado de datos para la tabla `TASKS`
@@ -947,14 +956,14 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=81 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
 --
 
 INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-(0, 'administrator', '', '', NULL, '2014-03-25 10:36:01'),
+(0, '', '', '', NULL, '2014-03-25 10:36:01'),
 (1, 'alex', 'd41d8cd98f0b24e980998ecf8427e', 'a', 'hint', '2014-03-11 04:00:00'),
 (2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'ctiradocaa@gmail.com', 'Adivina adivinanza.', '2014-03-25 21:36:35'),
 (10, 'luis', '502ff82f7f1f8218dd41201fe4353687', 'luis@gmail.com', 'what about me?', '2014-11-13 05:00:00'),
@@ -973,7 +982,8 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (69, 'miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguel@gmail.com', '', '2014-03-28 12:22:15'),
 (71, 'Sam', 'ba0e0cde1bf72c28d435c89a66afc61a', 'sam@gmail.com', 'Remember me.', '2014-04-02 09:29:18'),
 (75, 'd', 's', 'd', 'd', '2014-04-08 09:59:21'),
-(77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30');
+(77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
+(80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05');
 
 --
 -- Restricciones para tablas volcadas
@@ -1006,18 +1016,6 @@ ALTER TABLE `HISTORYACCESS`
   ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
 
 --
--- Filtros para la tabla `HISTORYACTION`
---
-ALTER TABLE `HISTORYACTION`
-  ADD CONSTRAINT `HISTORYACTION_ibfk_2` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
-
---
--- Filtros para la tabla `HOUSES`
---
-ALTER TABLE `HOUSES`
-  ADD CONSTRAINT `HOUSES_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
-
---
 -- Filtros para la tabla `PERMISSIONS`
 --
 ALTER TABLE `PERMISSIONS`
@@ -1034,8 +1032,7 @@ ALTER TABLE `PROGRAMACTIONS`
 -- Filtros para la tabla `ROOMS`
 --
 ALTER TABLE `ROOMS`
-  ADD CONSTRAINT `ROOMS_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`),
-  ADD CONSTRAINT `ROOMS_ibfk_2` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`);
+  ADD CONSTRAINT `ROOMS_ibfk_1` FOREIGN KEY (`IDHOUSE`) REFERENCES `HOUSES` (`IDHOUSE`);
 
 --
 -- Filtros para la tabla `SERVICES`
