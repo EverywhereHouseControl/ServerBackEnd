@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-04-2014 a las 17:16:42
+-- Tiempo de generación: 09-04-2014 a las 22:47:26
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -72,6 +72,49 @@ begin
 				VALUES  (     NULL,  idu,    idh,  IF(err = 27, 0, err),  14, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 27, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(15), IN ta VARCHAR(15),IN des VARCHAR(50),IN fre timestamp)
+    COMMENT 'Create a task, will group programaction.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*) INTO num
+		FROM TASKS
+		WHERE IDUSER = idu AND TASKNAME = ta;
+		
+		CASE num 
+		WHEN 0 THEN 
+			INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, ` FREQUENCY`, `DATEBEGIN`) 
+					VALUES	(NULL, ta, idu, des, fre, CURRENT_TIMESTAMP);
+			SET err = 29;
+		WHEN 1 THEN 
+			SET err = 24;
+		ELSE
+			SET err = 4;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    null,  IF(err = 29, 0, err),  11, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 29, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 
@@ -414,6 +457,8 @@ DELIMITER ;
 --
 -- Estructura de tabla para la tabla `ACCESSHOUSE`
 --
+-- Creación: 23-03-2014 a las 19:19:34
+--
 
 CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
@@ -423,6 +468,14 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
   PRIMARY KEY (`IDUSER`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACIONES PARA LA TABLA `ACCESSHOUSE`:
+--   `IDHOUSE`
+--       `HOUSES` -> `IDHOUSE`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
 
 --
 -- Volcado de datos para la tabla `ACCESSHOUSE`
@@ -450,6 +503,8 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 --
 -- Estructura de tabla para la tabla `ACTIONMESSAGES`
 --
+-- Creación: 23-03-2014 a las 16:09:18
+--
 
 CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   `IDMESSAGE` int(11) NOT NULL AUTO_INCREMENT,
@@ -461,6 +516,12 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   PRIMARY KEY (`IDMESSAGE`),
   UNIQUE KEY `IDACTION_RETURNCODE` (`IDACTION`,`RETURNCODE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+
+--
+-- RELACIONES PARA LA TABLA `ACTIONMESSAGES`:
+--   `IDACTION`
+--       `ACTIONS` -> `IDACTION`
+--
 
 --
 -- Volcado de datos para la tabla `ACTIONMESSAGES`
@@ -492,6 +553,8 @@ INSERT INTO `ACTIONMESSAGES` (`IDMESSAGE`, `IDACTION`, `RETURNCODE`, `EXIT`, `EN
 --
 -- Estructura de tabla para la tabla `ACTIONS`
 --
+-- Creación: 23-03-2014 a las 15:29:32
+--
 
 CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `IDACTION` int(11) NOT NULL AUTO_INCREMENT,
@@ -503,6 +566,12 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
   PRIMARY KEY (`IDACTION`),
   UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=93 ;
+
+--
+-- RELACIONES PARA LA TABLA `ACTIONS`:
+--   `IDSERVICE`
+--       `SERVICES` -> `IDSERVICE`
+--
 
 --
 -- Volcado de datos para la tabla `ACTIONS`
@@ -584,6 +653,8 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
+-- Creación: 23-03-2014 a las 21:40:50
+--
 
 CREATE TABLE IF NOT EXISTS `DEVICES` (
   `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
@@ -618,13 +689,15 @@ INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SP
 --
 -- Estructura de tabla para la tabla `ERRORS`
 --
+-- Creación: 09-04-2014 a las 12:36:30
+--
 
 CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ERRORCODE` int(11) NOT NULL AUTO_INCREMENT,
   `ENGLISH` varchar(50) CHARACTER SET utf8 NOT NULL,
   `SPANISH` varchar(50) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -659,12 +732,15 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (25, 'Not allowed to create cyclic tasks.', 'No esta permitido crear tareas ciclicas.'),
 (26, 'Next program action does not exist.', 'La accion programada siguiente no existe.'),
 (27, 'Create new program action.', 'Nueva acción programada creada.'),
-(28, 'Program action deleted.', 'Acción programada eliminada.');
+(28, 'Program action deleted.', 'Acción programada eliminada.'),
+(29, 'Created new task.', 'Nueva tarea creada.');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `FUNCTIONS`
+--
+-- Creación: 09-04-2014 a las 10:50:14
 --
 
 CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
@@ -704,55 +780,9 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `HISTORYACCESS`
---
-
-CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
-  `IDHISTORY` int(11) NOT NULL AUTO_INCREMENT,
-  `IDUSER` int(11) NOT NULL,
-  `IDHOUSE` int(11) DEFAULT NULL,
-  `ERROR` int(11) NOT NULL,
-  `FUNCT` int(11) NOT NULL,
-  `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`IDHISTORY`),
-  KEY `ERROR` (`ERROR`),
-  KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2372 ;
-
---
--- Volcado de datos para la tabla `HISTORYACCESS`
---
-
-INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-(2371, 0, 0, 11, 15, '2014-04-09 15:16:11');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `HISTORYACTION`
---
-
-CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
-  `IDHISTORYACTION` int(11) NOT NULL AUTO_INCREMENT,
-  `IDACTION` int(11) NOT NULL,
-  `IDPROGRAM` int(11) DEFAULT NULL,
-  `IDUSER` int(11) DEFAULT NULL,
-  `RETURNCODE` varchar(20) NOT NULL,
-  `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`IDHISTORYACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=225 ;
-
---
--- Volcado de datos para la tabla `HISTORYACTION`
---
-
-INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`) VALUES
-(224, 1, NULL, 29, '013216722135132', '2014-04-04 18:55:13');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `HOUSES`
+--
+-- Creación: 09-04-2014 a las 12:39:04
 --
 
 CREATE TABLE IF NOT EXISTS `HOUSES` (
@@ -764,6 +794,12 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- RELACIONES PARA LA TABLA `HOUSES`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
 
 --
 -- Volcado de datos para la tabla `HOUSES`
@@ -790,6 +826,8 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALU
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
+--
+-- Creación: 27-03-2014 a las 09:29:44
 --
 
 CREATE TABLE IF NOT EXISTS `IRCODES` (
@@ -829,6 +867,8 @@ INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `
 --
 -- Estructura de tabla para la tabla `PERMISSIONS`
 --
+-- Creación: 04-04-2014 a las 09:01:27
+--
 
 CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
@@ -838,6 +878,14 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   PRIMARY KEY (`IDUSER`,`IDSERVICE`),
   KEY `IDSERVICE` (`IDSERVICE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELACIONES PARA LA TABLA `PERMISSIONS`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `IDSERVICE`
+--       `SERVICES` -> `IDSERVICE`
+--
 
 --
 -- Volcado de datos para la tabla `PERMISSIONS`
@@ -851,6 +899,8 @@ INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN
 --
 -- Estructura de tabla para la tabla `PROGRAMACTIONS`
 --
+-- Creación: 09-04-2014 a las 12:10:05
+--
 
 CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT,
@@ -860,6 +910,14 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
+
+--
+-- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
+--   `IDACTION`
+--       `ACTIONS` -> `IDACTION`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
 
 --
 -- Volcado de datos para la tabla `PROGRAMACTIONS`
@@ -916,6 +974,8 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `D
 --
 -- Estructura de tabla para la tabla `ROOMS`
 --
+-- Creación: 09-04-2014 a las 08:37:10
+--
 
 CREATE TABLE IF NOT EXISTS `ROOMS` (
   `IDROOM` int(11) NOT NULL AUTO_INCREMENT,
@@ -927,6 +987,14 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+
+--
+-- RELACIONES PARA LA TABLA `ROOMS`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--   `IDHOUSE`
+--       `HOUSES` -> `IDHOUSE`
+--
 
 --
 -- Volcado de datos para la tabla `ROOMS`
@@ -952,6 +1020,8 @@ INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VAL
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
+-- Creación: 09-04-2014 a las 07:56:47
+--
 
 CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDSERVICE` int(11) NOT NULL AUTO_INCREMENT,
@@ -966,6 +1036,14 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
   KEY `IDDEVICE` (`IDDEVICE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=61 ;
+
+--
+-- RELACIONES PARA LA TABLA `SERVICES`:
+--   `IDROOM`
+--       `ROOMS` -> `IDROOM`
+--   `IDDEVICE`
+--       `DEVICES` -> `IDDEVICE`
+--
 
 --
 -- Volcado de datos para la tabla `SERVICES`
@@ -1020,6 +1098,8 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `SERVI
 --
 -- Estructura de tabla para la tabla `SOFTWARE`
 --
+-- Creación: 23-03-2014 a las 15:23:12
+--
 
 CREATE TABLE IF NOT EXISTS `SOFTWARE` (
   `DEVICE` int(11) NOT NULL,
@@ -1032,6 +1112,8 @@ CREATE TABLE IF NOT EXISTS `SOFTWARE` (
 
 --
 -- Estructura de tabla para la tabla `STADISTICS`
+--
+-- Creación: 05-04-2014 a las 17:48:55
 --
 
 CREATE TABLE IF NOT EXISTS `STADISTICS` (
@@ -1103,6 +1185,8 @@ INSERT INTO `STADISTICS` (`Y`, `X`) VALUES
 --
 -- Estructura de tabla para la tabla `TASKPROGRAM`
 --
+-- Creación: 09-04-2014 a las 12:30:29
+--
 
 CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
   `IDTASK` int(11) NOT NULL,
@@ -1111,10 +1195,20 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
   KEY `IDPROGRAM` (`IDPROGRAM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELACIONES PARA LA TABLA `TASKPROGRAM`:
+--   `IDTASK`
+--       `TASKS` -> `IDTASK`
+--   `IDPROGRAM`
+--       `PROGRAMACTIONS` -> `IDPROGRAM`
+--
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `TASKS`
+--
+-- Creación: 09-04-2014 a las 20:26:07
 --
 
 CREATE TABLE IF NOT EXISTS `TASKS` (
@@ -1122,27 +1216,38 @@ CREATE TABLE IF NOT EXISTS `TASKS` (
   `TASKNAME` varchar(15) NOT NULL,
   `IDUSER` int(11) DEFAULT NULL,
   `DESCRIPTION` varchar(50) DEFAULT NULL,
-  `PERIODICITY` int(1) DEFAULT NULL,
+  ` FREQUENCY` timestamp NULL DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDTASK`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+
+--
+-- RELACIONES PARA LA TABLA `TASKS`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
 
 --
 -- Volcado de datos para la tabla `TASKS`
 --
 
-INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, `PERIODICITY`, `DATEBEGIN`) VALUES
+INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, ` FREQUENCY`, `DATEBEGIN`) VALUES
 (1, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
 (2, '', 29, NULL, NULL, '0000-00-00 00:00:00'),
 (4, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
 (5, '', 1, NULL, NULL, '0000-00-00 00:00:00'),
-(6, '', NULL, NULL, NULL, '0000-00-00 00:00:00');
+(6, '', NULL, NULL, NULL, '0000-00-00 00:00:00'),
+(9, 'er', 0, 'dess', '2014-04-09 20:32:05', '2014-04-09 20:32:05'),
+(10, 'primer', 29, 'tarea nueva', '2014-04-09 20:32:39', '2014-04-09 20:32:39'),
+(11, 'prier', 29, 'tarea nueva', '2014-04-09 20:33:17', '2014-04-09 20:33:17');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `USERS`
+--
+-- Creación: 09-04-2014 a las 13:27:15
 --
 
 CREATE TABLE IF NOT EXISTS `USERS` (
@@ -1208,13 +1313,6 @@ ALTER TABLE `ACTIONMESSAGES`
 --
 ALTER TABLE `ACTIONS`
   ADD CONSTRAINT `ACTIONS_ibfk_1` FOREIGN KEY (`IDSERVICE`) REFERENCES `SERVICES` (`IDSERVICE`);
-
---
--- Filtros para la tabla `HISTORYACCESS`
---
-ALTER TABLE `HISTORYACCESS`
-  ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`),
-  ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
 
 --
 -- Filtros para la tabla `PERMISSIONS`
