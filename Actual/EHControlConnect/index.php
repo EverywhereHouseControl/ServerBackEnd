@@ -108,7 +108,7 @@ switch ($_POST['command']) {
 		break;
 	//14
 	case "createprogramaction":
-		createprogramaction( $_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['start']);
+		createprogramaction( $_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data'],$_POST['start']);
 		break;
 	//15
 	case "deleteprogramaction":
@@ -129,6 +129,10 @@ switch ($_POST['command']) {
 	//22
 	case "removetaskprogram":
 		removetaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
+		break;
+	//23
+	case "schedulehouse":
+		schedulehouse( $_POST['housename']);
 		break;
 //-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":

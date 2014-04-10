@@ -902,9 +902,9 @@ function getweather($city,$language){
 }
 
 //--------------------------------------------------------------------------------------
-function createprogramaction($user, $house, $room, $service, $action, $start){
+function createprogramaction($user, $house, $room, $service, $action, $data, $start){
 	/* create a new user*/
-	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $user, $house, $room, $service, $action, date("Y-m-d H:i:s",strtotime($start)) );
+	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $user, $house, $room, $service, $action, $data, date("Y-m-d H:i:s",strtotime($start)) );
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -954,5 +954,113 @@ function removetaskprogram($user, $idtask, $idaction){
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
+
+//--------------------------------------------------------------------------------------
+function schedulehouse($house){
+	/* create a new user*/
+	$SQLjson = query("CALL schedule ('%s')",$house);
+	// take de error message
+	//$json['result'] =  array_map('utf8_encode', $message['result'][0]);
+	$num	 = count($SQLjson['result']);
+	
+	//TEST QUERY HAS AT LEAST one VALUE
+	if ($num == 0){
+		$JSON = null;
+		print json_encode($json);
+		return ;
+	}
+	
+	//var for register distinct SOCKET
+	$tmpTASKNAME 	= NULL;
+	$tmpHOUSENAME 	= NULL;
+	$tmpROOMNAME	= NULL;
+	$tmpSERVICENAME = NULL;
+	$tmpACTIONNAME  = NULL;
+	
+	//initialice values
+	$JSON["houses"] = null;
+	$h = -1;
+	$r = -1;
+	$s = -1;
+	$a = -1;
+
+	//print json_encode($JSON).$num;
+	for($i = 0; $i < $num; $i++){
+		
+		switch (true) {
+			
+			case ($SQLjson['result'][$i]['HOUSENAME'] == NULL):
+				continue;
+				
+			case ($tmpHOUSENAME <> $SQLjson['result'][$i]['HOUSENAME']):
+				$r = 0;
+				$s = 0;
+				$a = 0;
+				$h++;
+				
+				$JSON["houses"][$h]["name"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
+				$JSON["houses"][$h]["access"] = $SQLjson['result'][$i]['ACCESSNUMBER'];
+				
+				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"] = null;
+					break;
+				}
+				
+				goto roomlabel;
+				
+			case ($SQLjson['result'][$i]['ROOMNAME'] == NULL):
+				break;
+				
+			case ($tmpROOMNAME <> $SQLjson['result'][$i]['ROOMNAME']):
+				$s = 0;
+				$a = 0;
+				$r++;
+				
+	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"]     = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
+				
+				if ($SQLjson['result'][$i]['SERVICENAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"][$r]["services"] = null;
+					break;
+				}
+				
+				goto servicelabel;
+				
+			case ($SQLjson['result'][$i]['SERVICENAME'] == NULL):	
+				break;
+				
+			case ($tmpSERVICENAME <> $SQLjson['result'][$i]['SERVICENAME']):
+				$a = 0;
+				$s++;
+				
+servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]   = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["id"]     = $SQLjson['result'][$i]['SERVICEINTERFACE'];
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["access"] = $SQLjson['result'][$i]['PERMISSIONNUMBER'];
+				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["state"]  = 1;//servicestate();print 'null';
+				
+				if ($SQLjson['result'][$i]['ACTIONNAME'] == NULL) {
+					$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"] = null;
+					break;
+				}
+				
+				goto actionlabel;
+				
+			case ($SQLjson['result'][$i]['ACTIONNAME'] == NULL):
+				break;
+				
+			case ($tmpACTIONNAME <> $SQLjson['result'][$i]['ACTIONNAME']):
+				$a++;
+				
+actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
+			default:
+				
+		}
+		$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
+		$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
+		$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
+		$tmpACTIONNAME  = $SQLjson['result'][$i]['ACTIONNAME'];
+	}
+	print json_encode($json);
+}
+
 ?>
 
