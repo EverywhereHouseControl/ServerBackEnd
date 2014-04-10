@@ -913,11 +913,46 @@ function createprogramaction($user, $house, $room, $service, $action, $start){
 //--------------------------------------------------------------------------------------
 function deleteprogramaction($user, $idaction){
 	/* create a new user*/
-	$message = query("CALL deleteprogramaction ('%s','%s')", $user, $idaction);
+	$message = query("CALL deleteprogramaction ('%s','%s')", $user, (int) $idaction);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 
+//--------------------------------------------------------------------------------------
+function createtask($user, $task, $description, $frequency){
+	/* create a new user*/
+	$message = query("CALL createtask ('%s','%s','%s','%s')", $user, $task, $description, date("Y-m-d H:i:s",strtotime($frequency)) );
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deletetask($user, $task){
+	/* create a new user*/
+	$message = query("CALL deletetask ('%s','%s')", $user, $task);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function addtaskprogram($user, $idtask, $idaction){
+	/* create a new user*/
+	$message = query("CALL addtaskprogram ('%s','%s','%s')", $user, (int) $idtask, (int) $idaction );
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function removetaskprogram($user, $idtask, $idaction){
+	/* create a new user*/
+	$message = query("CALL removetaskprogram ('%s','%s','%s')",$user, (int) $idtask, (int) $idaction);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
 ?>
 

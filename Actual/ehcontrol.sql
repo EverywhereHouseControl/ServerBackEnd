@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-04-2014 a las 22:47:26
+-- Tiempo de generación: 10-04-2014 a las 11:48:14
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -24,6 +24,65 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+DROP PROCEDURE IF EXISTS `addtaskprogram`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
+    COMMENT 'add an acction to a task.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0), IFNULL(USERS.IDUSER, 0) INTO num, ida, idu
+	FROM PROGRAMACTIONS, USERS
+	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN
+	
+		SELECT COUNT(*) INTO num
+		FROM TASKS
+		WHERE IDTASK = idta AND IDUSER = idu;
+		
+		CASE num
+		WHEN 1 THEN
+			SELECT COUNT(*) INTO num
+			FROM TASKPROGRAM
+			WHERE IDTASK = idta AND IDPROGRAM = idpa;
+			
+			CASE num
+			WHEN 0 THEN
+				INSERT INTO TASKPROGRAM (IDTASK, IDPROGRAM) VALUE (idta, idpa);
+				SET err = 34;
+			ELSE
+				SET err = 37;
+			END CASE;
+		ELSE
+			SET err = 32;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 33;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	SELECT IDHOUSE INTO idh
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE IDACTION = ida;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 34, 0, err),  21, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 34, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `createprogramaction`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
 begin
@@ -77,6 +136,7 @@ begin
 
 end$$
 
+DROP PROCEDURE IF EXISTS `createtask`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(15), IN ta VARCHAR(15),IN des VARCHAR(50),IN fre timestamp)
     COMMENT 'Create a task, will group programaction.'
 begin
@@ -120,6 +180,7 @@ begin
 
 end$$
 
+DROP PROCEDURE IF EXISTS `createuser`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), h VARCHAR(30))
     COMMENT 'Create a new user if not exist.'
 begin
@@ -179,6 +240,7 @@ begin
 	WHERE ERRORCODE = err;
 end$$
 
+DROP PROCEDURE IF EXISTS `deleteprogramaction`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(15), IN idpa INTEGER)
     COMMENT 'Delete program action.'
 begin
@@ -205,7 +267,8 @@ begin
 		WHEN 1 THEN
 			CASE acc
 			WHEN 1 THEN 
-				DELETE FROM PROGRAMACTIONS WHERE IDACTION = idpa;
+				DELETE FROM TASKPROGRAM WHERE IDPROGRAM= idpa;
+				DELETE FROM PROGRAMACTIONS WHERE IDPROGRAM= idpa;
 				SET err = 28;
 			WHEN 0 THEN
 				SET err = 11;
@@ -220,7 +283,8 @@ begin
 				WHEN 1 THEN
 					CASE per
 					WHEN 1 THEN
-						DELETE FROM PROGRAMACTIONS WHERE IDACTION = idpa;
+						DELETE FROM TASKPROGRAM WHERE IDPROGRAM= idpa;
+						DELETE FROM PROGRAMACTIONS WHERE IDPROGRAM= idpa;
 						SET err = 28;
 					ELSE
 						SET err = 10;
@@ -247,6 +311,51 @@ begin
 
 end$$
 
+DROP PROCEDURE IF EXISTS `deletetask`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(15), IN ta VARCHAR(15))
+    COMMENT 'Delete a user task.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu, idta INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*), IFNULL(IDTASK, 0) INTO num, idta
+		FROM TASKS
+		WHERE IDUSER = idu AND TASKNAME = ta;
+		
+		CASE num 
+		WHEN 1 THEN 
+			DELETE FROM TASKPROGRAM WHERE IDTASK = idta;
+			DELETE FROM TASKS WHERE IDTASK = idta;
+			SET err = 30;
+		WHEN 0 THEN 
+			SET err = 31;
+		ELSE
+			SET err = 4;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    null,  IF(err = 30, 0, err),  12, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 30, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `deleteuser`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(15), IN p VARCHAR(40))
     COMMENT 'Delete user if posible by deleting all information restring.'
 begin
@@ -288,6 +397,7 @@ begin
 
 end$$
 
+DROP PROCEDURE IF EXISTS `loginJSON`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(15))
 begin
 
@@ -305,6 +415,7 @@ SELECT *
 
 end$$
 
+DROP PROCEDURE IF EXISTS `modifyuser`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN n_u VARCHAR(15), IN n_p VARCHAR(40), IN n_mail VARCHAR(40), n_h VARCHAR(30))
     COMMENT 'Mdify the especcification of an existing user.'
 begin
@@ -372,27 +483,88 @@ begin
 
 end$$
 
+DROP PROCEDURE IF EXISTS `ProG`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `ProG`()
 begin 
 SELECT * FROM USERS;
 end$$
 
+DROP PROCEDURE IF EXISTS `removetaskprogram`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
+    COMMENT 'add an acction to a task.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(IDACTION, 0), IFNULL(USERS.IDUSER, 0) INTO num, ida, idu
+	FROM PROGRAMACTIONS, USERS
+	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN
+	
+		SELECT COUNT(*) INTO num
+		FROM TASKS
+		WHERE IDTASK = idta AND IDUSER = idu;
+		
+		CASE num
+		WHEN 1 THEN
+			SELECT COUNT(*) INTO num
+			FROM TASKPROGRAM
+			WHERE IDTASK = idta AND IDPROGRAM = idpa;
+			
+			CASE num
+			WHEN 1 THEN
+				DELETE FROM TASKPROGRAM WHERE IDTASK = idta;
+				SET err = 35;
+			ELSE
+				SET err = 36;
+			END CASE;
+		ELSE
+			SET err = 32;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 33;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	SELECT IDHOUSE INTO idh
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE IDACTION = ida;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 35, 0, err),  22, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 35, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
+DROP PROCEDURE IF EXISTS `schedule`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
     COMMENT 'Request for all task afected to a house, by a user.'
 begin
 
-SELECT *
-	FROM  HOUSES
-	LEFT JOIN ROOMS USING ( IDHOUSE )
-	LEFT JOIN SERVICES USING ( IDROOM  )
-	LEFT JOIN ACTIONS USING ( IDSERVICE  )
-	LEFT JOIN PROGRAMACTIONS USING ( IDACTION  )
-	LEFT JOIN TASKS USING ( IDPROGRAM  )
+	SELECT *
+	FROM PROGRAMACTIONS 
+	JOIN TASKPROGRAM USING ( IDPROGRAM  )
+	JOIN TASKS USING (IDTASK)
+	JOIN ACTIONS USING ( IDACTION)
+	JOIN SERVICES USING ( IDSERVICE  )
+	JOIN ROOMS USING ( IDROOM  )
+	JOIN HOUSES USING ( IDHOUSE )
 	WHERE HOUSES.HOUSENAME = h
 	ORDER BY TASKNAME DESC;
-
 end$$
 
+DROP PROCEDURE IF EXISTS `selectiduser`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
 BEGIN
 DECLARE idu INTEGER;
@@ -400,6 +572,7 @@ SELECT IDUSER into idu FROM USERS WHERE USERNAME=u;
 set id = idu;
 END$$
 
+DROP PROCEDURE IF EXISTS `streaminghour`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
 BEGIN
 DROP  TABLE IF EXISTS STADISTICS  ;
@@ -411,6 +584,7 @@ GROUP BY X
 ORDER BY X; 
 END$$
 
+DROP PROCEDURE IF EXISTS `userexist`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
 declare pass varchar(40);
@@ -428,12 +602,14 @@ END$$
 --
 -- Funciones
 --
+DROP FUNCTION IF EXISTS `ROUND_HOUR`$$
 CREATE DEFINER=`alex`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'returns nearest hour'
 RETURN DATE_FORMAT(datestamp + INTERVAL 30 MINUTE, '%Y-%m-%d %H:00')$$
 
+DROP FUNCTION IF EXISTS `TRUNC_N_HOURS`$$
 CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
@@ -442,6 +618,7 @@ RETURN DATE(datestamp) +
                 INTERVAL (HOUR(datestamp) -
                           HOUR(datestamp) MOD n) HOUR$$
 
+DROP FUNCTION IF EXISTS `TRUNC_N_MINUTES`$$
 CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
@@ -460,6 +637,7 @@ DELIMITER ;
 -- Creación: 23-03-2014 a las 19:19:34
 --
 
+DROP TABLE IF EXISTS `ACCESSHOUSE`;
 CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
   `IDHOUSE` int(11) NOT NULL DEFAULT '0',
@@ -506,6 +684,7 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 -- Creación: 23-03-2014 a las 16:09:18
 --
 
+DROP TABLE IF EXISTS `ACTIONMESSAGES`;
 CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   `IDMESSAGE` int(11) NOT NULL AUTO_INCREMENT,
   `IDACTION` int(11) NOT NULL,
@@ -556,6 +735,7 @@ INSERT INTO `ACTIONMESSAGES` (`IDMESSAGE`, `IDACTION`, `RETURNCODE`, `EXIT`, `EN
 -- Creación: 23-03-2014 a las 15:29:32
 --
 
+DROP TABLE IF EXISTS `ACTIONS`;
 CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `IDACTION` int(11) NOT NULL AUTO_INCREMENT,
   `IDSERVICE` int(11) DEFAULT NULL,
@@ -656,6 +836,7 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 -- Creación: 23-03-2014 a las 21:40:50
 --
 
+DROP TABLE IF EXISTS `DEVICES`;
 CREATE TABLE IF NOT EXISTS `DEVICES` (
   `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
   `IPADDRESS` varchar(20) DEFAULT NULL,
@@ -692,12 +873,13 @@ INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SP
 -- Creación: 09-04-2014 a las 12:36:30
 --
 
+DROP TABLE IF EXISTS `ERRORS`;
 CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ERRORCODE` int(11) NOT NULL AUTO_INCREMENT,
   `ENGLISH` varchar(50) CHARACTER SET utf8 NOT NULL,
   `SPANISH` varchar(50) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -733,7 +915,15 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (26, 'Next program action does not exist.', 'La accion programada siguiente no existe.'),
 (27, 'Create new program action.', 'Nueva acción programada creada.'),
 (28, 'Program action deleted.', 'Acción programada eliminada.'),
-(29, 'Created new task.', 'Nueva tarea creada.');
+(29, 'Created new task.', 'Nueva tarea creada.'),
+(30, 'Task deleted.', 'Tarea eliminada.'),
+(31, 'This task does not exist.', 'Esta tarea no existe.'),
+(32, 'The task does not exist or is not of this user.', 'La tarea no existe o no es de este usuario.'),
+(33, 'The action does not exist or is not of this user.', 'La accion no existe o no es de este usuario.'),
+(34, 'The action has been included in the task.', 'La acción se ha incluido en la tarea.'),
+(35, 'The action has been removed in the task.', 'La acción se ha eliminado en la tarea.'),
+(36, 'This action is not in the task.', 'Esta acción no esta en la tarea.'),
+(37, 'This action is already in the task.', 'Esta acción ya esta en la tarea.');
 
 -- --------------------------------------------------------
 
@@ -743,12 +933,13 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 -- Creación: 09-04-2014 a las 10:50:14
 --
 
+DROP TABLE IF EXISTS `FUNCTIONS`;
 CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCT` int(11) NOT NULL AUTO_INCREMENT,
   `FUNCTION` varchar(20) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -756,6 +947,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
 
 INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (0, '----'),
+(21, 'addtaskprogram'),
 (7, 'createhouse'),
 (14, 'createprogramaction'),
 (17, 'createroom'),
@@ -775,7 +967,8 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (16, 'modifyprogramaction'),
 (19, 'modifyroom'),
 (13, 'modifytask'),
-(5, 'modifyuser');
+(5, 'modifyuser'),
+(22, 'removetaskprogram');
 
 -- --------------------------------------------------------
 
@@ -785,6 +978,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 -- Creación: 09-04-2014 a las 12:39:04
 --
 
+DROP TABLE IF EXISTS `HOUSES`;
 CREATE TABLE IF NOT EXISTS `HOUSES` (
   `IDHOUSE` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
@@ -830,6 +1024,7 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALU
 -- Creación: 27-03-2014 a las 09:29:44
 --
 
+DROP TABLE IF EXISTS `IRCODES`;
 CREATE TABLE IF NOT EXISTS `IRCODES` (
   `IDCODE` int(11) NOT NULL AUTO_INCREMENT,
   `TYPE` varchar(20) NOT NULL,
@@ -870,6 +1065,7 @@ INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `
 -- Creación: 04-04-2014 a las 09:01:27
 --
 
+DROP TABLE IF EXISTS `PERMISSIONS`;
 CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
   `IDSERVICE` int(11) NOT NULL,
@@ -902,6 +1098,7 @@ INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN
 -- Creación: 09-04-2014 a las 12:10:05
 --
 
+DROP TABLE IF EXISTS `PROGRAMACTIONS`;
 CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
@@ -909,7 +1106,7 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `STARTTIME` timestamp NULL DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
@@ -967,7 +1164,13 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `D
 (43, 29, 52, '0000-00-00 00:00:00', '2014-04-09 14:16:26'),
 (44, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:21:26'),
 (45, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:22:38'),
-(46, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:24:40');
+(46, 29, 52, '2014-04-09 13:43:36', '2014-04-09 14:24:40'),
+(47, 29, 52, '0000-00-00 00:00:00', '2014-04-10 09:31:02'),
+(48, 29, 52, '0000-00-00 00:00:00', '2014-04-10 09:31:25'),
+(49, 29, 52, '0000-00-00 00:00:00', '2014-04-10 09:31:55'),
+(50, 29, 52, '0000-00-00 00:00:00', '2014-04-10 09:32:10'),
+(51, 29, 52, '1983-09-05 11:28:00', '2014-04-10 09:34:01'),
+(52, 29, 52, '2009-02-01 23:02:02', '2014-04-10 09:34:11');
 
 -- --------------------------------------------------------
 
@@ -977,6 +1180,7 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `STARTTIME`, `D
 -- Creación: 09-04-2014 a las 08:37:10
 --
 
+DROP TABLE IF EXISTS `ROOMS`;
 CREATE TABLE IF NOT EXISTS `ROOMS` (
   `IDROOM` int(11) NOT NULL AUTO_INCREMENT,
   `IDHOUSE` int(11) DEFAULT NULL,
@@ -1023,6 +1227,7 @@ INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VAL
 -- Creación: 09-04-2014 a las 07:56:47
 --
 
+DROP TABLE IF EXISTS `SERVICES`;
 CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDSERVICE` int(11) NOT NULL AUTO_INCREMENT,
   `IDROOM` int(11) DEFAULT NULL,
@@ -1101,6 +1306,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `SERVI
 -- Creación: 23-03-2014 a las 15:23:12
 --
 
+DROP TABLE IF EXISTS `SOFTWARE`;
 CREATE TABLE IF NOT EXISTS `SOFTWARE` (
   `DEVICE` int(11) NOT NULL,
   `VERSION` int(11) NOT NULL,
@@ -1116,6 +1322,7 @@ CREATE TABLE IF NOT EXISTS `SOFTWARE` (
 -- Creación: 05-04-2014 a las 17:48:55
 --
 
+DROP TABLE IF EXISTS `STADISTICS`;
 CREATE TABLE IF NOT EXISTS `STADISTICS` (
   `Y` bigint(21) NOT NULL DEFAULT '0',
   `X` datetime DEFAULT NULL
@@ -1188,6 +1395,7 @@ INSERT INTO `STADISTICS` (`Y`, `X`) VALUES
 -- Creación: 09-04-2014 a las 12:30:29
 --
 
+DROP TABLE IF EXISTS `TASKPROGRAM`;
 CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
   `IDTASK` int(11) NOT NULL,
   `IDPROGRAM` int(11) NOT NULL,
@@ -1208,19 +1416,20 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
 --
 -- Estructura de tabla para la tabla `TASKS`
 --
--- Creación: 09-04-2014 a las 20:26:07
+-- Creación: 10-04-2014 a las 09:15:07
 --
 
+DROP TABLE IF EXISTS `TASKS`;
 CREATE TABLE IF NOT EXISTS `TASKS` (
   `IDTASK` int(11) NOT NULL AUTO_INCREMENT,
-  `TASKNAME` varchar(15) NOT NULL,
+  `TASKNAME` varchar(15) CHARACTER SET utf8 NOT NULL,
   `IDUSER` int(11) DEFAULT NULL,
-  `DESCRIPTION` varchar(50) DEFAULT NULL,
+  `DESCRIPTION` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
   ` FREQUENCY` timestamp NULL DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDTASK`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- RELACIONES PARA LA TABLA `TASKS`:
@@ -1240,7 +1449,11 @@ INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, ` FREQUENCY`
 (6, '', NULL, NULL, NULL, '0000-00-00 00:00:00'),
 (9, 'er', 0, 'dess', '2014-04-09 20:32:05', '2014-04-09 20:32:05'),
 (10, 'primer', 29, 'tarea nueva', '2014-04-09 20:32:39', '2014-04-09 20:32:39'),
-(11, 'prier', 29, 'tarea nueva', '2014-04-09 20:33:17', '2014-04-09 20:33:17');
+(11, 'prier', 29, 'tarea nueva', '2014-04-09 20:33:17', '2014-04-09 20:33:17'),
+(16, 'cuarta', 29, 'la primera', '2009-02-01 23:02:02', '2014-04-10 09:16:41'),
+(17, 'quinta', 29, 'la primera', '0000-00-00 00:00:00', '2014-04-10 09:17:12'),
+(18, 'sexta', 29, 'la primera', '1983-09-05 11:28:00', '2014-04-10 09:18:52'),
+(19, 'septima', 29, 'la primera', '0000-00-00 00:00:00', '2014-04-10 09:19:34');
 
 -- --------------------------------------------------------
 
@@ -1250,6 +1463,7 @@ INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, ` FREQUENCY`
 -- Creación: 09-04-2014 a las 13:27:15
 --
 
+DROP TABLE IF EXISTS `USERS`;
 CREATE TABLE IF NOT EXISTS `USERS` (
   `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
   `USERNAME` varchar(15) CHARACTER SET utf8 NOT NULL,

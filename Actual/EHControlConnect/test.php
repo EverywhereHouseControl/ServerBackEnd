@@ -26,6 +26,10 @@
   data: <input type="text" name="data" /></br>
   start: <input type="text" name="start" /></br>
   idaction: <input type="text" name="idaction" /></br>
+  taskname: <input type="text" name="taskname" /></br>
+  description: <input type="text" name="description" /></br>
+  frequency: <input type="text" name="frequency" /></br>
+  idtask: <input type="text" name="idtask" /></br>
   device: <input type="text" name="device" /></br>
   ciudad: <input type="text" name="city" /></br>
   pais: <input type="text" name="country" /></br>

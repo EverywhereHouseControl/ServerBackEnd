@@ -114,6 +114,22 @@ switch ($_POST['command']) {
 	case "deleteprogramaction":
 		deleteprogramaction( $_POST['username'],$_POST['idaction']);
 		break;
+	//11
+	case "createtask":
+		createtask( $_POST['username'],$_POST['taskname'],$_POST['description'],$_POST['frequency']);
+		break;
+	//12
+	case "deletetask":
+		deletetask( $_POST['username'],$_POST['taskname']);
+		break;
+	//21
+	case "addtaskprogram":
+		addtaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
+		break;
+	//22
+	case "removetaskprogram":
+		removetaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
+		break;
 //-------------------------------------------------------------------------------------------------		
 	case "modifyhouse":
 		modifyhouse($_POST['username'],$_POST['password'],$_POST['housename']);
