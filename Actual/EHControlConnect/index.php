@@ -321,6 +321,12 @@ switch ($_POST['command']) {
     case "a":
 		a($_POST['arg1'],$_POST['arg2']); 
 	break;*/
+    default:
+		$message = query(	"SELECT ERRORCODE AS ERROR, ENGLISH, SPANISH
+					FROM ERRORS
+					WHERE ERRORCODE= 38 LIMIT 1 ");
+		$json['error'] = $message['result'][0];
+		print json_encode($json);
 }
 
 exit();

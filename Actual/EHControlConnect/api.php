@@ -346,7 +346,7 @@ function login2($user, $pass) {
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP);"
 			, $iduser, $error, $funct);
 	
 	//successful function
@@ -355,7 +355,7 @@ function login2($user, $pass) {
 	
 	$m = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
-					WHERE ERRORCODE='%s' LIMIT 1 ", 0);
+					WHERE ERRORCODE=0 LIMIT 1 ");
 	
 	$result['error']['ENGLISH'] = utf8_encode($m['result'][0]['ENGLISH']);
 	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
