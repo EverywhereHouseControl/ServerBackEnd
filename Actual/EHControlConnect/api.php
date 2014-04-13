@@ -703,107 +703,12 @@ function doaction($user,$house,$room,$service,$action,$data) {
 
 }
 //--------------------------------------------------------------------------------------
-function createhouse($user, $house){
+function createhouse($user, $house, $city, $country){
 	/* create a new house + create access for this user to the house*/
-	$error = 0;
-	$funct = 7;
-
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		default:	$error = 3;	break;//this user does not exists.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-
-	//** CREATE NEW HOUSE BY THIS USER **
-	$sql = query("INSERT INTO HOUSES
-			       (IDHOUSE, IDUSER, HOUSENAME, IPADRESS, GPS,       DATEBEGIN)
-			VALUES (NULL,      '%s',    '%s',     '',    NULL, CURRENT_TIMESTAMP)"
-			, $iduser, $house);
-
-	$SQLhouse = query("SELECT * FROM HOUSES WHERE HOUSENAME='%s' limit 2", $house);
-	$idhouse  = $SQLhouse['result'][0]['IDHOUSE'];
-	$num	  = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		case 2:		$error = 4;	break;//DATA BASE INTEGRITY BREAK
-		default:	$error = 8;	break;//this user does not exists.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-
-	//CREATE PERMISSION TO ACCESS
-	$sql = query("INSERT INTO ACCESSHOUSE
-			       (IDUSER, IDHOUSE, ACCESSNUMBER,       DATEBEGIN)
-			VALUES ('%s',      '%s',    1,       CURRENT_TIMESTAMP)"
-			, $iduser, $house);
-
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-
+	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
 	// take de error message
-	$error = 17;//create new house
-	message($error, 0);
-}
-
-//--------------------------------------------------------------------------------------
-function createhouse2($user, $house){
-	/* create a new house + create access for this user to the house*/
-	$error = 0;
-	$funct = 7;
-	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		default:	$error = 3;	break;//this user does not exists.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-
-	//** CREATE NEW HOUSE BY THIS USER **
-	$sql = query("INSERT INTO HOUSES
-			       (IDHOUSE, IDUSER, HOUSENAME, IPADRESS, GPS,       DATEBEGIN)
-			VALUES (NULL,      '%s',    '%s',     '',    NULL, CURRENT_TIMESTAMP)"
-			, $iduser, $house);
-	
-	$SQLhouse = query("SELECT * FROM HOUSES WHERE HOUSENAME='%s' limit 2", $house);
-	$idhouse  = $SQLhouse['result'][0]['IDHOUSE'];
-	$num	  = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		case 2:		$error = 4;	break;//DATA BASE INTEGRITY BREAK
-		default:	$error = 8;	break;//this user does not exists.
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	//CREATE PERMISSION TO ACCESS
-	$sql = query("INSERT INTO ACCESSHOUSE
-			       (IDUSER, IDHOUSE, ACCESSNUMBER,       DATEBEGIN)
-			VALUES ('%s',      '%s',    1,       CURRENT_TIMESTAMP)"
-			, $iduser, $house);
-	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	// take de error message
-	$error = 17;//create new house
-	message($error, 0);
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -827,57 +732,28 @@ function ipcheck(){
 //--------------------------------------------------------------------------------------
 function deletehouse($user, $pass, $house){
 	/*delete a existing house by an administrator user <-- user with access number 1*/
-	$error = 0;
-	$funct = 9;
-	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-	
-	switch ($num){
-		case 1:		$error = 0;	break;
-		default:	$error = 3;	break;//this user does not exists.
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	//** THIS USER HAS PERMISSION IN THE HOUSE **
-	$sql = query("SELECT * 
-				FROM ACCESSHOUSE 
-				WHERE 	IDUSER IN 
-						   (SELECT IDUSER
-							FROM USERS 
-							WHERE USERNAME='%s') AND
-						IDHOUSE IN 
-						   (SELECT IDHOUSE
-							FROM HOUSES 
-							WHERE HOUSENAME='%s') limit 2", $user);
-	if (count($sql['result'])) {
-		$error = 18;//access require you have not access to this house
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	$idhouse = $sql['result'][0]['IDHOUSE'];
-	if ($sql['result'][0]['ACCESSNUMBER'] <> 1){
-		$error = 10;//permission require you are not a administrator
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	//DELETE HOUSE
-	$sql = query("DELETE FROM HOUSES WHERE IDHOUSE='%s'"
-			, $idhouse);
-	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
+	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
 	// take de error message
-	$error = 19;//delete house
-	message($error, 0);
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function createaccesshouse($user, $house, $user2, $n){
+	/*create access to a house by an administrator <-- user with access number n*/
+	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deleteaccesshouse($user, $house, $user2){
+	/*delete access to a house by an administrator*/
+	$message = query("CALL deleteaccesshouse('%s', '%s', '%s')",$user, $house, $user2);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -1062,5 +938,104 @@ actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= ut
 	print json_encode($json);
 }
 
+//--------------------------------------------------------------------------------------
+function image($id){
+	if ($id > 0){
+		//vamos a crear nuestra consulta SQL
+		//$consulta = "SELECT * FROM IMAGES WHERE IDIMAGE = $id";
+		//con mysql_query la ejecutamos en nuestra base de datos indicada anteriormente
+		//de lo contrario mostraremos el error que ocaciono la consulta y detendremos la ejecucion.
+		$resultado= query("SELECT * FROM IMAGES WHERE IDIMAGE = %s", $id);
+	
+		//si el resultado fue exitoso
+		//obtendremos el dato que ha devuelto la base de datos
+		//$datos = mysql_fetch_assoc($resultado);
+	
+		//ruta va a obtener un valor parecido a "imagenes/nombre_imagen.jpg" por ejemplo
+		$imagen = $resultado['result'][0]['IMAGE'];
+		$tipo = $resultado['result'][0]['TYPE'];
+		 
+		if (count($resultado['result']) <> 0) {
+			//ahora colocamos la cabeceras correcta segun el tipo de imagen
+			header("Content-type: $tipo");//text/plain");
+			echo $imagen;
+		}
+		else {
+			echo 'this image does not exist.';
+		}
+		//echo '<img src='.$resultado['result'][0]['URL'].' width="100" heigth="100"/>';
+	}
+}
+
+//--------------------------------------------------------------------------------------
+function imageup($id){
+	//comprobamos si ha ocurrido un error.
+	if ( ! isset($_FILES["imagen"]) || $_FILES["imagen"]["error"] > 0){
+		echo "ha ocurrido un error";
+	} else {
+		//ahora vamos a verificar si el tipo de archivo es un tipo de imagen permitido.
+		//y que el tamano del archivo no exceda los 16mb
+		$permitidos = array("image/jpg", "image/jpeg", "image/gif", "image/png");
+		$limite_kb = 16384; //16mb es el limite de medium blob
+		 
+		if (in_array($_FILES['imagen']['type'], $permitidos) && $_FILES['imagen']['size'] <= $limite_kb * 1024){
+			 
+			//este es el archivo temporal
+			$imagen_temporal  = $_FILES['imagen']['tmp_name'];
+			//este es el tipo de archivo
+			$tipo = $_FILES['imagen']['type'];
+			//leer el archivo temporal en binario
+			$fp     = fopen($imagen_temporal, 'r+b');
+			$data = fread($fp, filesize($imagen_temporal));
+			fclose($fp);
+			//escapar los caracteres
+			$data = mysql_escape_string($data);
+	
+			$resultado = mysql_query("INSERT INTO imagenes (imagen, tipo_imagen) VALUES ('$data', '$tipo')");
+			if ($resultado){
+				echo "el archivo ha sido copiado exitosamente";
+			} else {
+				echo "ocurrio un error al copiar el archivo.";
+			}
+		} else {
+			echo "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
+		}
+	}
+}
+//--------------------------------------------------------------------------------------
+function subir(){
+	//comprobamos si ha ocurrido un error.
+	if ( ! isset($_FILES["imagen"]) || $_FILES["imagen"]["error"] > 0){
+		print "ha ocurrido un error";
+	} else {
+		//ahora vamos a verificar si el tipo de archivo es un tipo de imagen permitido.
+		//y que el tamano del archivo no exceda los 16mb
+		$permitidos = array("image/jpg", "image/jpeg", "image/gif", "image/png");
+		$limite_kb = 16384; //16mb es el limite de medium blob
+		 
+		if (in_array($_FILES['imagen']['type'], $permitidos) && $_FILES['imagen']['size'] <= $limite_kb * 1024){
+			 
+			//este es el archivo temporal
+			$imagen_temporal  = $_FILES['imagen']['tmp_name'];
+			//este es el tipo de archivo
+			$tipo = $_FILES['imagen']['type'];
+			//leer el archivo temporal en binario
+			$fp     = fopen($imagen_temporal, 'r+b');
+			$data = fread($fp, filesize($imagen_temporal));
+			fclose($fp);
+			//escapar los caracteres
+			//$data = mysql_escape_string($data);
+	
+			$resultado = query("INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) VALUES (NULL, '%s', '', '%s')",$data,$tipo);
+			if ($resultado){
+				print "el archivo ha sido copiado exitosamente";
+			} else {
+				print "ocurrio un error al copiar el archivo.";
+			}
+		} else {
+			print "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
+		}
+		}
+}
 ?>
 

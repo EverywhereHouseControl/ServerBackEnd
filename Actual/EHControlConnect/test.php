@@ -1,12 +1,8 @@
-<?php
-  if( $_POST["name"] || $_POST["age"] )
-  {
-     echo "Welcome ". $_POST['name']. "<br />";
-     echo "You are ". $_POST['age']. " years old.";
-     exit();
-  }
-?>
+<!doctype html>
 <html>
+	<head>
+		<title>Test API server</title>
+	</head>
 <body>
   <form action="http://ehcontrol.net/EHControlConnect/index.php" method="POST">
 
@@ -31,11 +27,20 @@
   frequency: <input type="text" name="frequency" /></br>
   idtask: <input type="text" name="idtask" /></br>
   device: <input type="text" name="device" /></br>
-  ciudad: <input type="text" name="city" /></br>
-  pais: <input type="text" name="country" /></br>
-  idioma: <input type="text" name="language" /></br>
+  city: <input type="text" name="city" /></br>
+  country: <input type="text" name="country" /></br>
+  language: <input type="text" name="language" /></br>
+  number: <input type="text" name="number" /></br>
 
   <input type="submit" />
   </form>
+  	
+	<body>
+		<form action="http://ehcontrol.net/EHControlConnect/index.php" method="POST" enctype="multipart/form-data">
+		    <label for="imagen">Imagen:</label>
+		    <input type="file" name="imagen" id="imagen" />
+		    <input type="submit" name="subir" value="Subir"/>
+		    <input type="text" name="command" value="subir"/>
+		</form>
 </body>
 </html>

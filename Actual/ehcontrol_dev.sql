@@ -230,46 +230,40 @@ begin
 
 end$$
 
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse` 
-( IN u VARCHAR(15), IN h VARCHAR(30))
-LANGUAGE SQL
-NOT DETERMINISTIC
-SQL SECURITY DEFINER
-COMMENT 'Create a new user if not exist.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(30), IN h VARCHAR(30), IN c VARCHAR(30), IN ctry VARCHAR(30))
+    COMMENT 'Create a new house if not exist.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE idu, idh INTEGER DEFAULT 0;
+	DECLARE idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*) INTO num 
-	FROM (
-			SELECT IDUSER INTO idu
-			FROM USERS
-			WHERE USERNAME = u);
+	SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
 			
 	CASE num 
 	WHEN 1 THEN 
-		begin
-			DECLARE num INTEGER DEFAULT 0;
-			SELECT COUNT(*) INTO num 
-			FROM (
-				SELECT IDHOUSE INTO idh
-				FROM HOUSES
-				WHERE HOUSENAME = h);
+			SELECT COUNT(*), IDHOUSE INTO num, idh
+			FROM HOUSES
+			WHERE HOUSENAME = h;
+				
 			CASE num
 			WHEN 0 THEN 
-				INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `GPS`, `DATEBEGIN`) VALUES
-(1, 1, 'mi casa', '37.6735925', '2014-03-04 05:00:00');
-				INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES
-(0, 11, 1, '2014-03-25 21:39:58');
+				INSERT INTO HOUSES  (IDHOUSE, IDUSER, HOUSENAME, IDIMAGE, CITY, COUNTRY, GPS, DATEBEGIN) VALUES
+									(null, idu, h,NULL, c, ctry ,NULL,CURRENT_TIMESTAMP);
+				SELECT IDHOUSE INTO idh
+				FROM HOUSES
+				WHERE HOUSENAME = h;
+				
+				INSERT INTO ACCESSHOUSE (IDUSER, IDHOUSE, ACCESSNUMBER, DATEBEGIN) VALUES
+										(idu,    idh, 1, CURRENT_TIMESTAMP);
 				SET err = 17;
 			WHEN 1 THEN
-				SET err = 7; --EMAIL repeated
+				SET err = 22;
 			ELSE
 				SET err = 4;
 			END CASE;
-		end
 	WHEN 0 THEN
 		SET err = 3;
 	ELSE
@@ -278,12 +272,147 @@ begin
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  err,  3, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,    idu,   idh,  IF(err = 17, 0, err),  7, CURRENT_TIMESTAMP);
 				
-	SELECT IF(ERRORCODE = 17, 0, ERRORCODE) AS ERRORCODE, ENGLISH, SPANISH
+	SELECT IF(ERRORCODE = 17, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 end$$
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`
+( IN u VARCHAR(30), IN h VARCHAR(30))
+    COMMENT 'Create a new house if not exist.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu, idh INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
+	FROM HOUSES
+	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
+	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+	WHERE USERNAME = u AND HOUSENAME = h;
+			
+	CASE num 
+	WHEN 1 THEN 
+		CASE acc
+		WHEN 1 THEN 
+			DELETE FROM HOUSES WHERE IDHOUSE= idh;
+			SET err = 19;
+		WHEN 0 THEN
+			SET err = 11;
+		ELSE
+			SET err = 39;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 19, 0, err),  9, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 19, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`
+( IN u VARCHAR(30), IN h VARCHAR(30), IN u2 VARCHAR(30), IN n INTEGER)
+    COMMENT 'Create a new house if not exist.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu, idh INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
+	FROM HOUSES
+	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
+	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+	WHERE USERNAME = u AND HOUSENAME = h;
+			
+	CASE num 
+	WHEN 1 THEN 
+		CASE acc
+		WHEN 1 THEN 
+			SELECT COUNT(*), IDUSER INTO num, idu
+			FROM USERS
+			WHERE USERNAME = u2;
+			IF (num <> 0) THEN 
+				INSERT INTO ACCESSHOUSE (IDUSER, IDHOUSE, ACCESSNUMBER, DATEBEGIN) VALUES
+										(idu,    idh, 1, CURRENT_TIMESTAMP);
+				SET err = 40;
+			ELSE
+				SET err = 3;
+			END IF;
+		WHEN 0 THEN
+			SET err = 11;
+		ELSE
+			SET err = 39;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 40, 0, err),  24, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 40, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteccesshouse`
+( IN u VARCHAR(30), IN h VARCHAR(30), IN u2 VARCHAR(30))
+    COMMENT 'Delete the access to a house of a user.'
+begin
+
+	DECLARE num,acc INTEGER DEFAULT 0;
+	DECLARE idu, idh INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
+	FROM HOUSES
+	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
+	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+	WHERE USERNAME = u AND HOUSENAME = h;
+			
+	CASE num 
+	WHEN 1 THEN 
+		CASE acc
+		WHEN 1 THEN 
+			DELETE FROM ACCESSHOUSE WHERE IDUSER=idu AND IDHOUSE = idh;
+			SET err = 41;
+		WHEN 0 THEN
+			SET err = 11;
+		ELSE
+			SET err = 39;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 41, 0, err),  24, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 41, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end
+
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE doaction
 ($user,$house,$room,$service,$action,$data)
@@ -689,9 +818,58 @@ begin
 
 end$$
 
+SELECT month,
+       MAX(CASE WHEN unit = 'CS-1' THEN value END) `CS-1`,
+       MAX(CASE WHEN unit = 'CS-2' THEN value END) `CS-2`,
+       MAX(CASE WHEN unit = 'CS-3' THEN value END) `CS-3`
+  FROM
+(
+  SELECT unit, month,
+         CASE month 
+            WHEN 'JAN' THEN jan
+            WHEN 'FEB' THEN feb
+            WHEN 'MAR' THEN mar
+            WHEN 'APR' THEN apr
+            WHEN 'MAY' THEN may
+            WHEN 'JUN' THEN jun
+         END value
+    FROM table1 t CROSS JOIN
+  (
+    SELECT 'JAN' month UNION ALL
+    SELECT 'FEB' UNION ALL
+    SELECT 'MAR' UNION ALL
+    SELECT 'APR' UNION ALL
+    SELECT 'MAY' UNION ALL
+    SELECT 'JUN'
+  ) c
+) q
+ GROUP BY month
 
+ 
+ mysqlslap --user=alex -p --delimiter=";"   --create="CREATE TABLE a (b int);INSERT INTO a VALUES (23)"  --query="SELECT * FROM a" --concurrency=50 --iterations=200
+ 
+ select `ehcontrol`.`USERS`.`USERNAME` AS `USERNAME`,`ehcontrol`.`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`ehcontrol`.`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`ehcontrol`.`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`ehcontrol`.`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`ehcontrol`.`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`ehcontrol`.`USERS` left join `ehcontrol`.`HISTORYACCESS` on((`ehcontrol`.`USERS`.`IDUSER` = `ehcontrol`.`HISTORYACCESS`.`IDUSER`))) left join `ehcontrol`.`FUNCTIONS` on((`ehcontrol`.`HISTORYACCESS`.`FUNCT` = `ehcontrol`.`FUNCTIONS`.`FUNCT`))) join `ehcontrol`.`ERRORS` on((`ehcontrol`.`ERRORS`.`ERRORCODE` = `ehcontrol`.`HISTORYACCESS`.`ERROR`))) group by `ehcontrol`.`USERS`.`USERNAME`,`ehcontrol`.`FUNCTIONS`.`FUNCTION` order by count(0) desc
+ 
+ 
+ mysqlslap --user=alex --password=alex --auto-generate-sql --concurrency=50 --iterations=10 --number-char-cols=4
+ 
+ mysqlslap --user=alex --password=alex --auto-generate-sql --concurrency=100 --iterations=10 --number-char-cols=4
+ 
+  mysqlslap --user=alex --password=alex --create-schema=world --query="SELECT City.Name, City.District FROM City, Country WHERE City.CountryCode = Country.Code AND Country.Code = 'IND';" --concurrency=100 --iterations=5
 
-
+  mysqlslap --user=alex --password=alex --auto-generate-sql --concurrency=100 --number-of-queries=700 --engine=innodb
+ 
+ 
+ mysqlslap --user=alex --password=alex --auto-generate-sql --concurrency=100 --number-of-queries=700 --engine=myisam
+ 
+ mysqlslap --user=alex --password=alex --create-schema=ehcontrol --auto-generate-sql --concurrency=100 --number-of-queries=700
+ 
+ mysqlslap --user=alex --password=alex --create-schema=ehcontrol --query="select ehcontrol.USERS.USERNAME AS USERNAME,ehcontrol.FUNCTIONS.FUNCTION AS FUNCTION,count(0) AS TOTAL,sum(if((ehcontrol.HISTORYACCESS.ERROR = 0),1,0)) AS SUCCESS,sum(if((ehcontrol.HISTORYACCESS.ERROR <> 0),1,0)) AS ERROR,sum(if((ehcontrol.HISTORYACCESS.ERROR = 2),1,0)) AS PASSWORD,sum(if((ehcontrol.HISTORYACCESS.ERROR = 4),1,0)) AS INTEGRITY from (((ehcontrol.USERS left join ehcontrol.HISTORYACCESS on((ehcontrol.USERS.IDUSER = ehcontrol.HISTORYACCESS.IDUSER))) left join ehcontrol.FUNCTIONS on((ehcontrol.HISTORYACCESS.FUNCT = ehcontrol.FUNCTIONS.FUNCT))) join ehcontrol.ERRORS on((ehcontrol.ERRORS.ERRORCODE = ehcontrol.HISTORYACCESS.ERROR))) group by ehcontrol.USERS.USERNAME,ehcontrol.FUNCTIONS.FUNCTION order by count(0) desc" --concurrency=100 --number-of-queries=700
+ 
+ 
+ 
+ 
+ 
  	Cotejamiento
 UPDATE USERS 
 latin1_swedish_ci 	

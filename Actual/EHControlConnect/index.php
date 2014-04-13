@@ -80,16 +80,11 @@ switch ($_POST['command']) {
 		break;
 	//7
 	case "createhouse":
-		createuser($_POST['username'],$_POST['housename']);
+		createhouse($_POST['username'],$_POST['housename'],$_POST['city'],$_POST['country']);
 		//**create a new house with an existing user
 		// ::> returns a message | returns the result of the operation
 		break;
-		//7
-		case "createhouse2":
-			createhouse2($_POST['username'],$_POST['housename']);
-			//**create a new house with an existing user
-			// ::> returns a message | returns the result of the operation
-			break;
+
 	//8
 	case "ipcheck":
 		ipcheck();
@@ -152,7 +147,19 @@ switch ($_POST['command']) {
 		//**delete a existing room by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
-	
+		
+	case "createaccesshouse":
+		createaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username'],$_POST['number']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+
+	case "deleteaccesshouse":
+		deleteaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+			
 	case "modifyroom":
 		modifyroom($_POST['username'],$_POST['password'],$_POST['roomname']);
 		//**modify setings of an existing the room
@@ -169,6 +176,16 @@ switch ($_POST['command']) {
 		downloadstadistics($_POST['username']);
 		//**download the STADISTICS of username by using and more
 		// ::> returns a message | returns JSON 
+	break;
+	case "image":
+		image($_POST['username']);
+		//**download the STADISTICS of username by using and more
+		// ::> returns a message | returns JSON
+	break;
+	case "subir":
+		subir();
+		//**download the STADISTICS of username by using and more
+		// ::> returns a message | returns JSON
 	break;
 		/*
     case "downloadhousetask":
