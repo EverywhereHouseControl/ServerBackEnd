@@ -19,6 +19,8 @@
   roomname: <input type="text" name="roomname" /></br>
   servicename: <input type="text" name="servicename" /></br>
   actionname: <input type="text" name="actionname" /></br>
+  n_housename: <input type="text" name="n_housename" /></br>
+  n_roomname: <input type="text" name="n_roomname" /></br>
   data: <input type="text" name="data" /></br>
   start: <input type="text" name="start" /></br>
   idaction: <input type="text" name="idaction" /></br>
@@ -31,6 +33,7 @@
   country: <input type="text" name="country" /></br>
   language: <input type="text" name="language" /></br>
   number: <input type="text" name="number" /></br>
+  idimage: <input type="text" name="idimage" /></br>
 
   <input type="submit" />
   </form>

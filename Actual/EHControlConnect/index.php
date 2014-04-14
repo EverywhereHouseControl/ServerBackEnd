@@ -130,14 +130,9 @@ switch ($_POST['command']) {
 		schedulehouse( $_POST['housename']);
 		break;
 //-------------------------------------------------------------------------------------------------		
-	case "modifyhouse":
-		modifyhouse($_POST['username'],$_POST['password'],$_POST['housename']);
-		//**modify setings of an existing the house
-		// ::> returns a message | returns the result of the operation
-		break;
 	
 	case "createroom":
-		createroom($_POST['username'],$_POST['roomname']);
+		createroom($_POST['username'],$_POST['housename'],$_POST['roomname']);
 		//**create a new room with an existing user
 		// ::> returns a message | returns the result of the operation
 		break;
@@ -156,6 +151,11 @@ switch ($_POST['command']) {
 
 	case "deleteaccesshouse":
 		deleteaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+	case "modifyhouse":
+		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['idimage'],$_POST['city'],$_POST['country']);
 		//**delete a existing room by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;

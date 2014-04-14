@@ -1,7 +1,5 @@
 <?
-//API implementation to come here
-
-
+//API implementation
 
 //--------------------------------------------------------------------------------------
 function errorJson($msg){
@@ -702,14 +700,6 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 
 }
-//--------------------------------------------------------------------------------------
-function createhouse($user, $house, $city, $country){
-	/* create a new house + create access for this user to the house*/
-	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
-	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
-	print json_encode($json);
-}
 
 //--------------------------------------------------------------------------------------
 function ipcheck(){
@@ -726,34 +716,6 @@ function ipcheck(){
 	
 	print json_encode ($_SERVER['REMOTE_ADDR']);
 	exit();
-}
-
-
-//--------------------------------------------------------------------------------------
-function deletehouse($user, $pass, $house){
-	/*delete a existing house by an administrator user <-- user with access number 1*/
-	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
-	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
-	print json_encode($json);
-}
-
-//--------------------------------------------------------------------------------------
-function createaccesshouse($user, $house, $user2, $n){
-	/*create access to a house by an administrator <-- user with access number n*/
-	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);
-	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
-	print json_encode($json);
-}
-
-//--------------------------------------------------------------------------------------
-function deleteaccesshouse($user, $house, $user2){
-	/*delete access to a house by an administrator*/
-	$message = query("CALL deleteaccesshouse('%s', '%s', '%s')",$user, $house, $user2);
-	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
-	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -775,6 +737,59 @@ function getweather($city,$language){
 		echo ("\n");
 	}
 	exit();
+}
+
+//--------------------------------------------------------------------------------------
+function createhouse($user, $house, $city, $country){
+	/* create a new house + create access for this user to the house*/
+	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function modifyhouse($user, $house, $n_house, $image, $city, $country){
+	/* modify information of house by an administrator*/
+	$message = query("CALL modifyhouse('%s', '%s', '%s', %s, '%s', '%s')", $user, $house, $n_house, $image, $city, $country);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+//--------------------------------------------------------------------------------------
+function deletehouse($user, $pass, $house){
+	/*delete a existing house by an administrator user <-- user with access number 1*/
+	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function createroom($user, $house, $room){
+	/* create a new house + create access for this user to the house*/
+	$message = query("CALL createroom('%s', '%s', '%s')", $user, $house, $room);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function createaccesshouse($user, $house, $user2, $n){
+	/*create access to a house by an administrator <-- user with access number n*/
+	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deleteaccesshouse($user, $house, $user2){
+	/*delete access to a house by an administrator*/
+	$message = query("CALL deleteaccesshouse('%s', '%s', '%s')",$user, $house, $user2);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -1003,31 +1018,36 @@ function imageup($id){
 	}
 }
 //--------------------------------------------------------------------------------------
-function subir(){
-	//comprobamos si ha ocurrido un error.
-	if ( ! isset($_FILES["imagen"]) || $_FILES["imagen"]["error"] > 0){
+function subir() {
+	// comprobamos si ha ocurrido un error.
+	if (! isset ( $_FILES ["imagen"] ) || $_FILES ["imagen"] ["error"] > 0) {
 		print "ha ocurrido un error";
 	} else {
-		//ahora vamos a verificar si el tipo de archivo es un tipo de imagen permitido.
-		//y que el tamano del archivo no exceda los 16mb
-		$permitidos = array("image/jpg", "image/jpeg", "image/gif", "image/png");
-		$limite_kb = 16384; //16mb es el limite de medium blob
-		 
-		if (in_array($_FILES['imagen']['type'], $permitidos) && $_FILES['imagen']['size'] <= $limite_kb * 1024){
-			 
-			//este es el archivo temporal
-			$imagen_temporal  = $_FILES['imagen']['tmp_name'];
-			//este es el tipo de archivo
-			$tipo = $_FILES['imagen']['type'];
-			//leer el archivo temporal en binario
-			$fp     = fopen($imagen_temporal, 'r+b');
-			$data = fread($fp, filesize($imagen_temporal));
-			fclose($fp);
-			//escapar los caracteres
-			//$data = mysql_escape_string($data);
-	
-			$resultado = query("INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) VALUES (NULL, '%s', '', '%s')",$data,$tipo);
-			if ($resultado){
+		// ahora vamos a verificar si el tipo de archivo es un tipo de imagen permitido.
+		// y que el tamano del archivo no exceda los 16mb
+		$permitidos = array (
+				"image/jpg",
+				"image/jpeg",
+				"image/gif",
+				"image/png" 
+		);
+		$limite_kb = 16384; // 16mb es el limite de medium blob
+		
+		if (in_array ( $_FILES ['imagen'] ['type'], $permitidos ) && $_FILES ['imagen'] ['size'] <= $limite_kb * 1024) {
+			
+			// este es el archivo temporal
+			$imagen_temporal = $_FILES ['imagen'] ['tmp_name'];
+			// este es el tipo de archivo
+			$tipo = $_FILES ['imagen'] ['type'];
+			// leer el archivo temporal en binario
+			$fp = fopen ( $imagen_temporal, 'r+b' );
+			$data = fread ( $fp, filesize ( $imagen_temporal ) );
+			fclose ( $fp );
+			// escapar los caracteres
+			// $data = mysql_escape_string($data);
+			
+			$resultado = query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) VALUES (NULL, '%s', '', '%s')", $data, $tipo );
+			if ($resultado) {
 				print "el archivo ha sido copiado exitosamente";
 			} else {
 				print "ocurrio un error al copiar el archivo.";
@@ -1035,7 +1055,7 @@ function subir(){
 		} else {
 			print "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
 		}
-		}
+	}
 }
 ?>
 
