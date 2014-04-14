@@ -775,6 +775,15 @@ function createroom($user, $house, $room){
 }
 
 //--------------------------------------------------------------------------------------
+function deleteroom($user, $pass, $house, $room){
+	/* create a new house + create access for this user to the house*/
+	$message = query("CALL deleteroom('%s', '%s', '%s', '%s')", $user, $pass, $house, $room);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/
 	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);

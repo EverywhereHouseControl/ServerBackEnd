@@ -138,7 +138,7 @@ switch ($_POST['command']) {
 		break;
 	
 	case "deleteroom":
-		deleteroom($_POST['username'],$_POST['password'],$_POST['roomname']);
+		deleteroom($_POST['username'],$_POST['password'],$_POST['housename'],$_POST['roomname']);
 		//**delete a existing room by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
