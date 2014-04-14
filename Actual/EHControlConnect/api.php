@@ -784,6 +784,24 @@ function deleteroom($user, $pass, $house, $room){
 }
 
 //--------------------------------------------------------------------------------------
+function createdevice($user, $ip, $serial, $device){
+	/* create a new device*/
+	$message = query("CALL createdevice('%s', '%s', '%s', '%s')", $user, $ip, $serial, $device);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deletedevice($user, $ip, $serial, $device){
+	/* create a new device*/
+	$message = query("CALL deletedevice('%s', '%s', '%s', '%s')", $user, $ip, $serial, $device);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/
 	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);

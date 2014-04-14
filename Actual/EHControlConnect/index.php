@@ -242,14 +242,14 @@ switch ($_POST['command']) {
     case "sendmessage":
 		sendmessage($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-		/*
+		
     case "createdevice":
-		createdevice($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
+		createdevice($_POST['username'],$_POST['ipaddress'],$_POST['serial'],$_POST['devicename']); 
+	break;
+		
     case "deletedevice":
 		deletedevice($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+	break;
 		/*
 
 

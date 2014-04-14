@@ -28,11 +28,13 @@
   description: <input type="text" name="description" /></br>
   frequency: <input type="text" name="frequency" /></br>
   idtask: <input type="text" name="idtask" /></br>
-  device: <input type="text" name="device" /></br>
+  devicename: <input type="text" name="devicename" /></br>
+  ipaddress: <input type="text" name="ipaddress" /></br>
   city: <input type="text" name="city" /></br>
   country: <input type="text" name="country" /></br>
   language: <input type="text" name="language" /></br>
   number: <input type="text" name="number" /></br>
+  serial: <input type="text" name="serial" /></br>
   idimage: <input type="text" name="idimage" /></br>
 
   <input type="submit" />

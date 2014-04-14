@@ -555,7 +555,55 @@ begin
 	WHERE ERRORCODE = err;
 end$$
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(30), IN ip VARCHAR(200), IN s VARCHAR(20), IN d VARCHAR(20))
+    COMMENT 'Create a new device.'
+begin
 
+	DECLARE num, v INTEGER DEFAULT 0;
+	DECLARE idu, idd, idh INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+			SELECT COUNT(*), IDDEVICE INTO num, idd
+			FROM DEVICES
+			WHERE SERIAL = s AND IPADDRESS = ip;
+				
+			CASE num
+			WHEN 0 THEN 
+				SELECT COUNT(*),VERSION INTO num, v
+				FROM DEVICES
+				WHERE NAME = d AND IDUSER = NULL AND IPADDRESS = NULL AND SERIAL = NULL;
+				
+				CASE num 
+				WHEN 1 THEN
+					INSERT INTO DEVICES (IDDEVICE, IDUSER, IPADDRESS, SERIAL, NAME, ENGLISH, SPANISH, `DATE`, VERSION) VALUES 
+										(NULL,   idu,    ip,    s,   d,   NULL,   NULL,   CURRENT_TIMESTAMP,   v);
+					SET err = 49;
+				ELSE
+					SET err = 48;
+				END CASE;
+			ELSE
+				SET err = 47;
+			END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 49, 0, err),  25, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 49, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
 
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE doaction
