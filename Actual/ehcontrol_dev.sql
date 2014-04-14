@@ -714,6 +714,50 @@ begin
 	WHERE ERRORCODE = err;
 end
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(15), IN c VARCHAR(15))
+    COMMENT 'delete a command from an user(conjunto de mandatos)'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+    SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*) INTO num
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+
+		CASE num
+		WHEN 1 THEN
+			DELETE FROM COMMANDS WHERE COMMANDNAME = c AND IDUSER = idu;
+			SET err = 54; 
+		ELSE
+			SET err = 53;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    NULL,  IF(err = 54, 0, err),  27, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 54, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+
+
+
+
 
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE doaction

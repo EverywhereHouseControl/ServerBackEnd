@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-04-2014 a las 17:22:50
+-- Tiempo de generación: 14-04-2014 a las 17:32:40
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -549,6 +549,47 @@ begin
 				VALUES  (     NULL,    idu,   idh,  IF(err = 41, 0, err),  24, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 41, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `deletecommand`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(15), IN c VARCHAR(15))
+    COMMENT 'delete a command from an user(conjunto de mandatos)'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+    SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*) INTO num
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+
+		CASE num
+		WHEN 1 THEN
+			DELETE FROM COMMANDS WHERE COMMANDNAME = c AND IDUSER = idu;
+			SET err = 54; 
+		ELSE
+			SET err = 53;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    NULL,  IF(err = 54, 0, err),  27, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 54, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 end$$
@@ -1295,7 +1336,7 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
   `IDUSER` int(11) NOT NULL,
   PRIMARY KEY (`IDCOMMAND`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- RELACIONES PARA LA TABLA `COMMANDS`:
@@ -1309,8 +1350,7 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
 
 INSERT INTO `COMMANDS` (`IDCOMMAND`, `COMMANDNAME`, `IDUSER`) VALUES
 (2, 'wakeup', 10),
-(3, 'otroror', 86),
-(4, 'otroror', 10);
+(3, 'otroror', 86);
 
 -- --------------------------------------------------------
 
@@ -1426,7 +1466,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=53 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -1485,7 +1525,9 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (49, 'Added new device.', 'Nuevo dispositivo añadido.'),
 (50, 'Login success.', 'Login correcto.'),
 (51, ' This command already exists.', 'Este comando ya existe.'),
-(52, 'New command created.', 'Nuevo comando creado.');
+(52, 'New command created.', 'Nuevo comando creado.'),
+(53, 'This command does not exist.', 'Este comando no existe.'),
+(54, 'Command removed.', 'Comando eliminado.');
 
 -- --------------------------------------------------------
 
@@ -1501,7 +1543,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(20) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -1518,6 +1560,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (17, 'createroom'),
 (11, 'createtask'),
 (3, 'createuser'),
+(27, 'deletecommand'),
 (9, 'deletehouse'),
 (15, 'deleteprogramaction'),
 (18, 'deleteroom'),
@@ -1555,7 +1598,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2772 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2780 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -4228,7 +4271,15 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (2768, 86, NULL, 0, 26, '2014-04-14 15:22:11'),
 (2769, 86, NULL, 51, 26, '2014-04-14 15:22:14'),
 (2770, 10, NULL, 0, 26, '2014-04-14 15:22:24'),
-(2771, NULL, NULL, 3, 26, '2014-04-14 15:22:35');
+(2771, NULL, NULL, 3, 26, '2014-04-14 15:22:35'),
+(2772, NULL, NULL, 3, 27, '2014-04-14 15:30:48'),
+(2773, 10, NULL, 0, 27, '2014-04-14 15:31:00'),
+(2774, 10, NULL, 53, 27, '2014-04-14 15:31:03'),
+(2775, 29, NULL, 53, 27, '2014-04-14 15:31:17'),
+(2776, 29, NULL, 0, 26, '2014-04-14 15:31:30'),
+(2777, 29, NULL, 0, 27, '2014-04-14 15:31:41'),
+(2778, 29, NULL, 0, 1, '2014-04-14 15:32:06'),
+(2779, 29, NULL, 0, 1, '2014-04-14 15:32:18');
 
 -- --------------------------------------------------------
 
