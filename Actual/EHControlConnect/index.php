@@ -194,7 +194,7 @@ switch ($_POST['command']) {
 //-------------------------------------------------------------------------------------------------
 
 	case "image":
-		image($_POST['username']);
+		image($_POST['idimage']);
 		//**download the STADISTICS of username by using and more
 		// ::> returns a message | returns JSON
 	break;
