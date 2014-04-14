@@ -605,6 +605,116 @@ begin
 	WHERE ERRORCODE = err;
 end$$
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `login`( IN u VARCHAR(15), IN p VARCHAR(40))
+    COMMENT 'login2 implementation'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+    SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		begin
+			IF (pass = p) THEN
+				DELETE FROM ROOMS WHERE IDROOM = idr;
+				SET err = 45;
+			ELSE
+				SET err = 2;
+			END IF;
+			
+			
+			DECLARE num INTEGER DEFAULT 0;
+			SELECT COUNT(*) INTO num
+			FROM USERS
+			WHERE EMAIL = mail ;
+			CASE num
+			WHEN 0 THEN 
+				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
+									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE USERNAME = u;
+
+				SET err = 13;
+			WHEN 1 THEN
+
+                               SELECT IFNULL(IDUSER, 0) INTO  id
+	                       FROM USERS
+	                       WHERE EMAIL = mail;
+
+				SET err = 7; 
+			ELSE
+				SET err = 4;
+			END CASE;
+		end;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	SELECT IFNULL(IDUSER, 0) INTO  id
+	FROM USERS
+	WHERE USERNAME = u;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  id,    NULL,  IF(err = 13, 0, err),  1, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 13, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(15), IN c VARCHAR(15))
+    COMMENT 'create new command (conjunto de mandatos)'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+    SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*) INTO num
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+
+		CASE num
+		WHEN 0 THEN
+			INSERT INTO COMMANDS (IDCOMMAND, COMMANDNAME, IDUSER) VALUES
+								(NULL, c, idu);
+			SET err = 52; 
+		ELSE
+			SET err = 51;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    NULL,  IF(err = 52, 0, err),  26, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 52, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end
+
+
 
 CREATE DEFINER=`alex`@`localhost` PROCEDURE doaction
 ($user,$house,$room,$service,$action,$data)

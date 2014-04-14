@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-04-2014 a las 13:30:43
+-- Tiempo de generación: 14-04-2014 a las 17:22:50
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -128,6 +128,99 @@ begin
 				VALUES  (     NULL,    idu,   idh,  IF(err = 40, 0, err),  24, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 40, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `createcommand`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(15), IN c VARCHAR(15))
+    COMMENT 'create new command (conjunto de mandatos)'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+    SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*) INTO num
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+
+		CASE num
+		WHEN 0 THEN
+			INSERT INTO COMMANDS (IDCOMMAND, COMMANDNAME, IDUSER) VALUES
+								(NULL, c, idu);
+			SET err = 52; 
+		ELSE
+			SET err = 51;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    NULL,  IF(err = 52, 0, err),  26, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 52, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `createdevice`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(30), IN ip VARCHAR(200), IN s VARCHAR(20), IN d VARCHAR(20))
+    COMMENT 'Create a new device.'
+begin
+
+	DECLARE num, v INTEGER DEFAULT 0;
+	DECLARE idu, idd, idh INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+	SELECT COUNT(*), IDUSER INTO num, idu
+	FROM USERS
+	WHERE USERNAME = u;
+			
+	CASE num 
+	WHEN 1 THEN 
+			SELECT COUNT(*), IDDEVICE INTO num, idd
+			FROM DEVICES
+			WHERE SERIAL = s AND IPADDRESS = ip;
+				
+			CASE num
+			WHEN 0 THEN 
+				SELECT COUNT(*),VERSION INTO num, v
+				FROM DEVICES
+				WHERE NAME = d AND IDUSER IS NULL AND IPADDRESS IS NULL AND SERIAL IS NULL;
+				
+				CASE num 
+				WHEN 1 THEN
+					INSERT INTO DEVICES (IDDEVICE, IDUSER, IPADDRESS, SERIAL, NAME, ENGLISH, SPANISH, `DATE`, VERSION) VALUES 
+										(NULL,   idu,    ip,    s,   d,   NULL,   NULL,   CURRENT_TIMESTAMP,   v);
+					SET err = 49;
+				ELSE
+					SET err = 48;
+				END CASE;
+			ELSE
+				SET err = 47;
+			END CASE;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 49, 0, err),  25, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 49, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 end$$
@@ -1192,17 +1285,17 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 --
 -- Estructura de tabla para la tabla `COMMANDS`
 --
--- Creación: 12-04-2014 a las 14:42:08
+-- Creación: 14-04-2014 a las 15:15:40
 --
 
 DROP TABLE IF EXISTS `COMMANDS`;
 CREATE TABLE IF NOT EXISTS `COMMANDS` (
-  `IDCOMMMAND` int(11) NOT NULL AUTO_INCREMENT,
+  `IDCOMMAND` int(11) NOT NULL AUTO_INCREMENT,
   `COMMANDNAME` varchar(15) NOT NULL,
   `IDUSER` int(11) NOT NULL,
-  PRIMARY KEY (`IDCOMMMAND`),
+  PRIMARY KEY (`IDCOMMAND`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- RELACIONES PARA LA TABLA `COMMANDS`:
@@ -1214,15 +1307,17 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
 -- Volcado de datos para la tabla `COMMANDS`
 --
 
-INSERT INTO `COMMANDS` (`IDCOMMMAND`, `COMMANDNAME`, `IDUSER`) VALUES
-(1, 'llegaCasa', 29);
+INSERT INTO `COMMANDS` (`IDCOMMAND`, `COMMANDNAME`, `IDUSER`) VALUES
+(2, 'wakeup', 10),
+(3, 'otroror', 86),
+(4, 'otroror', 10);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `COMMAND_PROGRAM`
 --
--- Creación: 13-04-2014 a las 12:57:03
+-- Creación: 14-04-2014 a las 15:15:59
 --
 
 DROP TABLE IF EXISTS `COMMAND_PROGRAM`;
@@ -1236,18 +1331,11 @@ CREATE TABLE IF NOT EXISTS `COMMAND_PROGRAM` (
 
 --
 -- RELACIONES PARA LA TABLA `COMMAND_PROGRAM`:
+--   `IDCOMMAND`
+--       `COMMANDS` -> `IDCOMMAND`
 --   `IDPROGRAM`
 --       `PROGRAMACTIONS` -> `IDPROGRAM`
---   `IDCOMMAND`
---       `COMMANDS` -> `IDCOMMMAND`
 --
-
---
--- Volcado de datos para la tabla `COMMAND_PROGRAM`
---
-
-INSERT INTO `COMMAND_PROGRAM` (`IDCOMMAND`, `IDPROGRAM`, `POS`) VALUES
-(1, 2, 4);
 
 --
 -- Disparadores `COMMAND_PROGRAM`
@@ -1283,13 +1371,14 @@ CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
--- Creación: 12-04-2014 a las 14:42:05
+-- Creación: 14-04-2014 a las 11:40:55
 --
 
 DROP TABLE IF EXISTS `DEVICES`;
 CREATE TABLE IF NOT EXISTS `DEVICES` (
   `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
-  `IPADDRESS` varchar(20) DEFAULT NULL,
+  `IDUSER` int(11) DEFAULT NULL,
+  `IPADDRESS` varchar(200) DEFAULT NULL,
   `SERIAL` varchar(20) DEFAULT NULL,
   `NAME` varchar(20) DEFAULT NULL,
   `ENGLISH` varchar(500) DEFAULT NULL,
@@ -1298,22 +1387,30 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
   UNIQUE KEY `SERIAL` (`SERIAL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+
+--
+-- RELACIONES PARA LA TABLA `DEVICES`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
 
 --
 -- Volcado de datos para la tabla `DEVICES`
 --
 
-INSERT INTO `DEVICES` (`IDDEVICE`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
-(0, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(1, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
-(9, '12.45.34.123', '5', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(10, '12.45.34.123', '52.33PL', 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(11, '12.45.34.123', '0', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(12, '12.45.34.123', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(13, '12.45.34.123', '2', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(14, '12.45.34.123', '3', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
-(15, '12.45.34.123', '12', 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1);
+INSERT INTO `DEVICES` (`IDDEVICE`, `IDUSER`, `IPADDRESS`, `SERIAL`, `NAME`, `ENGLISH`, `SPANISH`, `DATE`, `VERSION`) VALUES
+(0, NULL, NULL, NULL, 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(1, NULL, NULL, NULL, 'Arduino DUO', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '{"Microcontroller":"AT91SAM3X8E","Operating Voltage":"3.3V","Input Voltage (recommended)":"7-12V","Input Voltage (limits)":"6-16V","Digital I/O Pins":"54 (of which 12 provide PWM output)","Analog Input Pins":"12","Analog Outputs Pins":"2 (DAC)","Total DC Output Current on all I/O lines":"130 mA","DC Current for 3.3V Pin":"800 mA","DC Current for 5V Pin":"800 mA","Flash Memory":"512 KB all available for the user applications","SRAM":"96 KB (two banks: 64KB and 32KB)","Clock Speed":"84 MHz"}', '2014-03-23 21:35:50', 1),
+(9, NULL, '12.45.34.123', '5', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(10, NULL, '12.45.34.123', '52.33PL', 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(11, NULL, '12.45.34.123', '0', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(12, NULL, '12.45.34.123', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(13, NULL, '12.45.34.123', '2', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(14, NULL, '12.45.34.123', '3', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\n    "Operating Voltage":"5V",\n    "Input Voltage (recommended)":"7-12V",\n    "Input Voltage (limits)":"6-20V",\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\n    "Analog Input Pins":"6",\n    "DC Current per I/O Pin":"40 mA",\n    "DC Current for 3.3V Pin":"50 mA",\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\n    "SRAM":"2 KB (ATmega328)",\n    "EEPROM":"1 KB (ATmega328)",\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(15, NULL, '12.45.34.123', '12', 'Arduino UNO', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '{"Microcontroller":"ATmega328",\r\n    "Operating Voltage":"5V",\r\n    "Input Voltage (recommended)":"7-12V",\r\n    "Input Voltage (limits)":"6-20V",\r\n    "Digital I/O Pins":"14 (of which 6 provide PWM output)",\r\n    "Analog Input Pins":"6",\r\n    "DC Current per I/O Pin":"40 mA",\r\n    "DC Current for 3.3V Pin":"50 mA",\r\n    "Flash Memory":"32 KB (ATmega328) of which 0.5 KB used by bootloader",\r\n    "SRAM":"2 KB (ATmega328)",\r\n    "EEPROM":"1 KB (ATmega328)",\r\n    "Clock Speed":"16 MHz"}', '2014-03-23 21:21:42', 1),
+(16, 10, 'mykellys', '23', 'Arduino UNO', NULL, NULL, '2014-04-14 12:02:20', 1),
+(17, 86, 'MYKELLYS, ASDF A', '23555.345', 'Arduino DUO', NULL, NULL, '2014-04-14 12:10:07', 1);
 
 -- --------------------------------------------------------
 
@@ -1329,7 +1426,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=53 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -1382,7 +1479,13 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (43, 'This room already exist.', 'Esta habitación ya existe.'),
 (44, 'Create new room.', 'Nueva habitación creada.'),
 (45, 'Room deleted.', 'Habitación eliminada.'),
-(46, 'Access requires or room does not exist.', 'Necesita acceso o no existe la habitación.');
+(46, 'Access requires or room does not exist.', 'Necesita acceso o no existe la habitación.'),
+(47, 'This device already exist.', 'Este dispositivo ya existe.'),
+(48, 'This device does not supported.', 'Este dispositivo no es compatible.'),
+(49, 'Added new device.', 'Nuevo dispositivo añadido.'),
+(50, 'Login success.', 'Login correcto.'),
+(51, ' This command already exists.', 'Este comando ya existe.'),
+(52, 'New command created.', 'Nuevo comando creado.');
 
 -- --------------------------------------------------------
 
@@ -1398,7 +1501,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(20) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -1408,6 +1511,8 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (0, '----'),
 (21, 'addtaskprogram'),
 (24, 'createaccesshouse'),
+(26, 'createcommand'),
+(25, 'createdevice'),
 (7, 'createhouse'),
 (14, 'createprogramaction'),
 (17, 'createroom'),
@@ -1450,7 +1555,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2729 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2772 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -4080,7 +4185,50 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (2725, 10, 21, 39, 18, '2014-04-14 11:29:59'),
 (2726, 86, 21, 2, 18, '2014-04-14 11:30:09'),
 (2727, 86, 21, 0, 18, '2014-04-14 11:30:17'),
-(2728, NULL, NULL, 46, 18, '2014-04-14 11:30:21');
+(2728, NULL, NULL, 46, 18, '2014-04-14 11:30:21'),
+(2729, 29, NULL, 0, 1, '2014-04-14 11:55:54'),
+(2730, 29, NULL, 0, 1, '2014-04-14 11:57:46'),
+(2731, 10, NULL, 48, 25, '2014-04-14 11:58:17'),
+(2732, 10, NULL, 0, 25, '2014-04-14 12:02:21'),
+(2733, 10, NULL, 47, 25, '2014-04-14 12:02:32'),
+(2734, 29, NULL, 47, 25, '2014-04-14 12:02:56'),
+(2735, 29, NULL, 47, 25, '2014-04-14 12:03:11'),
+(2736, NULL, NULL, 3, 25, '2014-04-14 12:03:20'),
+(2737, 86, NULL, 0, 25, '2014-04-14 12:10:08'),
+(2738, 86, NULL, 47, 25, '2014-04-14 12:10:14'),
+(2739, 29, NULL, 0, 1, '2014-04-14 12:10:15'),
+(2740, 86, NULL, 47, 25, '2014-04-14 12:10:22'),
+(2741, 86, NULL, 48, 25, '2014-04-14 12:10:31'),
+(2742, NULL, NULL, 3, 25, '2014-04-14 12:11:16'),
+(2743, 0, NULL, 3, 1, '2014-04-14 14:50:59'),
+(2744, 10, NULL, 2, 1, '2014-04-14 14:51:10'),
+(2745, 86, NULL, 0, 1, '2014-04-14 14:51:17'),
+(2746, 86, NULL, 0, 1, '2014-04-14 14:53:11'),
+(2747, 29, NULL, 0, 1, '2014-04-14 14:53:23'),
+(2748, 86, NULL, 0, 1, '2014-04-14 14:54:01'),
+(2749, 86, NULL, 0, 1, '2014-04-14 14:54:49'),
+(2750, 86, NULL, 0, 1, '2014-04-14 14:55:55'),
+(2751, 86, NULL, 0, 1, '2014-04-14 14:56:45'),
+(2752, 29, NULL, 0, 1, '2014-04-14 15:02:21'),
+(2753, 86, NULL, 0, 1, '2014-04-14 15:02:58'),
+(2754, 29, NULL, 0, 1, '2014-04-14 15:03:12'),
+(2755, 29, NULL, 0, 1, '2014-04-14 15:04:11'),
+(2756, 29, NULL, 0, 1, '2014-04-14 15:05:51'),
+(2757, 29, NULL, 0, 1, '2014-04-14 15:10:02'),
+(2758, 29, NULL, 0, 1, '2014-04-14 15:11:37'),
+(2759, 29, NULL, 0, 1, '2014-04-14 15:13:33'),
+(2760, 29, NULL, 0, 1, '2014-04-14 15:14:51'),
+(2761, 10, NULL, 0, 26, '2014-04-14 15:16:16'),
+(2762, 29, NULL, 0, 1, '2014-04-14 15:16:17'),
+(2763, 10, NULL, 51, 26, '2014-04-14 15:16:23'),
+(2764, NULL, NULL, 3, 26, '2014-04-14 15:16:31'),
+(2765, 29, NULL, 0, 1, '2014-04-14 15:17:16'),
+(2766, 29, NULL, 0, 1, '2014-04-14 15:17:42'),
+(2767, 29, NULL, 0, 1, '2014-04-14 15:18:26'),
+(2768, 86, NULL, 0, 26, '2014-04-14 15:22:11'),
+(2769, 86, NULL, 51, 26, '2014-04-14 15:22:14'),
+(2770, 10, NULL, 0, 26, '2014-04-14 15:22:24'),
+(2771, NULL, NULL, 3, 26, '2014-04-14 15:22:35');
 
 -- --------------------------------------------------------
 
@@ -4495,7 +4643,7 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 ,`ACCESSNUMBER` int(11)
 ,`PERMISSIONNUMBER` int(11)
 ,`IDDEVICE` int(11)
-,`IPADDRESS` varchar(20)
+,`IPADDRESS` varchar(200)
 );
 -- --------------------------------------------------------
 
@@ -5039,8 +5187,8 @@ ALTER TABLE `COMMANDS`
 -- Filtros para la tabla `COMMAND_PROGRAM`
 --
 ALTER TABLE `COMMAND_PROGRAM`
-  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_2` FOREIGN KEY (`IDPROGRAM`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_1` FOREIGN KEY (`IDCOMMAND`) REFERENCES `COMMANDS` (`IDCOMMMAND`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_3` FOREIGN KEY (`IDCOMMAND`) REFERENCES `COMMANDS` (`IDCOMMAND`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_2` FOREIGN KEY (`IDPROGRAM`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `HISTORYACCESS`

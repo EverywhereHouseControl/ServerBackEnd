@@ -2,12 +2,6 @@
 //API implementation
 
 //--------------------------------------------------------------------------------------
-function errorJson($msg){
-	print json_encode(array('error'=>$msg));
-	exit();
-}
-
-//--------------------------------------------------------------------------------------
 function testNoERROR($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
 	if ($error <> 0) {
@@ -21,48 +15,45 @@ function testNoERROR($iduser, $error, $funct){
 		exit();
 	}
 }
-//--------------------------------------------------------------------------------------
-function testNoERROR2($iduser, $error, $funct){
-	//** TEST NO ERROR AT THIS POINT **
-	if ($error <> 0) {
-		//REGISTER THE ACTIVITY
-		$sql = query("INSERT INTO HISTORYACCESS
-					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-				, $iduser, $error, $funct);
+function login($user, $pass) {
+	/* make de server conexion*/
+	$error = 0;
+	$funct = 1;
 
-		message2($error, $error);
-		exit();
+	switch (testEXIST( 'USERS', 'USERNAME', $user)){
+		case 1:	$error = 3;	break;
+		case 4:	$error = 4;	break;
 	}
-}
-//--------------------------------------------------------------------------------------
-function message($error, $return){
-	// take de error message and return the error code to app
-	$message = query(	"SELECT ENGLISH, SPANISH
-					FROM ERRORS
-					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
-	
-	$json = '{"result":[{"ERROR":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	//$json = '{"result":[{"error":9}]}';
-	print $json;
-	//print json_encode($message);
-	//print json_encode( (array) json_decode($json));
-}
-//--------------------------------------------------------------------------------------
-function message2($error, $return){
-	// take de error message and return the error code to app
-	$message = query(	"SELECT ENGLISH, SPANISH
-					FROM ERRORS
-					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
 
-	//$json = '{"error":{"ERROR":"'.$return.'","ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}}';
-	//$json = '{"result":[{"error":9}]}';utf8_encode(
-	$json['error']['ENGLISH'] = utf8_encode($message['result'][0]['ENGLISH']);
-	$json['error']['SPANISH'] = utf8_encode($message['result'][0]['SPANISH']);
-	$json['error']['ERROR'] = $return;
-	print json_encode($json);
-	//print json_encode($message);
-	//print json_encode( (array) json_decode($json));
+	//only for save the iduser becouse we need that
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+
+	testNoERROR($iduser, $error, $funct);
+
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
+		//correct pass, authorized
+		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
+		$error = 0;
+	}
+	else{
+		//incorrect pass. hint password
+		$error = 2;
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	//successful function
+	$SQLuser['result'][0]['JSON'] = createJSON($iduser);
+	$SQLuser['result'][0]['ERROR'] = '0';
+	print json_encode($SQLuser);
 }
 //--------------------------------------------------------------------------------------
 function testEXIST( $where, $something, $id) {
@@ -83,26 +74,26 @@ function createJSON($iduser) {
 	// "Rooms":{R1...R3{"name":"", "items":[]} }
 	// "User":"username"
 	/*$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
-						FROM USERS 
-						JOIN (SERVICES, ROOMS, HOUSES ,ACCESSHOUSE)
-						ON (
-							SERVICES.IDROOM		= ROOMS.IDROOM 		 AND 
-							ROOMS.IDHOUSE		= HOUSES .IDHOUSE	 AND 
-                            HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE AND
-                            ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
-							USERS.IDUSER		= '%s')
-						ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );*/
+	 FROM USERS
+			JOIN (SERVICES, ROOMS, HOUSES ,ACCESSHOUSE)
+			ON (
+					SERVICES.IDROOM		= ROOMS.IDROOM 		 AND
+					ROOMS.IDHOUSE		= HOUSES .IDHOUSE	 AND
+					HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE AND
+					ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
+					USERS.IDUSER		= '%s')
+			ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );*/
 	$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
 						FROM USERS
-						JOIN (SERVICES, ROOMS, HOUSES, ACCESSHOUSE) 
+						JOIN (SERVICES, ROOMS, HOUSES, ACCESSHOUSE)
 						ON ( 		SERVICES.IDROOM = ROOMS.IDROOM
 								AND ROOMS.IDHOUSE = HOUSES.IDHOUSE
 								AND HOUSES.IDHOUSE = ACCESSHOUSE.IDHOUSE
-								AND ACCESSHOUSE.IDUSER = USERS.IDUSER 
+								AND ACCESSHOUSE.IDUSER = USERS.IDUSER
 								AND USERS.IDUSER = '%s')
 						ORDER BY USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );
 	$num	 = count($SQLjson['result']);
-	
+
 	//TEST QUERY HAS AT LEAST one VALUE
 	if ($num == 0){
 		$json = '';
@@ -111,18 +102,18 @@ function createJSON($iduser) {
 	//** creation of firt type of json aplication uses**
 	$json = '{';
 	$json .= '"User":"'.$SQLjson['result'][0]['USERNAME'].'",'; // "User":"username"
-	$json .= '"House":"'.$SQLjson['result'][0]['HOUSENAME'].'",'; 
+	$json .= '"House":"'.$SQLjson['result'][0]['HOUSENAME'].'",';
 	$json .= '"Rooms":{';// "Rooms":{R1...R3{"name":"", "items":[]} }
 	$json .= '"R1":{';
 	$json .= '"name":"'.$SQLjson['result'][0]['ROOMNAME'].'",';
 	$json .= '"items":[';
 	$json .= '"'.$SQLjson['result'][0]['SERVICENAME'].'"';
-	
+
 	//var for register distinct service
 	$tmpHOUSENAME 	= $SQLjson['result'][0]['HOUSENAME'];
 	$tmpROOMNAME	= $SQLjson['result'][0]['ROOMNAME'];
 	$tmpSERVICENAME = $SQLjson['result'][0]['SERVICENAME'];
-	
+
 	//var for write "R1" R1...R3
 	$r = 1;
 	for($i = 1; $i < $num; $i++){
@@ -136,20 +127,20 @@ function createJSON($iduser) {
 			$json .= '"name":"'.$SQLjson['result'][$i]['ROOMNAME'].'",';
 			$json .= '"items":[';
 			$json .= '"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
-			
+				
 			$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
-			
+				
 			continue;
 		}
 		if (!($tmpSERVICENAME == $SQLjson['result'][$i]['SERVICENAME'])) {
 			$json .= ',"'.$SQLjson['result'][$i]['SERVICENAME'].'"';
-			
+				
 			$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
 			$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
 			$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
-			
+				
 			continue;
 		}
 	}
@@ -162,6 +153,161 @@ function createJSON($iduser) {
 	//print json_encode( (array) json_decode($json));
 	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
+//--------------------------------------------------------------------------------------
+function createuser($user, $pass, $email, $hint){
+	/* create a new user*/
+	$error = 0;
+	$funct = 3;
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 0:		$error = 0;	break;
+		default:	$error = 6;	break;//this user already exists.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//** INSERT NEW USER **
+	$sql = query("INSERT INTO USERS
+			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT,     DATEBEGIN)
+			VALUES (NULL,      '%s',    '%s',    '%s', '%s', CURRENT_TIMESTAMP)"
+			, $user, $pass, $email, $hint);
+
+	//iduser UPDATE FOR NEW USER
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	// take de error message
+	$error = 13;//create new user
+	message($error, 0);
+}
+//--------------------------------------------------------------------------------------
+function deleteuser($user, $pass){
+	/* create a new user*/
+	$error = 0;
+	$funct = 4;
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD']== $pass){
+		$error = 0;
+	}
+	else{
+		//incorrect pass. hint password
+		$error = 2;
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//DELETE USER
+	$sql = query("DELETE FROM USERS
+			       WHERE USERNAME='%s'"
+			, $user);
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	// take de error message
+	$error = 14;//deleted user
+	message($error, 0);
+}
+//--------------------------------------------------------------------------------------
+function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
+	/* create a new user*/
+	$error = 0;
+	$funct = 5;
+
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+
+	switch ($num){
+		case 1:		$error = 0;	break;
+		default:	$error = 3;	break;//this user does not exists.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
+		$error = 0;
+	}
+	else{
+		$error = 2;//incorrect pass.
+	}
+
+	testNoERROR($iduser, $error, $funct);
+
+	//UPDATE USER
+	$sql = query("UPDATE USERS
+				SET USERNAME='%s', PASSWORD='%s', EMAIL='%s', HINT='%s'
+			    WHERE USERNAME='%s'"
+			, $n_user, $n_pass, $n_email, $n_hint, $user);
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	// take de error message
+	$error = 15;//user MODIFY
+	message($error, 0);
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------
+function testNoERROR2($iduser, $error, $funct){
+	//** TEST NO ERROR AT THIS POINT **
+	if ($error <> 0) {
+		//REGISTER THE ACTIVITY
+		$sql = query("INSERT INTO HISTORYACCESS
+					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+				, $iduser, $error, $funct);
+
+		message($error, $error);
+		exit();
+	}
+}
+
+//--------------------------------------------------------------------------------------
+function message($error, $return){
+	// take de error message and return the error code to app
+	$message = query(	"SELECT ENGLISH, SPANISH
+					FROM ERRORS
+					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+
+	$json['error']['ENGLISH'] = utf8_encode($message['result'][0]['ENGLISH']);
+	$json['error']['SPANISH'] = utf8_encode($message['result'][0]['SPANISH']);
+	$json['error']['ERROR'] = $return;
+	print json_encode($json);
+}
+
 //--------------------------------------------------------------------------------------
 function createJSON2($user) {
 //** creation of second type of json aplication uses**//
@@ -263,70 +409,25 @@ actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= ut
 		$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
 		$tmpACTIONNAME  = $SQLjson['result'][$i]['ACTIONNAME'];
 	}
-	//print json_encode($JSON);
-	//print $JSON;
+
 	return $JSON;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------------------
-function login($user, $pass) {
-/* make de server conexion*/
-	$error = 0;
-	$funct = 1;
-	
-	switch (testEXIST( 'USERS', 'USERNAME', $user)){
-		case 1:	$error = 3;	break;
-		case 4:	$error = 4;	break;
-	}
-	
-	//only for save the iduser becouse we need that
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-
-	testNoERROR($iduser, $error, $funct);
-	
-	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
-		//correct pass, authorized
-		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
-		$error = 0;
-	}
-	else{
-		//incorrect pass. hint password
-		$error = 2;
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	//successful function
-	$SQLuser['result'][0]['JSON'] = createJSON($iduser);
-	$SQLuser['result'][0]['ERROR'] = '0';
-	print json_encode($SQLuser);
-	//print createJSON($iduser);
-}
 //--------------------------------------------------------------------------------------
 function login2($user, $pass) {
 /* make de server conexion*/
 	$error = 0;
 	$funct = 1;
 	
-	switch (testEXIST( 'USERS', 'USERNAME', $user)){
-		case 1:	$error = 3;	break;
-		case 4:	$error = 4;	break;
-	}
-	
 	//only for save the iduser becouse we need that
 	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
-
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
+	}
+	
 	testNoERROR2($iduser, $error, $funct);
 	
 	//** TEST correct password **
@@ -340,6 +441,10 @@ function login2($user, $pass) {
 	}
 	
 	testNoERROR2($iduser, $error, $funct);
+	
+	$m = query("SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE=50 LIMIT 1 ");
 	
 	//REGISTER THE ACTIVITY
 	$sql = query("INSERT INTO HISTORYACCESS
@@ -351,15 +456,9 @@ function login2($user, $pass) {
 	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
 	$result['result']['JSON'] = createJSON2($user);
 	
-	$m = query(	"SELECT ENGLISH, SPANISH
-					FROM ERRORS
-					WHERE ERRORCODE=0 LIMIT 1 ");
-	
 	$result['error']['ENGLISH'] = utf8_encode($m['result'][0]['ENGLISH']);
 	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
-	$result['error']['ERROR'] = 0;
-	
-	//print count($message['result']).$error;
+	$result['error']['ERROR'] 	= 0;
 	
 	print json_encode($result);
 }
@@ -398,44 +497,6 @@ function lostpass($user){
 }
 
 //--------------------------------------------------------------------------------------
-function createuser($user, $pass, $email, $hint){
-/* create a new user*/
-	$error = 0;
-	$funct = 3;
-	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-	
-	switch ($num){
-		case 0:		$error = 0;	break;
-		default:	$error = 6;	break;//this user already exists.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-	
-	//** INSERT NEW USER **
-	$sql = query("INSERT INTO USERS
-			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT,     DATEBEGIN) 
-			VALUES (NULL,      '%s',    '%s',    '%s', '%s', CURRENT_TIMESTAMP)"
-			, $user, $pass, $email, $hint);
-	
-	//iduser UPDATE FOR NEW USER
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	
-		//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	// take de error message
-	$error = 13;//create new user
-	message($error, 0);
-}
-
-//--------------------------------------------------------------------------------------
 function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
 	$message = query("CALL createuser ('%s','%s', '%s', '%s')", $user, $pass, $email, $hint);
@@ -443,49 +504,6 @@ function createuser2($user, $pass, $email, $hint){
 	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
-}
-//--------------------------------------------------------------------------------------
-function deleteuser($user, $pass){
-	/* create a new user*/
-	$error = 0;
-	$funct = 4;
-	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		default:	$error = 3;	break;//this user does not exists.
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-	
-	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD']== $pass){
-		$error = 0;
-	}
-	else{
-		//incorrect pass. hint password
-		$error = 2;
-	}
-	
-	testNoERROR($iduser, $error, $funct);
-
-	//DELETE USER
-	$sql = query("DELETE FROM USERS
-			       WHERE USERNAME='%s'"
-			, $user);
-	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	// take de error message
-	$error = 14;//deleted user
-	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -495,50 +513,6 @@ function deleteuser2($user, $pass){
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
-}
-
-//--------------------------------------------------------------------------------------
-function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
-	/* create a new user*/
-	$error = 0;
-	$funct = 5;
-	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
-
-	switch ($num){
-		case 1:		$error = 0;	break;
-		default:	$error = 3;	break;//this user does not exists.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-	
-	//** TEST correct password **
-	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
-		$error = 0;
-	}
-	else{
-		$error = 2;//incorrect pass.
-	}
-
-	testNoERROR($iduser, $error, $funct);
-
-	//UPDATE USER
-	$sql = query("UPDATE USERS 
-				SET USERNAME='%s', PASSWORD='%s', EMAIL='%s', HINT='%s'
-			    WHERE USERNAME='%s'"
-			, $n_user, $n_pass, $n_email, $n_hint, $user);
-	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	// take de error message
-	$error = 15;//user MODIFY
-	message($error, 0);
 }
 
 //--------------------------------------------------------------------------------------
@@ -868,6 +842,24 @@ function addtaskprogram($user, $idtask, $idaction){
 function removetaskprogram($user, $idtask, $idaction){
 	/* create a new user*/
 	$message = query("CALL removetaskprogram ('%s','%s','%s')",$user, (int) $idtask, (int) $idaction);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function createcommand($user, $command){
+	/* */
+	$message = query("CALL createcommand ('%s','%s')", $user, $command);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deletecommand($user, $command){
+	/* */
+	$message = query("CALL deletecommand ('%s','%s')", $user, $command);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);

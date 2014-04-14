@@ -24,11 +24,11 @@ switch ($_POST['command']) {
 		//**grant a user access to the aplication 
 		// ::> returns a message | return JSON configuration
 		break;
-		//1
-		case "login2":
-			login2($_POST['username'], $_POST['password']);
-			//**grant a user access to the aplication
-			// ::> returns a message | return JSON configuration
+	//1
+	case "login2":
+		login2($_POST['username'], $_POST['password']);
+		//**grant a user access to the aplication
+		// ::> returns a message | return JSON configuration
 		break;
 	//2
     case "lostpass":
@@ -36,59 +36,66 @@ switch ($_POST['command']) {
 		//**send an email to the email of the username
 		// ::> returns a message | returns the result of the operation
 		break;	
+//-------------------------------------------------------------------------------------------------
 	//3
     case "createuser":
 		createuser($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']); 
 		//**create a new user account
 		// ::> returns a message | returns the result of the operation
 		break;
-		//3
-		case "createuser2":
-			createuser2($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']);
-			//**create a new user account
-			// ::> returns a message | returns the result of the operation
-			break;
+	//3
+	case "createuser2":
+		createuser2($_POST['username'],$_POST['password'],$_POST['email'],$_POST['hint']);
+		//**create a new user account
+		// ::> returns a message | returns the result of the operation
+		break;
 	//4
 	case "deleteuser":
 		deleteuser($_POST['username'],$_POST['password']);
 		//**delete a existing user
 		// ::> returns a message | returns the result of the operation
 		break;
-		//4
-		case "deleteuser2":
-			deleteuser2($_POST['username'],$_POST['password']);
-			//**delete a existing user
-			// ::> returns a message | returns the result of the operation
-			break;
+	//4
+	case "deleteuser2":
+		deleteuser2($_POST['username'],$_POST['password']);
+		//**delete a existing user
+		// ::> returns a message | returns the result of the operation
+		break;
 	//5	
 	case "modifyuser":
 		modifyuser($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
 		//**modify all fields
 		// ::> returns a message | returns the result of the operation
 		break;
-		//5
-		case "modifyuser2":
-			modifyuser2($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
-			//**modify all fields
-			// ::> returns a message | returns the result of the operation
-			break;
+	//5
+	case "modifyuser2":
+		modifyuser2($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
+		//**modify all fields
+		// ::> returns a message | returns the result of the operation
+		break;
+//-------------------------------------------------------------------------------------------------
 	//6
 	case "doaction":
 		doaction($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data']); 
 		//**send an action to the arduino to be done
 		// ::> returns a message
 		break;
+	//8
+	case "ipcheck":
+		ipcheck();
+		// ::> returns real client ip
+		break;		
+	//10
+	case "getweather":
+		getweather($_POST['city'],$_POST['language']);
+		// ::> returns the weather of a specific city and country
+		break;		
+//-------------------------------------------------------------------------------------------------
 	//7
 	case "createhouse":
 		createhouse($_POST['username'],$_POST['housename'],$_POST['city'],$_POST['country']);
 		//**create a new house with an existing user
 		// ::> returns a message | returns the result of the operation
-		break;
-
-	//8
-	case "ipcheck":
-		ipcheck();
-		// ::> returns real client ip
 		break;
 	//9
 	case "deletehouse":
@@ -96,11 +103,11 @@ switch ($_POST['command']) {
 		//**delete a existing house by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
-	//10
-	case "getweather":
-		getweather($_POST['city'],$_POST['language']);
-		// ::> returns the weather of a specific city and country
+	//
+	case "modifyhouse":
+		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['idimage'],$_POST['city'],$_POST['country']);
 		break;
+//-------------------------------------------------------------------------------------------------
 	//14
 	case "createprogramaction":
 		createprogramaction( $_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data'],$_POST['start']);
@@ -109,6 +116,7 @@ switch ($_POST['command']) {
 	case "deleteprogramaction":
 		deleteprogramaction( $_POST['username'],$_POST['idaction']);
 		break;
+//-------------------------------------------------------------------------------------------------
 	//11
 	case "createtask":
 		createtask( $_POST['username'],$_POST['taskname'],$_POST['description'],$_POST['frequency']);
@@ -117,6 +125,7 @@ switch ($_POST['command']) {
 	case "deletetask":
 		deletetask( $_POST['username'],$_POST['taskname']);
 		break;
+//-------------------------------------------------------------------------------------------------
 	//21
 	case "addtaskprogram":
 		addtaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
@@ -125,47 +134,52 @@ switch ($_POST['command']) {
 	case "removetaskprogram":
 		removetaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
 		break;
+//-------------------------------------------------------------------------------------------------
+	//
+	case "createcommand":
+		createcommand( $_POST['username'],$_POST['commandname']);
+		break;
+	//
+	case "deletecommand":
+		deletecommand( $_POST['username'],$_POST['commandname']);
+		break;
+//-------------------------------------------------------------------------------------------------
 	//23
 	case "schedulehouse":
 		schedulehouse( $_POST['housename']);
 		break;
 //-------------------------------------------------------------------------------------------------		
-	
 	case "createroom":
 		createroom($_POST['username'],$_POST['housename'],$_POST['roomname']);
 		//**create a new room with an existing user
 		// ::> returns a message | returns the result of the operation
 		break;
-	
+	//
 	case "deleteroom":
 		deleteroom($_POST['username'],$_POST['password'],$_POST['housename'],$_POST['roomname']);
 		//**delete a existing room by an administrator user
 		// ::> returns a message | returns the result of the operation
 		break;
-		
-	case "createaccesshouse":
-		createaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username'],$_POST['number']);
-		//**delete a existing room by an administrator user
-		// ::> returns a message | returns the result of the operation
-		break;
-
-	case "deleteaccesshouse":
-		deleteaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username']);
-		//**delete a existing room by an administrator user
-		// ::> returns a message | returns the result of the operation
-		break;
-	case "modifyhouse":
-		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['idimage'],$_POST['city'],$_POST['country']);
-		//**delete a existing room by an administrator user
-		// ::> returns a message | returns the result of the operation
-		break;
-			
+	//
 	case "modifyroom":
 		modifyroom($_POST['username'],$_POST['password'],$_POST['roomname']);
 		//**modify setings of an existing the room
 		// ::> returns a message | returns the result of the operation
 		break;
-	
+//-------------------------------------------------------------------------------------------------
+	//
+	case "createaccesshouse":
+		createaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username'],$_POST['number']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+	//
+	case "deleteaccesshouse":
+		deleteaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username']);
+		//**delete a existing room by an administrator user
+		// ::> returns a message | returns the result of the operation
+		break;
+//-------------------------------------------------------------------------------------------------
     case "downloadconfiguration":
 		downloadconfiguration($_POST['username'], $_POST['snoopy_username']); 
 		//**download the json configuration of username by snoopy_username
@@ -177,6 +191,8 @@ switch ($_POST['command']) {
 		//**download the STADISTICS of username by using and more
 		// ::> returns a message | returns JSON 
 	break;
+//-------------------------------------------------------------------------------------------------
+
 	case "image":
 		image($_POST['username']);
 		//**download the STADISTICS of username by using and more
@@ -187,6 +203,7 @@ switch ($_POST['command']) {
 		//**download the STADISTICS of username by using and more
 		// ::> returns a message | returns JSON
 	break;
+//-------------------------------------------------------------------------------------------------
 		/*
     case "downloadhousetask":
 		downloadhousetask($_POST['arg1'],$_POST['arg2']); 
@@ -199,9 +216,7 @@ switch ($_POST['command']) {
     case "logout":
 		logout($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-
-		
-
+//-------------------------------------------------------------------------------------------------
 		/*
     case "modifyuserconfiguration":
 		modifyuserconfiguration($_POST['arg1'],$_POST['arg2']); 
@@ -209,26 +224,6 @@ switch ($_POST['command']) {
 		/*
     case "modifyhouseconfiguration":
 		modifyhouseconfiguration($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "createtask":
-		createtask($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "deletetask":
-		deletetask($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "modifytask":
-		modifytask($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "createprogramaction":
-		createprogramaction($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "deleteprogramaction":
-		deleteprogramaction($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
     case "update":
@@ -242,7 +237,7 @@ switch ($_POST['command']) {
     case "sendmessage":
 		sendmessage($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-		
+//-------------------------------------------------------------------------------------------------
     case "createdevice":
 		createdevice($_POST['username'],$_POST['ipaddress'],$_POST['serial'],$_POST['devicename']); 
 	break;
@@ -250,9 +245,7 @@ switch ($_POST['command']) {
     case "deletedevice":
 		deletedevice($_POST['arg1'],$_POST['arg2']); 
 	break;
-		/*
-
-
+//-------------------------------------------------------------------------------------------------
 		/*
     case "createpermission":
 		createpermission($_POST['arg1'],$_POST['arg2']); 
@@ -266,13 +259,7 @@ switch ($_POST['command']) {
 		modifypermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
 		/*
-    case "createaccess":
-		createaccess($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "modifyaccess":
-		modifyaccess($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+//-------------------------------------------------------------------------------------------------
 		/*
     case "requestaccess":
 		requestaccess($_POST['arg1'],$_POST['arg2']); 
@@ -281,6 +268,7 @@ switch ($_POST['command']) {
     case "requestpermission":
 		requestpermission($_POST['arg1'],$_POST['arg2']); 
 	break;*/
+//-------------------------------------------------------------------------------------------------
 		/*
     case "generatebackup":
 		generatebackup($_POST['arg1'],$_POST['arg2']); 
@@ -289,6 +277,7 @@ switch ($_POST['command']) {
     case "loadbackup":
 		loadbackup($_POST['arg1'],$_POST['arg2']); 
 	break;*/
+//-------------------------------------------------------------------------------------------------
 		/*
     case "redo":
 		redo($_POST['arg1'],$_POST['arg2']); 
@@ -301,43 +290,7 @@ switch ($_POST['command']) {
     case "listdo":
 		listdo($_POST['arg1'],$_POST['arg2']); 
 	break;*/
-//_-------------------------
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "a":
-		a($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+//-------------------------------------------------------------------------------------------------
     default:
 		$message = query(	"SELECT ERRORCODE AS ERROR, ENGLISH, SPANISH
 					FROM ERRORS

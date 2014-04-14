@@ -25,6 +25,7 @@
   start: <input type="text" name="start" /></br>
   idaction: <input type="text" name="idaction" /></br>
   taskname: <input type="text" name="taskname" /></br>
+  commandname: <input type="text" name="commandname" /></br>
   description: <input type="text" name="description" /></br>
   frequency: <input type="text" name="frequency" /></br>
   idtask: <input type="text" name="idtask" /></br>
