@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-04-2014 a las 04:22:29
+-- Tiempo de generación: 15-04-2014 a las 17:07:21
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -24,6 +24,68 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+DROP PROCEDURE IF EXISTS `addcommandprogram`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(15), IN c VARCHAR(15), IN idpa INTEGER, IN n INTEGER)
+    COMMENT 'add an acction to a command.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, idc INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(USERS.IDUSER, 0) INTO num, idu
+	FROM PROGRAMACTIONS, USERS
+	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN
+	
+		SELECT COUNT(*), IDCOMMAND INTO num, idc
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+		
+		CASE num
+		WHEN 1 THEN
+			SELECT COUNT(*) INTO num
+			FROM COMMAND_PROGRAM
+			WHERE IDCOMMAND = idc AND POS = n;
+			
+			CASE num
+			WHEN 0 THEN
+				IF (n > 0) THEN 
+					INSERT INTO COMMAND_PROGRAM (IDCOMMAND, IDPROGRAM, POS) VALUE (idc, idpa, n);
+					SET err = 56;
+				ELSE
+					SET err = 57;
+				END IF;
+			ELSE
+				SET err = 55;
+			END CASE;
+		ELSE
+			SET err = 60;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 33;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	SELECT IDHOUSE INTO idh
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE IDACTION = ida;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 56, 0, err),  28, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 56, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
 DROP PROCEDURE IF EXISTS `addtaskprogram`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
@@ -990,6 +1052,64 @@ begin
         SELECT e AS EMAIL;
 end$$
 
+DROP PROCEDURE IF EXISTS `removecommandprogram`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(15), IN c VARCHAR(15), IN idpa INTEGER, IN n INTEGER)
+    COMMENT 'Remove an acction of a command.'
+begin
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, idc INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	
+	SELECT COUNT(*), IFNULL(USERS.IDUSER, 0) INTO num, idu
+	FROM PROGRAMACTIONS, USERS
+	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+	
+	CASE num 
+	WHEN 1 THEN
+	
+		SELECT COUNT(*), IDCOMMAND INTO num, idc
+		FROM COMMANDS
+		WHERE COMMANDNAME = c AND IDUSER = idu;
+		
+		CASE num
+		WHEN 1 THEN
+			SELECT COUNT(*) INTO num
+			FROM COMMAND_PROGRAM
+			WHERE IDCOMMAND = idc AND POS = n;
+			
+			CASE num
+			WHEN 1 THEN
+				DELETE FROM COMMAND_PROGRAM WHERE IDCOMMAND = idc AND IDPROGRAM = idpa AND POS = n;
+				SET err = 59;
+			ELSE
+				SET err = 58;
+			END CASE;
+		ELSE
+			SET err = 60;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 33;
+	ELSE
+		SET err = 4;
+	END CASE;
+	
+	SELECT IDHOUSE INTO idh
+	FROM HOUSES
+	JOIN ROOMS 		USING ( IDHOUSE )
+	JOIN SERVICES	USING ( IDROOM )
+	JOIN ACTIONS	USING ( IDSERVICE )
+	WHERE IDACTION = ida;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  idu,    idh,  IF(err = 59, 0, err),  29, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 59, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end$$
+
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
@@ -1177,7 +1297,7 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 (10, 19, 1, '2014-04-13 22:10:21'),
 (10, 20, 1, '2014-04-13 22:10:30'),
 (10, 21, 2, '2014-04-14 11:09:12'),
-(29, 9, 2, '2014-03-25 21:39:58'),
+(29, 9, 1, '2014-03-25 21:39:58'),
 (29, 10, 3, '2014-04-05 10:16:17'),
 (29, 15, 1, '2014-03-23 19:56:06'),
 (29, 16, 1, '2014-03-23 19:56:06'),
@@ -1188,7 +1308,8 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 (67, 13, 1, '2014-03-23 19:56:06'),
 (67, 14, 1, '2014-03-23 19:56:06'),
 (80, 21, 1, '2014-04-13 23:24:39'),
-(86, 21, 1, '2014-04-13 23:23:06');
+(86, 21, 1, '2014-04-13 23:23:06'),
+(99, 9, 1, '2014-04-15 13:03:18');
 
 -- --------------------------------------------------------
 
@@ -1357,7 +1478,7 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
   `IDUSER` int(11) NOT NULL,
   PRIMARY KEY (`IDCOMMAND`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- RELACIONES PARA LA TABLA `COMMANDS`:
@@ -1371,14 +1492,15 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
 
 INSERT INTO `COMMANDS` (`IDCOMMAND`, `COMMANDNAME`, `IDUSER`) VALUES
 (2, 'wakeup', 10),
-(3, 'otroror', 86);
+(3, 'otroror', 86),
+(6, 'encendier', 29);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `COMMAND_PROGRAM`
 --
--- Creación: 14-04-2014 a las 15:15:59
+-- Creación: 15-04-2014 a las 14:24:32
 --
 
 DROP TABLE IF EXISTS `COMMAND_PROGRAM`;
@@ -1386,17 +1508,28 @@ CREATE TABLE IF NOT EXISTS `COMMAND_PROGRAM` (
   `IDCOMMAND` int(11) NOT NULL,
   `IDPROGRAM` int(11) NOT NULL,
   `POS` int(11) NOT NULL,
+  UNIQUE KEY `IDCOMMAND_2` (`IDCOMMAND`,`IDPROGRAM`,`POS`),
   KEY `IDCOMMAND` (`IDCOMMAND`),
   KEY `IDPROGRAM` (`IDPROGRAM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELACIONES PARA LA TABLA `COMMAND_PROGRAM`:
---   `IDCOMMAND`
---       `COMMANDS` -> `IDCOMMAND`
 --   `IDPROGRAM`
 --       `PROGRAMACTIONS` -> `IDPROGRAM`
+--   `IDCOMMAND`
+--       `COMMANDS` -> `IDCOMMAND`
 --
+
+--
+-- Volcado de datos para la tabla `COMMAND_PROGRAM`
+--
+
+INSERT INTO `COMMAND_PROGRAM` (`IDCOMMAND`, `IDPROGRAM`, `POS`) VALUES
+(6, 11, 1),
+(6, 11, 2),
+(6, 11, 11),
+(6, 11, 12);
 
 --
 -- Disparadores `COMMAND_PROGRAM`
@@ -1487,7 +1620,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -1548,7 +1681,13 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (51, ' This command already exists.', 'Este comando ya existe.'),
 (52, 'New command created.', 'Nuevo comando creado.'),
 (53, 'This command does not exist.', 'Este comando no existe.'),
-(54, 'Command removed.', 'Comando eliminado.');
+(54, 'Command removed.', 'Comando eliminado.'),
+(55, 'This position is already occupied.', 'Esta posición ya esta ocupada.'),
+(56, 'Action added to the command.', 'Acción añadido al comando.'),
+(57, 'The position should be a natural.', 'La posición debe ser un natural.'),
+(58, 'This command does not have this action.', 'Este comando no tiene esta acción.'),
+(59, 'Action removed from command.', 'Acción eliminada del comando.'),
+(60, 'The command does not exist or is not of this user.', 'El comando no existe o no es de este usuario.');
 
 -- --------------------------------------------------------
 
@@ -1564,7 +1703,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(20) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -1572,6 +1711,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
 
 INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (0, '----'),
+(28, 'addcommandprogram'),
 (21, 'addtaskprogram'),
 (24, 'createaccesshouse'),
 (26, 'createcommand'),
@@ -1597,6 +1737,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (19, 'modifyroom'),
 (13, 'modifytask'),
 (5, 'modifyuser'),
+(29, 'removecommandprogram'),
 (22, 'removetaskprogram'),
 (23, 'schedulehouse');
 
@@ -1619,7 +1760,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2860 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3028 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -4380,7 +4521,175 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (2856, 91, NULL, 0, 3, '2014-04-15 02:18:56'),
 (2857, 91, NULL, 0, 4, '2014-04-15 02:19:02'),
 (2858, 92, NULL, 0, 3, '2014-04-15 02:20:16'),
-(2859, 92, NULL, 0, 4, '2014-04-15 02:20:25');
+(2859, 92, NULL, 0, 4, '2014-04-15 02:20:25'),
+(2860, 69, NULL, 6, 3, '2014-04-15 02:27:11'),
+(2861, 93, NULL, 0, 3, '2014-04-15 02:28:11'),
+(2862, 93, NULL, 0, 2, '2014-04-15 02:29:16'),
+(2863, 93, NULL, 0, 4, '2014-04-15 02:30:21'),
+(2864, 94, NULL, 0, 3, '2014-04-15 02:33:55'),
+(2865, 94, NULL, 0, 2, '2014-04-15 02:35:06'),
+(2866, 94, NULL, 0, 4, '2014-04-15 02:36:22'),
+(2867, 2, NULL, 7, 3, '2014-04-15 02:39:45'),
+(2868, 95, NULL, 0, 3, '2014-04-15 02:40:18'),
+(2869, 95, NULL, 0, 2, '2014-04-15 02:40:46'),
+(2870, 95, NULL, 0, 4, '2014-04-15 02:41:37'),
+(2871, 29, NULL, 0, 1, '2014-04-15 07:08:05'),
+(2872, 29, NULL, 0, 1, '2014-04-15 07:12:14'),
+(2873, 29, NULL, 0, 1, '2014-04-15 07:13:49'),
+(2874, 29, NULL, 0, 1, '2014-04-15 07:14:42'),
+(2875, 29, NULL, 0, 1, '2014-04-15 07:16:26'),
+(2876, 29, NULL, 0, 1, '2014-04-15 07:16:52'),
+(2877, 29, NULL, 0, 1, '2014-04-15 07:17:14'),
+(2878, 29, NULL, 0, 1, '2014-04-15 07:18:27'),
+(2879, 29, NULL, 0, 1, '2014-04-15 07:19:13'),
+(2880, 29, NULL, 0, 1, '2014-04-15 07:19:50'),
+(2881, 29, NULL, 0, 1, '2014-04-15 07:20:42'),
+(2882, 29, NULL, 0, 1, '2014-04-15 07:26:05'),
+(2883, 29, NULL, 0, 1, '2014-04-15 07:28:23'),
+(2884, 29, NULL, 0, 1, '2014-04-15 07:42:45'),
+(2885, 29, NULL, 0, 1, '2014-04-15 07:44:42'),
+(2886, 29, NULL, 0, 1, '2014-04-15 07:48:10'),
+(2887, 29, NULL, 0, 1, '2014-04-15 07:50:13'),
+(2888, 29, NULL, 0, 1, '2014-04-15 07:51:24'),
+(2889, 29, NULL, 0, 1, '2014-04-15 07:55:20'),
+(2890, 29, NULL, 0, 1, '2014-04-15 07:57:16'),
+(2891, 29, NULL, 0, 1, '2014-04-15 08:01:30'),
+(2892, 29, NULL, 0, 1, '2014-04-15 08:03:15'),
+(2893, 29, NULL, 0, 1, '2014-04-15 08:04:16'),
+(2894, 29, NULL, 0, 1, '2014-04-15 08:05:07'),
+(2895, 29, NULL, 0, 1, '2014-04-15 08:07:52'),
+(2896, 29, NULL, 0, 1, '2014-04-15 08:16:18'),
+(2897, 29, NULL, 0, 1, '2014-04-15 08:22:55'),
+(2898, 29, NULL, 0, 1, '2014-04-15 08:23:51'),
+(2899, 29, NULL, 0, 1, '2014-04-15 08:24:31'),
+(2900, 29, NULL, 0, 1, '2014-04-15 08:25:52'),
+(2901, 29, NULL, 0, 1, '2014-04-15 08:35:51'),
+(2902, 29, NULL, 0, 1, '2014-04-15 08:38:32'),
+(2903, 29, NULL, 0, 1, '2014-04-15 08:41:30'),
+(2904, 29, NULL, 0, 1, '2014-04-15 08:44:26'),
+(2905, 29, NULL, 0, 1, '2014-04-15 08:46:15'),
+(2906, 29, NULL, 0, 1, '2014-04-15 08:47:51'),
+(2907, 29, NULL, 0, 1, '2014-04-15 08:52:39'),
+(2908, 29, NULL, 0, 1, '2014-04-15 08:52:50'),
+(2909, 29, NULL, 0, 1, '2014-04-15 08:57:34'),
+(2910, 29, NULL, 0, 1, '2014-04-15 09:01:27'),
+(2911, 29, NULL, 0, 1, '2014-04-15 09:06:18'),
+(2912, 29, NULL, 0, 1, '2014-04-15 09:08:13'),
+(2913, 29, NULL, 0, 1, '2014-04-15 09:09:02'),
+(2914, 29, NULL, 0, 1, '2014-04-15 09:11:59'),
+(2915, 29, NULL, 0, 1, '2014-04-15 09:20:00'),
+(2916, 29, NULL, 0, 1, '2014-04-15 09:21:40'),
+(2917, 29, NULL, 0, 1, '2014-04-15 09:23:52'),
+(2918, 29, NULL, 0, 1, '2014-04-15 09:26:06'),
+(2919, 29, NULL, 0, 1, '2014-04-15 09:29:01'),
+(2920, 29, NULL, 0, 1, '2014-04-15 09:34:08'),
+(2921, 29, NULL, 0, 1, '2014-04-15 09:37:23'),
+(2922, 29, NULL, 0, 1, '2014-04-15 09:42:19'),
+(2923, 29, NULL, 0, 1, '2014-04-15 09:45:38'),
+(2924, 29, NULL, 0, 1, '2014-04-15 09:48:44'),
+(2925, 29, NULL, 0, 1, '2014-04-15 09:50:44'),
+(2926, 29, NULL, 0, 1, '2014-04-15 09:53:23'),
+(2927, 29, NULL, 0, 1, '2014-04-15 09:54:02'),
+(2928, 29, NULL, 0, 1, '2014-04-15 10:00:51'),
+(2929, 29, NULL, 0, 1, '2014-04-15 10:02:41'),
+(2930, 29, NULL, 0, 1, '2014-04-15 10:05:25'),
+(2931, 29, NULL, 0, 1, '2014-04-15 10:07:33'),
+(2932, 29, NULL, 0, 1, '2014-04-15 10:09:18'),
+(2933, 29, NULL, 0, 1, '2014-04-15 10:11:12'),
+(2934, 29, NULL, 0, 1, '2014-04-15 10:15:38'),
+(2935, 96, NULL, 0, 3, '2014-04-15 10:26:37'),
+(2936, 96, NULL, 0, 2, '2014-04-15 10:27:12'),
+(2937, 96, NULL, 0, 4, '2014-04-15 10:28:44'),
+(2938, 29, NULL, 0, 1, '2014-04-15 10:32:02'),
+(2939, 29, NULL, 0, 1, '2014-04-15 10:34:58'),
+(2940, 29, NULL, 0, 1, '2014-04-15 10:37:02'),
+(2941, 29, NULL, 0, 1, '2014-04-15 10:40:30'),
+(2942, 29, NULL, 0, 1, '2014-04-15 10:45:00'),
+(2943, 97, NULL, 0, 3, '2014-04-15 10:45:56'),
+(2944, 97, NULL, 0, 2, '2014-04-15 10:46:03'),
+(2945, 97, NULL, 0, 2, '2014-04-15 10:46:19'),
+(2946, 97, NULL, 0, 2, '2014-04-15 10:46:47'),
+(2947, 97, NULL, 0, 2, '2014-04-15 10:51:40'),
+(2948, 97, NULL, 0, 2, '2014-04-15 10:51:43'),
+(2949, 97, NULL, 0, 2, '2014-04-15 10:51:46'),
+(2950, 97, NULL, 0, 2, '2014-04-15 10:51:49'),
+(2951, 97, NULL, 0, 2, '2014-04-15 10:51:52'),
+(2952, 97, NULL, 0, 2, '2014-04-15 10:51:55'),
+(2953, 97, NULL, 0, 2, '2014-04-15 10:51:58'),
+(2954, 29, NULL, 0, 1, '2014-04-15 10:59:33'),
+(2955, 29, NULL, 0, 1, '2014-04-15 11:00:34'),
+(2956, 29, NULL, 0, 1, '2014-04-15 11:02:46'),
+(2957, 29, NULL, 0, 1, '2014-04-15 11:06:29'),
+(2958, 29, NULL, 0, 1, '2014-04-15 11:08:52'),
+(2959, 29, NULL, 0, 1, '2014-04-15 11:10:45'),
+(2960, 29, NULL, 0, 1, '2014-04-15 11:19:43'),
+(2961, 29, NULL, 0, 1, '2014-04-15 11:21:15'),
+(2962, 29, NULL, 0, 1, '2014-04-15 11:26:14'),
+(2963, 29, NULL, 0, 1, '2014-04-15 11:26:45'),
+(2964, 29, NULL, 0, 1, '2014-04-15 11:31:13'),
+(2965, 29, NULL, 0, 1, '2014-04-15 11:32:34'),
+(2966, 29, NULL, 0, 1, '2014-04-15 11:39:06'),
+(2967, 29, NULL, 0, 1, '2014-04-15 11:40:00'),
+(2968, 29, NULL, 0, 1, '2014-04-15 11:59:20'),
+(2969, 0, NULL, 3, 1, '2014-04-15 12:07:01'),
+(2970, 0, NULL, 0, 1, '2014-04-15 12:10:12'),
+(2971, 29, NULL, 0, 1, '2014-04-15 12:16:10'),
+(2972, 29, NULL, 0, 1, '2014-04-15 12:16:26'),
+(2973, 29, NULL, 0, 1, '2014-04-15 12:24:12'),
+(2974, 29, NULL, 0, 1, '2014-04-15 12:27:24'),
+(2975, 29, NULL, 0, 1, '2014-04-15 12:30:27'),
+(2976, 29, NULL, 0, 1, '2014-04-15 12:32:50'),
+(2977, 0, NULL, 0, 10, '2014-04-15 12:42:54'),
+(2978, 0, NULL, 0, 10, '2014-04-15 12:43:07'),
+(2979, 0, NULL, 0, 10, '2014-04-15 12:44:15'),
+(2980, 0, NULL, 0, 10, '2014-04-15 12:44:25'),
+(2981, 0, NULL, 0, 10, '2014-04-15 12:47:06'),
+(2982, 0, NULL, 0, 10, '2014-04-15 12:47:23'),
+(2983, 0, NULL, 0, 10, '2014-04-15 12:51:05'),
+(2984, 29, NULL, 0, 1, '2014-04-15 12:55:33'),
+(2985, 29, NULL, 0, 1, '2014-04-15 13:01:48'),
+(2986, 99, NULL, 0, 1, '2014-04-15 13:03:24'),
+(2987, 99, NULL, 0, 1, '2014-04-15 13:04:49'),
+(2988, 29, NULL, 2, 1, '2014-04-15 13:05:34'),
+(2989, 29, NULL, 0, 1, '2014-04-15 13:06:01'),
+(2990, 29, NULL, 0, 1, '2014-04-15 13:07:46'),
+(2991, 29, NULL, 0, 1, '2014-04-15 13:13:21'),
+(2992, 29, NULL, 0, 1, '2014-04-15 13:14:56'),
+(2993, 29, NULL, 0, 1, '2014-04-15 13:15:52'),
+(2994, 29, NULL, 0, 1, '2014-04-15 13:20:04'),
+(2995, 29, NULL, 0, 1, '2014-04-15 13:25:15'),
+(2996, 29, 9, 39, 17, '2014-04-15 14:19:59'),
+(2997, 29, 9, 0, 17, '2014-04-15 14:20:49'),
+(2998, 29, NULL, 0, 1, '2014-04-15 14:21:11'),
+(2999, 29, NULL, 0, 26, '2014-04-15 14:22:21'),
+(3000, 29, NULL, 51, 26, '2014-04-15 14:22:25'),
+(3001, 29, NULL, 0, 1, '2014-04-15 14:36:41'),
+(3002, 29, NULL, 0, 1, '2014-04-15 14:38:23'),
+(3003, 29, NULL, 0, 1, '2014-04-15 14:40:55'),
+(3004, 29, NULL, 0, 1, '2014-04-15 14:42:46'),
+(3005, 29, 0, 0, 28, '2014-04-15 14:42:48'),
+(3006, 29, 0, 55, 28, '2014-04-15 14:43:18'),
+(3007, 0, 0, 33, 28, '2014-04-15 14:43:28'),
+(3008, 0, 0, 33, 28, '2014-04-15 14:43:40'),
+(3009, 29, NULL, 0, 1, '2014-04-15 14:43:45'),
+(3010, 29, 0, 0, 28, '2014-04-15 14:44:06'),
+(3011, 29, 0, 0, 28, '2014-04-15 14:45:12'),
+(3012, 29, NULL, 0, 1, '2014-04-15 14:47:26'),
+(3013, 29, NULL, 0, 1, '2014-04-15 14:49:17'),
+(3014, 29, NULL, 0, 1, '2014-04-15 14:51:09'),
+(3015, 29, NULL, 0, 1, '2014-04-15 14:52:15'),
+(3016, 29, NULL, 0, 1, '2014-04-15 14:52:58'),
+(3017, 29, 0, 0, 28, '2014-04-15 14:54:47'),
+(3018, 0, 0, 33, 28, '2014-04-15 14:54:55'),
+(3019, 29, 0, 55, 28, '2014-04-15 14:55:01'),
+(3020, 29, 0, 0, 28, '2014-04-15 14:55:13'),
+(3021, 29, 0, 0, 29, '2014-04-15 15:04:06'),
+(3022, 29, 0, 58, 29, '2014-04-15 15:04:10'),
+(3023, 0, 0, 33, 29, '2014-04-15 15:04:32'),
+(3024, 0, 0, 33, 29, '2014-04-15 15:04:40'),
+(3025, 29, 0, 32, 29, '2014-04-15 15:04:50'),
+(3026, 29, NULL, 0, 1, '2014-04-15 15:05:07'),
+(3027, 29, 0, 60, 29, '2014-04-15 15:07:02');
 
 -- --------------------------------------------------------
 
@@ -4640,7 +4949,7 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 --
 -- Estructura de tabla para la tabla `HOUSES`
 --
--- Creación: 13-04-2014 a las 21:47:04
+-- Creación: 15-04-2014 a las 13:14:39
 --
 
 DROP TABLE IF EXISTS `HOUSES`;
@@ -4649,8 +4958,8 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   `IDUSER` int(11) NOT NULL,
   `HOUSENAME` varchar(30) NOT NULL,
   `IDIMAGE` int(11) DEFAULT NULL,
-  `CITY` varchar(30) NOT NULL,
-  `COUNTRY` varchar(30) NOT NULL,
+  `CITY` varchar(50) DEFAULT NULL,
+  `COUNTRY` varchar(50) DEFAULT NULL,
   `GPS` varchar(10) DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
@@ -4671,26 +4980,26 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
 --
 
 INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IDIMAGE`, `CITY`, `COUNTRY`, `GPS`, `DATEBEGIN`) VALUES
-(1, 1, 'mi casa', NULL, '', '', '37.6735925', '2014-03-04 05:00:00'),
-(2, 11, 'otto', NULL, '', '', NULL, '2014-03-11 04:00:00'),
-(3, 11, 'house', NULL, '', '', NULL, '2014-03-11 04:00:00'),
-(4, 11, 'home', NULL, '', '', NULL, '2014-03-11 04:00:00'),
-(5, 11, 'hause', NULL, '', '', NULL, '2014-03-11 04:00:00'),
-(6, 11, 'shack', NULL, '', '', NULL, '2014-03-11 04:00:00'),
-(8, 1, 'micasa', NULL, '', '', NULL, '2014-03-23 19:09:25'),
-(9, 29, 'casaBertoldo', 1, '', '', NULL, '2014-03-23 19:51:49'),
-(10, 2, 'Mansión', NULL, '', '', NULL, '2014-03-25 21:39:22'),
-(11, 0, 'demoHouse', NULL, '', '', NULL, '2014-03-27 14:48:48'),
-(12, 0, 'basicHouse0', NULL, '', '', NULL, '2014-03-27 20:32:40'),
-(13, 0, 'basicHouse1', NULL, '', '', NULL, '2014-03-27 20:32:51'),
-(14, 0, 'basicHouse2', NULL, '', '', NULL, '2014-03-27 20:33:07'),
-(15, 0, 'basicHouse3', NULL, '', '', NULL, '2014-03-27 20:33:21'),
-(16, 71, 'Casa1', NULL, '', '', '125625625', '2014-04-02 09:30:09'),
-(17, 29, 'cerate', NULL, 'madrid', 'españa', NULL, '2014-04-13 21:54:25'),
-(18, 10, 'micasa2', NULL, 'segovia', 'españa', NULL, '2014-04-13 22:03:46'),
-(19, 10, 'micasa5', NULL, 'segovia', 'españa', NULL, '2014-04-13 22:10:20'),
-(20, 10, '', NULL, 'segovia', 'españa', NULL, '2014-04-13 22:10:30'),
-(21, 85, 'pp', NULL, 'granada', 'españa', NULL, '2014-04-13 22:13:47');
+(1, 1, 'mi casa', NULL, 'madrid', 'spain', '37.6735925', '2014-03-04 05:00:00'),
+(2, 11, 'otto', NULL, 'madrid', 'spain', NULL, '2014-03-11 04:00:00'),
+(3, 11, 'house', NULL, 'madrid', 'spain', NULL, '2014-03-11 04:00:00'),
+(4, 11, 'home', NULL, 'madrid', 'spain', NULL, '2014-03-11 04:00:00'),
+(5, 11, 'hause', NULL, 'madrid', 'spain', NULL, '2014-03-11 04:00:00'),
+(6, 11, 'shack', NULL, 'madrid', 'spain', NULL, '2014-03-11 04:00:00'),
+(8, 1, 'micasa', NULL, 'madrid', 'spain', NULL, '2014-03-23 19:09:25'),
+(9, 29, 'casaBertoldo', 1, 'madrid', NULL, NULL, '2014-03-23 19:51:49'),
+(10, 2, 'Mansión', NULL, 'madrid', 'spain', NULL, '2014-03-25 21:39:22'),
+(11, 0, 'demoHouse', NULL, 'madrid', 'spain', NULL, '2014-03-27 14:48:48'),
+(12, 0, 'basicHouse0', NULL, 'madrid', 'spain', NULL, '2014-03-27 20:32:40'),
+(13, 0, 'basicHouse1', NULL, 'madrid', 'spain', NULL, '2014-03-27 20:32:51'),
+(14, 0, 'basicHouse2', NULL, 'madrid', 'spain', NULL, '2014-03-27 20:33:07'),
+(15, 0, 'basicHouse3', NULL, NULL, NULL, NULL, '2014-03-27 20:33:21'),
+(16, 71, 'Casa1', NULL, NULL, NULL, '125625625', '2014-04-02 09:30:09'),
+(17, 29, 'cerate', NULL, 'madrid', 'spain', NULL, '2014-04-13 21:54:25'),
+(18, 10, 'micasa2', NULL, 'madrid', 'spain', NULL, '2014-04-13 22:03:46'),
+(19, 10, 'micasa5', NULL, 'madrid', 'spain', NULL, '2014-04-13 22:10:20'),
+(20, 10, '', NULL, 'madrid', 'spain', NULL, '2014-04-13 22:10:30'),
+(21, 85, 'pp', NULL, 'madrid', 'spain', NULL, '2014-04-13 22:13:47');
 
 -- --------------------------------------------------------
 
@@ -4796,6 +5105,8 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 ,`PERMISSIONNUMBER` int(11)
 ,`IDDEVICE` int(11)
 ,`IPADDRESS` varchar(200)
+,`CITY` varchar(50)
+,`COUNTRY` varchar(50)
 );
 -- --------------------------------------------------------
 
@@ -4936,7 +5247,7 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
@@ -4964,7 +5275,8 @@ INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `DATEBEGIN`) VAL
 (15, 14, 0, 'Lab', '2014-03-27 20:34:35'),
 (16, 15, 0, 'Lab', '2014-03-27 20:34:35'),
 (17, 16, 71, 'Hab1', '2014-04-02 09:30:33'),
-(20, 21, 86, 'jiaa', '2014-04-14 11:08:07');
+(20, 21, 86, 'jiaa', '2014-04-14 11:08:07'),
+(22, 9, 29, 'desvan', '2014-04-15 14:20:36');
 
 -- --------------------------------------------------------
 
@@ -5233,7 +5545,7 @@ INSERT INTO `TASKS` (`IDTASK`, `TASKNAME`, `IDUSER`, `DESCRIPTION`, ` FREQUENCY`
 --
 -- Estructura de tabla para la tabla `USERS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 11:02:32
 --
 
 DROP TABLE IF EXISTS `USERS`;
@@ -5241,13 +5553,13 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
   `USERNAME` varchar(15) NOT NULL,
   `PASSWORD` varchar(40) NOT NULL,
-  `EMAIL` varchar(40) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
   `HINT` varchar(30) DEFAULT NULL,
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=93 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=100 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -5256,7 +5568,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
 INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
 (0, '', '', '', NULL, '2014-03-25 10:36:01'),
 (1, 'alex', '9393cbd5cb36eb245c02b163d6ca969a', 'a@ucm.es', 'hint', '2014-03-11 04:00:00'),
-(2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'ctiradocaa@gmail.com', 'Adivina adivinanza.', '2014-03-25 21:36:35'),
+(2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'c@gmail.com', 'Adivina adivinanza.', '2014-03-25 21:36:35'),
 (10, 'luis', '502ff82f7f1f8218dd41201fe4353687', 'luis@gmail.com', 'what about me?', '2014-11-13 05:00:00'),
 (11, 'alex2', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@hotmail.co', 'what about me?', '2014-01-11 05:00:00'),
 (12, 'alex3', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@ehc.com', 'what about me?', '2014-03-01 05:00:00'),
@@ -5270,14 +5582,15 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (66, 'Ismael', 'e1adc3949ba59abbe56e057f2f883e', 'irequena@outlook.com', NULL, '2014-03-27 16:14:53'),
 (67, 'example', '1a79a4d60de6718e8e5b326e338ae533', 'example@gmail.com', 'about me.', '2014-03-27 20:49:06'),
 (68, 'asd', '7815696ecbf1c96e6894b779456d33e', 'asd@', '', '2014-03-28 12:15:55'),
-(69, 'miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguel@gmail.com', '', '2014-03-28 12:22:15'),
 (71, 'Sam', '332532dcfaa1cbf61e2a266bd723612c', 'sam@gmail.com', 'Remember me.', '2014-04-02 09:29:18'),
 (75, 'd', 's', 'd', 'd', '2014-04-08 09:59:21'),
 (77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
 (80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05'),
 (82, 'ó', '', 'oóbn', 'oóoóo', '2014-04-09 13:22:58'),
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', '2014-04-09 13:33:28'),
-(86, 'p', 'p', 'p', 'p', '2014-04-13 22:32:14');
+(86, 'p', 'p', 'p', 'p', '2014-04-13 22:32:14'),
+(97, 'alex4', '430746351e69124b5bf9136c2192effe', 'alejandroladrondeguevara@gmail.com', 'i dont remember', '2014-04-15 10:45:56'),
+(99, 'z', 'z', 'z', NULL, '2014-04-15 13:02:34');
 
 -- --------------------------------------------------------
 
@@ -5295,7 +5608,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS` from (((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from (((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 
@@ -5339,8 +5652,8 @@ ALTER TABLE `COMMANDS`
 -- Filtros para la tabla `COMMAND_PROGRAM`
 --
 ALTER TABLE `COMMAND_PROGRAM`
-  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_3` FOREIGN KEY (`IDCOMMAND`) REFERENCES `COMMANDS` (`IDCOMMAND`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_2` FOREIGN KEY (`IDPROGRAM`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_2` FOREIGN KEY (`IDPROGRAM`) REFERENCES `PROGRAMACTIONS` (`IDPROGRAM`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_3` FOREIGN KEY (`IDCOMMAND`) REFERENCES `COMMANDS` (`IDCOMMAND`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `HISTORYACCESS`

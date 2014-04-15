@@ -136,6 +136,15 @@ switch ($_POST['command']) {
 		break;
 //-------------------------------------------------------------------------------------------------
 	//
+	case "addcommandprogram":
+		addcommandprogram( $_POST['username'],$_POST['commandname'],$_POST['idaction'], $_POST['number']);
+		break;
+	//
+	case "removecommandprogram":
+		removecommandprogram( $_POST['username'],$_POST['commandname'],$_POST['idaction'], $_POST['number']);
+		break;
+//-------------------------------------------------------------------------------------------------
+	//
 	case "createcommand":
 		createcommand( $_POST['username'],$_POST['commandname']);
 		break;

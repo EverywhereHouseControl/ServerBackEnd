@@ -24,6 +24,8 @@
 				<option value="deletetask">deletetask</option>
 				<option value="addtaskprogram">addtaskprogram</option>
 				<option value="removetaskprogram">removetaskprogram</option>
+				<option value="addcommandprogram">addcommandprogram</option>
+				<option value="removecommandprogram">removecommandprogram</option>
 				<option value="createcommand">createcommand</option>
 				<option value="deletecommand">deletecommand</option>
 				<option value="schedulehouse">schedulehouse</option>

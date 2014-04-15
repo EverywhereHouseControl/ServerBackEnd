@@ -350,6 +350,17 @@ function createJSON2($user) {
 				
 				$JSON["houses"][$h]["name"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON["houses"][$h]["access"] = $SQLjson['result'][$i]['ACCESSNUMBER'];
+				$JSON["houses"][$h]["weather"] = null;
+				
+				//if the house have set the city/country then saw the clima
+				if (!empty($SQLjson['result'][$i]['CITY'])) {
+					if (!empty($SQLjson['result'][$i]['COUNTRY'])){
+						$JSON["houses"][$h]["weather"] =getweather2($SQLjson['result'][$i]['CITY'].','.$SQLjson['result'][$i]['COUNTRY'], 'en');
+					}
+					else{
+						$JSON["houses"][$h]["weather"] =getweather2($SQLjson['result'][$i]['CITY'], 'en');
+					}
+				}
 				
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"] = null;
@@ -724,6 +735,26 @@ function getweather($city,$language){
 }
 
 //--------------------------------------------------------------------------------------
+function getweather2($city,$language){
+	/* returns the weather of a specific city and country */
+	$error = 0;
+	$funct = 10;
+	$iduser = 0;//administrator
+
+	//REGISTER THE ACTIVITY
+	$sql = query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
+			, $iduser, $error, $funct);
+
+	exec('./clima ' .$city.' '. $language,$output);
+	foreach($output as &$valor){
+		return ($valor);
+		echo ("\n");
+	}
+	return null;
+}
+//--------------------------------------------------------------------------------------
 function createhouse($user, $house, $city, $country){
 	/* create a new house + create access for this user to the house*/
 	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
@@ -852,6 +883,24 @@ function addtaskprogram($user, $idtask, $idaction){
 function removetaskprogram($user, $idtask, $idaction){
 	/* create a new user*/
 	$message = query("CALL removetaskprogram ('%s','%s','%s')",$user, (int) $idtask, (int) $idaction);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function addcommandprogram($user, $command, $idaction, $pos){
+	/* create a new user*/
+	$message = query("CALL addcommandprogram ('%s','%s',%s,%s)", $user, $command, (int) $idaction, (int) $pos);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function removecommandprogram($user, $command, $idaction, $pos){
+	/* create a new user*/
+	$message = query("CALL removecommandprogram ('%s','%s',%s,%s)",$user, $command, (int) $idaction, (int) $pos);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
