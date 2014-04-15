@@ -755,6 +755,30 @@ begin
 end$$
 
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE recoveryuser
+( IN u VARCHAR(15), IN p VARCHAR(40))
+LANGUAGE SQL
+NOT DETERMINISTIC
+SQL SECURITY DEFINER
+COMMENT 'Generate a password to recovery user.'
+begin
+	UPDATE USERS SET PASSWORD = p
+	WHERE USERNAME = u;
+	SELECT EMAIL
+	FROM USERS
+	WHERE USERNAME = u;
+end 
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-04-2014 a las 17:32:53
+-- Tiempo de generación: 15-04-2014 a las 04:22:48
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -838,7 +838,7 @@ begin
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 				VALUES  (     NULL,   id,    NULL,  IF(err = 14, 0, err),  4, CURRENT_TIMESTAMP);
 				
-	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH, p, pass
+	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 
@@ -967,6 +967,27 @@ DROP PROCEDURE IF EXISTS `ProG`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `ProG`()
 begin 
 SELECT * FROM USERS;
+end$$
+
+DROP PROCEDURE IF EXISTS `recoveryuser`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(15), IN p VARCHAR(40))
+    COMMENT 'Generate a password to recovery user.'
+begin
+	DECLARE idu INTEGER DEFAULT NULL;
+        DECLARE e VARCHAR(40) DEFAULT NULL;
+
+	UPDATE USERS SET PASSWORD = p
+	WHERE USERNAME = u;
+        
+	SELECT  IDUSER, EMAIL INTO  idu, e
+	FROM USERS
+	WHERE USERNAME = u;
+
+	INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   idu,    NULL,  0,  2, CURRENT_TIMESTAMP);
+
+        SELECT e AS EMAIL;
 end$$
 
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
@@ -1346,7 +1367,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2780 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2860 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -1720,7 +1741,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=87 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=93 ;
 
 -- --------------------------------------------------------
 
