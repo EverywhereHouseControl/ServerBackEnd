@@ -1158,7 +1158,7 @@ function randomPass(){
 	$str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
 	$cad = "";
 	for($i=0;$i<8;$i++) {
-		$cad .= substr($str,rand(0,55),1);
+		$cad .= substr($str,rand(0,54),1);
 	}
 	return $cad;
 }
