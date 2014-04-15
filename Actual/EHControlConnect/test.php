@@ -36,36 +36,36 @@
 				<option value="createdevice">createdevice</option>
 				<option value="deletedevice">deletedevice</option>
 			</select>                          <input type="submit" />
-  username:    <input type="text" name="username" />
-  password:    <input type="text" name="password" />
-  email:       <input type="text" name="email" />
-  hint:        <input type="text" name="hint" />
-  n_username:  <input type="text" name="n_username" />
-  n_password:  <input type="text" name="n_password" />
-  n_email:     <input type="text" name="n_email" />
-  n_hint:      <input type="text" name="n_hint" />
-  housename:   <input type="text" name="housename" />
-  roomname:    <input type="text" name="roomname" />
-  servicename: <input type="text" name="servicename" />
-  actionname:  <input type="text" name="actionname" />
-  n_housename: <input type="text" name="n_housename" />
-  n_roomname:  <input type="text" name="n_roomname" />
-  data:        <input type="text" name="data" />
-  start:       <input type="text" name="start" />
-  idaction:    <input type="text" name="idaction" />
-  taskname:    <input type="text" name="taskname" />
-  commandname: <input type="text" name="commandname" />
-  description: <input type="text" name="description" />
-  frequency:   <input type="text" name="frequency" />
-  idtask:      <input type="text" name="idtask" />
-  devicename:  <input type="text" name="devicename" />
-  ipaddress:   <input type="text" name="ipaddress" />
-  city:        <input type="text" name="city" />
-  country:     <input type="text" name="country" />
-  language:    <input type="text" name="language" />
-  number:      <input type="text" name="number" />
-  serial:      <input type="text" name="serial" />
-  idimage:     <input type="text" name="idimage" />
+  username:    <input size="40" type="text" name="username" />
+  password:    <input size="40" type="text" name="password" />
+  email:       <input size="40" type="text" name="email" />
+  hint:        <input size="40" type="text" name="hint" />
+  n_username:  <input size="40" type="text" name="n_username" />
+  n_password:  <input size="40" type="text" name="n_password" />
+  n_email:     <input size="40" type="text" name="n_email" />
+  n_hint:      <input size="40" type="text" name="n_hint" />
+  housename:   <input size="40" type="text" name="housename" />
+  roomname:    <input size="40" type="text" name="roomname" />
+  servicename: <input size="40" type="text" name="servicename" />
+  actionname:  <input size="40" type="text" name="actionname" />
+  n_housename: <input size="40" type="text" name="n_housename" />
+  n_roomname:  <input size="40" type="text" name="n_roomname" />
+  data:        <input size="40" type="text" name="data" />
+  start:       <input size="40" type="text" name="start" />
+  idaction:    <input size="40" type="text" name="idaction" />
+  taskname:    <input size="40" type="text" name="taskname" />
+  commandname: <input size="40" type="text" name="commandname" />
+  description: <input size="40" type="text" name="description" />
+  frequency:   <input size="40" type="text" name="frequency" />
+  idtask:      <input size="40" type="text" name="idtask" />
+  devicename:  <input size="40" type="text" name="devicename" />
+  ipaddress:   <input size="40" type="text" name="ipaddress" />
+  city:        <input size="40" type="text" name="city" />
+  country:     <input size="40" type="text" name="country" />
+  language:    <input size="40" type="text" name="language" />
+  number:      <input size="40" type="text" name="number" />
+  serial:      <input size="40" type="text" name="serial" />
+  idimage:     <input size="40" type="text" name="idimage" />
 <span _fck_bookmark="1" style="display: none;"> </span></pre>
   </form>
   	
