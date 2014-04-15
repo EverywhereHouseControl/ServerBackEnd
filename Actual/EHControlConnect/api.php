@@ -1155,10 +1155,10 @@ function recovery_mail($email, $user, $pass){
 function randomPass(){
 	//code from web
 	//http://www.cristalab.com/tutoriales/script-generador-de-passwords-aleatorios-en-php-c8514l/
-	$str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+	$str = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz23456789";
 	$cad = "";
 	for($i=0;$i<8;$i++) {
-		$cad .= substr($str,rand(0,62),1);
+		$cad .= substr($str,rand(0,55),1);
 	}
 	return $cad;
 }
