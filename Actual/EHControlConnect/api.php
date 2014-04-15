@@ -468,32 +468,32 @@ function lostpass($user){
 	$error = 0;
 	$funct = 2;
 	
-	switch (testEXIST( 'USERS', 'USERNAME', $user)){
-		case 1:	$error = 3;	break;
-		case 4:	$error = 4;	break;
+	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
 	}
 
 	testNoERROR($iduser, $error, $funct);
 	
-	/*
-	 * 
-	 * server send an email recovery pasword
-	 * 
-	 */
+	//GENERATE NEW PASSWORD
+	$pass = randomPass();
 	
-	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-	
-	// take de error message
 	$error = 12;//email password recovery sent.
-	$message = query(	"SELECT ENGLISH, SPANISH
-				FROM ERRORS
-				WHERE ERRORCODE='%s' LIMIT 1 ", $error);
+	message($error, 0);	
 	
-	message($error, 0);
+	//set new password
+	$message = query("CALL recoveryuser ('%s','%s')", $user, md5($pass));
+	
+	//take user email
+	$email =  $message['result'][0]['EMAIL'];
+
+	//server send an email recovery pasword
+	recovery_mail($email, $user, $pass);
+	
+	
 }
 
 //--------------------------------------------------------------------------------------
@@ -503,15 +503,25 @@ function createuser2($user, $pass, $email, $hint){
 	// take de error message
 	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	if ($json['error'][0]['ERROR'] == 0){
+		welcome_mail($email, $user);
+	}
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deleteuser2($user, $pass){
-	/* create a new user*/
+	/* delete a existing user*/
+	//take email before deletion
+	$SQLuser = query("SELECT EMAIL FROM USERS WHERE USERNAME='%s'  limit 1", $user);
+	$email  = $SQLuser['result'][0]['EMAIL'];
+
 	$message = query("CALL deleteuser ('%s', '%s')", $user, $pass);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	if ($json['error']['ERROR'] == 0){
+		goodbye_mail($email, $user);
+	}
 	print json_encode($json);
 }
 
@@ -1075,6 +1085,82 @@ function subir() {
 			print "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
 		}
 	}
+}
+//--------------------------------------------------------------------------------------
+function welcome_mail($email, $user){
+	//header html mail
+	$mail_headers="MIME-Version: 1.0\r\n";
+	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
+	
+	//header remiter
+	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	
+	$mail_message ='<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p>&nbsp;</p>
+		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Welcome to EHC.</span></span></h1>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
+		<p><span style="font-family: verdana,geneva; font-size: medium;">Congratulations! '.$user.' from now, you will experience the comfort about the mobile control of EHC.</span></p>
+		<span style="font-family: verdana,geneva; font-size: medium;"> Hope you like.</span></div>';
+	
+	mail($email, "WELCOME EHC!", $mail_message, $mail_headers);
+}
+//--------------------------------------------------------------------------------------
+function goodbye_mail($email,$user){
+	//header html mail
+	$mail_headers="MIME-Version: 1.0\r\n";
+	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
+	
+	//header remiter
+	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	
+	$mail_message ='<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p>&nbsp;</p>
+		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Account deleted.</span></span></h1>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
+		<p><span style="font-family: verdana,geneva; font-size: medium;">Good Bye! '.$user.', see you soon.</span></p>
+		<span style="font-family: verdana,geneva; font-size: medium;"> EHC.</span></div>';
+	
+	mail($email, "GOOD BYE! from EHC", $mail_message, $mail_headers);
+}
+//--------------------------------------------------------------------------------------
+function recovery_mail($email, $user, $pass){
+	//header html mail
+	$mail_headers="MIME-Version: 1.0\r\n";
+	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
+	
+	//header remiter
+	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	
+	$mail_message = '<p>&nbsp;</p>
+			<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+			<p>&nbsp;</p>
+			<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Email</span> <span class="hps">password</span> <span class="hps">recovery</span>.</span></h1>
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+			<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
+			<p><span style="font-family: verdana,geneva; font-size: medium;">User:  '.$user.'</span></p>
+			<p><span style="font-family: verdana,geneva; font-size: medium;">Pass:  '.$pass.'</span></p>
+			</div>';
+	
+	mail($email, "Lost Password", $mail_message, $mail_headers);
+}
+
+//--------------------------------------------------------------------------------------
+function randomPass(){
+	//code from web
+	//http://www.cristalab.com/tutoriales/script-generador-de-passwords-aleatorios-en-php-c8514l/
+	$str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+	$cad = "";
+	for($i=0;$i<8;$i++) {
+		$cad .= substr($str,rand(0,62),1);
+	}
+	return $cad;
 }
 ?>
 

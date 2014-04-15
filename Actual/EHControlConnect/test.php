@@ -14,6 +14,7 @@
 				<option value="doaction">doaction</option>
 				<option value="ipcheck">ipcheck</option>
 				<option value="getweather">getweather</option>
+				<option value="lostpass">lostpass</option>
 				<option value="createhouse">createhouse</option>
 				<option value="deletehouse">deletehouse</option>
 				<option value="modifyhouse">modifyhouse</option>
