@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-04-2014 a las 17:07:35
+-- Tiempo de generación: 16-04-2014 a las 03:29:33
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -25,14 +25,21 @@ DELIMITER $$
 -- Procedimientos
 --
 DROP PROCEDURE IF EXISTS `addcommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(15), IN c VARCHAR(15), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'add an acction to a command.'
 begin
+
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh, idc INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, idc INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
-	
-	SELECT COUNT(*), IFNULL(USERS.IDUSER, 0) INTO num, idu
+
+end_proc:begin
+	IF (u IS NULL OR c IS NULL OR idpa IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), USERS.IDUSER INTO num, idu
 	FROM PROGRAMACTIONS, USERS
 	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
 	
@@ -70,11 +77,9 @@ begin
 	END CASE;
 	
 	SELECT IDHOUSE INTO idh
-	FROM HOUSES
-	JOIN ROOMS 		USING ( IDHOUSE )
-	JOIN SERVICES	USING ( IDROOM )
-	JOIN ACTIONS	USING ( IDSERVICE )
-	WHERE IDACTION = ida;
+	FROM loginVIEW
+	WHERE IDACTION = ida AND USERNAME = u;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -87,14 +92,20 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `addtaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN idta INTEGER,IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
-	
-	SELECT COUNT(*), IFNULL(IDACTION, 0), IFNULL(USERS.IDUSER, 0) INTO num, ida, idu
+
+end_proc:begin
+	IF (u IS NULL OR idta IS NULL OR idpa IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDACTION, USERS.IDUSER INTO num, ida, idu
 	FROM PROGRAMACTIONS, USERS
 	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
 	
@@ -128,12 +139,9 @@ begin
 	END CASE;
 	
 	SELECT IDHOUSE INTO idh
-	FROM HOUSES
-	JOIN ROOMS 		USING ( IDHOUSE )
-	JOIN SERVICES	USING ( IDROOM )
-	JOIN ACTIONS	USING ( IDSERVICE )
-	WHERE IDACTION = ida;
-	
+	FROM loginVIEW 
+	WHERE IDACTION = ida AND IDUSER = idu;
+end;
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 				VALUES  (     NULL,  idu,    idh,  IF(err = 34, 0, err),  21, CURRENT_TIMESTAMP);
@@ -145,27 +153,32 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(30), IN h VARCHAR(30), IN u2 VARCHAR(30), IN n INTEGER)
-    COMMENT 'Create a new house if not exist.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+    COMMENT 'An admistrator grant access somobody to a house.'
 begin
 
 	DECLARE num,acc INTEGER DEFAULT 0;
 	DECLARE idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
-	FROM HOUSES
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
 	WHEN 1 THEN 
 		CASE acc
 		WHEN 1 THEN 
-			SELECT COUNT(*), IDUSER INTO num, idu
+			SELECT COUNT(*), IDUSER INTO num, idu 
 			FROM USERS
 			WHERE USERNAME = u2;
+
 			IF (num <> 0) THEN 
 				DELETE FROM ACCESSHOUSE WHERE IDUSER=idu AND IDHOUSE = idh;
 				INSERT INTO ACCESSHOUSE (IDUSER, IDHOUSE, ACCESSNUMBER, DATEBEGIN) VALUES
@@ -184,7 +197,8 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
-	
+end;
+
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 				VALUES  (     NULL,    idu,   idh,  IF(err = 40, 0, err),  24, CURRENT_TIMESTAMP);
@@ -195,13 +209,19 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createcommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(15), IN c VARCHAR(15))
-    COMMENT 'create new command (conjunto de mandatos)'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+    COMMENT 'Create a new command (conjunto de mandatos)'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE idu INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR c IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
 
     SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
@@ -226,6 +246,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -237,13 +258,19 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createdevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(30), IN ip VARCHAR(200), IN s VARCHAR(20), IN d VARCHAR(20))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
     COMMENT 'Create a new device.'
 begin
 
 	DECLARE num, v INTEGER DEFAULT 0;
 	DECLARE idu, idd, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR d IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
 
 	SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
@@ -259,11 +286,11 @@ begin
 			WHEN 0 THEN 
 				SELECT COUNT(*),VERSION INTO num, v
 				FROM DEVICES
-				WHERE NAME = d AND IDUSER IS NULL AND IPADDRESS IS NULL AND SERIAL IS NULL;
+				WHERE DEVICENAME = d AND IDUSER IS NULL AND IPADDRESS IS NULL AND SERIAL IS NULL;
 				
 				CASE num 
 				WHEN 1 THEN
-					INSERT INTO DEVICES (IDDEVICE, IDUSER, IPADDRESS, SERIAL, NAME, ENGLISH, SPANISH, `DATE`, VERSION) VALUES 
+					INSERT INTO DEVICES (IDDEVICE, IDUSER, IPADDRESS, SERIAL, DEVICENAME, ENGLISH, SPANISH, `DATE`, VERSION) VALUES 
 										(NULL,   idu,    ip,    s,   d,   NULL,   NULL,   CURRENT_TIMESTAMP,   v);
 					SET err = 49;
 				ELSE
@@ -277,7 +304,8 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
-	
+end;
+
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 				VALUES  (     NULL,    idu,   idh,  IF(err = 49, 0, err),  25, CURRENT_TIMESTAMP);
@@ -288,13 +316,19 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(30), IN h VARCHAR(30), IN c VARCHAR(30), IN ctry VARCHAR(30))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Create a new house if not exist.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR c IS NULL OR ctry IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
 
 	SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
@@ -327,6 +361,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -338,64 +373,61 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(15), IN h VARCHAR(15),IN r VARCHAR(15),IN s VARCHAR(15), IN a VARCHAR(15),IN dat VARCHAR(30), IN t timestamp, IN d timestamp)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
 begin
-	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh, ids, acc INTEGER DEFAULT 0;
+	DECLARE num, acc INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, ids INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
-	SELECT COUNT(*), IFNULL(IDACTION, 0), IFNULL(IDSERVICE, 0), IFNULL(IDHOUSE, 0) INTO num, ida, ids, idh
-	FROM HOUSES 
-	JOIN ROOMS 		USING ( IDHOUSE ) 
-	JOIN SERVICES	USING ( IDROOM ) 
-	JOIN ACTIONS	USING ( IDSERVICE ) 
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR r IS NULL OR s IS NULL OR a IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDACTION, IDSERVICE, IDHOUSE INTO num, ida, ids, idh
+	FROM houseRoomServiceActionVIEW
 	WHERE HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s AND ACTIONNAME = a; 
 	
 	CASE num  
 	WHEN 1 THEN  
-		begin 
-			DECLARE num INTEGER DEFAULT 0;
-			SELECT COUNT(*), IFNULL(USERS.IDUSER, 0), IFNULL(ACCESSNUMBER, 0) INTO num, idu, acc 
-			FROM USERS,  ACCESSHOUSE
-						WHERE USERNAME = u 
-						AND USERS.IDUSER = ACCESSHOUSE.IDUSER 
-						AND ACCESSHOUSE.IDHOUSE = idh ;
+			SELECT COUNT(*), IDUSER, IFNULL(ACCESSNUMBER, 0) INTO num, idu, acc 
+			FROM loginVIEW
+			WHERE USERNAME = u AND IDHOUSE = idh ;
 			
 			CASE num
-			WHEN 1 THEN 
+			WHEN 0 THEN
+				SET err = 11; 
+			ELSE
 				CASE acc
 				WHEN 1 THEN
-					INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `DATA`, `STARTTIME`, `DATEBEGIN`) VALUES (NULL, idu, ida, dat, t, d);
+					INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `DATA`, `STARTTIME`, `DATEBEGIN`)
+										 VALUES (NULL, idu, ida, dat, t, d);
 					SET err = 27;
 				ELSE
 					SELECT COUNT(*), IFNULL(PERMISSIONNUMBER, 0) INTO num, acc 
 					FROM PERMISSIONS
-						WHERE IDUSER = idu 
-							AND IDSERVICE= ids ;
+					WHERE IDUSER = idu AND IDSERVICE= ids ;
 					
 					CASE acc
 					WHEN 1 THEN
-						INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `DATA`, `STARTTIME`, `DATEBEGIN`) VALUES (NULL, idu, ida, dat, t, d);
+						INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `DATA`, `STARTTIME`, `DATEBEGIN`) 
+										VALUES 		 (NULL, idu, ida, dat, t, d);
 						SET err = 27;
 					ELSE
 						SET err = 10;
 					END CASE;
 				END CASE;
-
-			WHEN 0 THEN
-				SET err = 11; 
-			ELSE
-				SET err = 4;
 			END CASE;
-		end;
 	WHEN 0 THEN
 		SET err = 21;
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
-	SELECT IFNULL(IDHOUSE, 0) INTO  idh
+	SELECT IDHOUSE INTO  idh
 	FROM HOUSES
 	WHERE HOUSENAME = h;
 
@@ -410,7 +442,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(30), IN h VARCHAR(30), IN r VARCHAR(30))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Create a new room if not exist.'
 begin
 
@@ -418,10 +450,14 @@ begin
 	DECLARE idu, idh, idr INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), USERS.IDUSER, HOUSES.IDHOUSE INTO num, acc, idu, idh
-	FROM HOUSES
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR r IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
@@ -453,6 +489,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -464,14 +501,20 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createtask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(15), IN ta VARCHAR(15),IN des VARCHAR(50),IN fre timestamp)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
     COMMENT 'Create a task, will group programaction.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE idu INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
-	SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+end_proc:begin
+	IF (u IS NULL OR ta IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
 	WHERE USERNAME = u;
 	
@@ -496,6 +539,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -508,38 +552,43 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN mail VARCHAR(40), h VARCHAR(30))
-    COMMENT 'Create a new user if not exist.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50))
+    COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE id INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-        SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, id
+end_proc:begin
+	IF (u IS NULL OR p IS NULL OR mail IS NULL OR h IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+        SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
 	WHERE USERNAME = u;
 			
 	CASE num 
 	WHEN 0 THEN 
-		begin
-			DECLARE num INTEGER DEFAULT 0;
 			SELECT COUNT(*) INTO num
 			FROM USERS
 			WHERE EMAIL = mail ;
+
 			CASE num
 			WHEN 0 THEN 
 				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
 									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
 
-                               SELECT IFNULL(IDUSER, 0) INTO  id
+                               SELECT IDUSER INTO  idu
 	                       FROM USERS
 	                       WHERE USERNAME = u;
 
 				SET err = 13;
 			WHEN 1 THEN
 
-                               SELECT IFNULL(IDUSER, 0) INTO  id
+                               SELECT IDUSER INTO  idu
 	                       FROM USERS
 	                       WHERE EMAIL = mail;
 
@@ -547,20 +596,16 @@ begin
 			ELSE
 				SET err = 4;
 			END CASE;
-		end;
 	WHEN 1 THEN
 		SET err = 6;
 	ELSE
 		SET err = 4;
 	END CASE;
-
-	SELECT IFNULL(IDUSER, 0) INTO  id
-	FROM USERS
-	WHERE USERNAME = u;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,  id,    NULL,  IF(err = 13, 0, err),  3, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,  idu,    NULL,  IF(err = 13, 0, err),  3, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 13, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
@@ -568,18 +613,22 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(30), IN h VARCHAR(30), IN u2 VARCHAR(30))
-    COMMENT 'Delete the access to a house of a user.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
+    COMMENT 'Delete the access to a house of an user.'
 begin
 
 	DECLARE num,acc INTEGER DEFAULT 0;
 	DECLARE idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
-	FROM HOUSES
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
@@ -589,6 +638,7 @@ begin
 			SELECT COUNT(*), IDUSER INTO num, idu
 			FROM USERS
 			WHERE USERNAME = u2;
+
 			IF (num <> 0) THEN 
 				DELETE FROM ACCESSHOUSE WHERE IDUSER=idu AND IDHOUSE = idh;
 				SET err = 41;
@@ -605,6 +655,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -616,13 +667,19 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deletecommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(15), IN c VARCHAR(15))
-    COMMENT 'delete a command from an user(conjunto de mandatos)'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+    COMMENT 'Delete a command from an user (conjunto de mandatos)'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE idu INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR c IS NULL OR idpa IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
 
     SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
@@ -646,6 +703,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -656,20 +714,78 @@ begin
 	WHERE ERRORCODE = err;
 end$$
 
+DROP PROCEDURE IF EXISTS `deletedevice`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
+    COMMENT 'Delete a device.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;  
+	DECLARE err INTEGER DEFAULT 0; 
+	DECLARE pass VARCHAR(50); 
+
+end_proc:begin
+	IF (u IS NULL OR p IS NULL OR idd IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER, PASSWORD INTO num, idu, pass
+	FROM USERS
+	WHERE USERNAME = u;
+			 
+	CASE num 
+	WHEN 1 THEN 
+		IF (pass = p) THEN
+			SELECT COUNT(*) INTO num
+			FROM DEVICES
+			WHERE IDUSER = idu AND IDDEVICE = idd;
+			
+			CASE num 
+			WHEN 1 THEN 
+				DELETE FROM DEVICES WHERE IDDEVICE = idd;
+				
+				SET err = 62;
+			ELSE
+				SET err = 39;
+			END CASE;
+		ELSE
+			SET err = 2;
+		END IF;
+	WHEN 0 THEN
+		SET err = 3;
+	ELSE
+		SET err = 4;
+	END CASE;
+end;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   NULL,  IF(err = 62, 0, err),  30, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 62, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
 DROP PROCEDURE IF EXISTS `deletehouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(30),IN p VARCHAR(40), IN h VARCHAR(30))
-    COMMENT 'Create a new house if not exist.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
+    COMMENT 'Delete a house if exist and the user is an administrator.'
 begin
 
 	DECLARE num, acc INTEGER DEFAULT 0;
 	DECLARE idu, idh INTEGER DEFAULT NULL;  
 	DECLARE err INTEGER DEFAULT 0; 
-	DECLARE pass VARCHAR(40); 
+	DECLARE pass VARCHAR(50); 
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0), IFNULL(PASSWORD,0) INTO num, acc, idu, idh, pass
-	FROM HOUSES 
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER) 
+end_proc:begin
+	IF (u IS NULL OR p IS NULL OR h IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE, PASSWORD INTO num, acc, idu, idh, pass
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h;
 			 
 	CASE num 
@@ -692,6 +808,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -703,49 +820,43 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(15), IN idpa INTEGER)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN idpa INTEGER)
     COMMENT 'Delete program action.'
 begin
-	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh, acc, per INTEGER DEFAULT 0;
+	DECLARE num, acc, per INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
+end_proc:begin
+	IF (u IS NULL OR idpa IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
 	SELECT COUNT(*), IFNULL(IDACTION, 0) INTO num, ida
 	FROM PROGRAMACTIONS
 	WHERE IDPROGRAM = idpa ;
 	
 	CASE num 
 	WHEN 1 THEN
-		SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IFNULL(USERS.IDUSER, 0), IFNULL(HOUSES.IDHOUSE, 0) INTO num, acc, idu, idh
-		FROM HOUSES
-		JOIN ROOMS 		USING ( IDHOUSE )
-		JOIN SERVICES	USING ( IDROOM )
-		JOIN ACTIONS	USING ( IDSERVICE )
-		JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-		JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+		SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE,PERMISSIONNUMBER INTO num, acc, idu, idh, per
+		FROM loginVIEW
 		WHERE IDACTION = ida AND USERNAME = u;
 	
 		CASE num
 		WHEN 1 THEN
 			CASE acc
 			WHEN 1 THEN 
-				DELETE FROM TASKPROGRAM WHERE IDPROGRAM= idpa;
 				DELETE FROM PROGRAMACTIONS WHERE IDPROGRAM= idpa;
 				SET err = 28;
 			WHEN 0 THEN
 				SET err = 11;
 			ELSE
-				SELECT COUNT(*), IFNULL(PERMISSIONNUMBER, 0) INTO num, per
-				FROM USERS 
-				JOIN PERMISSIONS USING (IDUSER)
-				JOIN ACTIONS	USING ( IDSERVICE )
-				WHERE IDACTION = ida AND USERNAME=u;
 				
 				CASE num
 				WHEN 1 THEN
 					CASE per
 					WHEN 1 THEN
-						DELETE FROM TASKPROGRAM WHERE IDPROGRAM= idpa;
 						DELETE FROM PROGRAMACTIONS WHERE IDPROGRAM= idpa;
 						SET err = 28;
 					ELSE
@@ -761,7 +872,7 @@ begin
 	ELSE 
 		SET err = 21;
 	END CASE;
-	
+end;	
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -774,20 +885,23 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(30),IN p VARCHAR(30), IN h VARCHAR(30), IN r VARCHAR(30))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Delete a room if exist.'
 begin
 
 	DECLARE num, acc INTEGER DEFAULT 0;
 	DECLARE idu, idh, idr INTEGER DEFAULT NULL;  
 	DECLARE err INTEGER DEFAULT 0; 
-	DECLARE pass VARCHAR(40); 
+	DECLARE pass VARCHAR(50); 
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), USERS.IDUSER, HOUSES.IDHOUSE, IFNULL(ROOMS.IDROOM, 0), IFNULL(PASSWORD,0) INTO num, acc, idu, idh, idr, pass
-	FROM HOUSES 
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER) 
-	JOIN ROOMS		ON (HOUSES.IDHOUSE = ROOMS.IDHOUSE)
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR r IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE, IDROOM, PASSWORD INTO num, acc, idu, idh, idr, pass
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r;
 			 
 	CASE num 
@@ -810,6 +924,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -821,20 +936,26 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deletetask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(15), IN ta VARCHAR(15))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
     COMMENT 'Delete a user task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE idu, idta INTEGER DEFAULT 0;
+	DECLARE idu, idta INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
-	SELECT COUNT(*), IFNULL(IDUSER, 0) INTO num, idu
+end_proc:begin
+	IF (u IS NULL OR ta IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER INTO num, idu
 	FROM USERS
 	WHERE USERNAME = u;
 	
 	CASE num 
 	WHEN 1 THEN 
-		SELECT COUNT(*), IFNULL(IDTASK, 0) INTO num, idta
+		SELECT COUNT(*), IDTASK INTO num, idta
 		FROM TASKS
 		WHERE IDUSER = idu AND TASKNAME = ta;
 		
@@ -853,6 +974,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -865,27 +987,29 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(15), IN p VARCHAR(40))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Delete user if posible by deleting all information restring.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE id INTEGER DEFAULT 0;
+	DECLARE idu INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
-	DECLARE pass VARCHAR(40);
+	DECLARE pass VARCHAR(50);
 
+end_proc:begin
+	IF (u IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
 	
-	SELECT COUNT(*), IFNULL(IDUSER,0), IFNULL(PASSWORD,0) INTO num , id, pass
+	SELECT COUNT(*), IDUSER, PASSWORD INTO num , idu, pass
 	FROM USERS
 	WHERE USERNAME = u;
 			
 	CASE num 
 	WHEN 1 THEN 
 			IF (pass = p) THEN 
-				DELETE FROM `ACCESSHOUSE` WHERE IDUSER = id;
-				DELETE FROM `PERMISSIONS` WHERE IDUSER = id;
-				DELETE FROM `TASKS` WHERE IDUSER = id;
-				DELETE FROM `USERS` WHERE IDUSER = id;
+				DELETE FROM `USERS` WHERE IDUSER = idu;
 				SET err = 14;
 			ELSE 
 				SET err = 2;
@@ -895,10 +1019,11 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  IF(err = 14, 0, err),  4, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,   idu,    NULL,  IF(err = 14, 0, err),  4, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 14, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
@@ -907,7 +1032,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `loginJSON`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(15))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
 begin
 
 SELECT *
@@ -917,7 +1042,7 @@ SELECT *
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(30), IN h VARCHAR(30), IN n_h VARCHAR(30), IN idim INTEGER, IN c VARCHAR(30), IN ctry VARCHAR(30))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN idim INTEGER, IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Modify house information.'
 begin
 
@@ -925,18 +1050,33 @@ begin
 	DECLARE idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), USERS.IDUSER, HOUSES.IDHOUSE INTO num, acc, idu, idh
-	FROM HOUSES
-	JOIN ACCESSHOUSE ON (HOUSES.IDHOUSE= ACCESSHOUSE.IDHOUSE)
-	JOIN USERS 		ON (USERS.IDUSER=ACCESSHOUSE.IDUSER)
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR n_h IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
+	FROM loginVIEW
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
 	WHEN 1 THEN 
 		CASE acc
 		WHEN 1 THEN 
-			UPDATE HOUSES SET HOUSENAME=n_h, IDIMAGE=idim, CITY=c, COUNTRY=ctry WHERE IDHOUSE = idh;
-			SET err = 42;
+SELECT COUNT(*) INTO num
+				FROM HOUSES
+				WHERE HOUSENAME = n_h AND IDHOUSE <> idh;
+						
+				CASE num 
+				WHEN 0 THEN 
+					UPDATE HOUSES SET HOUSENAME=n_h, IDIMAGE=idim, CITY=c, COUNTRY=ctry WHERE IDHOUSE = idh;
+					SET err = 42;
+				WHEN 1 THEN
+					SET err = 22;
+				ELSE
+					SET err = 4;
+				END CASE;
 		WHEN 0 THEN
 			SET err = 11;
 		ELSE
@@ -947,6 +1087,7 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -958,54 +1099,52 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(15), IN p VARCHAR(40), IN n_u VARCHAR(15), IN n_p VARCHAR(40), IN n_mail VARCHAR(40), n_h VARCHAR(30))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50))
     COMMENT 'Mdify the especcification of an existing user.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE id INTEGER DEFAULT 0;
-	DECLARE pass VARCHAR(40);
+	DECLARE idu INTEGER DEFAULT NULL;
+	DECLARE pass VARCHAR(50);
 	DECLARE err INTEGER DEFAULT 0;
 
-	SELECT COUNT(*), IFNULL(IDUSER, 0), IFNULL(PASSWORD, 0) INTO num, id, pass
+end_proc:begin
+	IF (u IS NULL OR n_u IS NULL OR n_mail IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER, PASSWORD INTO num, idu, pass
 	FROM USERS
 	WHERE USERNAME = u;
 			
 	CASE num 
 	WHEN 1 THEN 
 		IF (pass = p) THEN 
-			begin 
-				DECLARE num INTEGER DEFAULT 0;
-
 				SELECT COUNT(*) INTO num
 				FROM USERS
-				WHERE USERNAME = n_u AND IDUSER <> id;
+				WHERE USERNAME = n_u AND IDUSER <> idu;
 						
 				CASE num 
 				WHEN 0 THEN 
-					begin
-						DECLARE num INTEGER DEFAULT 0;
 						SELECT COUNT(*) INTO num
 						FROM USERS
-						WHERE EMAIL = n_mail AND IDUSER <> id;
+						WHERE EMAIL = n_mail AND IDUSER <> idu;
 						CASE num
 						WHEN 0 THEN 
 							UPDATE USERS SET USERNAME=n_u, PASSWORD=n_p, EMAIL=n_mail, HINT=n_h
-								WHERE IDUSER = id;
+								WHERE IDUSER = idu;
 							SET err = 15;
 						WHEN 1 THEN
 							SET err = 7; 
 						ELSE
 							SET err = 4;
 						END CASE;
-					end;
 				WHEN 1 THEN
 					SET err = 6;
 				ELSE
 					SET err = 4;
 				END CASE;
-				
-			end;
 		ELSE 
 			SET err = 2;
 		END IF;
@@ -1014,10 +1153,10 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
-
+end;
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-				VALUES  (     NULL,   id,    NULL,  IF(err = 15, 0, err),  5, CURRENT_TIMESTAMP);
+				VALUES  (     NULL,   idu,    NULL,  IF(err = 15, 0, err),  5, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 15, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
@@ -1032,11 +1171,11 @@ SELECT * FROM USERS;
 end$$
 
 DROP PROCEDURE IF EXISTS `recoveryuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(15), IN p VARCHAR(40))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Generate a password to recovery user.'
 begin
 	DECLARE idu INTEGER DEFAULT NULL;
-        DECLARE e VARCHAR(40) DEFAULT NULL;
+        DECLARE e VARCHAR(50) DEFAULT NULL;
 
 	UPDATE USERS SET PASSWORD = p
 	WHERE USERNAME = u;
@@ -1053,16 +1192,24 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `removecommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(15), IN c VARCHAR(15), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'Remove an acction of a command.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh, idc INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh, idc INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
-	SELECT COUNT(*), IFNULL(USERS.IDUSER, 0) INTO num, idu
-	FROM PROGRAMACTIONS, USERS
-	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+end_proc:begin
+	IF (u IS NULL OR c IS NULL OR idpa IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER INTO  num, idu
+	FROM PROGRAMACTIONS 
+	WHERE IDPROGRAM = idpa AND IDUSER IN ( SELECT IDUSER 
+										FROM USERS 
+										WHERE USERNAME = u);
 	
 	CASE num 
 	WHEN 1 THEN
@@ -1092,12 +1239,10 @@ begin
 	ELSE
 		SET err = 4;
 	END CASE;
+end;
 	
 	SELECT IDHOUSE INTO idh
-	FROM HOUSES
-	JOIN ROOMS 		USING ( IDHOUSE )
-	JOIN SERVICES	USING ( IDROOM )
-	JOIN ACTIONS	USING ( IDSERVICE )
+	FROM houseRoomServiceActionVIEW
 	WHERE IDACTION = ida;
 	
 	INSERT INTO HISTORYACCESS
@@ -1111,16 +1256,24 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(15), IN idta INTEGER,IN idpa INTEGER)
-    COMMENT 'add an acction to a task.'
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
+    COMMENT 'Add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
-	DECLARE ida, idu, idh INTEGER DEFAULT 0;
+	DECLARE ida, idu, idh INTEGER DEFAULT NULL;
 	DECLARE err INTEGER DEFAULT 0;
 	
-	SELECT COUNT(*), IFNULL(IDACTION, 0), IFNULL(USERS.IDUSER, 0) INTO num, ida, idu
-	FROM PROGRAMACTIONS, USERS
-	WHERE IDPROGRAM = idpa AND PROGRAMACTIONS.IDUSER = USERS.IDUSER AND USERNAME = u;
+end_proc:begin
+	IF (u IS NULL OR idta IS NULL OR idpa IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDUSER INTO  num, idu
+	FROM PROGRAMACTIONS 
+	WHERE IDPROGRAM = idpa AND IDUSER IN ( SELECT IDUSER 
+										FROM USERS 
+										WHERE USERNAME = u);
 	
 	CASE num 
 	WHEN 1 THEN
@@ -1152,11 +1305,9 @@ begin
 	END CASE;
 	
 	SELECT IDHOUSE INTO idh
-	FROM HOUSES
-	JOIN ROOMS 		USING ( IDHOUSE )
-	JOIN SERVICES	USING ( IDROOM )
-	JOIN ACTIONS	USING ( IDSERVICE )
+	FROM houseRoomServiceActionVIEW
 	WHERE IDACTION = ida;
+end;
 	
 	INSERT INTO HISTORYACCESS
 						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
@@ -1283,14 +1434,14 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 --
 -- Estructura de tabla para la tabla `ACTIONMESSAGES`
 --
--- Creación: 12-04-2014 a las 14:42:07
+-- Creación: 15-04-2014 a las 19:48:45
 --
 
 DROP TABLE IF EXISTS `ACTIONMESSAGES`;
 CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
   `IDMESSAGE` int(11) NOT NULL AUTO_INCREMENT,
   `IDACTION` int(11) NOT NULL,
-  `RETURNCODE` varchar(20) NOT NULL,
+  `RETURNCODE` varchar(50) NOT NULL,
   `EXIT` tinyint(1) NOT NULL,
   `ENGLISH` varchar(50) DEFAULT NULL,
   `SPANISH` varchar(50) DEFAULT NULL,
@@ -1309,14 +1460,14 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
 --
 -- Estructura de tabla para la tabla `ACTIONS`
 --
--- Creación: 12-04-2014 a las 14:42:08
+-- Creación: 15-04-2014 a las 19:49:07
 --
 
 DROP TABLE IF EXISTS `ACTIONS`;
 CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `IDACTION` int(11) NOT NULL AUTO_INCREMENT,
   `IDSERVICE` int(11) DEFAULT NULL,
-  `ACTIONNAME` varchar(10) NOT NULL,
+  `ACTIONNAME` varchar(50) NOT NULL,
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   `FCODE` varchar(20) NOT NULL,
@@ -1335,17 +1486,17 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
 --
 -- Estructura de tabla para la tabla `COMMANDS`
 --
--- Creación: 14-04-2014 a las 15:15:40
+-- Creación: 15-04-2014 a las 19:49:30
 --
 
 DROP TABLE IF EXISTS `COMMANDS`;
 CREATE TABLE IF NOT EXISTS `COMMANDS` (
   `IDCOMMAND` int(11) NOT NULL AUTO_INCREMENT,
-  `COMMANDNAME` varchar(15) NOT NULL,
+  `COMMANDNAME` varchar(50) NOT NULL,
   `IDUSER` int(11) NOT NULL,
   PRIMARY KEY (`IDCOMMAND`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- RELACIONES PARA LA TABLA `COMMANDS`:
@@ -1353,6 +1504,27 @@ CREATE TABLE IF NOT EXISTS `COMMANDS` (
 --       `USERS` -> `IDUSER`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `commandVIEW`
+--
+DROP VIEW IF EXISTS `commandVIEW`;
+CREATE TABLE IF NOT EXISTS `commandVIEW` (
+`IDCOMMAND` int(11)
+,`COMMANDNAME` varchar(50)
+,`POS` int(11)
+,`IDPROGRAM` int(11)
+,`IDACTION` int(11)
+,`IDHOUSE` int(11)
+,`HOUSENAME` varchar(50)
+,`IDROOM` int(11)
+,`ROOMNAME` varchar(50)
+,`IDSERVICE` int(11)
+,`SERVICENAME` varchar(50)
+,`DATA` varchar(50)
+,`STARTTIME` timestamp
+);
 -- --------------------------------------------------------
 
 --
@@ -1400,8 +1572,8 @@ DELIMITER ;
 --
 DROP VIEW IF EXISTS `countHitsVIEW`;
 CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
-`USERNAME` varchar(15)
-,`FUNCTION` varchar(20)
+`USERNAME` varchar(50)
+,`FUNCTION` varchar(50)
 ,`TOTAL` bigint(21)
 ,`SUCCESS` decimal(23,0)
 ,`ERROR` decimal(23,0)
@@ -1413,23 +1585,24 @@ CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
--- Creación: 14-04-2014 a las 11:40:55
+-- Creación: 15-04-2014 a las 23:49:58
 --
 
 DROP TABLE IF EXISTS `DEVICES`;
 CREATE TABLE IF NOT EXISTS `DEVICES` (
   `IDDEVICE` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) DEFAULT NULL,
-  `IPADDRESS` varchar(200) DEFAULT NULL,
-  `SERIAL` varchar(20) DEFAULT NULL,
-  `NAME` varchar(20) DEFAULT NULL,
+  `IPADDRESS` varchar(500) DEFAULT NULL,
+  `SERIAL` varchar(50) DEFAULT NULL,
+  `DEVICENAME` varchar(50) DEFAULT NULL,
   `ENGLISH` varchar(500) DEFAULT NULL,
   `SPANISH` varchar(500) DEFAULT NULL,
   `DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
-  UNIQUE KEY `SERIAL` (`SERIAL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+  UNIQUE KEY `SERIAL` (`SERIAL`),
+  KEY `IDUSER` (`IDUSER`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 --
 -- RELACIONES PARA LA TABLA `DEVICES`:
@@ -1451,23 +1624,23 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(50) NOT NULL,
   `SPANISH` varchar(50) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=63 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `FUNCTIONS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 19:50:51
 --
 
 DROP TABLE IF EXISTS `FUNCTIONS`;
 CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCT` int(11) NOT NULL AUTO_INCREMENT,
-  `FUNCTION` varchar(20) NOT NULL,
+  `FUNCTION` varchar(50) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
 
 -- --------------------------------------------------------
 
@@ -1488,7 +1661,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3028 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3219 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -1507,7 +1680,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
 --
 -- Estructura de tabla para la tabla `HISTORYACTION`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 19:51:13
 --
 
 DROP TABLE IF EXISTS `HISTORYACTION`;
@@ -1516,7 +1689,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `IDACTION` int(11) NOT NULL,
   `IDPROGRAM` int(11) DEFAULT NULL,
   `IDUSER` int(11) DEFAULT NULL,
-  `RETURNCODE` varchar(20) NOT NULL,
+  `RETURNCODE` varchar(50) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=225 ;
@@ -1532,32 +1705,47 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `houseRoomServiceActionVIEW`
+--
+DROP VIEW IF EXISTS `houseRoomServiceActionVIEW`;
+CREATE TABLE IF NOT EXISTS `houseRoomServiceActionVIEW` (
+`IDHOUSE` int(11)
+,`HOUSENAME` varchar(50)
+,`IDROOM` int(11)
+,`ROOMNAME` varchar(50)
+,`IDSERVICE` int(11)
+,`SERVICENAME` varchar(50)
+,`IDACTION` int(11)
+,`ACTIONNAME` varchar(50)
+);
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `HOUSES`
 --
--- Creación: 15-04-2014 a las 13:14:39
+-- Creación: 16-04-2014 a las 00:24:52
 --
 
 DROP TABLE IF EXISTS `HOUSES`;
 CREATE TABLE IF NOT EXISTS `HOUSES` (
   `IDHOUSE` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
-  `HOUSENAME` varchar(30) NOT NULL,
+  `HOUSENAME` varchar(50) NOT NULL,
   `IDIMAGE` int(11) DEFAULT NULL,
   `CITY` varchar(50) DEFAULT NULL,
   `COUNTRY` varchar(50) DEFAULT NULL,
-  `GPS` varchar(10) DEFAULT NULL,
+  `GPS` varchar(50) DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
-  UNIQUE KEY `HOUSENAME` (`HOUSENAME`),
-  KEY `IDIMAGE` (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+  UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- RELACIONES PARA LA TABLA `HOUSES`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDIMAGE`
 --       `IMAGES` -> `IDIMAGE`
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
 --
 
 -- --------------------------------------------------------
@@ -1565,30 +1753,30 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
 --
 -- Estructura de tabla para la tabla `IMAGES`
 --
--- Creación: 13-04-2014 a las 12:37:44
+-- Creación: 15-04-2014 a las 19:52:15
 --
 
 DROP TABLE IF EXISTS `IMAGES`;
 CREATE TABLE IF NOT EXISTS `IMAGES` (
   `IDIMAGE` int(11) NOT NULL AUTO_INCREMENT,
-  `IMAGE` mediumblob NOT NULL,
-  `URL` varchar(200) DEFAULT NULL,
-  `TYPE` varchar(30) NOT NULL,
+  `IMAGE` mediumblob,
+  `URL` varchar(500) DEFAULT NULL,
+  `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 19:52:36
 --
 
 DROP TABLE IF EXISTS `IRCODES`;
 CREATE TABLE IF NOT EXISTS `IRCODES` (
   `IDCODE` int(11) NOT NULL AUTO_INCREMENT,
-  `TYPE` varchar(20) NOT NULL,
+  `TYPE` varchar(50) NOT NULL,
   `POWER` int(11) DEFAULT NULL,
   `SETUP` int(11) DEFAULT NULL,
   `MUTE` int(11) DEFAULT NULL,
@@ -1619,19 +1807,20 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
 DROP VIEW IF EXISTS `loginVIEW`;
 CREATE TABLE IF NOT EXISTS `loginVIEW` (
 `IDUSER` int(11)
-,`USERNAME` varchar(15)
+,`USERNAME` varchar(50)
+,`PASSWORD` varchar(50)
 ,`IDHOUSE` int(11)
-,`HOUSENAME` varchar(30)
+,`HOUSENAME` varchar(50)
 ,`IDROOM` int(11)
-,`ROOMNAME` varchar(10)
+,`ROOMNAME` varchar(50)
 ,`IDSERVICE` int(11)
-,`SERVICENAME` varchar(20)
+,`SERVICENAME` varchar(50)
 ,`IDACTION` int(11)
-,`ACTIONNAME` varchar(10)
+,`ACTIONNAME` varchar(50)
 ,`ACCESSNUMBER` int(11)
 ,`PERMISSIONNUMBER` int(11)
 ,`IDDEVICE` int(11)
-,`IPADDRESS` varchar(200)
+,`IPADDRESS` varchar(500)
 ,`CITY` varchar(50)
 ,`COUNTRY` varchar(50)
 );
@@ -1666,7 +1855,7 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
 --
 -- Estructura de tabla para la tabla `PROGRAMACTIONS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 19:53:10
 --
 
 DROP TABLE IF EXISTS `PROGRAMACTIONS`;
@@ -1674,11 +1863,11 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT,
   `IDUSER` int(11) NOT NULL,
   `IDACTION` int(11) NOT NULL,
-  `DATA` varchar(30) DEFAULT NULL,
+  `DATA` varchar(50) DEFAULT NULL,
   `STARTTIME` timestamp NULL DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
@@ -1693,7 +1882,7 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
 --
 -- Estructura de tabla para la tabla `ROOMS`
 --
--- Creación: 12-04-2014 a las 14:42:08
+-- Creación: 15-04-2014 a las 19:53:32
 --
 
 DROP TABLE IF EXISTS `ROOMS`;
@@ -1701,12 +1890,12 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   `IDROOM` int(11) NOT NULL AUTO_INCREMENT,
   `IDHOUSE` int(11) DEFAULT NULL,
   `IDUSER` int(11) DEFAULT NULL,
-  `ROOMNAME` varchar(10) NOT NULL,
+  `ROOMNAME` varchar(50) NOT NULL,
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
@@ -1724,22 +1913,24 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
 DROP VIEW IF EXISTS `scheduleVIEW`;
 CREATE TABLE IF NOT EXISTS `scheduleVIEW` (
 `IDTASK` int(11)
-,`TASKNAME` varchar(15)
+,`TASKNAME` varchar(50)
 ,`IDPROGRAM` int(11)
 ,`IDACTION` int(11)
 ,`IDHOUSE` int(11)
-,`HOUSENAME` varchar(30)
+,`HOUSENAME` varchar(50)
 ,`IDROOM` int(11)
-,`ROOMNAME` varchar(10)
+,`ROOMNAME` varchar(50)
 ,`IDSERVICE` int(11)
-,`SERVICENAME` varchar(20)
+,`SERVICENAME` varchar(50)
+,`DATA` varchar(50)
+,`STARTTIME` timestamp
 );
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
--- Creación: 12-04-2014 a las 14:42:09
+-- Creación: 15-04-2014 a las 19:53:47
 --
 
 DROP TABLE IF EXISTS `SERVICES`;
@@ -1747,7 +1938,7 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDSERVICE` int(11) NOT NULL AUTO_INCREMENT,
   `IDROOM` int(11) DEFAULT NULL,
   `IDDEVICE` int(11) DEFAULT NULL,
-  `SERVICENAME` varchar(20) NOT NULL,
+  `SERVICENAME` varchar(50) NOT NULL,
   `SERVICEINTERFACE` int(11) NOT NULL,
   `FCODE` int(11) DEFAULT NULL,
   `ENGLISH` varchar(50) DEFAULT NULL,
@@ -1770,14 +1961,14 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
 --
 -- Estructura de tabla para la tabla `SOFTWARE`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 15-04-2014 a las 19:54:17
 --
 
 DROP TABLE IF EXISTS `SOFTWARE`;
 CREATE TABLE IF NOT EXISTS `SOFTWARE` (
   `DEVICE` int(11) NOT NULL,
   `VERSION` int(11) NOT NULL,
-  `PACKAGE` varchar(1000) NOT NULL,
+  `URL` varchar(500) NOT NULL,
   UNIQUE KEY `DEVICE` (`DEVICE`,`VERSION`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1824,20 +2015,20 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
 --
 -- Estructura de tabla para la tabla `TASKS`
 --
--- Creación: 12-04-2014 a las 14:42:09
+-- Creación: 15-04-2014 a las 19:55:00
 --
 
 DROP TABLE IF EXISTS `TASKS`;
 CREATE TABLE IF NOT EXISTS `TASKS` (
   `IDTASK` int(11) NOT NULL AUTO_INCREMENT,
-  `TASKNAME` varchar(15) NOT NULL,
+  `TASKNAME` varchar(50) NOT NULL,
   `IDUSER` int(11) DEFAULT NULL,
   `DESCRIPTION` varchar(50) DEFAULT NULL,
   ` FREQUENCY` timestamp NULL DEFAULT NULL,
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDTASK`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- RELACIONES PARA LA TABLA `TASKS`:
@@ -1850,21 +2041,30 @@ CREATE TABLE IF NOT EXISTS `TASKS` (
 --
 -- Estructura de tabla para la tabla `USERS`
 --
--- Creación: 15-04-2014 a las 11:02:32
+-- Creación: 15-04-2014 a las 19:55:29
 --
 
 DROP TABLE IF EXISTS `USERS`;
 CREATE TABLE IF NOT EXISTS `USERS` (
   `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
-  `USERNAME` varchar(15) NOT NULL,
-  `PASSWORD` varchar(40) NOT NULL,
+  `USERNAME` varchar(50) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
   `EMAIL` varchar(50) NOT NULL,
-  `HINT` varchar(30) DEFAULT NULL,
+  `HINT` varchar(50) DEFAULT NULL,
   `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=100 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=104 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `commandVIEW`
+--
+DROP TABLE IF EXISTS `commandVIEW`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`COMMAND_PROGRAM` join `COMMANDS`) on(((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`COMMAND_PROGRAM`.`IDCOMMAND` = `COMMANDS`.`IDCOMMAND`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `COMMANDS`.`COMMANDNAME` desc,`COMMAND_PROGRAM`.`POS`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -1878,11 +2078,20 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `houseRoomServiceActionVIEW`
+--
+DROP TABLE IF EXISTS `houseRoomServiceActionVIEW`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `loginVIEW`
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from (((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from (((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 
@@ -1891,7 +2100,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `scheduleVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 --
 -- Restricciones para tablas volcadas
@@ -1930,17 +2139,17 @@ ALTER TABLE `COMMAND_PROGRAM`
   ADD CONSTRAINT `COMMAND_PROGRAM_ibfk_3` FOREIGN KEY (`IDCOMMAND`) REFERENCES `COMMANDS` (`IDCOMMAND`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `DEVICES`
+--
+ALTER TABLE `DEVICES`
+  ADD CONSTRAINT `DEVICES_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `HISTORYACCESS`
 --
 ALTER TABLE `HISTORYACCESS`
   ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`),
   ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
-
---
--- Filtros para la tabla `HOUSES`
---
-ALTER TABLE `HOUSES`
-  ADD CONSTRAINT `HOUSES_ibfk_1` FOREIGN KEY (`IDIMAGE`) REFERENCES `IMAGES` (`IDIMAGE`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Filtros para la tabla `PERMISSIONS`

@@ -55,6 +55,7 @@
   data:        <input size="40" type="text" name="data" />
   start:       <input size="40" type="text" name="start" />
   idaction:    <input size="40" type="text" name="idaction" />
+  iddevice:    <input size="40" type="text" name="iddevice" />
   taskname:    <input size="40" type="text" name="taskname" />
   commandname: <input size="40" type="text" name="commandname" />
   description: <input size="40" type="text" name="description" />

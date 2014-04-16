@@ -170,11 +170,11 @@ switch ($_POST['command']) {
 		// ::> returns a message | returns the result of the operation
 		break;
 	//
-	case "modifyroom":
+	/*case "modifyroom":
 		modifyroom($_POST['username'],$_POST['password'],$_POST['roomname']);
 		//**modify setings of an existing the room
 		// ::> returns a message | returns the result of the operation
-		break;
+		break;*/
 //-------------------------------------------------------------------------------------------------
 	//
 	case "createaccesshouse":
@@ -208,7 +208,7 @@ switch ($_POST['command']) {
 		// ::> returns a message | returns JSON
 	break;
 	case "subir":
-		subir();
+		subir2();
 		//**download the STADISTICS of username by using and more
 		// ::> returns a message | returns JSON
 	break;
@@ -252,7 +252,7 @@ switch ($_POST['command']) {
 	break;
 		
     case "deletedevice":
-		deletedevice($_POST['arg1'],$_POST['arg2']); 
+		deletedevice($_POST['username'],$_POST['password'],$_POST['iddevice']); 
 	break;
 //-------------------------------------------------------------------------------------------------
 		/*

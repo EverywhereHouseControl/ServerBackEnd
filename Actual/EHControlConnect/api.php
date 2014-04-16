@@ -351,7 +351,7 @@ function createJSON2($user) {
 				$JSON["houses"][$h]["name"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON["houses"][$h]["access"] = $SQLjson['result'][$i]['ACCESSNUMBER'];
 				$JSON["houses"][$h]["weather"] = null;
-				
+				/*
 				//if the house have set the city/country then saw the clima
 				if (!empty($SQLjson['result'][$i]['CITY'])) {
 					if (!empty($SQLjson['result'][$i]['COUNTRY'])){
@@ -360,7 +360,7 @@ function createJSON2($user) {
 					else{
 						$JSON["houses"][$h]["weather"] =getweather2($SQLjson['result'][$i]['CITY'], 'en');
 					}
-				}
+				}*/
 				
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"] = null;
@@ -766,7 +766,7 @@ function createhouse($user, $house, $city, $country){
 //--------------------------------------------------------------------------------------
 function modifyhouse($user, $house, $n_house, $image, $city, $country){
 	/* modify information of house by an administrator*/
-	$message = query("CALL modifyhouse('%s', '%s', '%s', %s, '%s', '%s')", $user, $house, $n_house, $image, $city, $country);
+	$message = query("CALL modifyhouse('%s', '%s', '%s', %s, '%s', '%s')", $user, $house, $n_house,(int) $image, $city, $country);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -808,9 +808,9 @@ function createdevice($user, $ip, $serial, $device){
 }
 
 //--------------------------------------------------------------------------------------
-function deletedevice($user, $ip, $serial, $device){
+function deletedevice($user, $pass, $iddevice){
 	/* create a new device*/
-	$message = query("CALL deletedevice('%s', '%s', '%s', '%s')", $user, $ip, $serial, $device);
+	$message = query("CALL deletedevice('%s', '%s', %s)", $user, $pass, (int) $iddevice);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -819,7 +819,7 @@ function deletedevice($user, $ip, $serial, $device){
 //--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/
-	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, $n);
+	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, (int) $n);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -1046,17 +1046,19 @@ function image($id){
 	
 		//ruta va a obtener un valor parecido a "imagenes/nombre_imagen.jpg" por ejemplo
 		$imagen = $resultado['result'][0]['IMAGE'];
-		$tipo = $resultado['result'][0]['TYPE'];
+		$url    = $resultado['result'][0]['URL'];
+		$tipo   = $resultado['result'][0]['TYPE'];
 		 
 		if (count($resultado['result']) <> 0) {
 			//ahora colocamos la cabeceras correcta segun el tipo de imagen
 			header("Content-type: $tipo");//text/plain");
-			echo $imagen;
+			//echo $imagen;
+			echo '<img src='.$url.' width="100" heigth="100"/>';
 		}
 		else {
 			echo 'this image does not exist.';
 		}
-		//echo '<img src='.$resultado['result'][0]['URL'].' width="100" heigth="100"/>';
+		
 	}
 }
 
@@ -1122,7 +1124,7 @@ function subir() {
 			$data = fread ( $fp, filesize ( $imagen_temporal ) );
 			fclose ( $fp );
 			// escapar los caracteres
-			// $data = mysql_escape_string($data);
+			//$data = mysql_escape_string($data);
 			
 			$resultado = query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) VALUES (NULL, '%s', '', '%s')", $data, $tipo );
 			if ($resultado) {
@@ -1134,6 +1136,23 @@ function subir() {
 			print "archivo no permitido, es tipo de archivo prohibido o excede el tamano de $limite_kb Kilobytes";
 		}
 	}
+}
+//--------------------------------------------------------------------------------------
+function subir2() {
+	$image 	= $_FILES ['imagen'] ['name'];
+	$ruta 	= $_FILES ['imagen'] ['tmp_name'];
+	$tipo 	= $_FILES ['imagen'] ['type'];
+	$destino = 'images/'.$image;
+	if (copy($ruta,$destino)) {
+		print "Archivo subido.";
+	} else {
+		print "Error al subir el archivo";
+	}
+	$resultado = query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) 
+									VALUES   (NULL, NULL, '%s', '%s')", $destino, $tipo);
+
+	echo "<img src=\"$destino\">";
+	print "$image $ruta $tipo $destino el archivo ha sido copiado exitosamente";
 }
 //--------------------------------------------------------------------------------------
 function welcome_mail($email, $user){
