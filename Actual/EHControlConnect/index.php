@@ -128,11 +128,11 @@ switch ($_POST['command']) {
 //-------------------------------------------------------------------------------------------------
 	//21
 	case "addtaskprogram":
-		addtaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
+		addtaskprogram( $_POST['username'],$_POST['taskname'],$_POST['idaction']);
 		break;
 	//22
 	case "removetaskprogram":
-		removetaskprogram( $_POST['username'],$_POST['idtask'],$_POST['idaction']);
+		removetaskprogram( $_POST['username'],$_POST['taskname'],$_POST['idaction']);
 		break;
 //-------------------------------------------------------------------------------------------------
 	//
@@ -213,18 +213,14 @@ switch ($_POST['command']) {
 		// ::> returns a message | returns JSON
 	break;
 //-------------------------------------------------------------------------------------------------
-		/*
-    case "downloadhousetask":
-		downloadhousetask($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "downloadusertask":
-		downloadusertask($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "logout":
-		logout($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+		
+    case "linkserviceroom":
+		linkserviceroom($_POST['idservice'],$_POST['idroom']); 
+	break;
+		
+    case "unlinkserviceroom":
+		unlinkserviceroom($_POST['idservice']); 
+	break;
 //-------------------------------------------------------------------------------------------------
 		/*
     case "modifyuserconfiguration":
