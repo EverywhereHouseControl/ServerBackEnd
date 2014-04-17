@@ -1351,16 +1351,13 @@ function confirm_mail($email, $user, $codeconfirm){
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
 	
 	//header remiter
-	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	$mail_headers.="From: EHC<no-response@ehc.com>";
 	
-	$mail_message ='<p>&nbsp;</p>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
-		<p>&nbsp;</p>
+	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Confrim EHC account.</span></span></h1>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
-		<p><span style="font-family: verdana,geneva; font-size: medium;"> `'.$user.'`, confirm your EHC account clicking on below.</span></p>
+		<p><span style="font-family: verdana,geneva; font-size: medium;"> '.$user.', confirm your EHC account clicking on below or copying that on your browser.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> http://ehcontrol.net/EHControlConnect/confirm.php?code='.$codeconfirm.'</span></div>';
 	
 	mail($email, "CONFIRM EHC", $mail_message, $mail_headers);
@@ -1372,14 +1369,11 @@ function welcome_mail($email, $user){
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
 
 	//header remiter
-	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	$mail_headers.="From: EHC<no-response@ehc.com>";
 
-	$mail_message ='<p>&nbsp;</p>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
-		<p>&nbsp;</p>
+	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Welcome to EHC.</span></span></h1>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;">Congratulations! '.$user.' from now, you will experience the comfort about the mobile control of EHC.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> Hope you like.</span></div>';
@@ -1393,14 +1387,11 @@ function goodbye_mail($email,$user){
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
 	
 	//header remiter
-	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	$mail_headers.="From: EHC<no-response@ehc.com>";
 	
-	$mail_message ='<p>&nbsp;</p>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
-		<p>&nbsp;</p>
+	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Account deleted.</span></span></h1>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;">Good Bye! '.$user.', see you soon.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> EHC.</span></div>';
@@ -1414,14 +1405,11 @@ function recovery_mail($email, $user, $pass){
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
 	
 	//header remiter
-	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+	$mail_headers.="From: EHC<no-response@ehc.com>";
 	
-	$mail_message = '<p>&nbsp;</p>
-			<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
-			<p>&nbsp;</p>
+	$mail_message = '
 			<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Email</span> <span class="hps">password</span> <span class="hps">recovery</span>.</span></h1>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
+			<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 			<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 			<p><span style="font-family: verdana,geneva; font-size: medium;">User:  '.$user.'</span></p>
 			<p><span style="font-family: verdana,geneva; font-size: medium;">Pass:  '.$pass.'</span></p>

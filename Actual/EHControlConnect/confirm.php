@@ -8,6 +8,7 @@ $code = $_GET ['code'];
 <body>
 <?php
 require ("lib.php");
+require ("api.php");
 $sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $code );
 
 if (count ( $sqlregistration ['result'] ) == 1) {
@@ -19,6 +20,7 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 										$sqlregistration ['result'][0]['EMAIL'],
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
+	welcome_mail($sqlregistration ['result'][0]['EMAIL'], $sqlregistration ['result'][0]['USERNAME']);
 	echo "You have successfully confirmed your account.";
 } else {
 	echo "The verification code is not valid.";

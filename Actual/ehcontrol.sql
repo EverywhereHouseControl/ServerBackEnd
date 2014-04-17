@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-04-2014 a las 21:34:28
+-- Tiempo de generación: 18-04-2014 a las 00:45:55
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -1905,14 +1905,14 @@ CREATE TABLE IF NOT EXISTS `deviceVIEW` (
 --
 -- Estructura de tabla para la tabla `ERRORS`
 --
--- Creación: 12-04-2014 a las 14:42:05
+-- Creación: 17-04-2014 a las 21:28:34
 --
 
 DROP TABLE IF EXISTS `ERRORS`;
 CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ERRORCODE` int(11) NOT NULL AUTO_INCREMENT,
-  `ENGLISH` varchar(50) NOT NULL,
-  `SPANISH` varchar(50) NOT NULL,
+  `ENGLISH` varchar(100) NOT NULL,
+  `SPANISH` varchar(100) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
 
@@ -1934,7 +1934,7 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (10, 'Requires permission.', 'Necesita permisos.'),
 (11, 'Requires access.', 'Necesita acceso.'),
 (12, 'Email password recovery sent.', 'Correo de recuperacion de contraseña enviado.'),
-(13, 'Create new user.', 'Nuevo usuario creado.'),
+(13, 'New user created, confirms the user using the link that will get in your inbox. Look on spam.', 'Nuevo usuario creado, confirma el usuario con el enlace que recibirás al correo. Mira en spam.'),
 (14, 'Deleted user.', 'Usuario eliminado.'),
 (15, 'User modified.', 'Usuario modificado.'),
 (16, 'Action sent.', 'Acción enviada.'),
@@ -2064,7 +2064,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3643 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3708 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -5604,7 +5604,72 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3639, 29, NULL, 0, 1, '2014-04-17 19:26:13'),
 (3640, 29, NULL, 0, 1, '2014-04-17 19:26:35'),
 (3641, NULL, NULL, 0, 3, '2014-04-17 19:33:06'),
-(3642, 29, NULL, 0, 1, '2014-04-17 19:34:01');
+(3642, 29, NULL, 0, 1, '2014-04-17 19:34:01'),
+(3643, 29, NULL, 0, 1, '2014-04-17 19:35:32'),
+(3644, 29, NULL, 0, 1, '2014-04-17 19:43:16'),
+(3645, 29, NULL, 0, 1, '2014-04-17 19:45:02'),
+(3646, 29, NULL, 0, 1, '2014-04-17 19:47:32'),
+(3647, 29, NULL, 0, 1, '2014-04-17 19:49:10'),
+(3648, 29, NULL, 0, 1, '2014-04-17 19:55:23'),
+(3649, 29, NULL, 0, 1, '2014-04-17 19:58:47'),
+(3650, 29, NULL, 0, 1, '2014-04-17 20:00:31'),
+(3651, 29, NULL, 0, 1, '2014-04-17 20:00:49'),
+(3652, 29, NULL, 0, 1, '2014-04-17 20:03:50'),
+(3653, 29, NULL, 0, 1, '2014-04-17 20:04:41'),
+(3654, 29, NULL, 0, 1, '2014-04-17 20:05:05'),
+(3655, 29, NULL, 0, 1, '2014-04-17 20:08:10'),
+(3656, 29, NULL, 0, 1, '2014-04-17 20:09:28'),
+(3657, 29, NULL, 0, 1, '2014-04-17 20:09:37'),
+(3658, 29, NULL, 0, 1, '2014-04-17 20:15:24'),
+(3659, 29, NULL, 0, 1, '2014-04-17 20:16:26'),
+(3660, 29, NULL, 0, 1, '2014-04-17 20:17:27'),
+(3661, 29, NULL, 0, 1, '2014-04-17 20:19:42'),
+(3662, 29, NULL, 0, 1, '2014-04-17 20:20:15'),
+(3663, 29, NULL, 0, 1, '2014-04-17 20:22:53'),
+(3664, 29, NULL, 0, 1, '2014-04-17 20:25:17'),
+(3665, 29, NULL, 0, 1, '2014-04-17 20:27:26'),
+(3666, 29, NULL, 0, 1, '2014-04-17 20:29:09'),
+(3667, 29, NULL, 0, 1, '2014-04-17 20:31:15'),
+(3668, 29, NULL, 0, 1, '2014-04-17 20:38:57'),
+(3669, 29, NULL, 0, 1, '2014-04-17 20:40:38'),
+(3670, 29, NULL, 0, 1, '2014-04-17 20:42:08'),
+(3671, 0, NULL, 3, 1, '2014-04-17 20:58:42'),
+(3672, NULL, NULL, 0, 3, '2014-04-17 20:58:51'),
+(3673, NULL, NULL, 6, 3, '2014-04-17 20:58:55'),
+(3674, NULL, NULL, 0, 3, '2014-04-17 21:00:23'),
+(3675, 29, NULL, 0, 1, '2014-04-17 21:02:30'),
+(3676, NULL, NULL, 0, 3, '2014-04-17 21:03:14'),
+(3677, 29, NULL, 0, 1, '2014-04-17 21:07:01'),
+(3678, 29, NULL, 0, 1, '2014-04-17 21:07:21'),
+(3679, NULL, NULL, 0, 3, '2014-04-17 21:10:21'),
+(3680, NULL, NULL, 0, 3, '2014-04-17 21:11:20'),
+(3681, 29, NULL, 0, 1, '2014-04-17 21:11:46'),
+(3682, 29, NULL, 0, 1, '2014-04-17 21:12:20'),
+(3683, NULL, NULL, 0, 3, '2014-04-17 21:13:21'),
+(3684, NULL, NULL, 0, 3, '2014-04-17 21:14:53'),
+(3685, 29, NULL, 0, 1, '2014-04-17 21:17:59'),
+(3686, 29, NULL, 0, 1, '2014-04-17 21:20:40'),
+(3687, NULL, NULL, 0, 3, '2014-04-17 21:27:12'),
+(3688, 29, NULL, 0, 1, '2014-04-17 21:31:20'),
+(3689, NULL, NULL, 0, 3, '2014-04-17 21:33:11'),
+(3690, NULL, NULL, 6, 3, '2014-04-17 21:34:39'),
+(3691, NULL, NULL, 0, 3, '2014-04-17 21:39:37'),
+(3692, NULL, NULL, 0, 3, '2014-04-17 21:42:00'),
+(3693, NULL, NULL, 0, 3, '2014-04-17 21:44:14'),
+(3694, NULL, NULL, 0, 3, '2014-04-17 21:48:50'),
+(3695, 29, NULL, 0, 1, '2014-04-17 21:53:33'),
+(3696, NULL, NULL, 6, 3, '2014-04-17 21:55:41'),
+(3697, NULL, NULL, 0, 3, '2014-04-17 21:56:11'),
+(3698, NULL, NULL, 0, 3, '2014-04-17 21:59:47'),
+(3699, NULL, NULL, 0, 3, '2014-04-17 22:03:22'),
+(3700, NULL, NULL, 0, 3, '2014-04-17 22:06:26'),
+(3701, NULL, NULL, 0, 3, '2014-04-17 22:08:45'),
+(3702, 118, NULL, 0, 2, '2014-04-17 22:10:31'),
+(3703, 118, NULL, 0, 4, '2014-04-17 22:11:59'),
+(3704, NULL, NULL, 0, 3, '2014-04-17 22:12:43'),
+(3705, 0, NULL, 3, 1, '2014-04-17 22:13:23'),
+(3706, 0, NULL, 3, 1, '2014-04-17 22:13:26'),
+(3707, NULL, NULL, 3, 4, '2014-04-17 22:14:43');
 
 -- --------------------------------------------------------
 
@@ -5928,7 +5993,7 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
 
 --
 -- Volcado de datos para la tabla `IMAGES`
@@ -5950,14 +6015,29 @@ INSERT INTO `IMAGES` (`IDIMAGE`, `IMAGE`, `URL`, `TYPE`) VALUES
 (50, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
 (51, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
 (52, NULL, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(53, NULL, 'images/IMG-20140415-WA0001.jpg', 'image/jpeg');
+(53, NULL, 'images/IMG-20140415-WA0001.jpg', 'image/jpeg'),
+(54, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
+(55, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(56, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
+(57, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
+(58, NULL, 'images/5138761528977023028.jpg', 'image/jpeg'),
+(59, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(60, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
+(61, NULL, 'images/5138761528977023028.jpg', 'image/jpeg'),
+(62, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(63, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(64, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(65, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(66, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(67, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(68, NULL, 'images/3702102233458977864.jpg', 'image/jpeg');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
 --
--- Creación: 15-04-2014 a las 19:52:36
+-- Creación: 17-04-2014 a las 22:38:52
 --
 
 DROP TABLE IF EXISTS `IRCODES`;
@@ -5968,21 +6048,29 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
   `SETUP` int(11) DEFAULT NULL,
   `MUTE` int(11) DEFAULT NULL,
   `FUNCTION` int(11) DEFAULT NULL,
-  `UNO` int(11) DEFAULT NULL,
-  `DOS` int(11) DEFAULT NULL,
-  `TRES` int(11) DEFAULT NULL,
-  `CUATRO` int(11) DEFAULT NULL,
-  `CINCO` int(11) DEFAULT NULL,
-  `SEIS` int(11) DEFAULT NULL,
-  `SIETE` int(11) DEFAULT NULL,
-  `OCHO` int(11) DEFAULT NULL,
-  `NUEVE` int(11) DEFAULT NULL,
-  `CERO` int(11) DEFAULT NULL,
+  `ONE` int(11) DEFAULT NULL,
+  `TWO` int(11) DEFAULT NULL,
+  `THREE` int(11) DEFAULT NULL,
+  `FOUR` int(11) DEFAULT NULL,
+  `FIVE` int(11) DEFAULT NULL,
+  `SIX` int(11) DEFAULT NULL,
+  `SEVEN` int(11) DEFAULT NULL,
+  `EIGHT` int(11) DEFAULT NULL,
+  `NINE` int(11) DEFAULT NULL,
+  `ZERO` int(11) DEFAULT NULL,
   `FAV` int(11) DEFAULT NULL,
   `UP` int(11) DEFAULT NULL,
+  `DOWN` int(11) DEFAULT NULL,
   `LEFT` int(11) DEFAULT NULL,
-  `PLAY` int(11) DEFAULT NULL,
   `RIGHT` int(11) DEFAULT NULL,
+  `OK` int(11) DEFAULT NULL,
+  `PLAY` int(11) DEFAULT NULL,
+  `PAUSE` int(11) DEFAULT NULL,
+  `STOP` int(11) DEFAULT NULL,
+  `FF` int(11) DEFAULT NULL,
+  `FW` int(11) DEFAULT NULL,
+  `VOLUMEUP` int(11) DEFAULT NULL,
+  `VOLUMEDOWN` int(11) DEFAULT NULL,
   PRIMARY KEY (`IDCODE`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
@@ -5990,8 +6078,8 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
 -- Volcado de datos para la tabla `IRCODES`
 --
 
-INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `UNO`, `DOS`, `TRES`, `CUATRO`, `CINCO`, `SEIS`, `SIETE`, `OCHO`, `NUEVE`, `CERO`, `FAV`, `UP`, `LEFT`, `PLAY`, `RIGHT`) VALUES
-(1, 'TV NPG', 16722135, 16771605, 16745085, NULL, 16748655, 16758855, 16775175, 16756815, 16750695, 16767015, 16746615, 16754775, 16771095, 16730295, 16732845, 16769055, 16718055, 16720605, 16773135);
+INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `ONE`, `TWO`, `THREE`, `FOUR`, `FIVE`, `SIX`, `SEVEN`, `EIGHT`, `NINE`, `ZERO`, `FAV`, `UP`, `DOWN`, `LEFT`, `RIGHT`, `OK`, `PLAY`, `PAUSE`, `STOP`, `FF`, `FW`, `VOLUMEUP`, `VOLUMEDOWN`) VALUES
+(1, 'TV NPG', 16722135, 16771605, 16745085, NULL, 16748655, 16758855, 16775175, 16756815, 16750695, 16767015, 16746615, 16754775, 16771095, 16730295, 16732845, 16769055, NULL, 16718055, 16773135, NULL, 16720605, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -6129,15 +6217,7 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Volcado de datos para la tabla `REGISTRATIONS`
---
-
-INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, `CODECONFIRM`) VALUES
-(1, 'XX', '', 'f', NULL, '2014-04-17 18:15:21', ''),
-(2, 'Xxx', '', 'fd', '', '2014-04-17 18:29:52', '');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 
@@ -6493,7 +6573,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=106 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=119 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -6515,8 +6595,9 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
 (80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05'),
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', '2014-04-09 13:33:28'),
-(97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'alejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
-(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', '2014-04-15 23:58:11');
+(97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'lejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
+(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', '2014-04-15 23:58:11'),
+(112, 'a', '', 'alejandroladrondeguevara@gmail.com', '', '2014-04-17 21:42:00');
 
 -- --------------------------------------------------------
 
@@ -6534,7 +6615,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `countHitsVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`USERS` left join `HISTORYACCESS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
 
 -- --------------------------------------------------------
 
