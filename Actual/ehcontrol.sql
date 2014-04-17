@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-04-2014 a las 17:39:28
+-- Tiempo de generación: 17-04-2014 a las 21:34:28
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -600,7 +600,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
     COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
@@ -609,37 +609,44 @@ begin
 	DECLARE err INTEGER DEFAULT 0;
 
 end_proc:begin
-	IF (u IS NULL OR p IS NULL OR mail IS NULL OR h IS NULL ) THEN 
+	IF (u IS NULL OR p IS NULL OR mail IS NULL OR h IS NULL OR c IS NULL ) THEN 
 		SET err = 61;
 		LEAVE end_proc;
 	END IF;
 
-        SELECT COUNT(*), IDUSER INTO num, idu
-	FROM USERS
-	WHERE USERNAME = u;
+        SELECT COUNT(*) INTO num
+        FROM
+        (
+                SELECT IDUSER
+                FROM USERS
+                WHERE USERNAME = u
+         UNION 
+                SELECT IDUSER
+                FROM REGISTRATIONS
+                WHERE USERNAME = u
+        ) AS TOTAL;
 			
 	CASE num 
 	WHEN 0 THEN 
 			SELECT COUNT(*) INTO num
-			FROM USERS
-			WHERE EMAIL = mail ;
+			FROM
+			(
+				SELECT IDUSER
+				FROM USERS
+				WHERE EMAIL = mail
+			UNION 
+				SELECT IDUSER 
+				FROM REGISTRATIONS
+				WHERE EMAIL = mail
+			) AS TOTAL;
 
 			CASE num
 			WHEN 0 THEN 
-				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
-
-                               SELECT IDUSER INTO  idu
-	                       FROM USERS
-	                       WHERE USERNAME = u;
+				INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, CODECONFIRM) VALUES
+									(NULL, u, p, mail, h, CURRENT_TIMESTAMP, c);
 
 				SET err = 13;
 			WHEN 1 THEN
-
-                               SELECT IDUSER INTO  idu
-	                       FROM USERS
-	                       WHERE EMAIL = mail;
-
 				SET err = 7; 
 			ELSE
 				SET err = 4;
@@ -1576,8 +1583,7 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES
 (2, 10, 1, '2014-03-25 21:39:58'),
 (29, 9, 1, '2014-03-25 21:39:58'),
-(29, 10, 3, '2014-04-05 10:16:17'),
-(99, 9, 2, '2014-04-15 13:03:18');
+(29, 10, 3, '2014-04-05 10:16:17');
 
 -- --------------------------------------------------------
 
@@ -2058,7 +2064,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3606 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3643 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -5392,7 +5398,6 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3433, 29, NULL, 0, 28, '2014-04-16 23:50:34'),
 (3434, 29, NULL, 0, 1, '2014-04-16 23:50:42'),
 (3435, 29, NULL, 0, 1, '2014-04-16 23:54:59'),
-(3436, 29, 9, 4, 24, '2014-04-16 23:56:12'),
 (3437, 29, 21, 0, 24, '2014-04-17 00:08:12'),
 (3438, 29, 9, 63, 24, '2014-04-17 00:09:09'),
 (3439, 29, NULL, 0, 1, '2014-04-17 00:09:44'),
@@ -5410,9 +5415,9 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3451, 29, NULL, 0, 25, '2014-04-17 01:10:33'),
 (3452, 29, NULL, 0, 25, '2014-04-17 01:10:41'),
 (3453, 29, NULL, 39, 30, '2014-04-17 01:12:38'),
-(3454, 29, NULL, 0, 30, '2014-04-17 01:12:55');
+(3454, 29, NULL, 0, 30, '2014-04-17 01:12:55'),
+(3455, 29, NULL, 39, 30, '2014-04-17 01:13:03');
 INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
-(3455, 29, NULL, 39, 30, '2014-04-17 01:13:03'),
 (3456, 29, NULL, 39, 30, '2014-04-17 01:13:25'),
 (3457, 29, NULL, 39, 30, '2014-04-17 01:13:32'),
 (3458, 29, NULL, 0, 30, '2014-04-17 01:13:39'),
@@ -5562,7 +5567,44 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3602, 29, NULL, 0, 28, '2014-04-17 15:37:47'),
 (3603, 29, NULL, 0, 28, '2014-04-17 15:37:56'),
 (3604, NULL, NULL, 33, 28, '2014-04-17 15:38:04'),
-(3605, 29, NULL, 0, 1, '2014-04-17 15:38:14');
+(3605, 29, NULL, 0, 1, '2014-04-17 15:38:14'),
+(3606, 0, NULL, 3, 1, '2014-04-17 17:29:58'),
+(3607, 103, NULL, 7, 3, '2014-04-17 17:30:12'),
+(3608, 0, NULL, 2, 1, '2014-04-17 17:31:53'),
+(3609, 0, NULL, 0, 1, '2014-04-17 17:32:50'),
+(3610, 102, NULL, 0, 1, '2014-04-17 17:37:25'),
+(3611, NULL, NULL, 6, 3, '2014-04-17 18:22:04'),
+(3612, NULL, NULL, 6, 3, '2014-04-17 18:22:29'),
+(3613, NULL, NULL, 6, 3, '2014-04-17 18:28:05'),
+(3614, NULL, NULL, 6, 3, '2014-04-17 18:28:51'),
+(3615, NULL, NULL, 7, 3, '2014-04-17 18:29:03'),
+(3616, NULL, NULL, 7, 3, '2014-04-17 18:29:43'),
+(3617, NULL, NULL, 0, 3, '2014-04-17 18:29:52'),
+(3618, 29, NULL, 0, 1, '2014-04-17 18:41:31'),
+(3619, 29, NULL, 0, 1, '2014-04-17 18:41:43'),
+(3620, 29, NULL, 0, 1, '2014-04-17 18:43:29'),
+(3621, 29, NULL, 0, 1, '2014-04-17 18:44:06'),
+(3622, 29, NULL, 0, 1, '2014-04-17 18:49:36'),
+(3623, 29, NULL, 0, 1, '2014-04-17 18:50:57'),
+(3624, 29, NULL, 0, 1, '2014-04-17 19:02:57'),
+(3625, NULL, NULL, 6, 3, '2014-04-17 19:03:23'),
+(3626, NULL, NULL, 7, 3, '2014-04-17 19:03:31'),
+(3627, 29, NULL, 0, 1, '2014-04-17 19:04:28'),
+(3628, NULL, NULL, 7, 3, '2014-04-17 19:05:42'),
+(3629, NULL, NULL, 7, 3, '2014-04-17 19:08:20'),
+(3630, NULL, NULL, 7, 3, '2014-04-17 19:08:24'),
+(3631, NULL, NULL, 7, 3, '2014-04-17 19:10:49'),
+(3632, NULL, NULL, 0, 3, '2014-04-17 19:11:15'),
+(3633, 29, NULL, 0, 1, '2014-04-17 19:12:47'),
+(3634, NULL, NULL, 0, 3, '2014-04-17 19:13:42'),
+(3635, 29, NULL, 0, 1, '2014-04-17 19:19:50'),
+(3636, 29, NULL, 0, 1, '2014-04-17 19:21:01'),
+(3637, NULL, NULL, 6, 3, '2014-04-17 19:22:47'),
+(3638, 29, NULL, 0, 1, '2014-04-17 19:23:26'),
+(3639, 29, NULL, 0, 1, '2014-04-17 19:26:13'),
+(3640, 29, NULL, 0, 1, '2014-04-17 19:26:35'),
+(3641, NULL, NULL, 0, 3, '2014-04-17 19:33:06'),
+(3642, 29, NULL, 0, 1, '2014-04-17 19:34:01');
 
 -- --------------------------------------------------------
 
@@ -5886,7 +5928,7 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
 
 --
 -- Volcado de datos para la tabla `IMAGES`
@@ -5903,7 +5945,12 @@ INSERT INTO `IMAGES` (`IDIMAGE`, `IMAGE`, `URL`, `TYPE`) VALUES
 (45, NULL, 'images/', ''),
 (46, NULL, 'images/', ''),
 (47, NULL, 'images/', ''),
-(48, NULL, 'images/', '');
+(48, NULL, 'images/', ''),
+(49, NULL, 'images/5138761528977023028.jpg', 'image/jpeg'),
+(50, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
+(51, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(52, NULL, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
+(53, NULL, 'images/IMG-20140415-WA0001.jpg', 'image/jpeg');
 
 -- --------------------------------------------------------
 
@@ -6061,6 +6108,36 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `IDUSER`, `IDACTION`, `DATA`, `STARTT
 (91, 29, 190, 'VOL ', '0000-00-00 00:00:00', '2014-04-17 15:35:30'),
 (92, 29, 190, 'VOL ', '0000-00-00 00:00:00', '2014-04-17 15:35:33'),
 (93, 29, 190, 'VOL ', '0000-00-00 00:00:00', '2014-04-17 15:35:36');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `REGISTRATIONS`
+--
+-- Creación: 17-04-2014 a las 18:32:39
+--
+
+DROP TABLE IF EXISTS `REGISTRATIONS`;
+CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
+  `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(50) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `HINT` varchar(50) DEFAULT NULL,
+  `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `CODECONFIRM` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDUSER`),
+  UNIQUE KEY `USERNAME` (`USERNAME`),
+  UNIQUE KEY `EMAIL` (`EMAIL`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Volcado de datos para la tabla `REGISTRATIONS`
+--
+
+INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, `CODECONFIRM`) VALUES
+(1, 'XX', '', 'f', NULL, '2014-04-17 18:15:21', ''),
+(2, 'Xxx', '', 'fd', '', '2014-04-17 18:29:52', '');
 
 -- --------------------------------------------------------
 
@@ -6416,24 +6493,18 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=104 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=106 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
 --
 
 INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-(0, '®', '®', 'proyectoehc@gmail.com', 'administrator register.', '2014-04-15 19:41:51'),
+(0, '', '®☺☻♪‼!!‼└┴ÝÛåõ­­¶ §○BAb96ÙÍ¸∟ÙAAıä÷☻M♀7☼1VY8ü♂b56‗', '', 'administrator register.', '2014-04-15 19:41:51'),
 (1, 'alex', '9393cbd5cb36eb245c02b163d6ca969a', 'algcano@ucm.es', 'hint', '2014-03-11 04:00:00'),
-(2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'c@gmail.com', 'Adivina adivinanza.', '2014-03-25 21:36:35'),
+(2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'ctiradocaa@gmail.com', 'Adivina adivinanza.', '2014-03-25 21:36:35'),
 (10, 'luis', '502ff82f7f1f8218dd41201fe4353687', 'luis@gmail.com', 'what about me?', '2014-11-13 05:00:00'),
-(11, 'alex2', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@hotmail.co', 'what about me?', '2014-01-11 05:00:00'),
-(12, 'alex3', '534b44a19bf18d20b71ecc4eb77c572f', 'alex@ehc.com', 'what about me?', '2014-03-01 05:00:00'),
-(28, 'luis2', '502ff82f7f1f8218dd41201fe4353687', 'luis@hotmail.co', 'what about me?', '2014-03-03 05:00:00'),
 (29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.com', 'what about me?', '2014-03-23 04:00:01'),
-(60, 'a', 'cc175b9c0f1b6a831c399e269772661', 'a@', NULL, '2014-03-25 22:08:01'),
-(61, 'berto', '4124bca9335c27f86f24ba207a4912', 'hhhhh@gms.com', NULL, '2014-03-26 11:11:56'),
-(62, 's', '3c7c0ace395d8182db7ae2c30f034', 's@d', NULL, '2014-03-27 14:35:35'),
 (64, 'sobek', '69dafe8b5866478aea48f3df384820', 'Sergioprimo23@Gmail.com', NULL, '2014-03-27 15:17:28'),
 (65, 'beaordepe', 'b32676f518207bc993997bf8b58adacc', 'beaordepe@gmail.com', NULL, '2014-03-27 15:58:12'),
 (66, 'Ismael', 'e1adc3949ba59abbe56e057f2f883e', 'irequena@outlook.com', NULL, '2014-03-27 16:14:53'),
@@ -6443,13 +6514,9 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (75, 'd', 's', 'd', 'd', '2014-04-08 09:59:21'),
 (77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
 (80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05'),
-(82, 'ó', '', 'oóbn', 'oóoóo', '2014-04-09 13:22:58'),
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', '2014-04-09 13:33:28'),
-(86, 'p', 'p', 'p', 'p', '2014-04-13 22:32:14'),
-(97, 'alejandroladron', '534b44a19bf18d20b71ecc4eb77c572f', 'alejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
-(99, 'z', 'z', 'z', NULL, '2014-04-15 13:02:34'),
-(102, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'a@gmail.com', 'about me.', '2014-04-15 23:56:50'),
-(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', '', '', '2014-04-15 23:58:11');
+(97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'alejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
+(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', '2014-04-15 23:58:11');
 
 -- --------------------------------------------------------
 

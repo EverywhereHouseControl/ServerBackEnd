@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-04-2014 a las 17:39:42
+-- Tiempo de generación: 17-04-2014 a las 21:34:45
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -600,7 +600,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50))
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
     COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
@@ -609,37 +609,44 @@ begin
 	DECLARE err INTEGER DEFAULT 0;
 
 end_proc:begin
-	IF (u IS NULL OR p IS NULL OR mail IS NULL OR h IS NULL ) THEN 
+	IF (u IS NULL OR p IS NULL OR mail IS NULL OR h IS NULL OR c IS NULL ) THEN 
 		SET err = 61;
 		LEAVE end_proc;
 	END IF;
 
-        SELECT COUNT(*), IDUSER INTO num, idu
-	FROM USERS
-	WHERE USERNAME = u;
+        SELECT COUNT(*) INTO num
+        FROM
+        (
+                SELECT IDUSER
+                FROM USERS
+                WHERE USERNAME = u
+         UNION 
+                SELECT IDUSER
+                FROM REGISTRATIONS
+                WHERE USERNAME = u
+        ) AS TOTAL;
 			
 	CASE num 
 	WHEN 0 THEN 
 			SELECT COUNT(*) INTO num
-			FROM USERS
-			WHERE EMAIL = mail ;
+			FROM
+			(
+				SELECT IDUSER
+				FROM USERS
+				WHERE EMAIL = mail
+			UNION 
+				SELECT IDUSER 
+				FROM REGISTRATIONS
+				WHERE EMAIL = mail
+			) AS TOTAL;
 
 			CASE num
 			WHEN 0 THEN 
-				INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-									(NULL, u, p, mail, h, CURRENT_TIMESTAMP);
-
-                               SELECT IDUSER INTO  idu
-	                       FROM USERS
-	                       WHERE USERNAME = u;
+				INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, CODECONFIRM) VALUES
+									(NULL, u, p, mail, h, CURRENT_TIMESTAMP, c);
 
 				SET err = 13;
 			WHEN 1 THEN
-
-                               SELECT IDUSER INTO  idu
-	                       FROM USERS
-	                       WHERE EMAIL = mail;
-
 				SET err = 7; 
 			ELSE
 				SET err = 4;
@@ -1824,7 +1831,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3606 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3643 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -1926,7 +1933,7 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
 
 -- --------------------------------------------------------
 
@@ -2043,6 +2050,28 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
 --   `IDACTION`
 --       `ACTIONS` -> `IDACTION`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `REGISTRATIONS`
+--
+-- Creación: 17-04-2014 a las 18:32:39
+--
+
+DROP TABLE IF EXISTS `REGISTRATIONS`;
+CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
+  `IDUSER` int(11) NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(50) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `HINT` varchar(50) DEFAULT NULL,
+  `DATEBEGIN` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `CODECONFIRM` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDUSER`),
+  UNIQUE KEY `USERNAME` (`USERNAME`),
+  UNIQUE KEY `EMAIL` (`EMAIL`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -2267,7 +2296,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=104 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=106 ;
 
 -- --------------------------------------------------------
 

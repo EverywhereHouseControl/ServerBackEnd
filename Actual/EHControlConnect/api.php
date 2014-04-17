@@ -510,12 +510,14 @@ function lostpass($user){
 //--------------------------------------------------------------------------------------
 function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
-	$message = query("CALL createuser ('%s','%s', '%s', '%s')", $user, $pass, $email, $hint);
+	// randomconde verification.
+	$codeconfirm = rand(0000000000,9999999999);
+	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s')", $user, $pass, $email, $hint, $codeconfirm);
 	// take de error message
 	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
-	if ($json['error'][0]['ERROR'] == 0){
-		welcome_mail($email, $user);
+	if ($json['error']['ERROR'] == 0){
+		confirm_mail($email, $user, $codeconfirm);
 	}
 	print json_encode($json);
 }
@@ -1343,7 +1345,7 @@ function subir2() {
 	//print "$image $ruta $tipo $destino el archivo ha sido copiado exitosamente";
 }
 //--------------------------------------------------------------------------------------
-function welcome_mail($email, $user){
+function confirm_mail($email, $user, $codeconfirm){
 	//header html mail
 	$mail_headers="MIME-Version: 1.0\r\n";
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
@@ -1354,13 +1356,34 @@ function welcome_mail($email, $user){
 	$mail_message ='<p>&nbsp;</p>
 		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 		<p>&nbsp;</p>
+		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Confrim EHC account.</span></span></h1>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
+		<p><span style="font-family: verdana,geneva; font-size: medium;"> `'.$user.'`, confirm your EHC account clicking on below.</span></p>
+		<span style="font-family: verdana,geneva; font-size: medium;"> http://ehcontrol.net/EHControlConnect/confirm.php?code='.$codeconfirm.'</span></div>';
+	
+	mail($email, "CONFIRM EHC", $mail_message, $mail_headers);
+}
+//--------------------------------------------------------------------------------------
+function welcome_mail($email, $user){
+	//header html mail
+	$mail_headers="MIME-Version: 1.0\r\n";
+	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
+
+	//header remiter
+	$mail_headers.="From: EHC<proyectoehc@gmail.com>";
+
+	$mail_message ='<p>&nbsp;</p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p>&nbsp;</p>
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Welcome to EHC.</span></span></h1>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;">Congratulations! '.$user.' from now, you will experience the comfort about the mobile control of EHC.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> Hope you like.</span></div>';
-	
+
 	mail($email, "WELCOME EHC!", $mail_message, $mail_headers);
 }
 //--------------------------------------------------------------------------------------
