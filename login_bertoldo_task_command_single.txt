@@ -1,0 +1,592 @@
+{
+    "result": {
+        "IDUSER": 29,
+        "USERNAME": "bertoldo",
+        "PASSWORD": "6e1fd914c4532f9325e4107bd68e32c7",
+        "EMAIL": "bertoldo@gmail.com",
+        "HINT": "what about me?",
+        "DATEBEGIN": "2014-03-23 05:00:01",
+        "TASKS": [
+            {
+                "name": "control de las persianas",
+                "id": 23,
+                "user": "bertoldo",
+                "actions": null
+            },
+            {
+                "name": "control programado de luces",
+                "id": 24,
+                "user": "bertoldo",
+                "actions": [
+                    {
+                        "idaction": 73,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "desvan",
+                        "service": "LIGHTS",
+                        "data": "ON",
+                        "starttime": "2014-04-16 09:00:00"
+                    },
+                    {
+                        "idaction": 75,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "terraza",
+                        "service": "LIGHTS",
+                        "data": "ON",
+                        "starttime": "2014-04-16 09:00:00"
+                    },
+                    {
+                        "idaction": 77,
+                        "action": "SEND",
+                        "house": "Mansión",
+                        "room": "Garden",
+                        "service": "LIGHTS",
+                        "data": "ON",
+                        "starttime": "2014-04-16 09:00:00"
+                    },
+                    {
+                        "idaction": 74,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "desvan",
+                        "service": "LIGHTS",
+                        "data": "OFF",
+                        "starttime": "2014-04-16 10:00:00"
+                    },
+                    {
+                        "idaction": 76,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "terraza",
+                        "service": "LIGHTS",
+                        "data": "ON",
+                        "starttime": "2014-04-16 10:00:00"
+                    },
+                    {
+                        "idaction": 78,
+                        "action": "SEND",
+                        "house": "Mansión",
+                        "room": "Garden",
+                        "service": "LIGHTS",
+                        "data": "ON",
+                        "starttime": "2014-04-16 10:00:00"
+                    }
+                ]
+            },
+            {
+                "name": "LAVADORA",
+                "id": 22,
+                "user": "bertoldo",
+                "actions": null
+            }
+        ],
+        "COMMANDS": [
+            {
+                "name": "acostarse",
+                "id": 11,
+                "user": "bertoldo",
+                "actions": [
+                    {
+                        "idaction": 83,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "POWER",
+                        "position": 1
+                    },
+                    {
+                        "idaction": 84,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "terraza",
+                        "service": "BLINDS",
+                        "data": "DOWN",
+                        "position": 2
+                    },
+                    {
+                        "idaction": 85,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "terraza",
+                        "service": "LIGHTS",
+                        "data": "OFF",
+                        "position": 3
+                    },
+                    {
+                        "idaction": 86,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "desvan",
+                        "service": "LIGHTS",
+                        "data": "OFF",
+                        "position": 4
+                    },
+                    {
+                        "idaction": 87,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "desvan",
+                        "service": "DOOR",
+                        "data": "CLOSE",
+                        "position": 5
+                    },
+                    {
+                        "idaction": 88,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "AIRCONDITIONING",
+                        "data": "OFF",
+                        "position": 6
+                    }
+                ]
+            },
+            {
+                "name": "levantarse",
+                "id": 10,
+                "user": "bertoldo",
+                "actions": [
+                    {
+                        "idaction": 80,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "terraza",
+                        "service": "BLINDS",
+                        "data": "UP",
+                        "position": 1
+                    },
+                    {
+                        "idaction": 81,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "POWER",
+                        "position": 2
+                    },
+                    {
+                        "idaction": 82,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "ONE",
+                        "position": 3
+                    }
+                ]
+            },
+            {
+                "name": "salir de casa",
+                "id": 9,
+                "user": "bertoldo",
+                "actions": null
+            },
+            {
+                "name": "ver desheredada",
+                "id": 12,
+                "user": "bertoldo",
+                "actions": [
+                    {
+                        "idaction": 89,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "ON",
+                        "position": 1
+                    },
+                    {
+                        "idaction": 90,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "ONE",
+                        "position": 2
+                    },
+                    {
+                        "idaction": 91,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "VOL ",
+                        "position": 3
+                    },
+                    {
+                        "idaction": 92,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "VOL ",
+                        "position": 4
+                    },
+                    {
+                        "idaction": 93,
+                        "action": "SEND",
+                        "house": "casaBertoldo",
+                        "room": "cocina",
+                        "service": "TV",
+                        "data": "VOL ",
+                        "position": 5
+                    }
+                ]
+            }
+        ],
+        "SINGLES": [
+            {
+                "idaction": 79,
+                "action": "SEND",
+                "house": "casaBertoldo",
+                "room": "terraza",
+                "service": "BLINDS",
+                "data": "UP",
+                "starttime": "0000-00-00 00:00:00"
+            }
+        ],
+        "DEVICES": [
+            {
+                "iddevice": 44,
+                "name": "Arduino UNO",
+                "ipaddress": "http://casaBertoldo/rasp/index.php",
+                "serial": 1,
+                "english": "{\"Microcontroller\":\"ATmega328\",\n    \"Operating Vol",
+                "spanish": "{\"Microcontroller\":\"ATmega328\",\n    \"Operating Vol",
+                "services": {
+                    "0": {
+                        "name": "INTERCOM",
+                        "idservice": 170,
+                        "house": "casaBertoldo",
+                        "room": "cocina"
+                    },
+                    "1": {
+                        "name": "PLUG",
+                        "idservice": 171,
+                        "house": "casaBertoldo",
+                        "room": "cocina"
+                    },
+                    "2": {
+                        "name": "AIRCONDITIONING",
+                        "idservice": 172,
+                        "house": "casaBertoldo",
+                        "room": "cocina"
+                    },
+                    "3": {
+                        "name": "SENSOR",
+                        "idservice": 173,
+                        "house": "casaBertoldo",
+                        "room": "cocina"
+                    },
+                    "4": {
+                        "name": "BLINDS",
+                        "idservice": 174,
+                        "house": "casaBertoldo",
+                        "room": "terraza"
+                    },
+                    "5": {
+                        "name": "DOOR",
+                        "idservice": 175,
+                        "house": "casaBertoldo",
+                        "room": "desvan"
+                    },
+                    "6": {
+                        "name": "LIGHTS",
+                        "idservice": 176,
+                        "house": "casaBertoldo",
+                        "room": "terraza"
+                    },
+                    "-1": {
+                        "name": "TV",
+                        "idservice": 169,
+                        "house": "casaBertoldo",
+                        "room": "cocina"
+                    }
+                }
+            },
+            {
+                "iddevice": 45,
+                "name": "Arduino UNO",
+                "ipaddress": "http://casaBertoldo/rasp/index.php",
+                "serial": 2,
+                "english": "{\"Microcontroller\":\"ATmega328\",\n    \"Operating Vol",
+                "spanish": "{\"Microcontroller\":\"ATmega328\",\n    \"Operating Vol",
+                "services": {
+                    "6": {
+                        "name": "TV",
+                        "idservice": 177,
+                        "house": null,
+                        "room": null
+                    },
+                    "7": {
+                        "name": "INTERCOM",
+                        "idservice": 178,
+                        "house": null,
+                        "room": null
+                    },
+                    "8": {
+                        "name": "PLUG",
+                        "idservice": 179,
+                        "house": null,
+                        "room": null
+                    },
+                    "9": {
+                        "name": "AIRCONDITIONING",
+                        "idservice": 180,
+                        "house": null,
+                        "room": null
+                    },
+                    "10": {
+                        "name": "SENSOR",
+                        "idservice": 181,
+                        "house": null,
+                        "room": null
+                    },
+                    "11": {
+                        "name": "BLINDS",
+                        "idservice": 182,
+                        "house": null,
+                        "room": null
+                    },
+                    "12": {
+                        "name": "DOOR",
+                        "idservice": 183,
+                        "house": null,
+                        "room": null
+                    },
+                    "13": {
+                        "name": "LIGHTS",
+                        "idservice": 184,
+                        "house": "casaBertoldo",
+                        "room": "desvan"
+                    }
+                }
+            }
+        ],
+        "JSON": {
+            "houses": [
+                {
+                    "name": "casaBertoldo",
+                    "id": 9,
+                    "access": 1,
+                    "weather": null,
+                    "image": "http://ehcontrol.net/EHControlConnect/images/logo.png",
+                    "rooms": [
+                        {
+                            "name": "cocina",
+                            "id": 1,
+                            "services": [
+                                {
+                                    "name": "AIRCONDITIONING",
+                                    "id": 172,
+                                    "interface": 5,
+                                    "access": null,
+                                    "state": "[0,0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "INTERCOM",
+                                    "id": 170,
+                                    "interface": 3,
+                                    "access": null,
+                                    "state": "[]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "PLUG",
+                                    "id": 171,
+                                    "interface": 4,
+                                    "access": null,
+                                    "state": "[0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "SENSOR",
+                                    "id": 173,
+                                    "interface": 6,
+                                    "access": null,
+                                    "state": "[0,0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "TV",
+                                    "id": 169,
+                                    "interface": 1,
+                                    "access": null,
+                                    "state": "[0,0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "desvan",
+                            "id": 3,
+                            "services": [
+                                {
+                                    "name": "DOOR",
+                                    "id": 175,
+                                    "interface": 8,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "LIGHTS",
+                                    "id": 184,
+                                    "interface": 2,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "terraza",
+                            "id": 2,
+                            "services": [
+                                {
+                                    "name": "BLINDS",
+                                    "id": 174,
+                                    "interface": 7,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "LIGHTS",
+                                    "id": 176,
+                                    "interface": 2,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mansión",
+                    "id": 10,
+                    "access": 3,
+                    "weather": null,
+                    "image": "http://ehcontrol.net/EHControlConnect/images/logo.png",
+                    "rooms": [
+                        {
+                            "name": "Garage",
+                            "id": 8,
+                            "services": [
+                                {
+                                    "name": "DOOR",
+                                    "id": 167,
+                                    "interface": 8,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Garden",
+                            "id": 10,
+                            "services": [
+                                {
+                                    "name": "LIGHTS",
+                                    "id": 168,
+                                    "interface": 2,
+                                    "access": 1,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                },
+                                {
+                                    "name": "SENSOR",
+                                    "id": 165,
+                                    "interface": 6,
+                                    "access": null,
+                                    "state": "[0,0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Kitchen",
+                            "id": 9,
+                            "services": [
+                                {
+                                    "name": "BLINDS",
+                                    "id": 166,
+                                    "interface": 7,
+                                    "access": null,
+                                    "state": "[0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Livingroom",
+                            "id": 7,
+                            "services": [
+                                {
+                                    "name": "AIRCONDITIONING",
+                                    "id": 164,
+                                    "interface": 5,
+                                    "access": null,
+                                    "state": "[0,0,0]",
+                                    "actions": [
+                                        "SEND",
+                                        "SCAN"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "error": {
+        "ENGLISH": "Login success.",
+        "SPANISH": "Login correcto.",
+        "ERROR": 0
+    }
+}

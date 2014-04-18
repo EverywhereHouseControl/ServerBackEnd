@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 18-04-2014 a las 00:45:55
+-- Tiempo de generación: 18-04-2014 a las 20:16:33
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -265,10 +265,10 @@ begin
 	DECLARE num, v INTEGER DEFAULT 0;
 	DECLARE idu, idd, idh, i INTEGER DEFAULT NULL;
 	DECLARE err, done, ids INTEGER DEFAULT 0;
-	DECLARE ser, st, en, sp VARCHAR(50);
+	DECLARE ser, t, st, en, sp VARCHAR(50);
 	DECLARE a, fc VARCHAR(50);
 
-	DECLARE cur CURSOR FOR SELECT  IDSERVICE, `SERVICENAME`, `SERVICEINTERFACE`, `STATUS`, `ENGLISH`, `SPANISH`
+	DECLARE cur CURSOR FOR SELECT  IDSERVICE, `SERVICENAME`, TYPE, `SERVICEINTERFACE`, `STATUS`, `ENGLISH`, `SPANISH`
 						FROM SERVICES
 						WHERE IDDEVICE = idd; 
 
@@ -312,15 +312,15 @@ end_proc:begin
 					WHERE SERIAL = s AND IPADDRESS = ip;
 
 					LOOP1:LOOP
-						FETCH cur INTO ids, ser, i, st, en, sp; 
+						FETCH cur INTO ids, ser, t, i, st, en, sp; 
 						IF done THEN 
 							CLOSE cur;
 							LEAVE LOOP1;
 
 						END IF; 
 
-						INSERT INTO SERVICES(IDSERVICE, IDROOM, IDDEVICE, SERVICENAME, SERVICEINTERFACE, STATUS, ENGLISH, SPANISH) 
-									VALUES (NULL, NULL, idd, ser, i, st, en, sp); 
+						INSERT INTO SERVICES(IDSERVICE, IDROOM, IDDEVICE, SERVICENAME, TYPE, SERVICEINTERFACE, STATUS, ENGLISH, SPANISH) 
+									VALUES (NULL, NULL, idd, ser, t, i, st, en, sp); 
 						OPEN cur2; 
 
 						SELECT IDSERVICE INTO ids 
@@ -1914,7 +1914,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(100) NOT NULL,
   `SPANISH` varchar(100) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -1988,7 +1988,8 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (64, 'This service does not exist.', 'Este servicio no existe.'),
 (65, 'Service assigned to a room.', 'Servicio asignado a una habitacion.'),
 (66, 'This room does not exist.', 'Esta habitación no existe.'),
-(67, 'Service removed from a room.', 'Servicio quitado de la una habitación.');
+(67, 'Service removed from a room.', 'Servicio quitado de la una habitación.'),
+(68, 'This button does not exist.', 'Este botón no existe.');
 
 -- --------------------------------------------------------
 
@@ -2064,7 +2065,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3708 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3790 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -5669,7 +5670,89 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3704, NULL, NULL, 0, 3, '2014-04-17 22:12:43'),
 (3705, 0, NULL, 3, 1, '2014-04-17 22:13:23'),
 (3706, 0, NULL, 3, 1, '2014-04-17 22:13:26'),
-(3707, NULL, NULL, 3, 4, '2014-04-17 22:14:43');
+(3707, NULL, NULL, 3, 4, '2014-04-17 22:14:43'),
+(3708, 29, NULL, 0, 1, '2014-04-18 08:31:14'),
+(3709, 29, NULL, 0, 1, '2014-04-18 08:50:01'),
+(3710, 29, NULL, 0, 1, '2014-04-18 09:20:05'),
+(3711, 29, NULL, 0, 1, '2014-04-18 09:25:35'),
+(3712, 29, NULL, 0, 1, '2014-04-18 09:27:15'),
+(3713, 29, NULL, 0, 1, '2014-04-18 09:46:25'),
+(3714, 29, NULL, 0, 1, '2014-04-18 09:56:48'),
+(3715, 29, NULL, 0, 1, '2014-04-18 10:02:40'),
+(3716, 29, NULL, 0, 1, '2014-04-18 10:07:31'),
+(3717, 29, NULL, 0, 1, '2014-04-18 10:16:39'),
+(3718, 29, NULL, 0, 1, '2014-04-18 10:17:53'),
+(3719, 29, NULL, 0, 1, '2014-04-18 10:19:27'),
+(3720, 29, NULL, 0, 1, '2014-04-18 10:20:26'),
+(3721, 29, NULL, 0, 1, '2014-04-18 10:23:07'),
+(3722, 29, NULL, 0, 1, '2014-04-18 10:24:32'),
+(3723, 29, NULL, 0, 1, '2014-04-18 10:26:41'),
+(3724, 29, NULL, 0, 1, '2014-04-18 10:27:54'),
+(3725, 29, NULL, 0, 1, '2014-04-18 10:29:13'),
+(3726, 29, NULL, 0, 1, '2014-04-18 10:32:01'),
+(3727, 29, NULL, 0, 1, '2014-04-18 10:36:25'),
+(3728, 29, NULL, 0, 1, '2014-04-18 10:38:30'),
+(3729, 29, NULL, 0, 1, '2014-04-18 10:50:24'),
+(3730, 29, NULL, 0, 1, '2014-04-18 10:59:58'),
+(3731, 29, NULL, 0, 1, '2014-04-18 11:02:32'),
+(3732, 29, NULL, 0, 1, '2014-04-18 11:03:53'),
+(3733, 29, NULL, 0, 1, '2014-04-18 11:04:41'),
+(3734, 29, NULL, 0, 1, '2014-04-18 11:06:49'),
+(3735, 29, NULL, 0, 1, '2014-04-18 11:33:44'),
+(3736, 29, NULL, 0, 1, '2014-04-18 11:34:58'),
+(3737, 29, NULL, 0, 1, '2014-04-18 11:36:27'),
+(3738, 29, NULL, 0, 1, '2014-04-18 11:37:22'),
+(3739, 29, NULL, 0, 1, '2014-04-18 13:32:15'),
+(3740, 29, NULL, 0, 1, '2014-04-18 13:46:43'),
+(3741, 29, NULL, 0, 1, '2014-04-18 14:00:56'),
+(3742, 29, NULL, 0, 1, '2014-04-18 14:12:05'),
+(3743, 29, NULL, 0, 1, '2014-04-18 14:12:53'),
+(3744, 29, NULL, 0, 1, '2014-04-18 14:13:33'),
+(3745, 29, NULL, 0, 1, '2014-04-18 14:14:37'),
+(3746, 29, NULL, 0, 1, '2014-04-18 14:16:11'),
+(3747, 29, NULL, 0, 1, '2014-04-18 14:18:31'),
+(3748, 29, NULL, 0, 1, '2014-04-18 14:22:47'),
+(3749, 29, NULL, 0, 1, '2014-04-18 14:23:47'),
+(3750, 29, NULL, 0, 1, '2014-04-18 14:26:35'),
+(3751, 29, NULL, 0, 1, '2014-04-18 14:29:53'),
+(3752, 29, NULL, 0, 1, '2014-04-18 14:40:07'),
+(3753, 29, NULL, 0, 1, '2014-04-18 14:41:34'),
+(3754, 29, NULL, 0, 1, '2014-04-18 14:42:57'),
+(3755, 29, NULL, 0, 1, '2014-04-18 14:44:00'),
+(3756, 29, NULL, 0, 1, '2014-04-18 14:44:27'),
+(3757, 29, NULL, 0, 1, '2014-04-18 14:44:54'),
+(3758, 29, NULL, 0, 1, '2014-04-18 14:45:34'),
+(3759, 29, NULL, 0, 1, '2014-04-18 14:47:36'),
+(3760, 29, NULL, 0, 1, '2014-04-18 14:48:42'),
+(3761, 29, NULL, 0, 1, '2014-04-18 14:49:44'),
+(3762, 29, NULL, 0, 1, '2014-04-18 14:50:20'),
+(3763, 29, NULL, 0, 1, '2014-04-18 14:52:03'),
+(3764, 29, NULL, 0, 1, '2014-04-18 14:52:48'),
+(3765, 29, NULL, 0, 1, '2014-04-18 14:53:47'),
+(3766, 29, NULL, 0, 1, '2014-04-18 14:55:17'),
+(3767, 29, NULL, 0, 1, '2014-04-18 14:55:51'),
+(3768, 29, NULL, 0, 1, '2014-04-18 14:59:42'),
+(3769, 29, NULL, 0, 1, '2014-04-18 15:03:21'),
+(3770, 29, NULL, 0, 1, '2014-04-18 15:05:34'),
+(3771, 29, NULL, 0, 1, '2014-04-18 15:06:40'),
+(3772, 29, NULL, 0, 1, '2014-04-18 15:08:40'),
+(3773, 29, NULL, 0, 1, '2014-04-18 15:10:00'),
+(3774, 29, NULL, 0, 1, '2014-04-18 15:10:17'),
+(3775, 29, NULL, 0, 1, '2014-04-18 15:11:55'),
+(3776, 29, NULL, 0, 1, '2014-04-18 15:12:56'),
+(3777, 29, NULL, 0, 1, '2014-04-18 15:13:02'),
+(3778, 29, NULL, 0, 6, '2014-04-18 16:32:08'),
+(3779, 29, NULL, 0, 6, '2014-04-18 16:33:51'),
+(3780, 29, NULL, 0, 6, '2014-04-18 16:37:15'),
+(3781, 29, NULL, 0, 1, '2014-04-18 17:39:15'),
+(3782, 29, NULL, 0, 1, '2014-04-18 17:45:27'),
+(3783, 29, NULL, 0, 1, '2014-04-18 17:47:39'),
+(3784, 29, NULL, 0, 1, '2014-04-18 17:51:43'),
+(3785, 29, NULL, 0, 1, '2014-04-18 17:57:43'),
+(3786, 29, NULL, 0, 1, '2014-04-18 17:58:57'),
+(3787, 29, NULL, 0, 1, '2014-04-18 17:59:54'),
+(3788, 29, NULL, 0, 1, '2014-04-18 18:09:58'),
+(3789, 29, NULL, 0, 1, '2014-04-18 18:13:41');
 
 -- --------------------------------------------------------
 
@@ -5688,7 +5771,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `RETURNCODE` varchar(50) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=225 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=228 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACTION`:
@@ -5922,7 +6005,10 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 (221, 1, NULL, 29, '013216750695132', '2014-04-04 18:55:08'),
 (222, 1, NULL, 29, '013216771095132', '2014-04-04 18:55:10'),
 (223, 1, NULL, 29, '013216771095132', '2014-04-04 18:55:11'),
-(224, 1, NULL, 29, '013216722135132', '2014-04-04 18:55:13');
+(224, 1, NULL, 29, '013216722135132', '2014-04-04 18:55:13'),
+(225, 0, NULL, 29, 'IRCODES', '2014-04-18 16:32:08'),
+(226, 0, NULL, 29, 'IRCODES', '2014-04-18 16:33:51'),
+(227, 0, NULL, 29, 'IRCODES', '2014-04-18 16:37:15');
 
 -- --------------------------------------------------------
 
@@ -6005,12 +6091,6 @@ INSERT INTO `IMAGES` (`IDIMAGE`, `IMAGE`, `URL`, `TYPE`) VALUES
 (38, NULL, 'images/logo.png', 'image/png'),
 (39, NULL, 'images/mysqlslap_2.png', 'image/png'),
 (42, NULL, 'images/mysqlslap_1.png', 'image/png'),
-(43, NULL, 'images/', ''),
-(44, NULL, 'images/', ''),
-(45, NULL, 'images/', ''),
-(46, NULL, 'images/', ''),
-(47, NULL, 'images/', ''),
-(48, NULL, 'images/', ''),
 (49, NULL, 'images/5138761528977023028.jpg', 'image/jpeg'),
 (50, NULL, 'images/-5071688982451818767.jpg', 'image/jpeg'),
 (51, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
@@ -6079,7 +6159,7 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
 --
 
 INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `ONE`, `TWO`, `THREE`, `FOUR`, `FIVE`, `SIX`, `SEVEN`, `EIGHT`, `NINE`, `ZERO`, `FAV`, `UP`, `DOWN`, `LEFT`, `RIGHT`, `OK`, `PLAY`, `PAUSE`, `STOP`, `FF`, `FW`, `VOLUMEUP`, `VOLUMEDOWN`) VALUES
-(1, 'TV NPG', 16722135, 16771605, 16745085, NULL, 16748655, 16758855, 16775175, 16756815, 16750695, 16767015, 16746615, 16754775, 16771095, 16730295, 16732845, 16769055, NULL, 16718055, 16773135, NULL, 16720605, NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'TV NPG', 16722135, 16771605, 16745085, 16736925, 16748655, 16758855, 16775175, 16756815, 16750695, 16767015, 16746615, 16754775, 16771095, 16730295, 16732845, 16769055, 16742535, 16718055, 16773135, 16720605, 16720605, 16720605, NULL, 16734375, 16740495, 16730805, 16763445);
 
 -- --------------------------------------------------------
 
@@ -6098,10 +6178,12 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 ,`ROOMNAME` varchar(50)
 ,`IDSERVICE` int(11)
 ,`SERVICENAME` varchar(50)
+,`TYPE` varchar(50)
 ,`STATUS` varchar(50)
 ,`SERVICEINTERFACE` int(11)
 ,`IDACTION` int(11)
 ,`ACTIONNAME` varchar(50)
+,`FCODE` varchar(20)
 ,`ACCESSNUMBER` int(11)
 ,`PERMISSIONNUMBER` int(11)
 ,`IDDEVICE` int(11)
@@ -6285,7 +6367,7 @@ CREATE TABLE IF NOT EXISTS `scheduleVIEW` (
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
--- Creación: 16-04-2014 a las 15:29:54
+-- Creación: 18-04-2014 a las 15:51:21
 --
 
 DROP TABLE IF EXISTS `SERVICES`;
@@ -6294,6 +6376,7 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `IDROOM` int(11) DEFAULT NULL,
   `IDDEVICE` int(11) DEFAULT NULL,
   `SERVICENAME` varchar(50) NOT NULL,
+  `TYPE` varchar(50) DEFAULT NULL,
   `SERVICEINTERFACE` int(11) NOT NULL,
   `STATUS` varchar(50) DEFAULT NULL,
   `ENGLISH` varchar(50) DEFAULT NULL,
@@ -6315,39 +6398,39 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
 -- Volcado de datos para la tabla `SERVICES`
 --
 
-INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `SERVICEINTERFACE`, `STATUS`, `ENGLISH`, `SPANISH`) VALUES
-(0, NULL, 0, 'TV', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
-(1, NULL, 0, 'INTERCOM', 3, '[]', 'For intercom.', 'Para el telefonillo.'),
-(2, NULL, 0, 'PLUG', 4, '[0]', 'Control strips.', 'Control de regletas.'),
-(3, NULL, 0, 'AIRCONDITIONING', 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(4, NULL, 0, 'SENSOR', 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
-(5, NULL, 0, 'BLINDS', 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
-(6, NULL, 0, 'DOOR', 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
-(7, NULL, 0, 'LIGHTS', 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
-(161, NULL, 43, 'TV', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
-(162, NULL, 43, 'INTERCOM', 3, '[]', 'For intercom.', 'Para el telefonillo.'),
-(163, NULL, 43, 'PLUG', 4, '[0]', 'Control strips.', 'Control de regletas.'),
-(164, 7, 43, 'AIRCONDITIONING', 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(165, 10, 43, 'SENSOR', 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
-(166, 9, 43, 'BLINDS', 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
-(167, 8, 43, 'DOOR', 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
-(168, 10, 43, 'LIGHTS', 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
-(169, 1, 44, 'TV', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
-(170, 1, 44, 'INTERCOM', 3, '[]', 'For intercom.', 'Para el telefonillo.'),
-(171, 1, 44, 'PLUG', 4, '[0]', 'Control strips.', 'Control de regletas.'),
-(172, 1, 44, 'AIRCONDITIONING', 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(173, 1, 44, 'SENSOR', 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
-(174, 2, 44, 'BLINDS', 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
-(175, 3, 44, 'DOOR', 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
-(176, 2, 44, 'LIGHTS', 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
-(177, NULL, 45, 'TV', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
-(178, NULL, 45, 'INTERCOM', 3, '[]', 'For intercom.', 'Para el telefonillo.'),
-(179, NULL, 45, 'PLUG', 4, '[0]', 'Control strips.', 'Control de regletas.'),
-(180, NULL, 45, 'AIRCONDITIONING', 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(181, NULL, 45, 'SENSOR', 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
-(182, NULL, 45, 'BLINDS', 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
-(183, NULL, 45, 'DOOR', 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
-(184, 3, 45, 'LIGHTS', 2, '[0,0]', 'Control of lights.', 'Control de luces.');
+INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`, `SERVICEINTERFACE`, `STATUS`, `ENGLISH`, `SPANISH`) VALUES
+(0, NULL, 0, 'TV', 'TV NPG', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
+(1, NULL, 0, 'INTERCOM', NULL, 3, '[]', 'For intercom.', 'Para el telefonillo.'),
+(2, NULL, 0, 'PLUG', NULL, 4, '[0]', 'Control strips.', 'Control de regletas.'),
+(3, NULL, 0, 'AIRCONDITIONING', NULL, 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(4, NULL, 0, 'SENSOR', NULL, 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
+(5, NULL, 0, 'BLINDS', NULL, 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
+(6, NULL, 0, 'DOOR', NULL, 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
+(7, NULL, 0, 'LIGHTS', NULL, 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
+(161, NULL, 43, 'TV', 'TV NPG', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
+(162, NULL, 43, 'INTERCOM', NULL, 3, '[]', 'For intercom.', 'Para el telefonillo.'),
+(163, NULL, 43, 'PLUG', NULL, 4, '[0]', 'Control strips.', 'Control de regletas.'),
+(164, 7, 43, 'AIRCONDITIONING', NULL, 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(165, 10, 43, 'SENSOR', NULL, 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
+(166, 9, 43, 'BLINDS', NULL, 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
+(167, 8, 43, 'DOOR', NULL, 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
+(168, 10, 43, 'LIGHTS', NULL, 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
+(169, 1, 44, 'TV', 'TV NPG', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
+(170, 1, 44, 'INTERCOM', NULL, 3, '[]', 'For intercom.', 'Para el telefonillo.'),
+(171, 1, 44, 'PLUG', NULL, 4, '[0]', 'Control strips.', 'Control de regletas.'),
+(172, 1, 44, 'AIRCONDITIONING', NULL, 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(173, 1, 44, 'SENSOR', NULL, 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
+(174, 2, 44, 'BLINDS', NULL, 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
+(175, 3, 44, 'DOOR', NULL, 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
+(176, 2, 44, 'LIGHTS', NULL, 2, '[0,0]', 'Control of lights.', 'Control de luces.'),
+(177, NULL, 45, 'TV', 'TV NPG', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
+(178, NULL, 45, 'INTERCOM', NULL, 3, '[]', 'For intercom.', 'Para el telefonillo.'),
+(179, NULL, 45, 'PLUG', NULL, 4, '[0]', 'Control strips.', 'Control de regletas.'),
+(180, NULL, 45, 'AIRCONDITIONING', NULL, 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(181, NULL, 45, 'SENSOR', NULL, 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
+(182, NULL, 45, 'BLINDS', NULL, 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
+(183, NULL, 45, 'DOOR', NULL, 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
+(184, 3, 45, 'LIGHTS', NULL, 2, '[0,0]', 'Control of lights.', 'Control de luces.');
 
 -- --------------------------------------------------------
 
@@ -6642,7 +6725,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 

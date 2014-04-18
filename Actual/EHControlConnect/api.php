@@ -553,129 +553,112 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	$error = 0;
 	$funct = 6;
 	
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s' limit 2", $user);
-	$iduser  = $SQLuser['result'][0]['IDUSER'];
-	$num	 = count($SQLuser['result']);
+	$SQLdoaction = query("SELECT * 
+			FROM loginVIEW 
+			WHERE   USERNAME    ='%s'
+				AND HOUSENAME   ='%s'
+				AND ROOMNAME    ='%s'
+				AND SERVICENAME ='%s' 
+				AND ACTIONNAME  ='%s'   limit 2", $user,$house,$room,$service,$action );
+	$iduser  = $SQLdoaction['result'][0]['IDUSER'];
+	$num	 = count($SQLdoaction['result']);
 	switch ($num){
-		case 0:	$error = 3;	break;
+		case 0:	$error =11;	break;
 		case 2:	$error = 4;	break;
 	}
 	
 	testNoERROR($iduser, $error, $funct);
 	
-	//TEST HOUSE EXIST
-	switch (testEXIST( 'HOUSES', 'HOUSENAME', $house)){
-		case 1:	$error = 8;	break;
-		case 4:	$error = 4;	break;
-	}
-	testNoERROR($iduser, $error, $funct);
-	
-	//TEST ROOM EXIST
-	$SQLuser = query("SELECT * 
-						FROM ROOMS, HOUSES 
-						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
-								AND ROOMS.ROOMNAME='%s'
-								AND HOUSES.HOUSENAME='%s' limit 2", $room, $house);
-	$num	 = count($SQLuser['result']);
-	switch ($num){
-		case 0:	$error = 9;break;
-		case 2:	$error = 4;	break;
-	}
-	testNoERROR($iduser, $error, $funct);
-	
-	//TEST SERVICE EXIST
-	$SQLuser = query("SELECT * 
-						FROM ROOMS, HOUSES, SERVICES 
-						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
-								AND SERVICES.IDROOM=ROOMS.IDROOM
-								AND SERVICES.SERVICENAME='%s'
-								AND ROOMS.ROOMNAME='%s'
-								AND HOUSES.HOUSENAME='%s' limit 2", $service, $room, $house);
-	$num	 = count($SQLuser['result']);
-	switch ($num){
-		case 0:	$error = 20;break;
-		case 2:	$error = 4;	break;
-	}
-	testNoERROR($iduser, $error, $funct);
-	
-	//TEST ACTION EXIST
-	$SQLuser = query("SELECT * 
-						FROM ROOMS, HOUSES, SERVICES, ACTIONS
-						WHERE ROOMS.IDHOUSE=HOUSES.IDHOUSE 
-								AND SERVICES.IDROOM=ROOMS.IDROOM
-								AND ACTIONS.IDSERVICE=SERVICES.IDSERVICE
-								AND ACTIONS.ACTIONNAME='%s'
-								AND SERVICES.SERVICENAME='%s'
-								AND ROOMS.ROOMNAME='%s'
-								AND HOUSES.HOUSENAME='%s' limit 2", $action, $service, $room, $house);
-	$num	 = count($SQLuser['result']);
-	switch ($num){
-		case 0:	$error = 21;break;
-		case 2:	$error = 4;	break;
-	}
-	testNoERROR($iduser, $error, $funct);
-	
-	//TEST HAVE ACCESS
-	$SQLuser = query("SELECT * 
-						FROM ACCESSHOUSE, USERS, HOUSES 
-						WHERE ACCESSHOUSE.IDUSER=USERS.IDUSER 
-								AND ACCESSHOUSE.IDHOUSE=HOUSES.IDHOUSE 
-								AND USERS.USERNAME='%s'
-								AND HOUSES.HOUSENAME='%s' limit 2", $user, $house);
-	$num	 = count($SQLuser['result']);
-	switch ($num){
-		case 0:	$error = 11;break;
-		case 2:	$error = 4;	break;
-	}
-	testNoERROR($iduser, $error, $funct);
-	//if action == ENVIAR
-	//GET THE FUNCTION CODE 
-	$code = query("SELECT  FCODE 
-				   FROM    HOUSES, ROOMS, SERVICES, USERS
-				   WHERE   SERVICES.IDROOM=ROOMS.IDROOM
-							AND ROOMS.IDHOUSE=HOUSES.IDHOUSE
-							AND USERS.USERNAME='%s'
-							AND HOUSES.HOUSENAME='%s'
-							AND ROOMS.ROOMNAME='%s'
-							AND SERVICES.SERVICENAME = '%s' limit 2", $user,$house,$room,$service);
-	$num	 = count($code['result']);
-	switch ($num){
-		case 0:	$error = 5;	break;
-		case 2:	$error = 4;	break;
-	}
-
-	testNoERROR($iduser, $error, $funct);
-	
-	//GETN THE IDENTIFICATOR
-	$FCODE = $code['result'][0]['FCODE'];
-
-	//GET THE IRCODE CODE
-	if ($service == TV){
-		//sent infrared code
-		$code = query("SELECT  %s
-					   FROM   IRCODES
-					   WHERE  TYPE='%s' limit 2", $data,'TV NPG');
-		$num	 = count($code['result']);
-		
-		switch ($num){
-			case 0:	$error = 4;	break;
-			case 2:	$error = 4;	break;
+	//TEST HAVE ACCESS or PERMISSION
+	if ($SQLdoaction['result'][0]['ACCESSNUMBER'] != 1) {
+		if ($SQLdoaction['result'][0]['PERMISSIONNUMBER'] != 1) {
+			$error = 10;
 		}
-		testNoERROR($iduser, $error, $funct);
-		
-		$IRCODE = '0132'.$code['result'][0][$data];
-		$idaction = 1;
+		else{
+			$error = 39;
+		}
 	}
-	else{
-		//sent on code
-		$IRCODE = 0;
-		$idaction = 0;
+	
+	//http conection
+	$ipaddress = $SQLdoaction['result'][0]['IPADDRESS'];
+	
+	//construction code to raspberry would be send
+	$raspberry = '-'.$SQLdoaction['result'][0]['IDDEVICE'].'-'
+					.$SQLdoaction['result'][0]['IDSERVICE'].'-';
+	
+	//GET THE FUNCTION TYPE
+	$FCODE = $SQLdoaction['result'][0]['FCODE'];
+	$TYPE  = $SQLdoaction['result'][0]['TYPE'];
+
+	switch ($FCODE){
+		case 'IRCODES':
+			//GET THE IRCODE CODE
+			$code = query("SELECT  %s
+					   FROM   IRCODES
+					   WHERE  TYPE='%s' limit 2", $data, $TYPE);
+			$num	 = count($code['result']);
+			
+			//TEST BOTTON EXIST
+			$error = ($code['result'][0][$data] == NULL)?68:0;
+			switch ($num){
+				case 0:	$error = 68;break;
+				case 2:	$error = 4;	break;
+			}
+			
+			testNoERROR($iduser, $error, $funct);
+			
+			$raspberry .= $code['result'][0][$data].'-';
+			break;
+			
+		case 'OPEN/CLOSE':
+			switch ($data){
+				case 'OPEN':
+					$raspberry .= '1-';
+					break;
+				case 'CLOSE':
+					$raspberry .= '0-';
+					break;
+				default:
+					$raspberry .= '-';
+			}
+			break;
+			
+		case 'ON/OFF':	
+			switch ($data){
+				case 'ON':
+					$raspberry .= '1-';
+					break;
+				case 'OFF':
+					$raspberry .= '0-';
+					break;
+				default:
+					$raspberry .= '-';
+			}
+			break;
+			
+		case 'UP/MEDIUM/DOWN':
+			switch ($data){
+				case 'UP':
+					$raspberry .= '2-';
+					break;
+				case 'MEDIUM':
+					$raspberry .= '1-';
+					break;
+				case 'DOWN':
+					$raspberry .= '0-';
+					break;
+				default:
+					$raspberry .= '-';
+			}
+			break;
+		default:
+			$raspberry .= '-';
 	}
 	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
-	//header("Location: http://192.168.2.117/ejecuta.php?valor=".$IRCODE.$FCODE);
-	//header("Location: http://mykelly.sytes.net/ejecuta.php?valor=".$IRCODE.$FCODE);
-	//header("Content-Type: application/json");
+	header("Location: $ipaddress?valor=$raspberry");
+	//header("Location: http://ehcontrol.net/EHControlConnect/");
+	//echo "<a href='$ipaddress?valor=$raspberry'></a>";
 	
 	
 	//REGISTER ARDUINO ANSWER
