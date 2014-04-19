@@ -1,3 +1,20 @@
+<?php
+$username = "server";
+$password = "revres";
+if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
+?>
+<h2>Logueate</h2>
+<form name="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<p><label for="txtUsername">Username:</label>
+<br><input type="text" title="Introduce nombre de usuario" name="txtUsername"></p>
+<p><label for="txtpassword">Password:</label>
+<br><input type="password" title="Introduce la contraseña" name="txtPassword"></p>
+<p><input type="submit" name="Submit" value="Login"></p>
+</form>
+<?php
+}else {
+?>
+<p>Test now protected by password.</p>
 <!doctype html>
 <html>
 	<head>
@@ -84,3 +101,6 @@
 	</form>
 </body>
 </html>
+<?php
+}
+?> 
