@@ -1,7 +1,7 @@
 Repository BackEnd from server EHC.
 ===================================
 <div align="center">
-<img src="http://ehcontrol.net/images/logo.png">
+<img onclick="http://ehcontrol.net/" src="http://ehcontrol.net/images/logo.png">
 </div>
 ## Purpose
 
