@@ -6,7 +6,7 @@ function testNoERROR($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
 	if ($error <> 0) {
 		//REGISTER THE ACTIVITY
-		$sql = query("INSERT INTO HISTORYACCESS
+		query("INSERT INTO HISTORYACCESS
 					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 				, $iduser, $error, $funct);
@@ -45,7 +45,7 @@ function login($user, $pass) {
 	testNoERROR($iduser, $error, $funct);
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -171,7 +171,7 @@ function createuser($user, $pass, $email, $hint){
 	testNoERROR($iduser, $error, $funct);
 
 	//** INSERT NEW USER **
-	$sql = query("INSERT INTO USERS
+	query("INSERT INTO USERS
 			       (IDUSER, USERNAME, PASSWORD, EMAIL, HINT,     DATEBEGIN)
 			VALUES (NULL,      '%s',    '%s',    '%s', '%s', CURRENT_TIMESTAMP)"
 			, $user, $pass, $email, $hint);
@@ -181,7 +181,7 @@ function createuser($user, $pass, $email, $hint){
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -219,12 +219,12 @@ function deleteuser($user, $pass){
 	testNoERROR($iduser, $error, $funct);
 
 	//DELETE USER
-	$sql = query("DELETE FROM USERS
+	query("DELETE FROM USERS
 			       WHERE USERNAME='%s'"
 			, $user);
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -261,13 +261,13 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	testNoERROR($iduser, $error, $funct);
 
 	//UPDATE USER
-	$sql = query("UPDATE USERS
+	query("UPDATE USERS
 				SET USERNAME='%s', PASSWORD='%s', EMAIL='%s', HINT='%s'
 			    WHERE USERNAME='%s'"
 			, $n_user, $n_pass, $n_email, $n_hint, $user);
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -285,7 +285,7 @@ function testNoERROR2($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
 	if ($error <> 0) {
 		//REGISTER THE ACTIVITY
-		$sql = query("INSERT INTO HISTORYACCESS
+		query("INSERT INTO HISTORYACCESS
 					(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 			VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 				, $iduser, $error, $funct);
@@ -452,7 +452,7 @@ function login2($user, $pass) {
 				WHERE ERRORCODE=50 LIMIT 1; ");
 	
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP);"
 			, $iduser, $error, $funct);
@@ -584,7 +584,8 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	//construction code to raspberry would be send
 	$raspberry = '-'.$SQLdoaction['result'][0]['IDDEVICE'].'-'
-					.$SQLdoaction['result'][0]['IDSERVICE'].'-';
+					.$SQLdoaction['result'][0]['IDSERVICE'].'-'
+					.$SQLdoaction['result'][0]['ACTIONNAME'].'-';
 	
 	//GET THE FUNCTION TYPE
 	$FCODE = $SQLdoaction['result'][0]['FCODE'];
@@ -662,13 +663,13 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	
 	//REGISTER ARDUINO ANSWER
-	$sql = query("INSERT INTO HISTORYACTION
+	query("INSERT INTO HISTORYACTION
 						(`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
 				VALUES  (NULL,                '%s',      NULL,           '%s',  '%s',  CURRENT_TIMESTAMP)"
 			, $idaction, $iduser, $IRCODE.$FCODE);	
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -689,7 +690,7 @@ function ipcheck(){
 	$iduser = 0;//administrator
 	
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -706,7 +707,7 @@ function getweather($city,$language){
 	$iduser = 0;//administrator
 	
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -727,7 +728,7 @@ function getweather2($city,$language){
 	$iduser = 0;//administrator
 
 	//REGISTER THE ACTIVITY
-	$sql = query("INSERT INTO HISTORYACCESS
+	query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
@@ -1321,7 +1322,7 @@ function subir2() {
 	} else {
 		print '{"error":{"ERROR":1,"ENGLISH":"Error on update image.","SPANISH":"Error al subir archivo."}';
 	}
-	$resultado = query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) 
+	query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) 
 									VALUES   (NULL, NULL, '%s', '%s')", $destino, $tipo);
 
 	//echo "<img src=\"$destino\">";
