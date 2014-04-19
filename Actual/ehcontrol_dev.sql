@@ -1622,7 +1622,56 @@ end;
 end
   
   
-  
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`
+( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
+    COMMENT 'An admistrator grant access somobody to a house.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR idd IS NULL OR s IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
+	FROM loginVIEW
+	WHERE USERNAME = u AND HOUSENAME = h;
+			
+	CASE num 
+	WHEN 1 THEN 
+		CASE acc
+		WHEN 1 THEN 
+			SELECT COUNT(*), IDUSER INTO num, idu 
+			FROM USERS
+			WHERE USERNAME = u2;
+
+			IF (num <> 0) THEN 
+				DELETE FROM ACCESSHOUSE WHERE IDUSER=idu AND IDHOUSE = idh;
+				INSERT INTO ACCESSHOUSE (IDUSER, IDHOUSE, ACCESSNUMBER, DATEBEGIN) VALUES
+										(idu,    idh, n, CURRENT_TIMESTAMP);
+				SET err = 40;
+			ELSE
+				SET err = 3;
+			END IF;
+		WHEN 0 THEN
+			SET err = 11;
+		ELSE
+			SET err = 39;
+		END CASE;
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SET err = 4;
+	END CASE;
+end;
+
+
+
+
   
   
  	Cotejamiento

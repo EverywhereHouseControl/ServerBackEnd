@@ -815,6 +815,14 @@ function deletedevice($user, $pass, $iddevice){
 }
 
 //--------------------------------------------------------------------------------------
+function modifyservicetype($user, $iddevice, $service, $type){
+	/* */
+	$message = query("CALL modifyservicetype('%s', %s, '%s', '%s')", $user, (int) $iddevice, $service, $type);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+//--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/
 	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, (int) $n);

@@ -222,10 +222,9 @@ switch ($_POST['command']) {
 		unlinkserviceroom($_POST['idservice']); 
 	break;
 //-------------------------------------------------------------------------------------------------
-		/*
-    case "modifyuserconfiguration":
-		modifyuserconfiguration($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+    case "modifyservicetype":
+		modifyservicetype($_POST['username'], $_POST['iddevice'],$_POST['servicename'], $_POST['type']); 
+	break;
 		/*
     case "modifyhouseconfiguration":
 		modifyhouseconfiguration($_POST['arg1'],$_POST['arg2']); 

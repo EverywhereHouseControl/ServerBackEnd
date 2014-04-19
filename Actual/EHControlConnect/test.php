@@ -35,7 +35,41 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 	<body>
 		<form action="http://ehcontrol.net/EHControlConnect/index.php" method="POST">
 			<pre>
-  command:     <select name="command" size="1"><option selected="selected" value="login2">login2</option><option value="createuser2">createuser2</option><option value="deleteuser2">deleteuser2</option><option value="modifyuser2">modifyuser2</option><option value="doaction">doaction</option><option value="ipcheck">ipcheck</option><option value="getweather">getweather</option><option value="lostpass">lostpass</option><option value="createhouse">createhouse</option><option value="deletehouse">deletehouse</option><option value="modifyhouse">modifyhouse</option><option value="createprogramaction">createprogramaction</option><option value="deleteprogramaction">deleteprogramaction</option><option value="createtask">createtask</option><option value="deletetask">deletetask</option><option value="addtaskprogram">addtaskprogram</option><option value="removetaskprogram">removetaskprogram</option><option value="addcommandprogram">addcommandprogram</option><option value="removecommandprogram">removecommandprogram</option><option value="createcommand">createcommand</option><option value="deletecommand">deletecommand</option><option value="schedulehouse">schedulehouse</option><option value="createroom">createroom</option><option value="deleteroom">deleteroom</option><option value="modifyroom">modifyroom</option><option value="createaccesshouse">createaccesshouse</option><option value="deleteaccesshouse">deleteaccesshouse</option><option value="image">image</option><option value="createdevice">createdevice</option><option value="deletedevice">deletedevice</option><option value="linkserviceroom">linkserviceroom</option><option value="unlinkserviceroom">unlinkserviceroom</option> </select>                          <input type="submit" value="Execute" />
+  command:     <select name="command" size="1">
+  				<option selected="selected" value="login2">login2</option>
+  				<option value="createuser2">createuser2</option>
+  				<option value="deleteuser2">deleteuser2</option>
+  				<option value="modifyuser2">modifyuser2</option>
+  				<option value="doaction">doaction</option>
+  				<option value="ipcheck">ipcheck</option>
+  				<option value="getweather">getweather</option>
+  				<option value="lostpass">lostpass</option>
+  				<option value="createhouse">createhouse</option>
+  				<option value="deletehouse">deletehouse</option>
+  				<option value="modifyhouse">modifyhouse</option>
+  				<option value="createprogramaction">createprogramaction</option>
+  				<option value="deleteprogramaction">deleteprogramaction</option>
+  				<option value="createtask">createtask</option>
+  				<option value="deletetask">deletetask</option>
+  				<option value="addtaskprogram">addtaskprogram</option>
+  				<option value="removetaskprogram">removetaskprogram</option>
+  				<option value="addcommandprogram">addcommandprogram</option>
+  				<option value="removecommandprogram">removecommandprogram</option>
+  				<option value="createcommand">createcommand</option>
+  				<option value="deletecommand">deletecommand</option>
+  				<option value="schedulehouse">schedulehouse</option>
+  				<option value="createroom">createroom</option>
+  				<option value="deleteroom">deleteroom</option>
+  				<option value="modifyroom">modifyroom</option>
+  				<option value="createaccesshouse">createaccesshouse</option>
+  				<option value="deleteaccesshouse">deleteaccesshouse</option>
+  				<option value="image">image</option>
+  				<option value="createdevice">createdevice</option>
+  				<option value="deletedevice">deletedevice</option>
+  				<option value="modifyservicetype">modifyservicetype</option>
+  				<option value="linkserviceroom">linkserviceroom</option>
+  				<option value="unlinkserviceroom">unlinkserviceroom</option> 
+  				</select>                          <input type="submit" value="Execute" />
   username:    <input name="username" size="50" type="text" />
   password:    <input name="password" size="50" type="text" />
   email:       <input name="email" size="50" type="text" />
@@ -61,6 +95,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   commandname: <input name="commandname" size="50" type="text" />
   description: <input name="description" size="50" type="text" />
   frequency:   <input name="frequency" size="50" type="text" />
+  type:        <input name="type" size="50" type="text" />
   devicename:  <input name="devicename" size="50" type="text" />
   ipaddress:   <input name="ipaddress" size="50" type="text" />
   city:        <input name="city" size="50" type="text" />
