@@ -3,16 +3,16 @@ Repository BackEnd from server EHC.
 
 ## Purpose
 
-purpose is to give online application service monitoring domotico EHC.
+The purpose is to give online  service monitoring to application domotico EHC.
 
 ## Files located on server
 
-- API Connection
-- Data base: estructure
+- [API Connection PHP](Actual/EHControlConnect/index.php)
+- [Data base: estructure](Actual/ehcontrol_estructure.sql)
 
 ## Web located
 
-[EHC Everywhere House Control](https://ehcontrol.net)
+[EHC Everywhere House Control](http://ehcontrol.net/)
 
 ## Documentation
 
