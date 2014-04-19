@@ -1,3 +1,18 @@
-Repositorio BackEnd del servidor de EHC.
+#Repository BackEnd from server EHC.
 
-http://geekytheory.com/tutorial-raspberry-pi-crear-servidor-web/    rapsberry tutorials
+##Purpose
+
+purpose is to give online application service monitoring domotico EHC.
+
+##Files located on server
+
+-API Connection
+-Data base: estructure
+
+##Web located
+
+[EHC Everywhere House Control](https://ehcontrol.net)
+
+##Documentation
+
+-[Look use cases.](Use_Cases)
