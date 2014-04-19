@@ -17,3 +17,10 @@ The purpose is to give online  service monitoring to application domotico EHC.
 ## Documentation
 
 - [Look use cases.](Use_Cases)
+- [Look data base diagram.](design_DB.png)
+- [Examples of login return JSON.](loginBertoldo.json)
+- [Examples of login2 return JSON.](login_bertoldo_task_command_single.txt)
+
+## Acknowledgements
+
+# *[Makespace](http://makespacemadrid.org/)*
