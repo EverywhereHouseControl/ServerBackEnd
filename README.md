@@ -1,7 +1,7 @@
 Repository BackEnd from server EHC.
 ===================================
 <div align="center">
-[![Screen Shot](http://ehcontrol.net/images/logo.png)](http://ehcontrol.net/)
+<img src="http://ehcontrol.net/images/logo.png">
 </div>
 ## Purpose
 
