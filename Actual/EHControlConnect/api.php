@@ -822,6 +822,25 @@ function modifyservicetype($user, $iddevice, $service, $type){
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
+
+//--------------------------------------------------------------------------------------
+function createpermissionservice($user, $house, $room, $service, $user2, $n){
+	/* */
+	$message = query("CALL createpermissionservice('%s', '%s', '%s', '%s', '%s', %s)", $user, $house, $room, $service, $user2, (int) $n);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
+//--------------------------------------------------------------------------------------
+function deletepermissionservice($user, $house, $room, $service, $user2){
+	/* */
+	$message = query("CALL deletepermissionservice('%s', '%s', '%s', '%s', '%s')", $user, $house, $room, $service, $user2);
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	print json_encode($json);
+}
+
 //--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/

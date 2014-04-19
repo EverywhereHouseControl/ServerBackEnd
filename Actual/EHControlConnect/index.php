@@ -225,14 +225,14 @@ switch ($_POST['command']) {
     case "modifyservicetype":
 		modifyservicetype($_POST['username'], $_POST['iddevice'],$_POST['servicename'], $_POST['type']); 
 	break;
-		/*
-    case "modifyhouseconfiguration":
-		modifyhouseconfiguration($_POST['arg1'],$_POST['arg2']); 
-	break;*/
-		/*
-    case "update":
-		update($_POST['arg1'],$_POST['arg2']); 
-	break;*/
+		
+    case "createpermissionservice":
+		createpermissionservice($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['n_username'],$_POST['number']); 
+	break;
+		
+    case "deletepermissionservice":
+		deletepermissionservice($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['n_username']); 
+	break;
 		/*
     case "notify":
 		notify($_POST['arg1'],$_POST['arg2']); 

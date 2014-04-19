@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 18-04-2014 a las 20:16:33
+-- Tiempo de generación: 19-04-2014 a las 22:53:21
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -172,7 +172,9 @@ end_proc:begin
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
-	WHEN 1 THEN 
+	WHEN 0 THEN
+		SET err = 11;
+ 	ELSE
 		CASE acc
 		WHEN 1 THEN 
 			SELECT COUNT(*), IDUSER INTO num, idu 
@@ -192,10 +194,6 @@ end_proc:begin
 		ELSE
 			SET err = 39;
 		END CASE;
-	WHEN 0 THEN
-		SET err = 11;
-	ELSE
-		SET err = 4;
 	END CASE;
 end;
 
@@ -420,6 +418,61 @@ end;
 	WHERE ERRORCODE = err;
 end$$
 
+DROP PROCEDURE IF EXISTS `createpermissionservice`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+    COMMENT 'An admistrator give permission to somobody to a service.'
+begin
+
+	DECLARE num,acc INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL OR r IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDSERVICE INTO num, acc, idu, ids
+	FROM loginVIEW
+	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SELECT COUNT(*), IDUSER INTO num, idu 
+		FROM USERS
+		WHERE USERNAME = u2;	
+			
+		CASE acc
+		WHEN 1 THEN 
+			DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+			INSERT INTO PERMISSIONS (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+										(idu,    ids, n, CURRENT_TIMESTAMP);
+			SET err = 71;
+		ELSE
+			IF (n <> 1) THEN 
+				DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+				INSERT INTO PERMISSIONS (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+										(idu,    ids, n, CURRENT_TIMESTAMP);
+				SET err = 71;
+			ELSE
+				SET err = 39;
+			END IF;
+		END CASE;
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   NULL,  IF(err = 71, 0, err),  34, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 71, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
 DROP PROCEDURE IF EXISTS `createprogramaction`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
@@ -509,7 +562,9 @@ end_proc:begin
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
-	WHEN 1 THEN 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
 		CASE acc
 		WHEN 1 THEN 
 			SELECT COUNT(*) INTO num
@@ -531,11 +586,6 @@ end_proc:begin
 		ELSE
 			SET err = 39;
 		END CASE;
-			
-	WHEN 0 THEN
-		SET err = 11;
-	ELSE
-		SET err = 4;
 	END CASE;
 end;
 	
@@ -851,7 +901,9 @@ end_proc:begin
 	WHERE USERNAME = u AND HOUSENAME = h;
 			 
 	CASE num 
-	WHEN 1 THEN 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
 		CASE acc
 		WHEN 1 THEN 
 			IF (pass = p) THEN
@@ -865,10 +917,6 @@ end_proc:begin
 		ELSE
 			SET err = 39;
 		END CASE;
-	WHEN 0 THEN
-		SET err = 11;
-	ELSE
-		SET err = 4;
 	END CASE;
 end;
 	
@@ -877,6 +925,57 @@ end;
 				VALUES  (     NULL,    idu,   idh,  IF(err = 19, 0, err),  9, CURRENT_TIMESTAMP);
 				
 	SELECT IF(ERRORCODE = 19, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `deletepermissionservice`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
+    COMMENT 'An admistrator delete permission to somobody to a service.'
+begin
+
+	DECLARE num,acc, per INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL OR r IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDSERVICE, PERMISSIONNUMBER INTO num, acc, idu, ids, per
+	FROM loginVIEW
+	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SELECT COUNT(*), IDUSER INTO num, idu 
+		FROM USERS
+		WHERE USERNAME = u2;	
+			
+		CASE acc
+		WHEN 1 THEN 
+			DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+			SET err = 72;
+		ELSE
+			IF (per = 1) THEN 
+				DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+				SET err = 72;
+			ELSE
+				SET err = 39;
+			END IF;
+		END CASE;
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   NULL,  IF(err = 72, 0, err),  35, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 72, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
 end$$
@@ -967,7 +1066,9 @@ end_proc:begin
 	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r;
 			 
 	CASE num 
-	WHEN 1 THEN 
+	WHEN 0 THEN
+		SET err = 46;
+	ELSE
 		CASE acc
 		WHEN 1 THEN 
 			IF (pass = p) THEN
@@ -981,10 +1082,6 @@ end_proc:begin
 		ELSE
 			SET err = 39;
 		END CASE;
-	WHEN 0 THEN
-		SET err = 46;
-	ELSE
-		SET err = 4;
 	END CASE;
 end;
 	
@@ -1173,31 +1270,29 @@ end_proc:begin
 	WHERE USERNAME = u AND HOUSENAME = h;
 			
 	CASE num 
-	WHEN 1 THEN 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
 		CASE acc
 		WHEN 1 THEN 
-SELECT COUNT(*) INTO num
-				FROM HOUSES
-				WHERE HOUSENAME = n_h AND IDHOUSE <> idh;
-						
-				CASE num 
-				WHEN 0 THEN 
-					UPDATE HOUSES SET HOUSENAME=n_h, IDIMAGE=idim, CITY=c, COUNTRY=ctry WHERE IDHOUSE = idh;
-					SET err = 42;
-				WHEN 1 THEN
-					SET err = 22;
-				ELSE
-					SET err = 4;
-				END CASE;
+			SELECT COUNT(*) INTO num
+			FROM HOUSES
+			WHERE HOUSENAME = n_h AND IDHOUSE <> idh;
+					
+			CASE num 
+			WHEN 0 THEN 
+				UPDATE HOUSES SET HOUSENAME=n_h, IDIMAGE=idim, CITY=c, COUNTRY=ctry WHERE IDHOUSE = idh;
+				SET err = 42;
+			WHEN 1 THEN
+				SET err = 22;
+			ELSE
+				SET err = 4;
+			END CASE;
 		WHEN 0 THEN
 			SET err = 11;
 		ELSE
 			SET err = 39;
 		END CASE;
-	WHEN 0 THEN
-		SET err = 11;
-	ELSE
-		SET err = 4;
 	END CASE;
 end;
 	
@@ -1208,6 +1303,46 @@ end;
 	SELECT IF(ERRORCODE = 42, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
 	FROM ERRORS
 	WHERE ERRORCODE = err;
+end$$
+
+DROP PROCEDURE IF EXISTS `modifyservicetype`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
+    COMMENT 'An admistrator modify the type of service instaled on the device.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR idd IS NULL OR s IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IDSERVICE INTO num, ids
+	FROM deviceVIEW
+	WHERE USERNAME = u AND SERVICENAME = s AND IDDEVICE = idd;
+			
+	CASE num 
+	WHEN 1 THEN 
+		UPDATE SERVICES SET `TYPE` = ty WHERE IDSERVICE = ids;
+		SET err = 70;
+	WHEN 0 THEN
+		SET err = 69;
+	ELSE
+		SET err = 4;
+	END CASE;
+end;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  ids,    NULL,  IF(err = 70, 0, err),  33, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 70, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyuser`$$
@@ -1895,6 +2030,7 @@ CREATE TABLE IF NOT EXISTS `deviceVIEW` (
 ,`SPANISH` varchar(500)
 ,`IDSERVICE` int(11)
 ,`SERVICENAME` varchar(50)
+,`TYPE` varchar(50)
 ,`IDROOM` int(11)
 ,`ROOMNAME` varchar(50)
 ,`IDHOUSE` int(11)
@@ -1914,7 +2050,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(100) NOT NULL,
   `SPANISH` varchar(100) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -1989,7 +2125,11 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (65, 'Service assigned to a room.', 'Servicio asignado a una habitacion.'),
 (66, 'This room does not exist.', 'Esta habitación no existe.'),
 (67, 'Service removed from a room.', 'Servicio quitado de la una habitación.'),
-(68, 'This button does not exist.', 'Este botón no existe.');
+(68, 'This button does not exist.', 'Este botón no existe.'),
+(69, 'This user has not selected the device or service.', 'Este usuario no tiene el dispositivo o el servicio seleccionado.'),
+(70, 'Service type updated.', 'Tipo de servicio actualizado.'),
+(71, 'Permission granted.', 'Permiso concedido.'),
+(72, 'Permission withdrawn.', 'Permiso retirado.');
 
 -- --------------------------------------------------------
 
@@ -2005,7 +2145,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(50) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -2019,6 +2159,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (26, 'createcommand'),
 (25, 'createdevice'),
 (7, 'createhouse'),
+(34, 'createpermissionservice'),
 (14, 'createprogramaction'),
 (17, 'createroom'),
 (11, 'createtask'),
@@ -2026,6 +2167,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (27, 'deletecommand'),
 (30, 'deletedevice'),
 (9, 'deletehouse'),
+(35, 'deletepermissionservice'),
 (15, 'deleteprogramaction'),
 (18, 'deleteroom'),
 (12, 'deletetask'),
@@ -2039,6 +2181,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (20, 'modifyhouse'),
 (16, 'modifyprogramaction'),
 (19, 'modifyroom'),
+(33, 'modifyservicetype'),
 (13, 'modifytask'),
 (5, 'modifyuser'),
 (29, 'removecommandprogram'),
@@ -2065,7 +2208,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3790 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3867 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -5752,7 +5895,81 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (3786, 29, NULL, 0, 1, '2014-04-18 17:58:57'),
 (3787, 29, NULL, 0, 1, '2014-04-18 17:59:54'),
 (3788, 29, NULL, 0, 1, '2014-04-18 18:09:58'),
-(3789, 29, NULL, 0, 1, '2014-04-18 18:13:41');
+(3789, 29, NULL, 0, 1, '2014-04-18 18:13:41'),
+(3790, 29, NULL, 0, 1, '2014-04-18 18:17:46'),
+(3791, 29, NULL, 0, 1, '2014-04-18 18:19:55'),
+(3792, 29, NULL, 0, 1, '2014-04-18 18:21:01'),
+(3793, 29, NULL, 0, 1, '2014-04-18 18:22:20'),
+(3794, 29, NULL, 0, 1, '2014-04-18 18:25:08'),
+(3795, 29, NULL, 0, 1, '2014-04-18 18:26:32'),
+(3796, 29, NULL, 0, 1, '2014-04-18 18:29:05'),
+(3797, 29, NULL, 0, 1, '2014-04-18 18:35:58'),
+(3798, 29, NULL, 0, 1, '2014-04-18 18:38:06'),
+(3799, 29, NULL, 0, 1, '2014-04-18 18:40:02'),
+(3800, 29, NULL, 0, 1, '2014-04-18 18:45:55'),
+(3801, 29, NULL, 0, 1, '2014-04-18 18:50:03'),
+(3802, 29, NULL, 0, 1, '2014-04-18 18:51:23'),
+(3803, 29, NULL, 0, 1, '2014-04-18 18:55:53'),
+(3804, 29, NULL, 0, 1, '2014-04-18 18:58:56'),
+(3805, 29, NULL, 0, 1, '2014-04-18 19:02:23'),
+(3806, 29, NULL, 0, 1, '2014-04-18 19:03:57'),
+(3807, 29, NULL, 0, 1, '2014-04-18 19:07:38'),
+(3808, 29, NULL, 0, 1, '2014-04-18 19:12:46'),
+(3809, 29, NULL, 0, 1, '2014-04-18 19:14:54'),
+(3810, 29, NULL, 0, 1, '2014-04-18 20:19:51'),
+(3811, 29, NULL, 0, 1, '2014-04-18 20:38:41'),
+(3812, 29, NULL, 0, 1, '2014-04-18 20:46:00'),
+(3813, 29, NULL, 0, 1, '2014-04-18 21:14:27'),
+(3814, 29, NULL, 2, 1, '2014-04-18 21:16:42'),
+(3815, 29, NULL, 2, 1, '2014-04-18 21:17:39'),
+(3816, 0, NULL, 11, 6, '2014-04-18 21:17:46'),
+(3817, 29, NULL, 2, 1, '2014-04-18 21:18:09'),
+(3818, 29, NULL, 2, 1, '2014-04-18 21:19:08'),
+(3819, 29, NULL, 2, 1, '2014-04-18 21:19:14'),
+(3820, 29, NULL, 0, 1, '2014-04-18 22:14:00'),
+(3821, 29, NULL, 0, 1, '2014-04-18 22:15:16'),
+(3822, 29, NULL, 2, 1, '2014-04-18 22:43:58'),
+(3823, 29, NULL, 0, 1, '2014-04-18 22:44:14'),
+(3824, 29, NULL, 0, 1, '2014-04-18 22:50:38'),
+(3825, 29, NULL, 0, 1, '2014-04-19 14:26:27'),
+(3826, 29, NULL, 0, 1, '2014-04-19 14:27:30'),
+(3827, 29, NULL, 0, 1, '2014-04-19 14:31:42'),
+(3828, 29, NULL, 0, 1, '2014-04-19 14:32:04'),
+(3829, 29, NULL, 0, 1, '2014-04-19 14:32:57'),
+(3830, NULL, NULL, 7, 3, '2014-04-19 14:39:32'),
+(3831, NULL, NULL, 0, 3, '2014-04-19 14:39:54'),
+(3832, 119, NULL, 0, 2, '2014-04-19 14:41:38'),
+(3833, 119, NULL, 0, 4, '2014-04-19 14:42:33'),
+(3834, NULL, NULL, 3, 4, '2014-04-19 14:42:38'),
+(3835, 0, NULL, 2, 1, '2014-04-19 16:54:12'),
+(3836, 0, NULL, 2, 1, '2014-04-19 16:54:15'),
+(3837, 0, NULL, 2, 1, '2014-04-19 17:23:32'),
+(3838, 0, NULL, 2, 1, '2014-04-19 19:04:54'),
+(3840, 172, NULL, 0, 33, '2014-04-19 19:48:57'),
+(3842, 10, NULL, 0, 34, '2014-04-19 20:20:51'),
+(3843, 10, NULL, 0, 34, '2014-04-19 20:21:10'),
+(3844, NULL, NULL, 11, 34, '2014-04-19 20:24:48'),
+(3845, 10, NULL, 0, 34, '2014-04-19 20:24:55'),
+(3846, NULL, NULL, 11, 34, '2014-04-19 20:25:04'),
+(3847, NULL, NULL, 11, 34, '2014-04-19 20:25:16'),
+(3848, 10, NULL, 39, 34, '2014-04-19 20:26:08'),
+(3849, 10, NULL, 0, 34, '2014-04-19 20:26:15'),
+(3851, 29, 10, 39, 24, '2014-04-19 20:27:48'),
+(3852, 29, 10, 39, 24, '2014-04-19 20:28:01'),
+(3853, 29, 10, 39, 17, '2014-04-19 20:32:30'),
+(3854, 29, 9, 0, 17, '2014-04-19 20:32:47'),
+(3855, 29, 9, 2, 18, '2014-04-19 20:33:00'),
+(3856, 29, 9, 0, 18, '2014-04-19 20:33:17'),
+(3857, NULL, NULL, 11, 34, '2014-04-19 20:47:36'),
+(3858, NULL, NULL, 11, 34, '2014-04-19 20:48:47'),
+(3859, 10, NULL, 0, 34, '2014-04-19 20:49:09'),
+(3860, 10, NULL, 0, 35, '2014-04-19 20:50:41'),
+(3861, 10, NULL, 0, 35, '2014-04-19 20:50:47'),
+(3862, 10, NULL, 0, 34, '2014-04-19 20:50:56'),
+(3863, 10, NULL, 0, 34, '2014-04-19 20:51:03'),
+(3864, NULL, NULL, 11, 34, '2014-04-19 20:51:16'),
+(3865, 10, NULL, 0, 34, '2014-04-19 20:51:39'),
+(3866, 10, NULL, 0, 34, '2014-04-19 20:52:26');
 
 -- --------------------------------------------------------
 
@@ -6023,6 +6240,7 @@ CREATE TABLE IF NOT EXISTS `houseRoomServiceActionVIEW` (
 ,`ROOMNAME` varchar(50)
 ,`IDSERVICE` int(11)
 ,`SERVICENAME` varchar(50)
+,`TYPE` varchar(50)
 ,`IDACTION` int(11)
 ,`ACTIONNAME` varchar(50)
 );
@@ -6079,7 +6297,7 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=78 ;
 
 --
 -- Volcado de datos para la tabla `IMAGES`
@@ -6110,7 +6328,16 @@ INSERT INTO `IMAGES` (`IDIMAGE`, `IMAGE`, `URL`, `TYPE`) VALUES
 (65, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
 (66, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
 (67, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(68, NULL, 'images/3702102233458977864.jpg', 'image/jpeg');
+(68, NULL, 'images/3702102233458977864.jpg', 'image/jpeg'),
+(69, NULL, 'images/use_case_3.png', 'image/png'),
+(70, NULL, 'images/use_case_3.png', 'image/png'),
+(71, NULL, 'images/use_case_1.png', 'image/png'),
+(72, NULL, 'images/use_case_1.png', 'image/png'),
+(73, NULL, 'images/use_case_1.png', 'image/png'),
+(74, NULL, 'images/use_case_6.png', 'image/png'),
+(75, NULL, 'images/use_case_6.png', 'image/png'),
+(76, NULL, 'images/use_case_6.png', 'image/png'),
+(77, NULL, 'images/use_case_6.png', 'image/png');
 
 -- --------------------------------------------------------
 
@@ -6196,7 +6423,7 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 --
 -- Estructura de tabla para la tabla `PERMISSIONS`
 --
--- Creación: 12-04-2014 a las 14:42:08
+-- Creación: 19-04-2014 a las 20:52:19
 --
 
 DROP TABLE IF EXISTS `PERMISSIONS`;
@@ -6204,7 +6431,7 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
   `IDUSER` int(11) NOT NULL DEFAULT '0',
   `IDSERVICE` int(11) NOT NULL,
   `PERMISSIONNUMBER` int(11) NOT NULL,
-  `DATEBEGIN` date DEFAULT NULL,
+  `DATEBEGIN` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`IDUSER`,`IDSERVICE`),
   KEY `IDSERVICE` (`IDSERVICE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -6222,6 +6449,9 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
 --
 
 INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+(10, 168, 2, '2014-04-18 22:00:00'),
+(10, 169, 12, '2014-04-19 20:52:26'),
+(10, 172, 1, '2014-04-18 22:00:00'),
 (29, 168, 1, NULL);
 
 -- --------------------------------------------------------
@@ -6299,7 +6529,7 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -6319,7 +6549,7 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
@@ -6418,7 +6648,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (169, 1, 44, 'TV', 'TV NPG', 1, '[0,0,0]', 'Universal remote for TV.', 'Mando universal para televición.'),
 (170, 1, 44, 'INTERCOM', NULL, 3, '[]', 'For intercom.', 'Para el telefonillo.'),
 (171, 1, 44, 'PLUG', NULL, 4, '[0]', 'Control strips.', 'Control de regletas.'),
-(172, 1, 44, 'AIRCONDITIONING', NULL, 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(172, 1, 44, 'AIRCONDITIONING', 'FUGITSU', 5, '[0,0,0]', 'Control of air conditioning.', 'Control del aire acondicionado.'),
 (173, 1, 44, 'SENSOR', NULL, 6, '[0,0,0]', 'Sensors.', 'Sensores.'),
 (174, 2, 44, 'BLINDS', NULL, 7, '[0,0]', 'Blinds control.', 'Control de persianas.'),
 (175, 3, 44, 'DOOR', NULL, 8, '[0,0]', 'Control gates.', 'Control de puertas.'),
@@ -6656,7 +6886,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=119 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=120 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -6678,9 +6908,8 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEG
 (77, 'beta', 'f', 'aasdf@asdf', 'hint', '2014-04-08 10:18:30'),
 (80, 'dd', 'fgh', 'das', 'df', '2014-04-09 09:09:05'),
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', '2014-04-09 13:33:28'),
-(97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'lejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
-(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', '2014-04-15 23:58:11'),
-(112, 'a', '', 'alejandroladrondeguevara@gmail.com', '', '2014-04-17 21:42:00');
+(97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'alejandroladrondeguevara@gmail.com', 'about me.', '2014-04-15 10:45:56'),
+(103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', '2014-04-15 23:58:11');
 
 -- --------------------------------------------------------
 
@@ -6707,7 +6936,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `deviceVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
 
 -- --------------------------------------------------------
 
@@ -6716,7 +6945,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `houseRoomServiceActionVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
 
 -- --------------------------------------------------------
 

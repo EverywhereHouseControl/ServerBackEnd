@@ -1624,7 +1624,7 @@ end
   
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`
 ( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
-    COMMENT 'An admistrator grant access somobody to a house.'
+    COMMENT 'An admistrator modify the type of service instaled on the device.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
@@ -1637,30 +1637,71 @@ end_proc:begin
 		LEAVE end_proc;
 	END IF;
 
-	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDHOUSE INTO num, acc, idu, idh
-	FROM loginVIEW
-	WHERE USERNAME = u AND HOUSENAME = h;
+	SELECT COUNT(*), IDSERVICE INTO num, ids
+	FROM deviceVIEW
+	WHERE USERNAME = u AND SERVICENAME = s;
 			
 	CASE num 
 	WHEN 1 THEN 
+		UPDATE SERVICES SET `TYPE` = ty WHERE IDSERVICE = ids;
+		SET err = 70;
+	WHEN 0 THEN
+		SET err = 69;
+	ELSE
+		SET err = 4;
+	END CASE;
+end;
+	
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,  ids,    NULL,  IF(err = 70, 0, err),  33, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 70, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+
+end
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `createpermissionservice`
+( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+    COMMENT 'An admistrator give permission to somobody to a service.'
+begin
+
+	DECLARE num,acc INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL OR r IS NULL OR n IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDSERVICE INTO num, acc, idu, ids
+	FROM loginVIEW
+	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s;
+			
+	CASE num 
+	WHEN 1 THEN 
+		SELECT COUNT(*), IDUSER INTO num, idu 
+		FROM USERS
+		WHERE USERNAME = u2;	
+			
 		CASE acc
 		WHEN 1 THEN 
-			SELECT COUNT(*), IDUSER INTO num, idu 
-			FROM USERS
-			WHERE USERNAME = u2;
-
-			IF (num <> 0) THEN 
-				DELETE FROM ACCESSHOUSE WHERE IDUSER=idu AND IDHOUSE = idh;
-				INSERT INTO ACCESSHOUSE (IDUSER, IDHOUSE, ACCESSNUMBER, DATEBEGIN) VALUES
-										(idu,    idh, n, CURRENT_TIMESTAMP);
-				SET err = 40;
-			ELSE
-				SET err = 3;
-			END IF;
-		WHEN 0 THEN
-			SET err = 11;
+			DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+			INSERT INTO PERMISSIONS (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+										(idu,    ids, n, CURRENT_TIMESTAMP);
+			SET err = 71;
 		ELSE
-			SET err = 39;
+			IF (n <> 1) THEN 
+				DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+				INSERT INTO PERMISSIONS (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN`) VALUES
+										(idu,    ids, n, CURRENT_TIMESTAMP);
+				SET err = 71;
+			ELSE
+				SET err = 39;
+			END IF;
 		END CASE;
 	WHEN 0 THEN
 		SET err = 11;
@@ -1668,6 +1709,78 @@ end_proc:begin
 		SET err = 4;
 	END CASE;
 end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   idh,  IF(err = 71, 0, err),  34, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 71, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+
+
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletepermissionservice`
+( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
+    COMMENT 'An admistrator delete permission to somobody to a service.'
+begin
+
+	DECLARE num,acc, per INTEGER DEFAULT 0;
+	DECLARE idu, ids INTEGER DEFAULT NULL;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (u IS NULL OR h IS NULL OR u2 IS NULL OR r IS NULL ) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), IFNULL(ACCESSNUMBER, 0), IDUSER, IDSERVICE, PERMISSIONNUMBER INTO num, acc, idu, ids, per
+	FROM loginVIEW
+	WHERE USERNAME = u AND HOUSENAME = h AND ROOMNAME = r AND SERVICENAME = s;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 11;
+	ELSE
+		SELECT COUNT(*), IDUSER INTO num, idu 
+		FROM USERS
+		WHERE USERNAME = u2;	
+			
+		CASE acc
+		WHEN 1 THEN 
+			DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+			SET err = 72;
+		ELSE
+			IF (per = 1) THEN 
+				DELETE FROM PERMISSIONS WHERE IDUSER=idu AND IDSERVICE = ids;
+				SET err = 72;
+			ELSE
+				SET err = 39;
+			END IF;
+		END CASE;
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   NULL,  IF(err = 72, 0, err),  35, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 72, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -67,6 +67,8 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   				<option value="createdevice">createdevice</option>
   				<option value="deletedevice">deletedevice</option>
   				<option value="modifyservicetype">modifyservicetype</option>
+  				<option value="createpermissionservice">createpermissionservice</option>
+  				<option value="deletepermissionservice">deletepermissionservice</option>
   				<option value="linkserviceroom">linkserviceroom</option>
   				<option value="unlinkserviceroom">unlinkserviceroom</option> 
   				</select>                          <input type="submit" value="Execute" />
