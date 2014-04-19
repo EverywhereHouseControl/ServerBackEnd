@@ -1,6 +1,8 @@
 Repository BackEnd from server EHC.
 ===================================
+<div align="center">
 [![Screen Shot](http://ehcontrol.net/images/logo.png)](http://ehcontrol.net/)
+</div>
 ## Purpose
 
 The purpose is to give online  service monitoring to application domotico EHC.
