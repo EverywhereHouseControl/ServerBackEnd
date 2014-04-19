@@ -22,5 +22,4 @@ The purpose is to give online  service monitoring to application domotico EHC.
 - [Examples of login2 return JSON.](login_bertoldo_task_command_single.txt)
 
 ## Acknowledgements
-
-# *[Makespace](http://makespacemadrid.org/)*
+- # *[Makespace](http://makespacemadrid.org/)* #
