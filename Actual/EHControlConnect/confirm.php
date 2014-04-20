@@ -21,12 +21,12 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
 	welcome_mail($sqlregistration ['result'][0]['EMAIL'], $sqlregistration ['result'][0]['USERNAME']);
-	echo '<div style="margin-left: -100px;" dir="ltr" align="center">
+	echo '<div style="margin-left: -300px;" dir="ltr" align="center">
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
-		<div style="position: relative; left: 220px; top: -180px; width: 200px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
+		<div style="position: relative; left: 300px; top: -140px; width: 400px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
 		</div>';
 } else {
 	echo '<div style="margin-left: -400px;" dir="ltr" align="center">
