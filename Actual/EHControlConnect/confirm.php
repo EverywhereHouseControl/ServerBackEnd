@@ -26,7 +26,7 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
-		<div style="position: relative; left: 300px; top: -140px; width: 400px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
+		<div style="position: relative; left: 310px; top: -140px; width: 400px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
 		</div>';
 } else {
 	echo '<div style="margin-left: -400px;" dir="ltr" align="center">
