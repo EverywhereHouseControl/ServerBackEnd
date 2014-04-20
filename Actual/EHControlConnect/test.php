@@ -3,38 +3,52 @@ $username = "server";
 $password = "revres";
 if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 ?>
-	<head>
-		<title>Test API server</title>
-	</head>
-	<div style="position: absolute; left: 309px; top: 18px; width: 294px; height: 173px;">
-			<h2>
-				<span style="font-family:arial,helvetica,sans-serif;"><span style="color: rgb(0, 0, 205);">Test API, restricted area</span></span></h2>
-			<form action="" method="post" name="form">
-				<p>
-					<label for="txtUsername">Username:</label><br />
-					<input name="txtUsername" title="Introduce nombre de usuario" type="text" /></p>
-				<p>
-					<label for="txtpassword">Password:</label></p>
-				<p>
-					<input name="txtPassword" title="Introduce la contraseña" type="password" /></p>
-				<p>
-					<input name="Submit" type="submit" value="Login" /></p>
-			</form>
-		</div>
-		<div style="position: absolute; left: 87px; top: 57px; width: 100px; height: 100px;">
-			<img alt="" src="http://ehcontrol.net/images/logo.png" style="width: 200px; height: 200px;" /></div>
+<head>
+<title>Test API server</title>
+</head>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div style="margin-left: -300px;" align="center">
+	<img style="width: 200px; height: 200px;"
+		src="http://ehcontrol.net/images/logo.png" alt="" />
+	<div
+		style="position: relative; left: 300px; top: -220px; width: 294px; height: 173px;">
+		<h2 style="text-align: left;">
+			<span style="font-family: arial, helvetica, sans-serif;"><span
+				style="color: #0000cd;">Test API, restricted area</span></span>
+		</h2>
+		<form action="" method="post" name="form">
+			<p style="text-align: left;">
+				<label for="txtUsername">Username:</label><br /> <input
+					title="Introduce nombre de usuario" type="text" name="txtUsername" />
+			</p>
+			<p style="text-align: left;">
+				<label for="txtpassword">Password:</label>
+			</p>
+			<p style="text-align: left;">
+				<input title="Introduce la contrase&ntilde;a" type="password"
+					name="txtPassword" />
+			</p>
+			<p style="text-align: left;">
+				<input type="submit" name="Submit" value="Login" />
+			</p>
+		</form>
+	</div>
+</div>
 <?php
 }else {
 ?>
 <p>Test now protected by password.</p>
 <!doctype html>
 <html>
-	<head>
-		<title>Test API server</title>
-	</head>
-	<body>
-		<form action="http://ehcontrol.net/EHControlConnect/index.php" method="POST">
-			<pre>
+<head>
+<title>Test API server</title>
+</head>
+<body>
+	<form action="http://ehcontrol.net/EHControlConnect/index.php"
+		method="POST">
+		<pre>
   command:     <select name="command" size="1">
   				<option selected="selected" value="login2">login2</option>
   				<option value="createuser2">createuser2</option>
@@ -71,7 +85,8 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   				<option value="deletepermissionservice">deletepermissionservice</option>
   				<option value="linkserviceroom">linkserviceroom</option>
   				<option value="unlinkserviceroom">unlinkserviceroom</option> 
-  				</select>                          <input type="submit" value="Execute" />
+  				</select>                          <input type="submit"
+				value="Execute" />
   username:    <input name="username" size="50" type="text" />
   password:    <input name="password" size="50" type="text" />
   email:       <input name="email" size="50" type="text" />
@@ -107,14 +122,25 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   serial:      <input name="serial" size="50" type="text" />
   idimage:     <input name="idimage" size="50" type="text" />
 </pre>
-		</form>
-		<form action="http://ehcontrol.net/EHControlConnect/index.php" enctype="multipart/form-data" method="POST">
-			<label for="imagen">Imagen:</label> <input id="imagen" name="imagen" type="file" /> <input name="subir" type="submit" value="Subir" /> <input name="command" type="text" value="subir" />&nbsp;</form>
-		<div style="position: absolute; left: 526px; top: 93px; width: 100px; height: 100px;">
-			<img alt="" src="http://ehcontrol.net/images/logo.png" style="width: 200px; height: 200px;" /></div>
-		<div style="position: absolute; left: 479px; top: 282px; width: 310px; height: 100px;">
-			<span style="font-size:18px;"><span style="font-family: arial,helvetica,sans-serif;"><span style="color: rgb(0, 0, 205);">API SERVER TESTING INTERFACE</span></span></span></div>
-	</body>
+	</form>
+	<form action="http://ehcontrol.net/EHControlConnect/index.php"
+		enctype="multipart/form-data" method="POST">
+		<label for="imagen">Imagen:</label> <input id="imagen" name="imagen"
+			type="file" /> <input name="subir" type="submit" value="Subir" /> <input
+			name="command" type="text" value="subir" />&nbsp;
+	</form>
+	<div
+		style="position: absolute; left: 526px; top: 93px; width: 100px; height: 100px;">
+		<img alt="" src="http://ehcontrol.net/images/logo.png"
+			style="width: 200px; height: 200px;" />
+	</div>
+	<div
+		style="position: absolute; left: 479px; top: 282px; width: 310px; height: 100px;">
+		<span style="font-size: 18px;"><span
+			style="font-family: arial, helvetica, sans-serif;"><span
+				style="color: rgb(0, 0, 205);">API SERVER TESTING INTERFACE</span></span></span>
+	</div>
+</body>
 
 </html>
 <?php
