@@ -21,9 +21,24 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
 	welcome_mail($sqlregistration ['result'][0]['EMAIL'], $sqlregistration ['result'][0]['USERNAME']);
-	echo "You have successfully confirmed your account.";
+	echo '<div style="margin-left: -100px;" dir="ltr" align="center">
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
+		<div style="position: relative; left: 220px; top: -180px; width: 200px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
+		</div>';
 } else {
-	echo "The verification code is not valid.";
+	echo '<div style="margin-left: -400px;" dir="ltr" align="center">
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
+		<div style="position: relative; left: 360px; top: -180px; width: 500px; height: 200px; text-align: left;">
+		<p><span style="color: #ff0000; font-family: arial,helvetica,sans-serif; font-size: xx-large;">The verification code is not valid.</span></p>
+		<p><span style="color: #ff0000; font-family: arial,helvetica,sans-serif; font-size: xx-large;"><span id="result_box" class="short_text" lang="en"><span class="hps">Perhaps the</span> <span class="hps">user is</span> <span class="hps">already activated</span><span>.</span></span></span></p>
+		</div>
+		</div>';
 }
 ?>
 </body>
