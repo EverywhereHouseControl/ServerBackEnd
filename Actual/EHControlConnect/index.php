@@ -69,7 +69,7 @@ switch ($_POST['command']) {
 		break;
 	//5
 	case "modifyuser2":
-		modifyuser2($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint']);
+		modifyuser2($_POST['username'],$_POST['password'],$_POST['n_username'],$_POST['n_password'],$_POST['n_email'],$_POST['n_hint'],$_POST['image']);
 		//**modify all fields
 		// ::> returns a message | returns the result of the operation
 		break;
@@ -87,7 +87,7 @@ switch ($_POST['command']) {
 		break;		
 	//10
 	case "getweather":
-		getweather($_POST['city'],$_POST['language']);
+		getweather($_POST['city'],$_POST['country'],$_POST['language']);
 		// ::> returns the weather of a specific city and country
 		break;		
 //-------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ switch ($_POST['command']) {
 		break;
 	//
 	case "modifyhouse":
-		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['idimage'],$_POST['city'],$_POST['country']);
+		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['image'],$_POST['city'],$_POST['country']);
 		break;
 //-------------------------------------------------------------------------------------------------
 	//14
@@ -209,8 +209,7 @@ switch ($_POST['command']) {
 	break;
 	case "subir":
 		subir2();
-		//**download the STADISTICS of username by using and more
-		// ::> returns a message | returns JSON
+		
 	break;
 //-------------------------------------------------------------------------------------------------
 		

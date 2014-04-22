@@ -84,7 +84,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createuser2":
@@ -121,7 +121,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deleteuser2":
@@ -158,7 +158,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "modifyuser2":
@@ -195,7 +195,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="block";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "doaction":
@@ -232,7 +232,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "ipcheck":
@@ -269,7 +269,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "getweather":
@@ -306,7 +306,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="block";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "lostpass":
@@ -343,7 +343,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createhouse":
@@ -380,7 +380,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deletehouse":
@@ -417,7 +417,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "modifyhouse":
@@ -454,7 +454,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="block";
+            	document.getElementById("image").style.display="block";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createprogramaction":
@@ -491,7 +491,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deleteprogramaction":
@@ -528,7 +528,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createtask":
@@ -565,7 +565,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deletetask":
@@ -602,7 +602,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "addtaskprogram":
@@ -639,7 +639,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "removetaskprogram":
@@ -676,7 +676,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "addcommandprogram":
@@ -713,7 +713,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="block";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "removecommandprogram":
@@ -750,7 +750,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="block";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createcommand":
@@ -787,7 +787,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deletecommand":
@@ -824,44 +824,44 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
-            case "schedulehouse":
-            	document.getElementById("username").style.display="block";
-            	document.getElementById("password").style.display="block";
-            	document.getElementById("email").style.display="block";
-            	document.getElementById("hint").style.display="block";
-            	document.getElementById("n_username").style.display="block";
-            	document.getElementById("n_password").style.display="block";
-            	document.getElementById("n_email").style.display="block";
-            	document.getElementById("n_hint").style.display="block";
-            	document.getElementById("housename").style.display="block";
-            	document.getElementById("roomname").style.display="block";
-            	document.getElementById("servicename").style.display="block";
-            	document.getElementById("actionname").style.display="block";
-            	document.getElementById("n_housename").style.display="block";
-            	document.getElementById("n_roomname").style.display="block";
-            	document.getElementById("data").style.display="block";
-            	document.getElementById("start").style.display="block";
-            	document.getElementById("idaction").style.display="block";
-            	document.getElementById("iddevice").style.display="block";
-            	document.getElementById("idservice").style.display="block";
-            	document.getElementById("idroom").style.display="block";
-            	document.getElementById("taskname").style.display="block";
-            	document.getElementById("idtask").style.display="block";
-            	document.getElementById("commandname").style.display="block";
-            	document.getElementById("description").style.display="block";
-            	document.getElementById("frequency").style.display="block";
-            	document.getElementById("type").style.display="block";
-            	document.getElementById("devicename").style.display="block";
-            	document.getElementById("ipaddress").style.display="block";
-            	document.getElementById("city").style.display="block";
-            	document.getElementById("country").style.display="block";
-            	document.getElementById("language").style.display="block";
-            	document.getElementById("number").style.display="block";
-            	document.getElementById("serial").style.display="block";
-            	document.getElementById("idimage").style.display="block";
+            case "":
+            	document.getElementById("username").style.display="none";
+            	document.getElementById("password").style.display="none";
+            	document.getElementById("email").style.display="none";
+            	document.getElementById("hint").style.display="none";
+            	document.getElementById("n_username").style.display="none";
+            	document.getElementById("n_password").style.display="none";
+            	document.getElementById("n_email").style.display="none";
+            	document.getElementById("n_hint").style.display="none";
+            	document.getElementById("housename").style.display="none";
+            	document.getElementById("roomname").style.display="none";
+            	document.getElementById("servicename").style.display="none";
+            	document.getElementById("actionname").style.display="none";
+            	document.getElementById("n_housename").style.display="none";
+            	document.getElementById("n_roomname").style.display="none";
+            	document.getElementById("data").style.display="none";
+            	document.getElementById("start").style.display="none";
+            	document.getElementById("idaction").style.display="none";
+            	document.getElementById("iddevice").style.display="none";
+            	document.getElementById("idservice").style.display="none";
+            	document.getElementById("idroom").style.display="none";
+            	document.getElementById("taskname").style.display="none";
+            	document.getElementById("idtask").style.display="none";
+            	document.getElementById("commandname").style.display="none";
+            	document.getElementById("description").style.display="none";
+            	document.getElementById("frequency").style.display="none";
+            	document.getElementById("type").style.display="none";
+            	document.getElementById("devicename").style.display="none";
+            	document.getElementById("ipaddress").style.display="none";
+            	document.getElementById("city").style.display="none";
+            	document.getElementById("country").style.display="none";
+            	document.getElementById("language").style.display="none";
+            	document.getElementById("number").style.display="none";
+            	document.getElementById("serial").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createroom":
@@ -898,7 +898,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deleteroom":
@@ -935,7 +935,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createaccesshouse":
@@ -972,7 +972,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="block";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deleteaccesshouse":
@@ -1009,7 +1009,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createdevice":
@@ -1046,7 +1046,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="block";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deletedevice":
@@ -1083,7 +1083,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "modifyservicetype":
@@ -1120,7 +1120,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "createpermissionservice":
@@ -1157,7 +1157,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="block";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "deletepermissionservice":
@@ -1194,7 +1194,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "linkserviceroom":
@@ -1231,7 +1231,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "unlinkserviceroom":
@@ -1268,7 +1268,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="none";
             	break;
             case "subir":
@@ -1305,7 +1305,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="none";
             	document.getElementById("number").style.display="none";
             	document.getElementById("serial").style.display="none";
-            	document.getElementById("idimage").style.display="none";
+            	document.getElementById("image").style.display="none";
             	document.getElementById("loadfile").style.display="block";
             	break;
             	/*   case "login2":
@@ -1342,7 +1342,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("language").style.display="block";
             	document.getElementById("number").style.display="block";
             	document.getElementById("serial").style.display="block";
-            	document.getElementById("idimage").style.display="block";
+            	document.getElementById("image").style.display="block";
             	document.getElementById("loadfile").style.display="block";
             	break;*/
             }
@@ -1353,8 +1353,9 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 	<form action="http://ehcontrol.net/EHControlConnect/index.php"
 		method="POST">
 		<pre>
-<tr><td><pre>  command:     <select name="command" id="command" size="1" onchange="show()">
-  				<option selected="selected" value="login2">login2</option>
+<tr><td><pre>  command:     <select name="command" id="command" size="1" onclick="show()">
+  				<option selected="selected" value=""></option>
+  				<option value="login2">login2</option>
   				<option value="createuser2">createuser2</option>
   				<option value="deleteuser2">deleteuser2</option>
   				<option value="modifyuser2">modifyuser2</option>
@@ -1392,8 +1393,8 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   				<option value="unlinkserviceroom">unlinkserviceroom</option> 
   				</select>                          <input type="submit"
 				value="Execute" /></pre></td></tr>
-<tr id="username" style="display:block;"><td><pre>  username:    <input name="username" size="50" type="text" /></pre></td></tr>
-<tr id="password" style="display:block;"><td><pre>  password:    <input name="password" size="50" type="text" </pre></td></tr>
+<tr id="username" style="display:none;"><td><pre>  username:    <input name="username" size="50" type="text" /></pre></td></tr>
+<tr id="password" style="display:none;"><td><pre>  password:    <input name="password" size="50" type="text" </pre></td></tr>
 <tr id="email" style="display:none;"><td><pre>  email:       <input name="email" size="50" type="text" </pre></td></tr>
 <tr id="hint" style="display:none;"><td><pre>  hint:        <input name="hint" size="50" type="text" </pre></td></tr>
 <tr id="n_username" style="display:none;"><td><pre>  n_username:  <input name="n_username" size="50" type="text" </pre></td></tr>
@@ -1425,7 +1426,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 <tr id="language" style="display:none;"><td><pre>  language:    <input name="language" size="50" type="text" </pre></td></tr>
 <tr id="number" style="display:none;"><td><pre>  number:      <input name="number" size="50" type="text" </pre></td></tr>
 <tr id="serial" style="display:none;"><td><pre>  serial:      <input name="serial" size="50" type="text" </pre></td></tr>
-<tr id="idimage" style="display:none;"><td><pre>  idimage:     <input name="idimage" size="50" type="text" </pre></td></tr>
+<tr id="image" style="display:none;"><td><pre>  image:       <input name="image" size="50" type="text" </pre></td></tr>
 </pre>
 <tr id="loadfile" style="display:none;"><td>
 	</form>

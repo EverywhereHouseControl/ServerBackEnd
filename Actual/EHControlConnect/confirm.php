@@ -13,8 +13,8 @@ $sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s'
 
 if (count ( $sqlregistration ['result'] ) == 1) {
 	query ( "DELETE FROM REGISTRATIONS WHERE CODECONFIRM = '%s' LIMIT 1;", $code );
-	query ( "INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`) VALUES
-									(NULL, '%s', '%s', '%s', '%s', '%s');", 
+	query ( "INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE`, `DATEBEGIN`) VALUES
+									(NULL, '%s', '%s', '%s', '%s', NULL, '%s');", 
 										$sqlregistration ['result'][0]['USERNAME'],
 										$sqlregistration ['result'][0]['PASSWORD'],
 										$sqlregistration ['result'][0]['EMAIL'],

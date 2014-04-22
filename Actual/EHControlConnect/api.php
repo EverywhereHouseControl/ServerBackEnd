@@ -351,8 +351,11 @@ function createJSON2($user) {
 				$JSON["houses"][$h]["name"]    = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON["houses"][$h]["id"]    = utf8_encode($SQLjson['result'][$i]['IDHOUSE']);
 				$JSON["houses"][$h]["access"]  = $SQLjson['result'][$i]['ACCESSNUMBER'];
-				$JSON["houses"][$h]["weather"] = weatherJSON($SQLjson['result'][$i]['CITY'], $SQLjson['result'][$i]['COUNTRY'], 'en');
+				$JSON["houses"][$h]["city"]  = utf8_encode($SQLjson['result'][$i]['CITY']);
+				$JSON["houses"][$h]["country"]  =  utf8_encode($SQLjson['result'][$i]['COUNTRY']);
+				$JSON["houses"][$h]["weather"] = null;//weatherJSON($SQLjson['result'][$i]['CITY'], $SQLjson['result'][$i]['COUNTRY'], 'en');
 				$JSON["houses"][$h]["image"]   = ($SQLjson['result'][$i]['URL'] == NULL) ? NULL:'http://ehcontrol.net/EHControlConnect/'.utf8_encode($SQLjson['result'][$i]['URL']);
+				$JSON["houses"][$h]["events"]   = eventJSON(utf8_encode($SQLjson['result'][$i]['HOUSENAME']));
 				
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"] = null;
@@ -425,7 +428,7 @@ function login2($user, $pass) {
 	$funct = 1;
 	
 	//only for save the iduser becouse we need that
-	$SQLuser = query("SELECT * FROM USERS WHERE USERNAME='%s'  limit 2;", $user);
+	$SQLuser = query("SELECT IDUSER, USERNAME, PASSWORD, EMAIL, HINT, DATEBEGIN, URL FROM USERS LEFT JOIN IMAGES USING (IDIMAGE) WHERE USERNAME='%s'  limit 2;", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
 	$num	 = count($SQLuser['result']);
 	switch ($num){
@@ -459,6 +462,7 @@ function login2($user, $pass) {
 	
 	//successful function
 	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
+	$result['result']['URL'] = ($result['result']['URL'] == NULL)? NULL: 'http://ehcontrol.net/EHControlConnect/'.$result['result']['URL'];
 	$result['result']['TASKS']    = taskJSON($user);
 	$result['result']['COMMANDS'] = commandJSON($user);
 	$result['result']['SINGLES']  = singleProgramJSON($user);
@@ -511,7 +515,7 @@ function lostpass($user){
 function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
 	// randomconde verification.
-	$codeconfirm = rand(0000000000,9999999999);
+	$codeconfirm = md5(rand(0000000000,9999999999));
 	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s')", $user, $pass, $email, $hint, $codeconfirm);
 	// take de error message
 	
@@ -539,9 +543,9 @@ function deleteuser2($user, $pass){
 }
 
 //--------------------------------------------------------------------------------------
-function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
+function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image){
 	/* create a new user*/
-	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint);
+	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -583,9 +587,9 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	$ipaddress = $SQLdoaction['result'][0]['IPADDRESS'];
 	
 	//construction code to raspberry would be send
-	$raspberry = '-'.$SQLdoaction['result'][0]['IDDEVICE'].'-'
-					.$SQLdoaction['result'][0]['IDSERVICE'].'-'
-					.$SQLdoaction['result'][0]['ACTIONNAME'].'-';
+	$raspberryiddevice = $SQLdoaction['result'][0]['IDDEVICE'];
+	$raspberryidservice = $SQLdoaction['result'][0]['IDSERVICE'];
+	//$raspberryaction = $SQLdoaction['result'][0]['ACTIONNAME'];
 	
 	//GET THE FUNCTION TYPE
 	$FCODE = $SQLdoaction['result'][0]['FCODE'];
@@ -608,48 +612,48 @@ function doaction($user,$house,$room,$service,$action,$data) {
 			
 			testNoERROR($iduser, $error, $funct);
 			
-			$raspberry .= $code['result'][0][$data].'-';
+			$raspberryaction = $code['result'][0][$data];
 			break;
 			
 		case 'OPEN/CLOSE':
 			switch ($data){
 				case 'OPEN':
-					$raspberry .= '1-';
+					$raspberryaction = '1';
 					break;
 				case 'CLOSE':
-					$raspberry .= '0-';
+					$raspberryaction = '0';
 					break;
 				default:
-					$raspberry .= '-';
+					$raspberryaction = '';
 			}
 			break;
 			
 		case 'ON/OFF':	
 			switch ($data){
 				case 'ON':
-					$raspberry .= '1-';
+					$raspberryaction = '1';
 					break;
 				case 'OFF':
-					$raspberry .= '0-';
+					$raspberryaction = '0';
 					break;
 				default:
-					$raspberry .= '-';
+					$raspberryaction = '';
 			}
 			break;
 			
 		case 'UP/MEDIUM/DOWN':
 			switch ($data){
 				case 'UP':
-					$raspberry .= '2-';
+					$raspberryaction = '2';
 					break;
 				case 'MEDIUM':
-					$raspberry .= '1-';
+					$raspberryaction = '1';
 					break;
 				case 'DOWN':
-					$raspberry .= '0-';
+					$raspberryaction = '0';
 					break;
 				default:
-					$raspberry .= '-';
+					$raspberryaction = '';
 			}
 			break;
 		default:
@@ -657,7 +661,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	}
 	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
-	header("Location: $ipaddress?valor=$raspberry");
+	header("Location: $ipaddress?command=SEND&iddevice=$raspberryiddevice&idservice=$raspberryidservice&action=$raspberryaction&data=0");
 	//header("Location: http://ehcontrol.net/EHControlConnect/");
 	//echo "<a href='$ipaddress?valor=$raspberry'></a>";
 	
@@ -721,7 +725,7 @@ function getweather($city,$language){
 }
 
 //--------------------------------------------------------------------------------------
-function getweather2($city,$language){
+function getweather2($city, $country, $language){
 	/* returns the weather of a specific city and country */
 	$error = 0;
 	$funct = 10;
@@ -733,11 +737,12 @@ function getweather2($city,$language){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 
-	exec('./clima ' .$city.' '. $language,$output);
-	foreach($output as &$valor){
+	$language = ($language == null || $language == '')? 'en':$language;
+	exec('./clima ' .$city.','.$country.' '. $language);
+	/*foreach($output as &$valor){
 		return ($valor);
 		echo ("\n");
-	}
+	}*/
 	return null;
 }
 //--------------------------------------------------------------------------------------
@@ -756,7 +761,10 @@ function weatherJSON($city, $country, $language){
 function createhouse($user, $house, $city, $country){
 	/* create a new house + create access for this user to the house*/
 	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
-	// take de error message
+	
+	$dir = 'images/'.$house;
+	mkdir($dir, 0777);
+	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
@@ -764,16 +772,30 @@ function createhouse($user, $house, $city, $country){
 //--------------------------------------------------------------------------------------
 function modifyhouse($user, $house, $n_house, $image, $city, $country){
 	/* modify information of house by an administrator*/
-	$message = query("CALL modifyhouse('%s', '%s', '%s', %s, '%s', '%s')", $user, $house, $n_house,(int) $image, $city, $country);
+	$message = query("CALL modifyhouse('%s', '%s', '%s', '%s', '%s', '%s')", $user, $house, $n_house, $image, $city, $country);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 //--------------------------------------------------------------------------------------
+// recursively remove a directory
+function rrmdir($dir) {
+	foreach(glob($dir . '/*') as $file) {
+		if(is_dir($file))
+			rrmdir($file);
+		else
+			unlink($file);
+	}
+	rmdir($dir);
+}
+//--------------------------------------------------------------------------------------
 function deletehouse($user, $pass, $house){
 	/*delete a existing house by an administrator user <-- user with access number 1*/
 	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
-	// take de error message
+	
+	$dir = 'images/'.$house;
+	rrmdir($dir);
+	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
@@ -1162,6 +1184,60 @@ function singleProgramJSON($user){
 }
 
 //--------------------------------------------------------------------------------------
+function eventJSON($house){
+
+	$SQLjson = query ( "SELECT *
+						FROM eventProgramVIEW
+						WHERE HOUSENAME = '%s' ;", $house );
+	$num	 = count($SQLjson['result']);
+//print $house.' '.$num.'  ';
+	//TEST QUERY HAS AT LEAST one VALUE
+	if ($num == 0){
+		$JSON = null;
+		return $JSON;
+	}
+	
+	//var for register distinct SOCKET
+	$tmpIDPROGRAM	= NULL;
+
+	//initialice values
+	$JSON = null;
+	$p = -1;
+
+	//print json_encode($JSON).$num;
+	for($i = 0; $i < $num; $i++){
+
+		switch (true) {
+
+			case ($SQLjson['result'][$i]['IDPROGRAM'] == NULL):
+				break;
+
+			case ($tmpIDPROGRAM <> $SQLjson['result'][$i]['IDPROGRAM']):
+				$p++; 
+				$ev = 'Event'.$p;
+
+	roomlabel:	$JSON[$ev]["Name"] = $SQLjson['result'][$i]['IDPROGRAM'];
+				$JSON[$ev]["item"]  = $SQLjson['result'][$i]['IDSERVICE'];
+				$starttime = getdate($SQLjson['result'][$i]['STARTTIME']);
+				$JSON[$ev]["Day"]   = $starttime['mday'];
+				$JSON[$ev]["Month"] = $starttime['mon'];
+				$JSON[$ev]["Year"]  = $starttime['year'];
+				$JSON[$ev]["Hour"]  = $starttime['hours'];
+				$JSON[$ev]["Minute"]= $starttime['minutes'];
+				$JSON[$ev]["Second"]= $starttime['seconds'];
+				$JSON[$ev]["Created"]= $SQLjson['result'][$i]['USERNAME'];
+					
+			default:
+
+		}
+		$tmpIDPROGRAM	= $SQLjson['result'][$i]['IDPROGRAM'];
+	}
+
+	return $JSON;
+
+}
+
+//--------------------------------------------------------------------------------------
 function deviceJSON($user){
 
 	$SQLjson = query ( "SELECT *
@@ -1343,17 +1419,21 @@ function subir2() {
 	$image 	= $_FILES ['imagen'] ['name'];
 	$ruta 	= $_FILES ['imagen'] ['tmp_name'];
 	$tipo 	= $_FILES ['imagen'] ['type'];
-	$destino = 'images/'.$image;
+	$destino = 'images/'.$house.'/'.$image;
 	if (copy($ruta,$destino)) {
-		print '{"error":{"ERROR":0,"ENGLISH":"Uploaded image.","SPANISH":"Archivo subido."}';
+		$return['error']['ERROR'] = 0;
+		$return['error']['ENGLISH'] = "Uploaded image.";
+		$return['error']['SPANISH'] = "Archivo subido.";
 	} else {
-		print '{"error":{"ERROR":1,"ENGLISH":"Error on update image.","SPANISH":"Error al subir archivo."}';
+		$return['error']['ERROR'] = 1;
+		$return['error']['ENGLISH'] = "Error on update image.";
+		$return['error']['SPANISH'] = "Error al subir archivo.";
+		
 	}
-	query ( "INSERT INTO IMAGES (IDIMAGE, IMAGE, URL, TYPE) 
-									VALUES   (NULL, NULL, '%s', '%s')", $destino, $tipo);
-
-	//echo "<img src=\"$destino\">";
-	//print "$image $ruta $tipo $destino el archivo ha sido copiado exitosamente";
+	query ( "INSERT INTO IMAGES (IDIMAGE, URL, TYPE) 
+									VALUES   (NULL, '%s', '%s')", $destino, $tipo);
+	
+	print json_encode($return);
 }
 //--------------------------------------------------------------------------------------
 function confirm_mail($email, $user, $codeconfirm){
@@ -1365,7 +1445,7 @@ function confirm_mail($email, $user, $codeconfirm){
 	$mail_headers.="From: EHC<no-response@ehc.com>";
 	
 	$mail_message ='
-		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Confrim EHC account.</span></span></h1>
+		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Confirm EHC account.</span></span></h1>
 		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;"> '.$user.', confirm your EHC account clicking on below or copying that on your browser.</span></p>
