@@ -312,7 +312,9 @@ function message($error, $return){
 function createJSON2($user) {
 //** creation of second type of json aplication uses**//
 
-	$SQLjson = query ( "CALL loginJSON('%s');", $user );
+	$SQLjson = query ( "SELECT *
+						FROM  loginVIEW
+						WHERE USERNAME = '%s';", $user );
 	$num	 = count($SQLjson['result']);
 	
 	//TEST QUERY HAS AT LEAST one VALUE
@@ -631,7 +633,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 		case 'ON/OFF':	
 			switch ($data){
 				case 'ON':
-					$raspberryaction = '1';
+					$raspberryaction = '0';
 					break;
 				case 'OFF':
 					$raspberryaction = '0';
@@ -679,8 +681,8 @@ function doaction($user,$house,$room,$service,$action,$data) {
 			, $iduser, $error, $funct);
 	
 	// take de error message
-	$error = 16;//acction sent
-	message($error, 0);
+	/*$error = 16;//acction sent
+	message($error, 0);*/
 	
 	
 
@@ -772,6 +774,7 @@ function createhouse($user, $house, $city, $country){
 //--------------------------------------------------------------------------------------
 function modifyhouse($user, $house, $n_house, $image, $city, $country){
 	/* modify information of house by an administrator*/
+	$image = str_replace(" ", "", $image);
 	$message = query("CALL modifyhouse('%s', '%s', '%s', '%s', '%s', '%s')", $user, $house, $n_house, $image, $city, $country);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -1218,13 +1221,13 @@ function eventJSON($house){
 
 	roomlabel:	$JSON[$ev]["Name"] = $SQLjson['result'][$i]['IDPROGRAM'];
 				$JSON[$ev]["item"]  = $SQLjson['result'][$i]['IDSERVICE'];
-				$starttime = getdate($SQLjson['result'][$i]['STARTTIME']);
-				$JSON[$ev]["Day"]   = $starttime['mday'];
-				$JSON[$ev]["Month"] = $starttime['mon'];
-				$JSON[$ev]["Year"]  = $starttime['year'];
-				$JSON[$ev]["Hour"]  = $starttime['hours'];
-				$JSON[$ev]["Minute"]= $starttime['minutes'];
-				$JSON[$ev]["Second"]= $starttime['seconds'];
+				//$JSON[$ev]["starttime"]   = date("Y-m-d H:i:s", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Day"]   = date("d", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Month"] = date("m", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Year"]  = date("Y", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Hour"]  = date("H", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Minute"]= date("i", strtotime($SQLjson['result'][$i]['STARTTIME']));
+				$JSON[$ev]["Second"]= date("s", strtotime($SQLjson['result'][$i]['STARTTIME']));
 				$JSON[$ev]["Created"]= $SQLjson['result'][$i]['USERNAME'];
 					
 			default:
@@ -1419,7 +1422,8 @@ function subir2() {
 	$image 	= $_FILES ['imagen'] ['name'];
 	$ruta 	= $_FILES ['imagen'] ['tmp_name'];
 	$tipo 	= $_FILES ['imagen'] ['type'];
-	$destino = 'images/'.$house.'/'.$image;
+	$image = str_replace(" ", "", $image);
+	$destino = 'images/'.$image;
 	if (copy($ruta,$destino)) {
 		$return['error']['ERROR'] = 0;
 		$return['error']['ENGLISH'] = "Uploaded image.";
