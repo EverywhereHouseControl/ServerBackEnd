@@ -376,6 +376,7 @@ function createJSON2($user) {
 				
 	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"] = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
 				$JSON["houses"][$h]["rooms"][$r]["id"]   = utf8_encode($SQLjson['result'][$i]['IDROOM']);
+				$JSON["houses"][$h]["rooms"][$r]["interface"]   = utf8_encode($SQLjson['result'][$i]['ROOMTYPE']);
 				
 				if ($SQLjson['result'][$i]['SERVICENAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"][$r]["services"] = null;
@@ -706,7 +707,7 @@ function ipcheck(){
 }
 
 //--------------------------------------------------------------------------------------
-function getweather($city,$language){
+function getweather($city, $country, $language){
 /* returns the weather of a specific city and country */
 	$error = 0;
 	$funct = 10;
@@ -718,35 +719,28 @@ function getweather($city,$language){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 	
-	exec('./clima ' .$city.' '. $language,$output);
-	foreach($output as &$valor){
-		echo ($valor);
-		echo ("\n");
-	}
-	exit();
-}
-
-//--------------------------------------------------------------------------------------
-function getweather2($city, $country, $language){
-	/* returns the weather of a specific city and country */
-	$error = 0;
-	$funct = 10;
-	$iduser = 0;//administrator
-
-	//REGISTER THE ACTIVITY
-	query("INSERT INTO HISTORYACCESS
-				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
-		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
-			, $iduser, $error, $funct);
-
+	//exec('./clima ' .$city.' '. $language,$output);
+	
 	$language = ($language == null || $language == '')? 'en':$language;
-	exec('./clima ' .$city.','.$country.' '. $language);
-	/*foreach($output as &$valor){
-		return ($valor);
-		echo ("\n");
+	exec('./clima '.$city.','.$country.' '. $language,$output);
+	//$salida=json_encode ($output);
+	//$s=json_decode($json);
+	
+	/*foreach($s as &$valor){
+		echo ($valor);
+		echo ("heheheh\n");
 	}*/
-	return null;
+	//$value = $output;
+	//$sal = $json->encode($value);
+	//print json_encode($sal);
+	//$quitar = array("/" => "2", "<br />" => "", "<br>" => "", "<br >" => "");
+	//foreach($salida as $busca => $quita){
+	//	$data["content"] = str_replace($busca, $quita, $data["content"]);
+	//}
+	//print json_encode($output);
+	print $output[0];
 }
+
 //--------------------------------------------------------------------------------------
 function weatherJSON($city, $country, $language){
 	if (!empty($city)) {
