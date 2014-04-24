@@ -1,0 +1,77 @@
+<? include("php/seguridad.php"); ?>
+
+<!DOCTYPE html>
+<html lang="es-CO">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Everywhere House Control</title>
+		<SCRIPT src="js/addElements.js"></SCRIPT>
+		<link rel="stylesheet" href="css/estiloLogin.css" type="text/css" media="all">
+	</head>
+<body>
+	<form name="config-form" class="config-form" action="php/guardarDatos.php" method="post" style="overflow:hidden; padding:7px; border: 1px solid #ccc; border-radius: 3px; width: 50%; left: 25%; position: absolute">
+			<div class="header">
+				<h1><? echo $_SESSION["usuarioactual"];?> Configura tu App EHC de la forma mas facil</h1>
+				<span>Configura tu App.</span>
+			</div>
+			
+			<div class="content">
+				<a href='JavaScript:agregarHabitacion();'> Agregar habitación </a>		
+			</div>
+			
+			<div class="contenedorcampos" id="contenedorcampos">
+	   
+			</div>
+			
+			<div class="footer">
+				<input type="submit" name="submit" value="Guardar" class="button" />
+				<div class="salir">
+					<a href="php/salir.php">Salir</a>
+				</div>
+			</div>
+			<input type="hidden" name="jasonid" id="jasonid">
+		
+	</form>
+	<br/>
+
+	<script>
+	function submiting(){
+var a = JSON.stringify($('form').serializeObject());
+document.getElementById("jasonid").value=a;
+
+	}
+	
+	
+	  $.fn.serializeObject = function()
+	{
+		var o = {};
+		var a = this.serializeArray();
+		$.each(a, function() {
+			if (o[this.name] !== undefined) {
+				if (!o[this.name].push) {
+					o[this.name] = [o[this.name]];
+				}
+				o[this.name].push(this.value || '');
+			} else {
+				o[this.name] = this.value || '';
+			}
+		});
+		return o;
+	};
+
+	$(function() {
+		$('form').submit(function() {
+		var a = JSON.stringify($('form').serializeObject());
+		a.setAttribute("id", "jsonid");
+		a.setAttribute("name", "jsonid");
+			//$('#result').text(JSON.stringify($('form').serializeObject()));
+			//document.getElementById('jsonid').text = $('#result').text(JSON.stringify($('form').serializeObject()));
+			//$('form').appendChild(a);
+			submiting();
+			//$('form').submit();
+			return false;
+		});
+	});
+	</script>
+</body>
+</html>
