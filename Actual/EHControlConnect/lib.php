@@ -35,6 +35,10 @@ function query() {
 		while ($d = mysqli_fetch_assoc($result)) {
 			array_push($rows,$d);
 		}
+
+		//solve problem: making query consult after call procedure 
+		if(mysqli_more_results($link))
+			while(mysqli_next_result($link));
 		
 		//return json
 		return array('result'=>$rows);
