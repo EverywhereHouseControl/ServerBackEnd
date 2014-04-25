@@ -311,7 +311,9 @@ function message($error, $return){
 //--------------------------------------------------------------------------------------
 function createJSON2($user) {
 //** creation of second type of json aplication uses**//
-
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	$SQLjson = query ( "SELECT *
 						FROM  loginVIEW
 						WHERE USERNAME = '%s';", $user );
@@ -356,7 +358,7 @@ function createJSON2($user) {
 				$JSON["houses"][$h]["city"]  = utf8_encode($SQLjson['result'][$i]['CITY']);
 				$JSON["houses"][$h]["country"]  =  utf8_encode($SQLjson['result'][$i]['COUNTRY']);
 				$JSON["houses"][$h]["weather"] = null;//weatherJSON($SQLjson['result'][$i]['CITY'], $SQLjson['result'][$i]['COUNTRY'], 'en');
-				$JSON["houses"][$h]["image"]   = ($SQLjson['result'][$i]['URL'] == NULL) ? NULL:'http://ehcontrol.net/EHControlConnect/'.utf8_encode($SQLjson['result'][$i]['URL']);
+				$JSON["houses"][$h]["image"]   = ($SQLjson['result'][$i]['URL'] == NULL) ? NULL:'http://'.$host.$uri.'/'.utf8_encode($SQLjson['result'][$i]['URL']);
 				$JSON["houses"][$h]["events"]   = eventJSON(utf8_encode($SQLjson['result'][$i]['HOUSENAME']));
 				
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
@@ -430,6 +432,10 @@ function login2($user, $pass) {
 	$error = 0;
 	$funct = 1;
 	
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	//only for save the iduser becouse we need that
 	$SQLuser = query("SELECT IDUSER, USERNAME, PASSWORD, EMAIL, HINT, DATEBEGIN, URL FROM USERS LEFT JOIN IMAGES USING (IDIMAGE) WHERE USERNAME='%s'  limit 2;", $user);
 	$iduser  = $SQLuser['result'][0]['IDUSER'];
@@ -465,7 +471,7 @@ function login2($user, $pass) {
 	
 	//successful function
 	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
-	$result['result']['URL'] = ($result['result']['URL'] == NULL)? NULL: 'http://ehcontrol.net/EHControlConnect/'.$result['result']['URL'];
+	$result['result']['URL'] = ($result['result']['URL'] == NULL)? NULL: 'http://'.$host.$uri.'/'.$result['result']['URL'];
 	$result['result']['TASKS']    = taskJSON($user);
 	$result['result']['COMMANDS'] = commandJSON($user);
 	$result['result']['SINGLES']  = singleProgramJSON($user);
@@ -509,7 +515,7 @@ function lostpass($user){
 	$email =  $message['result'][0]['EMAIL'];
 
 	//server send an email recovery pasword
-	recovery_mail($email, $user, $pass);
+	//recovery_mail($email, $user, $pass);
 	
 	
 }
@@ -519,12 +525,24 @@ function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
 	// randomconde verification.
 	$codeconfirm = md5(rand(0000000000,9999999999));
-	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s')", $user, $pass, $email, $hint, $codeconfirm);
+	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s'); ", $user, $pass, $email, $hint, $codeconfirm);
 	// take de error message
 	
+	//**confirm message deleted
+	$sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $codeconfirm );
+	
+	query ( "DELETE FROM REGISTRATIONS WHERE CODECONFIRM = '%s' LIMIT 1;", $codeconfirm );
+	query ( "INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE`, `DATEBEGIN`) VALUES
+									(NULL, '%s', '%s', '%s', '%s', NULL, '%s');",
+										$sqlregistration ['result'][0]['USERNAME'],
+										$sqlregistration ['result'][0]['PASSWORD'],
+										$sqlregistration ['result'][0]['EMAIL'],
+										$sqlregistration ['result'][0]['HINT'],
+										$sqlregistration ['result'][0]['DATEBEGIN']);
+		
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
-		confirm_mail($email, $user, $codeconfirm);
+		//confirm_mail($email, $user, $codeconfirm);
 	}
 	print json_encode($json);
 }
@@ -540,7 +558,7 @@ function deleteuser2($user, $pass){
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
-		goodbye_mail($email, $user);
+		//goodbye_mail($email, $user);
 	}
 	print json_encode($json);
 }
@@ -879,18 +897,18 @@ function deleteaccesshouse($user, $house, $user2){
 }
 
 //--------------------------------------------------------------------------------------
-function createprogramaction($user, $house, $room, $service, $action, $data, $start){
+function createprogramaction($name, $user, $house, $room, $service, $action, $data, $start){
 	/* create a new user*/
-	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $user, $house, $room, $service, $action, $data, date("Y-m-d H:i:s",strtotime($start)) );
+	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $name, $user, $house, $room, $service, $action, $data, date("Y-m-d H:i:s",strtotime($start)) );
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
-function deleteprogramaction($user, $idaction){
+function deleteprogramaction($user, $name){
 	/* create a new user*/
-	$message = query("CALL deleteprogramaction ('%s','%s')", $user, (int) $idaction);
+	$message = query("CALL deleteprogramaction ('%s','%s')", $user, $name);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	print json_encode($json);
@@ -1213,8 +1231,13 @@ function eventJSON($house){
 				$p++; 
 				$ev = 'Event'.$p;
 
-	roomlabel:	$JSON[$ev]["Name"] = $SQLjson['result'][$i]['IDPROGRAM'];
-				$JSON[$ev]["item"]  = $SQLjson['result'][$i]['IDSERVICE'];
+	roomlabel:	$JSON[$ev]["Name"]     = $SQLjson['result'][$i]['PROGRAMNAME'];
+				$JSON[$ev]["item"]     = $SQLjson['result'][$i]['IDSERVICE'];
+				$JSON[$ev]["house"]    = $SQLjson['result'][$i]['HOUSENAME'];
+				$JSON[$ev]["room"]     = $SQLjson['result'][$i]['ROOMNAME'];
+				$JSON[$ev]["service"]  = $SQLjson['result'][$i]['SERVICENAME'];
+				$JSON[$ev]["action"]   = $SQLjson['result'][$i]['ACTIONNAME'];
+				$JSON[$ev]["data"]     = $SQLjson['result'][$i]['DATA'];
 				//$JSON[$ev]["starttime"]   = date("Y-m-d H:i:s", strtotime($SQLjson['result'][$i]['STARTTIME']));
 				$JSON[$ev]["Day"]   = date("d", strtotime($SQLjson['result'][$i]['STARTTIME']));
 				$JSON[$ev]["Month"] = date("m", strtotime($SQLjson['result'][$i]['STARTTIME']));
@@ -1435,6 +1458,10 @@ function subir2() {
 }
 //--------------------------------------------------------------------------------------
 function confirm_mail($email, $user, $codeconfirm){
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	//header html mail
 	$mail_headers="MIME-Version: 1.0\r\n";
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
@@ -1444,15 +1471,19 @@ function confirm_mail($email, $user, $codeconfirm){
 	
 	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Confirm EHC account.</span></span></h1>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://'.$host.$uri.'/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;"> '.$user.', confirm your EHC account clicking on below or copying that on your browser.</span></p>
-		<span style="font-family: verdana,geneva; font-size: medium;"> http://ehcontrol.net/EHControlConnect/confirm.php?code='.$codeconfirm.'</span></div>';
+		<span style="font-family: verdana,geneva; font-size: medium;"> http://'.$host.$uri.'/confirm.php?code='.$codeconfirm.'</span></div>';
 	
 	mail($email, "CONFIRM EHC", $mail_message, $mail_headers);
 }
 //--------------------------------------------------------------------------------------
 function welcome_mail($email, $user){
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	//header html mail
 	$mail_headers="MIME-Version: 1.0\r\n";
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
@@ -1462,7 +1493,7 @@ function welcome_mail($email, $user){
 
 	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Welcome to EHC.</span></span></h1>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://'.$host.$uri.'/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;">Congratulations! '.$user.' from now, you will experience the comfort about the mobile control of EHC.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> Hope you like.</span></div>';
@@ -1471,6 +1502,10 @@ function welcome_mail($email, $user){
 }
 //--------------------------------------------------------------------------------------
 function goodbye_mail($email,$user){
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	//header html mail
 	$mail_headers="MIME-Version: 1.0\r\n";
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
@@ -1480,7 +1515,7 @@ function goodbye_mail($email,$user){
 	
 	$mail_message ='
 		<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Account deleted.</span></span></h1>
-		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+		<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://'.$host.$uri.'/images/logo.png" alt="" /></p>
 		<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 		<p><span style="font-family: verdana,geneva; font-size: medium;">Good Bye! '.$user.', see you soon.</span></p>
 		<span style="font-family: verdana,geneva; font-size: medium;"> EHC.</span></div>';
@@ -1489,6 +1524,10 @@ function goodbye_mail($email,$user){
 }
 //--------------------------------------------------------------------------------------
 function recovery_mail($email, $user, $pass){
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	//header html mail
 	$mail_headers="MIME-Version: 1.0\r\n";
 	$mail_headers.="Content-type: text/html; charset=iso-8859-1\r\n";
@@ -1498,7 +1537,7 @@ function recovery_mail($email, $user, $pass){
 	
 	$mail_message = '
 			<h1 class="Text" style="position: absolute; left: 24px; top: 215px; width: 460px; height: 26px;"><span style="font-family: comic sans ms,sans-serif; font-size: x-large; color: #333399;"><span class="hps">Email</span> <span class="hps">password</span> <span class="hps">recovery</span>.</span></h1>
-			<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://ehcontrol.net/images/logo.png" alt="" /></p>
+			<p style="left: 65px; top: 1px; width: 202px; height: 202px; position: absolute;"><img style="display: block; margin-left: auto; margin-right: auto; top: 1px; left: 14px; width: 205px; height: 205px;" src="http://'.$host.$uri.'/images/logo.png" alt="" /></p>
 			<div style="position: absolute; left: 24px; top: 262px; width: 444px; height: 100px;">
 			<p><span style="font-family: verdana,geneva; font-size: medium;">User:  '.$user.'</span></p>
 			<p><span style="font-family: verdana,geneva; font-size: medium;">Pass:  '.$pass.'</span></p>

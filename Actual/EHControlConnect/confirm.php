@@ -9,6 +9,10 @@ $code = $_GET ['code'];
 <?php
 require ("lib.php");
 require ("api.php");
+
+$host  = $_SERVER['HTTP_HOST'];
+$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+
 $sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $code );
 
 if (count ( $sqlregistration ['result'] ) == 1) {
@@ -25,7 +29,7 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
-		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
+		<img src="http://'.$host.$uri.'/images/logo.png" alt="" width="200" height="200" />
 		<div style="position: relative; left: 310px; top: -140px; width: 400px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
 		</div>';
 } else {
@@ -33,7 +37,7 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
-		<img src="http://ehcontrol.net/images/logo.png" alt="" width="200" height="200" />
+		<img src="http://'.$host.$uri.'/images/logo.png" alt="" width="200" height="200" />
 		<div style="position: relative; left: 360px; top: -180px; width: 500px; height: 200px; text-align: left;">
 		<p><span style="color: #ff0000; font-family: arial,helvetica,sans-serif; font-size: xx-large;">The verification code is not valid.</span></p>
 		<p><span style="color: #ff0000; font-family: arial,helvetica,sans-serif; font-size: xx-large;"><span id="result_box" class="short_text" lang="en"><span class="hps">Perhaps the</span> <span class="hps">user is</span> <span class="hps">already activated</span><span>.</span></span></span></p>
