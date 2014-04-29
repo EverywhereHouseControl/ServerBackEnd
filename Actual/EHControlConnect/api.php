@@ -515,7 +515,7 @@ function lostpass($user){
 	$email =  $message['result'][0]['EMAIL'];
 
 	//server send an email recovery pasword
-	//recovery_mail($email, $user, $pass);
+	recovery_mail($email, $user, $pass);
 	
 	
 }
@@ -528,7 +528,7 @@ function createuser2($user, $pass, $email, $hint){
 	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s'); ", $user, $pass, $email, $hint, $codeconfirm);
 	// take de error message
 	
-	//**confirm message deleted
+	/**confirm message deleted
 	$sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $codeconfirm );
 	
 	query ( "DELETE FROM REGISTRATIONS WHERE CODECONFIRM = '%s' LIMIT 1;", $codeconfirm );
@@ -539,10 +539,10 @@ function createuser2($user, $pass, $email, $hint){
 										$sqlregistration ['result'][0]['EMAIL'],
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
-		
+		*/
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
-		//confirm_mail($email, $user, $codeconfirm);
+		confirm_mail($email, $user, $codeconfirm);
 	}
 	print json_encode($json);
 }
@@ -558,7 +558,7 @@ function deleteuser2($user, $pass){
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
-		//goodbye_mail($email, $user);
+		goodbye_mail($email, $user);
 	}
 	print json_encode($json);
 }
@@ -665,7 +665,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 		case 'UP/MEDIUM/DOWN':
 			switch ($data){
 				case 'UP':
-					$raspberryaction = '2';
+					$raspberryaction = '1';
 					break;
 				case 'MEDIUM':
 					$raspberryaction = '1';
@@ -737,25 +737,36 @@ function getweather($city, $country, $language){
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
 	
-	//exec('./clima ' .$city.' '. $language,$output);
-	
 	$language = ($language == null || $language == '')? 'en':$language;
 	exec('./clima '.$city.','.$country.' '. $language,$output);
-	//$salida=json_encode ($output);
-	//$s=json_decode($json);
 	
-	/*foreach($s as &$valor){
-		echo ($valor);
-		echo ("heheheh\n");
+	//for localhost service
+	/*switch ($city){
+		case "madrid":
+			print '{"description": "Sky is Clear", "main": "Clear", 
+					"sunrise": 1398403266, "temp min": 280.93000000000001, 
+					"sunset": 1398452657, "temp max": 283.70999999999998, 
+					"temperature": 282.38999999999999, "humidity": 75, 
+					"speed": 3.0800000000000001}';
+			break;
+			
+		case "colonia":
+			print '{"description": "few clouds", "main": "Clouds",
+					 "sunrise": 1398399353, "temp min": 290.37, 
+					"sunset": 1398451455, "temp max": 294.25999999999999,
+					 "temperature": 292.43000000000001, "humidity": 75,
+					 "speed": 2.0600000000000001}';
+			break;
+			
+		default:
+			print '{"description": "moderate rain", "main": "Rain",
+					 "sunrise": 1398401189, "temp min": 280.93000000000001,
+					 "sunset": 1398453561, "temp max": 282.58999999999997, 
+					"temperature": 281.69, "humidity": 95, 
+					"speed": 4.2599999999999998}';
+			break;
 	}*/
-	//$value = $output;
-	//$sal = $json->encode($value);
-	//print json_encode($sal);
-	//$quitar = array("/" => "2", "<br />" => "", "<br>" => "", "<br >" => "");
-	//foreach($salida as $busca => $quita){
-	//	$data["content"] = str_replace($busca, $quita, $data["content"]);
-	//}
-	//print json_encode($output);
+	
 	print $output[0];
 }
 
