@@ -10,7 +10,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 <head>
 <title>Test API server</title>
 </head>
-<p>&nbsp;</p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licencia de Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <div style="margin-left: -300px;" align="center">
@@ -39,11 +39,12 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 			</p>
 		</form>
 	</div>
+	
 </div>
 <?php
 }else {
 ?>
-<p>Test now protected by password.</p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licencia de Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />
 <!doctype html>
 <html>
 <head>
@@ -1488,7 +1489,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 		<span style="font-size: 18px;"><span
 			style="font-family: arial, helvetica, sans-serif;"><span
 				style="color: rgb(0, 0, 205);">API SERVER TESTING INTERFACE</span></span></span>
-	</div>
+	</div>	
 </td></tr>
 </tbody>
 </table>
