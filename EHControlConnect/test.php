@@ -10,6 +10,8 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
 <head>
 <title>Test API server</title>
 </head>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licencia de Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/StillImage" property="dct:title" rel="dct:type">http://ehcontrol.net/EHControlConnect/images/logo.png</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Miguel Alexander Maldonado Lenis</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Reconocimiento 4.0 Internacional License</a>.
+<div xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/" about="http://ehcontrol.net/EHControlConnect/test.php"><span property="dct:title">logo</span> (<a rel="cc:attributionURL" property="cc:attributionName" href="http://ehcontrol.net/EHControlConnect/logo.png">Miguel Alexander Maldonado Lenis</a>) / <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
