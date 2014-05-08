@@ -17,12 +17,12 @@ The purpose is to give online  service monitoring to application domotico EHC.
 - [EHC Everywhere House Control](http://ehcontrol.net/)
 - [Test API server](http://ehcontrol.net/EHControlConnect/test.php)
 
-## [Documentation](Documantation)
+## [Documentation](Documentation)
 
-- [Look use cases.](Documantation/Use_Cases)
-- [Look data base diagram.](Documantation/design_DB.png)
-- [Examples of login return JSON.](Documantation/loginBertoldo.json)
-- [Examples of login2 return JSON.](Documantation/login_bertoldo_task_command_single.json)
+- [Look use cases.](Documentation/Use_Cases)
+- [Look data base diagram.](Documentation/design_DB.png)
+- [Examples of login return JSON.](Documentation/loginBertoldo.json)
+- [Examples of login2 return JSON.](Documentation/login_bertoldo_task_command_single.json)
 - [All proyect documentation.](https://github.com/EverywhereHouseControl/Documentation)
 
 ## LICENSE
