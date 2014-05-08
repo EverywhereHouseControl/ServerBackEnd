@@ -8,9 +8,12 @@ Repository BackEnd from server EHC.
 The purpose is to give online  service monitoring to application domotico EHC. This repository contains all the files needed to replicate the server. This being the most stable version to date.
 
 ## Files located on server
+- [DataBase](DataBase) folder contains files needed to clone MySQL database.
+- [Documentation](Documentation) folder contains the documentation files.
+- [EHControlConnect](EHControlConnect) folder contains the documentation files.
+- [Executable](Executable) folder contains the source code of the program executed on the server.
+- [RaspberryPi](RaspberryPi) folder contains files located on RaspberryPi.
 
-- [API Connection PHP](EHControlConnect/index.php)
-- [Data base: estructure](DataBase/ehcontrol_estructure.sql)
 
 ## Intresting links
 
@@ -19,6 +22,8 @@ The purpose is to give online  service monitoring to application domotico EHC. T
 
 ## [Documentation](Documentation)
 
+- [API Connection PHP](EHControlConnect/index.php)
+- [Data base: estructure](DataBase/ehcontrol_estructure.sql)
 - [Look use cases.](Documentation/Use_Cases)
 - [Look data base diagram.](Documentation/design_DB.png)
 - [Examples of login return JSON.](Documentation/loginBertoldo.json)
