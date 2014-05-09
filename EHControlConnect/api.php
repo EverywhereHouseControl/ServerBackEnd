@@ -1,6 +1,10 @@
 <?
 //API implementation
 
+
+//++------------++
+//|| VERSION 1  ||
+//++------------++
 //--------------------------------------------------------------------------------------
 function testNoERROR($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
@@ -16,7 +20,7 @@ function testNoERROR($iduser, $error, $funct){
 	}
 }
 function login($user, $pass) {
-	/* make de server conexion*/
+	/* make de server conexion and return the user information*/
 	$error = 0;
 	$funct = 1;
 
@@ -57,6 +61,7 @@ function login($user, $pass) {
 }
 //--------------------------------------------------------------------------------------
 function testEXIST( $where, $something, $id) {
+	// template of exist consult
 	/*TEST $somothing(IDUSER/IDHOUSE/ID..../HOUSENAME/ROOM....) EXIST ON TABLE $where BY THIS ENTRY $id*/
 	$error = 0;
 	$SQLuser = query("SELECT * FROM %s WHERE %s='%s' limit 2", $where, $something, $id);
@@ -70,19 +75,9 @@ function testEXIST( $where, $something, $id) {
 
 //--------------------------------------------------------------------------------------
 function createJSON($iduser) {
-	/* make the json of the user */
-	// "Rooms":{R1...R3{"name":"", "items":[]} }
-	// "User":"username"
-	/*$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
-	 FROM USERS
-			JOIN (SERVICES, ROOMS, HOUSES ,ACCESSHOUSE)
-			ON (
-					SERVICES.IDROOM		= ROOMS.IDROOM 		 AND
-					ROOMS.IDHOUSE		= HOUSES .IDHOUSE	 AND
-					HOUSES.IDHOUSE		= ACCESSHOUSE.IDHOUSE AND
-					ACCESSHOUSE.IDUSER	= USERS.IDUSER 		 AND
-					USERS.IDUSER		= '%s')
-			ORDER BY   USERNAME, HOUSENAME, ROOMNAME, SERVICENAME DESC", $iduser );*/
+	// VERSION DEMO 1
+	/* make the json of the user on login call*/
+	
 	$SQLjson = query ( "SELECT USERNAME, HOUSENAME, ROOMNAME, SERVICENAME
 						FROM USERS
 						JOIN (SERVICES, ROOMS, HOUSES, ACCESSHOUSE)
@@ -147,12 +142,8 @@ function createJSON($iduser) {
 	$json .= ']}}';
 	$json .= '}';
 	return  $json;
-	//return json_encode( (array) json_decode($json));
-	//send json config to phone
-	//$return = '{"result":[{"JSON":'.$json.',"ENGLISH":"'.$message['result'][0]['ENGLISH'].'","SPANISH":"'.$message['result'][0]['SPANISH'].'"}]}';
-	//print json_encode( (array) json_decode($json));
-	//print json_decode ( $json );//<---esto tendria que devolver un concat con EXIT
 }
+
 //--------------------------------------------------------------------------------------
 function createuser($user, $pass, $email, $hint){
 	/* create a new user*/
@@ -190,9 +181,10 @@ function createuser($user, $pass, $email, $hint){
 	$error = 13;//create new user
 	message($error, 0);
 }
+
 //--------------------------------------------------------------------------------------
 function deleteuser($user, $pass){
-	/* create a new user*/
+	/* delete an existing user*/
 	$error = 0;
 	$funct = 4;
 
@@ -235,7 +227,7 @@ function deleteuser($user, $pass){
 }
 //--------------------------------------------------------------------------------------
 function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
-	/* create a new user*/
+	/* modify an existing user*/
 	$error = 0;
 	$funct = 5;
 
@@ -278,8 +270,11 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------------------
 
+
+//++------------++
+//|| VERSION 2  ||
+//++------------++
 //--------------------------------------------------------------------------------------
 function testNoERROR2($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
@@ -297,7 +292,7 @@ function testNoERROR2($iduser, $error, $funct){
 
 //--------------------------------------------------------------------------------------
 function message($error, $return){
-	// take de error message and return the error code to app
+	// take de error message and return the error code to application
 	$message = query(	"SELECT ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE='%s' LIMIT 1 ", $error);
@@ -310,7 +305,8 @@ function message($error, $return){
 
 //--------------------------------------------------------------------------------------
 function createJSON2($user) {
-//** creation of second type of json aplication uses**//
+	//** creation of second type of json aplication uses**//
+	// VERSION DEMO 2
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	
@@ -338,7 +334,8 @@ function createJSON2($user) {
 	$s = -1;
 	$a = -1;
 
-	//print json_encode($JSON).$num;
+	//lineal algoritm to save relevant inforamtion about the login query
+	//  all relevant block are made like this to simplify future modifucations
 	for($i = 0; $i < $num; $i++){
 		
 		switch (true) {
@@ -352,20 +349,23 @@ function createJSON2($user) {
 				$a = 0;
 				$h++;
 				
+				//all house relevant information
 				$JSON["houses"][$h]["name"]    = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
-				$JSON["houses"][$h]["id"]    = utf8_encode($SQLjson['result'][$i]['IDHOUSE']);
+				$JSON["houses"][$h]["id"]      = utf8_encode($SQLjson['result'][$i]['IDHOUSE']);
 				$JSON["houses"][$h]["access"]  = $SQLjson['result'][$i]['ACCESSNUMBER'];
-				$JSON["houses"][$h]["city"]  = utf8_encode($SQLjson['result'][$i]['CITY']);
-				$JSON["houses"][$h]["country"]  =  utf8_encode($SQLjson['result'][$i]['COUNTRY']);
+				$JSON["houses"][$h]["city"]    = utf8_encode($SQLjson['result'][$i]['CITY']);
+				$JSON["houses"][$h]["country"] =  utf8_encode($SQLjson['result'][$i]['COUNTRY']);
 				$JSON["houses"][$h]["weather"] = null;//weatherJSON($SQLjson['result'][$i]['CITY'], $SQLjson['result'][$i]['COUNTRY'], 'en');
 				$JSON["houses"][$h]["image"]   = ($SQLjson['result'][$i]['URL'] == NULL) ? NULL:'http://'.$host.$uri.'/'.utf8_encode($SQLjson['result'][$i]['URL']);
-				$JSON["houses"][$h]["events"]   = eventJSON(utf8_encode($SQLjson['result'][$i]['HOUSENAME']));
+				$JSON["houses"][$h]["events"]  = eventJSON(utf8_encode($SQLjson['result'][$i]['HOUSENAME']));
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['ROOMNAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"] = null;
 					break;
 				}
 				
+				//continue saving row information
 				goto roomlabel;
 				
 			case ($SQLjson['result'][$i]['ROOMNAME'] == NULL):
@@ -376,15 +376,18 @@ function createJSON2($user) {
 				$a = 0;
 				$r++;
 				
-	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"] = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
-				$JSON["houses"][$h]["rooms"][$r]["id"]   = utf8_encode($SQLjson['result'][$i]['IDROOM']);
-				$JSON["houses"][$h]["rooms"][$r]["interface"]   = utf8_encode($SQLjson['result'][$i]['ROOMTYPE']);
+				//all room relevant information
+	roomlabel:	$JSON["houses"][$h]["rooms"][$r]["name"]      = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
+				$JSON["houses"][$h]["rooms"][$r]["id"]        = utf8_encode($SQLjson['result'][$i]['IDROOM']);
+				$JSON["houses"][$h]["rooms"][$r]["interface"] = utf8_encode($SQLjson['result'][$i]['ROOMTYPE']);
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['SERVICENAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"][$r]["services"] = null;
 					break;
 				}
 				
+				//continue saving row information
 				goto servicelabel;
 				
 			case ($SQLjson['result'][$i]['SERVICENAME'] == NULL):	
@@ -394,17 +397,20 @@ function createJSON2($user) {
 				$a = 0;
 				$s++;
 				
+				//all service relevant information
 servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]      = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["id"]        = $SQLjson['result'][$i]['IDSERVICE'];
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["interface"] = $SQLjson['result'][$i]['SERVICEINTERFACE'];
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["access"]    = $SQLjson['result'][$i]['PERMISSIONNUMBER'];
 				$JSON["houses"][$h]["rooms"][$r]["services"][$s]["state"]     = utf8_encode($SQLjson['result'][$i]['STATUS']);
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['ACTIONNAME'] == NULL) {
 					$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"] = null;
 					break;
 				}
 				
+				//continue saving row information
 				goto actionlabel;
 				
 			case ($SQLjson['result'][$i]['ACTIONNAME'] == NULL):
@@ -413,10 +419,12 @@ servicelabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["name"]      = ut
 			case ($tmpACTIONNAME <> $SQLjson['result'][$i]['ACTIONNAME']):
 				$a++;
 				
+				//all action relevant information
 actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
 			default:
 				
 		}
+		//continue parsing distinct query rows
 		$tmpHOUSENAME 	= $SQLjson['result'][$i]['HOUSENAME'];
 		$tmpROOMNAME	= $SQLjson['result'][$i]['ROOMNAME'];
 		$tmpSERVICENAME = $SQLjson['result'][$i]['SERVICENAME'];
@@ -428,7 +436,7 @@ actionlabel:	$JSON["houses"][$h]["rooms"][$r]["services"][$s]["actions"][$a]= ut
 
 //--------------------------------------------------------------------------------------
 function login2($user, $pass) {
-/* make de server conexion*/
+	/* make de server conexion and return the user information*/
 	$error = 0;
 	$funct = 1;
 	
@@ -469,26 +477,28 @@ function login2($user, $pass) {
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP);"
 			, $iduser, $error, $funct);
 	
-	//successful function
+	//USER information
 	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
-	$result['result']['URL'] = ($result['result']['URL'] == NULL)? NULL: 'http://'.$host.$uri.'/'.$result['result']['URL'];
+	/*more relevant inforamtion about this loged user */
+	//user image
+	$result['result']['URL']      = ($result['result']['URL'] == NULL)? NULL: 'http://'.$host.$uri.'/'.$result['result']['URL'];
 	$result['result']['TASKS']    = taskJSON($user);
 	$result['result']['COMMANDS'] = commandJSON($user);
 	$result['result']['SINGLES']  = singleProgramJSON($user);
 	$result['result']['DEVICES']  = deviceJSON($user);
-	$result['result']['JSON']    = createJSON2($user);
+	$result['result']['JSON']     = createJSON2($user);
 	
-	//$result['result']['COMMAND'] =commandJSON($user);
-	
+	//return code inforamtion and messages asociated
+	$result['error']['ERROR'] 	= 0;
 	$result['error']['ENGLISH'] = utf8_encode($m['result'][0]['ENGLISH']);
 	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
-	$result['error']['ERROR'] 	= 0;
 	
 	print json_encode($result);
 }
+
 //--------------------------------------------------------------------------------------
 function lostpass($user){
-/* envia un email al usuario que ha olvidado el password*/
+	/* send an email to a user with the new recovery password*/
 	$error = 0;
 	$funct = 2;
 	
@@ -523,12 +533,18 @@ function lostpass($user){
 //--------------------------------------------------------------------------------------
 function createuser2($user, $pass, $email, $hint){
 	/* create a new user*/
-	// randomconde verification.
-	$codeconfirm = md5(rand(0000000000,9999999999));
-	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s'); ", $user, $pass, $email, $hint, $codeconfirm);
-	// take de error message
+	// VERSION 2
 	
-	/**confirm message deleted
+	// randomcode verification. generated a hash code to avoid linking errors
+	$codeconfirm = md5(rand(0000000000,9999999999));
+	
+	//update inforamtion to REGISTRATIONS table on database
+	$message = query("CALL createuser ('%s','%s', '%s', '%s', '%s'); ", $user, $pass, $email, $hint, $codeconfirm);
+	
+	/*********************************************/
+	/**UNCOMMENT this to delete confirm message */
+	/*********************************************/
+	/*
 	$sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $codeconfirm );
 	
 	query ( "DELETE FROM REGISTRATIONS WHERE CODECONFIRM = '%s' LIMIT 1;", $codeconfirm );
@@ -540,24 +556,37 @@ function createuser2($user, $pass, $email, $hint){
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
 		*/
+	
+	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
+		/******************************************/
+		/**COMMENT this to delete confirm message */
+		/******************************************/
 		confirm_mail($email, $user, $codeconfirm);
 	}
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deleteuser2($user, $pass){
 	/* delete a existing user*/
+	// VERSION 2
+	
 	//take email before deletion
 	$SQLuser = query("SELECT EMAIL FROM USERS WHERE USERNAME='%s'  limit 1", $user);
 	$email  = $SQLuser['result'][0]['EMAIL'];
 
+	//delete user
 	$message = query("CALL deleteuser ('%s', '%s')", $user, $pass);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	if ($json['error']['ERROR'] == 0){
+		/****************************************/
+		/**COMMENT this to delete email message */
+		/****************************************/
 		goodbye_mail($email, $user);
 	}
 	print json_encode($json);
@@ -565,17 +594,25 @@ function deleteuser2($user, $pass){
 
 //--------------------------------------------------------------------------------------
 function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image){
-	/* create a new user*/
+	/* modify an existing user*/
+	// VERSION 2
+	
+	// preserve integrity of the image url, avoid wrong adresses like this http:/as asd.jpg
 	$image = str_replace(" ", "", $image);
+	
+	//alter database
 	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function doaction($user,$house,$room,$service,$action,$data) {
-/* a user send a specific action aobut a service with or without data*/
+	/* a user send a specific action aobut a service with or without data*/
+	// VERSION 3
 	$error = 0;
 	$funct = 6;
 	
@@ -710,7 +747,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 
 //--------------------------------------------------------------------------------------
 function ipcheck(){
-/* Returs Real Client IP */
+	/* Returns Real Client IP */
 	$error = 0;
 	$funct = 8;
 	$iduser = 0;//administrator
@@ -728,7 +765,7 @@ function ipcheck(){
 
 //--------------------------------------------------------------------------------------
 function getweather($city, $country, $language){
-/* returns the weather of a specific city and country */
+	/* returns the weather of a specific city and country */
 	$error = 0;
 	$funct = 10;
 	$iduser = 0;//administrator
@@ -774,6 +811,7 @@ function getweather($city, $country, $language){
 
 //--------------------------------------------------------------------------------------
 function weatherJSON($city, $country, $language){
+	// generate json of the house.
 	if (!empty($city)) {
 		if (!empty($country)){
 			//return getweather2($city.','.$country, $language);
@@ -784,30 +822,43 @@ function weatherJSON($city, $country, $language){
 	}
 	return null;
 }
+
 //--------------------------------------------------------------------------------------
 function createhouse($user, $house, $city, $country){
 	/* create a new house + create access for this user to the house*/
+	
 	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
 	
+	//create a directory to his images
+	/*
 	$dir = 'images/'.$house;
 	mkdir($dir, 0777);
+	*/
 	
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function modifyhouse($user, $house, $n_house, $image, $city, $country){
-	/* modify information of house by an administrator*/
+	/* modify information of house by an administrator user <-- user with access number 1*/
+	
+	// preserve integrity of the image url, avoid wrong adresses like this http:/as asd.jpg
 	$image = str_replace(" ", "", $image);
+	
+	//alter database
 	$message = query("CALL modifyhouse('%s', '%s', '%s', '%s', '%s', '%s')", $user, $house, $n_house, $image, $city, $country);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
+
 //--------------------------------------------------------------------------------------
-// recursively remove a directory
 function rrmdir($dir) {
+	// remove a directory recursively
 	foreach(glob($dir . '/*') as $file) {
 		if(is_dir($file))
 			rrmdir($file);
@@ -816,156 +867,223 @@ function rrmdir($dir) {
 	}
 	rmdir($dir);
 }
+
 //--------------------------------------------------------------------------------------
 function deletehouse($user, $pass, $house){
 	/*delete a existing house by an administrator user <-- user with access number 1*/
 	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
 	
+	//delete the directory of house images
+	/*
 	$dir = 'images/'.$house;
 	rrmdir($dir);
+	*/
 	
+	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function createroom($user, $house, $room){
-	/* create a new house + create access for this user to the house*/
+	/* create a new room in the house*/
+	
 	$message = query("CALL createroom('%s', '%s', '%s')", $user, $house, $room);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deleteroom($user, $pass, $house, $room){
-	/* create a new house + create access for this user to the house*/
+	/*delete a existing room by an administrator user <-- user with access number 1*/
+	
 	$message = query("CALL deleteroom('%s', '%s', '%s', '%s')", $user, $pass, $house, $room);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function createdevice($user, $ip, $serial, $device){
 	/* create a new device*/
+	
 	$message = query("CALL createdevice('%s', '%s', '%s', '%s')", $user, $ip, $serial, $device);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deletedevice($user, $pass, $iddevice){
-	/* create a new device*/
+	/* delete a existing device*/
+	
 	$message = query("CALL deletedevice('%s', '%s', %s)", $user, $pass, (int) $iddevice);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function modifyservicetype($user, $iddevice, $service, $type){
-	/* */
+	/* modify the service type, example chage 'TV' type to 'NPG LG', that changes the asociates IRCODES*/
+	
 	$message = query("CALL modifyservicetype('%s', %s, '%s', '%s')", $user, (int) $iddevice, $service, $type);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function createpermissionservice($user, $house, $room, $service, $user2, $n){
-	/* */
+	/* grant permission to a house for a user or restrinct permission for a non administrator user*/
+	
 	$message = query("CALL createpermissionservice('%s', '%s', '%s', '%s', '%s', %s)", $user, $house, $room, $service, $user2, (int) $n);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deletepermissionservice($user, $house, $room, $service, $user2){
-	/* */
+	/* delete permission to a house for a user*/
+	
 	$message = query("CALL deletepermissionservice('%s', '%s', '%s', '%s', '%s')", $user, $house, $room, $service, $user2);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function createaccesshouse($user, $house, $user2, $n){
 	/*create access to a house by an administrator <-- user with access number n*/
+	
 	$message = query("CALL createaccesshouse('%s', '%s', '%s', %s)",$user, $house, $user2, (int) $n);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deleteaccesshouse($user, $house, $user2){
 	/*delete access to a house by an administrator*/
+	
 	$message = query("CALL deleteaccesshouse('%s', '%s', '%s')",$user, $house, $user2);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function createprogramaction($name, $user, $house, $room, $service, $action, $data, $start){
-	/* create a new user*/
+	/* create an event*/
+	// VERSION 2
+	
 	$message = query("CALL createprogramaction ('%s','%s','%s','%s','%s','%s','%s','%s', CURRENT_TIMESTAMP)", $name, $user, $house, $room, $service, $action, $data, date("Y-m-d H:i:s",strtotime($start)) );
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function deleteprogramaction($user, $name){
-	/* create a new user*/
+	/* delete an event*/
+	
 	$message = query("CALL deleteprogramaction ('%s','%s')", $user, $name);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+ */
 function createtask($user, $task, $description, $frequency){
-	/* create a new user*/
+	/* create a new task*/
+	
 	$message = query("CALL createtask ('%s','%s','%s','%s')", $user, $task, $description, date("Y-m-d H:i:s",strtotime($frequency)) );
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function deletetask($user, $task){
-	/* create a new user*/
+	/* delete a task*/
+	
 	$message = query("CALL deletetask ('%s','%s')", $user, $task);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function addtaskprogram($user, $task, $idaction){
-	/* create a new user*/
+	/* add a program action to a task group*/
+	
 	$message = query("CALL addtaskprogram ('%s','%s',%s)", $user, $task, (int) $idaction );
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function removetaskprogram($user, $idtask, $idaction){
-	/* create a new user*/
+	/* remove a progarm action from a task*/
+	
 	$message = query("CALL removetaskprogram ('%s','%s','%s')",$user, (int) $idtask, (int) $idaction);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function addcommandprogram($user, $command, $idaction, $pos){
-	/* create a new user*/
+	/* add a program action to a command process*/
 	$message = query("CALL addcommandprogram ('%s','%s',%s,%s)", $user, $command, (int) $idaction, (int) $pos);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -973,8 +1091,11 @@ function addcommandprogram($user, $command, $idaction, $pos){
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function removecommandprogram($user, $command, $idaction, $pos){
-	/* create a new user*/
+	/* remove a program action to a command process*/
 	$message = query("CALL removecommandprogram ('%s','%s',%s,%s)",$user, $command, (int) $idaction, (int) $pos);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -982,8 +1103,11 @@ function removecommandprogram($user, $command, $idaction, $pos){
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function createcommand($user, $command){
-	/* */
+	/* create a new command process for a user*/
 	$message = query("CALL createcommand ('%s','%s')", $user, $command);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -991,8 +1115,11 @@ function createcommand($user, $command){
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function deletecommand($user, $command){
-	/* */
+	/* delete a command process*/
 	$message = query("CALL deletecommand ('%s','%s')", $user, $command);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -1001,24 +1128,32 @@ function deletecommand($user, $command){
 
 //--------------------------------------------------------------------------------------
 function linkserviceroom($idservice, $idroom){
-	/* */
+	/* associates a room to a service */
+	
 	$message = query("CALL linkserviceroom ('%s','%s')", $idservice, $idroom);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
 function unlinkserviceroom($idservice){
-	/* */
+	/* disassociates a room to a service*/
+	
 	$message = query("CALL unlinkserviceroom ('%s')", $idservice);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
+
 //--------------------------------------------------------------------------------------
 function taskJSON($user){
-
+	/* generate the json information about the user associated tasks*/
+	
 	$SQLjson = query ( "SELECT * 
 						FROM taskVIEW 
 						WHERE USERNAME = '%s'
@@ -1040,7 +1175,7 @@ function taskJSON($user){
 	$t = -1;
 	$p = -1;
 
-	//print json_encode($JSON).$num;
+	//algotim to build json information
 	for($i = 0; $i < $num; $i++){
 		
 		switch (true) {
@@ -1052,16 +1187,19 @@ function taskJSON($user){
 				$p = 0;
 				$t++;
 				
+				//all task relevant information
 				$JSON[$t]["name"]  = utf8_encode($SQLjson['result'][$i]['TASKNAME']);
 				$JSON[$t]["id"]    = $SQLjson['result'][$i]['IDTASK'];
 				$JSON[$t]["user"]  = utf8_encode($SQLjson['result'][$i]['USERNAME']);
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['IDPROGRAM'] == NULL) {
 					$JSON[$t]["actions"] = null;
 					break;
 				}
 				
-				goto roomlabel;
+				//continue saving row information
+				goto actionlabel;
 				
 			case ($SQLjson['result'][$i]['IDPROGRAM'] == NULL):
 				break;
@@ -1069,7 +1207,8 @@ function taskJSON($user){
 			case ($tmpIDPROGRAM <> $SQLjson['result'][$i]['IDPROGRAM']):
 				$p++;
 				
-	roomlabel:	$JSON[$t]["actions"][$p]["idaction"] = $SQLjson['result'][$i]['IDPROGRAM'];
+				//all programaction relevant information
+actionlabel:	$JSON[$t]["actions"][$p]["idaction"] = $SQLjson['result'][$i]['IDPROGRAM'];
 				$JSON[$t]["actions"][$p]["action"]  = utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
 				$JSON[$t]["actions"][$p]["house"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON[$t]["actions"][$p]["room"]    = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
@@ -1090,7 +1229,9 @@ function taskJSON($user){
 
 //--------------------------------------------------------------------------------------
 function commandJSON($user){
-
+	/* generates the JSON command information*/
+	// VERSION 1
+	
 	$SQLjson = query ( "SELECT * 
 						FROM commandVIEW 
 						WHERE USERNAME = '%s'
@@ -1104,7 +1245,7 @@ function commandJSON($user){
 	}
 	
 	//var for register distinct SOCKET
-	$tmpCOMMANDNAME 	= NULL;
+	$tmpCOMMANDNAME = NULL;
 	$tmpIDPROGRAM	= NULL;
 	
 	//initialice values
@@ -1112,7 +1253,7 @@ function commandJSON($user){
 	$t = -1;
 	$p = -1;
 
-	//print json_encode($JSON).$num;
+	//algorithm
 	for($i = 0; $i < $num; $i++){
 		
 		switch (true) {
@@ -1124,16 +1265,19 @@ function commandJSON($user){
 				$p = 0;
 				$t++;
 				
+				//all command relevant information
 				$JSON[$t]["name"]  = utf8_encode($SQLjson['result'][$i]['COMMANDNAME']);
 				$JSON[$t]["id"]    = $SQLjson['result'][$i]['IDCOMMAND'];
 				$JSON[$t]["user"]  = utf8_encode($SQLjson['result'][$i]['USERNAME']);
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['IDPROGRAM'] == NULL) {
 					$JSON[$t]["actions"] = null;
 					break;
 				}
 				
-				goto roomlabel;
+				//continue saving row information
+				goto actionlabel;
 				
 			case ($SQLjson['result'][$i]['IDPROGRAM'] == NULL):
 				break;
@@ -1141,7 +1285,8 @@ function commandJSON($user){
 			case ($tmpIDPROGRAM <> $SQLjson['result'][$i]['IDPROGRAM']):
 				$p++;
 				
-	roomlabel:	$JSON[$t]["actions"][$p]["idaction"] = $SQLjson['result'][$i]['IDPROGRAM'];
+				//all programaction relevant information
+actionlabel:	$JSON[$t]["actions"][$p]["idaction"]= $SQLjson['result'][$i]['IDPROGRAM'];
 				$JSON[$t]["actions"][$p]["action"]  = utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
 				$JSON[$t]["actions"][$p]["house"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON[$t]["actions"][$p]["room"]    = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
@@ -1162,6 +1307,8 @@ function commandJSON($user){
 
 //--------------------------------------------------------------------------------------
 function singleProgramJSON($user){
+	/* generate the simgles program action information*/
+	// VERSION 1
 
 	$SQLjson = query ( "SELECT *
 						FROM singleProgramVIEW
@@ -1182,7 +1329,7 @@ function singleProgramJSON($user){
 	$JSON = null;
 	$p = -1;
 
-	//print json_encode($JSON).$num;
+	//Json genertad algorithm
 	for($i = 0; $i < $num; $i++){
 
 		switch (true) {
@@ -1193,12 +1340,13 @@ function singleProgramJSON($user){
 			case ($tmpIDPROGRAM <> $SQLjson['result'][$i]['IDPROGRAM']):
 				$p++;
 
-	roomlabel:	$JSON[$p]["idaction"] = $SQLjson['result'][$i]['IDPROGRAM'];
-				$JSON[$p]["action"]  = utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
-				$JSON[$p]["house"]   = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
-				$JSON[$p]["room"]    = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
-				$JSON[$p]["service"] = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
-				$JSON[$p]["data"]    = utf8_encode($SQLjson['result'][$i]['DATA']);
+				//all programaction relevant information
+				$JSON[$p]["idaction"] = $SQLjson['result'][$i]['IDPROGRAM'];
+				$JSON[$p]["action"]   = utf8_encode($SQLjson['result'][$i]['ACTIONNAME']);
+				$JSON[$p]["house"]    = utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
+				$JSON[$p]["room"]     = utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
+				$JSON[$p]["service"]  = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
+				$JSON[$p]["data"]     = utf8_encode($SQLjson['result'][$i]['DATA']);
 				$JSON[$p]["starttime"]= $SQLjson['result'][$i]['STARTTIME'];
 					
 			default:
@@ -1213,12 +1361,14 @@ function singleProgramJSON($user){
 
 //--------------------------------------------------------------------------------------
 function eventJSON($house){
+	/* genrate event JSON information*/
+	// VERSION 2
 
 	$SQLjson = query ( "SELECT *
 						FROM eventProgramVIEW
 						WHERE HOUSENAME = '%s' ;", $house );
 	$num	 = count($SQLjson['result']);
-//print $house.' '.$num.'  ';
+
 	//TEST QUERY HAS AT LEAST one VALUE
 	if ($num == 0){
 		$JSON = null;
@@ -1244,7 +1394,8 @@ function eventJSON($house){
 				$p++; 
 				$ev = 'Event'.$p;
 
-	roomlabel:	$JSON[$ev]["Name"]     = $SQLjson['result'][$i]['PROGRAMNAME'];
+				//all event relevant information
+				$JSON[$ev]["Name"]     = $SQLjson['result'][$i]['PROGRAMNAME'];
 				$JSON[$ev]["item"]     = $SQLjson['result'][$i]['IDSERVICE'];
 				$JSON[$ev]["house"]    = $SQLjson['result'][$i]['HOUSENAME'];
 				$JSON[$ev]["room"]     = $SQLjson['result'][$i]['ROOMNAME'];
@@ -1272,6 +1423,8 @@ function eventJSON($house){
 
 //--------------------------------------------------------------------------------------
 function deviceJSON($user){
+	/* list the devices created by this user*/
+	// VERSION 1
 
 	$SQLjson = query ( "SELECT *
 						FROM deviceVIEW
@@ -1294,7 +1447,7 @@ function deviceJSON($user){
 	$d = -1;
 	$s = -1;
 
-	//print json_encode($JSON).$num;
+	//JSON algorithm
 	for($i = 0; $i < $num; $i++){
 
 		switch (true) {
@@ -1305,6 +1458,7 @@ function deviceJSON($user){
 			case ($tmpIDDEVICE <> $SQLjson['result'][$i]['IDDEVICE']):
 				$d++;
 
+				//all device relevant information
 				$JSON[$d]["iddevice"] = $SQLjson['result'][$i]['IDDEVICE'];
 				$JSON[$d]["name"]     = utf8_encode($SQLjson['result'][$i]['DEVICENAME']);
 				$JSON[$d]["ipaddress"]= utf8_encode($SQLjson['result'][$i]['IPADDRESS']);
@@ -1312,12 +1466,14 @@ function deviceJSON($user){
 				$JSON[$d]["english"]  = utf8_encode($SQLjson['result'][$i]['ENGLISH']);
 				$JSON[$d]["spanish"]  = utf8_encode($SQLjson['result'][$i]['SPANISH']);
 				
+				//prevent NULL pointer exception
 				if ($SQLjson['result'][$i]['IDSERVICE'] == NULL) {
 					$JSON[$d]["services"] = null;
 					break;
 				}
 				
-				goto roomlabel;
+				//continue saving row information
+				goto servicelabel;
 				
 			case ($SQLjson['result'][$i]['IDSERVICE'] == NULL):
 				break;
@@ -1325,7 +1481,8 @@ function deviceJSON($user){
 			case ($tmpIDSERVICE <> $SQLjson['result'][$i]['IDSERVICE']):
 				$s++;
 				
-	roomlabel:	$JSON[$d]["services"][$s]["name"]      = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
+				//all service relevant information
+servicelabel:	$JSON[$d]["services"][$s]["name"]      = utf8_encode($SQLjson['result'][$i]['SERVICENAME']);
 				$JSON[$d]["services"][$s]["idservice"] = utf8_encode($SQLjson['result'][$i]['IDSERVICE']);
 				$JSON[$d]["services"][$s]["house"]     = ($SQLjson['result'][$i]['HOUSENAME'] == NULL) ? NULL:utf8_encode($SQLjson['result'][$i]['HOUSENAME']);
 				$JSON[$d]["services"][$s]["room"]      = ($SQLjson['result'][$i]['ROOMNAME'] == NULL) ? NULL:utf8_encode($SQLjson['result'][$i]['ROOMNAME']);
@@ -1342,17 +1499,13 @@ function deviceJSON($user){
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function image($id){
 	if ($id > 0){
-		//vamos a crear nuestra consulta SQL
-		//$consulta = "SELECT * FROM IMAGES WHERE IDIMAGE = $id";
-		//con mysql_query la ejecutamos en nuestra base de datos indicada anteriormente
-		//de lo contrario mostraremos el error que ocaciono la consulta y detendremos la ejecucion.
+		//vamos a buscar la imagen
 		$resultado= query("SELECT * FROM IMAGES WHERE IDIMAGE = %s", $id);
-	
-		//si el resultado fue exitoso
-		//obtendremos el dato que ha devuelto la base de datos
-		//$datos = mysql_fetch_assoc($resultado);
 	
 		//ruta va a obtener un valor parecido a "imagenes/nombre_imagen.jpg" por ejemplo
 		$imagen = $resultado['result'][0]['IMAGE'];
@@ -1373,6 +1526,9 @@ function image($id){
 }
 
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function imageup($id){
 	//comprobamos si ha ocurrido un error.
 	if ( ! isset($_FILES["imagen"]) || $_FILES["imagen"]["error"] > 0){
@@ -1408,6 +1564,9 @@ function imageup($id){
 	}
 }
 //--------------------------------------------------------------------------------------
+/*
+ * NOT USED
+*/
 function subir() {
 	// comprobamos si ha ocurrido un error.
 	if (! isset ( $_FILES ["imagen"] ) || $_FILES ["imagen"] ["error"] > 0) {
@@ -1447,13 +1606,20 @@ function subir() {
 		}
 	}
 }
+
 //--------------------------------------------------------------------------------------
 function subir2() {
+	/* upload an image to the server, if existing replacing it*/
+	
 	$image 	= $_FILES ['imagen'] ['name'];
 	$ruta 	= $_FILES ['imagen'] ['tmp_name'];
 	$tipo 	= $_FILES ['imagen'] ['type'];
+	
+	//delte the spaces
 	$image = str_replace(" ", "", $image);
+	
 	$destino = 'images/'.$image;
+	
 	if (copy($ruta,$destino)) {
 		$return['error']['ERROR'] = 0;
 		$return['error']['ENGLISH'] = "Uploaded image.";
@@ -1464,13 +1630,18 @@ function subir2() {
 		$return['error']['SPANISH'] = "Error al subir archivo.";
 		
 	}
+	
+	//registre the activity
 	query ( "INSERT INTO IMAGES (IDIMAGE, URL, TYPE) 
 									VALUES   (NULL, '%s', '%s')", $destino, $tipo);
 	
 	print json_encode($return);
 }
+
 //--------------------------------------------------------------------------------------
 function confirm_mail($email, $user, $codeconfirm){
+	/* send an email to the user with a confirm link*/
+	
 	//relative path
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -1491,8 +1662,11 @@ function confirm_mail($email, $user, $codeconfirm){
 	
 	mail($email, "CONFIRM EHC", $mail_message, $mail_headers);
 }
+
 //--------------------------------------------------------------------------------------
 function welcome_mail($email, $user){
+	/* send an email to the user welcoming him*/
+	
 	//relative path
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -1513,8 +1687,11 @@ function welcome_mail($email, $user){
 
 	mail($email, "WELCOME EHC!", $mail_message, $mail_headers);
 }
+
 //--------------------------------------------------------------------------------------
 function goodbye_mail($email,$user){
+	/* send an goodbye mail*/
+	
 	//relative path
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -1537,6 +1714,8 @@ function goodbye_mail($email,$user){
 }
 //--------------------------------------------------------------------------------------
 function recovery_mail($email, $user, $pass){
+	/* send an email to the user with the recovery password */
+	
 	//relative path
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -1561,8 +1740,11 @@ function recovery_mail($email, $user, $pass){
 
 //--------------------------------------------------------------------------------------
 function randomPass(){
+	/* generates a random password of 8 digits alfanumeric to recovery the password*/
+	
 	//code from web
 	//http://www.cristalab.com/tutoriales/script-generador-de-passwords-aleatorios-en-php-c8514l/
+	
 	$str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
 	$cad = "";
 	for($i=0;$i<8;$i++) {
@@ -1570,5 +1752,6 @@ function randomPass(){
 	}
 	return $cad;
 }
+
 ?>
 
