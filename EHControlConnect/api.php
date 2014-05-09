@@ -566,6 +566,7 @@ function deleteuser2($user, $pass){
 //--------------------------------------------------------------------------------------
 function modifyuser2($user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image){
 	/* create a new user*/
+	$image = str_replace(" ", "", $image);
 	$message = query("CALL modifyuser ('%s','%s','%s','%s','%s','%s','%s')", $user, $pass, $n_user, $n_pass, $n_email, $n_hint, $image);
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
@@ -724,6 +725,7 @@ function ipcheck(){
 	exit();
 }
 
+
 //--------------------------------------------------------------------------------------
 function getweather($city, $country, $language){
 /* returns the weather of a specific city and country */
@@ -732,11 +734,11 @@ function getweather($city, $country, $language){
 	$iduser = 0;//administrator
 	
 	//REGISTER THE ACTIVITY
-	query("INSERT INTO HISTORYACCESS
+	/*query("INSERT INTO HISTORYACCESS
 				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
 		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP)"
 			, $iduser, $error, $funct);
-	
+	*/
 	$language = ($language == null || $language == '')? 'en':$language;
 	exec('./clima '.$city.','.$country.' '. $language,$output);
 	
@@ -767,7 +769,7 @@ function getweather($city, $country, $language){
 			break;
 	}*/
 	
-	print $output[0];
+	return $output;
 }
 
 //--------------------------------------------------------------------------------------
