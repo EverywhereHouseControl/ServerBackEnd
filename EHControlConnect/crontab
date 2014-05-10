@@ -1,0 +1,7 @@
+#the cron resource for execute "scripts";
+#use the command "crontab-e" to open the file in gnu linux cron
+#this script runs every minute
+
+* * * * * php /var/www/EHControlConnect/coneccionBBDD.php >> /var/www/EHControlConnect/coneccion.log 
+
+#the log file.'s for displaying errors
