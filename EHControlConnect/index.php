@@ -123,64 +123,64 @@ switch ($_POST['command']) {
 	//20
 	case "modifyhouse":
 		modifyhouse($_POST['username'],$_POST['housename'],$_POST['n_housename'],$_POST['image'],$_POST['city'],$_POST['country']);
-		//**
-		// ::>
+		//**update informacion of the house, used to modify the house image
+		// ::> returns a message
 		break;
 		
 //-------------------------------------------------------------------------------------------------
 	//14
 	case "createprogramaction":
 		createprogramaction( $_POST['programname'],$_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['actionname'],$_POST['data'],$_POST['start']);
-		//**
-		// ::>
+		//**create an event, programaction == event
+		// ::> returns a message
 		break;
 		
 	//15
 	case "deleteprogramaction":
 		deleteprogramaction( $_POST['username'],$_POST['programname']);
-		//**
-		// ::>
+		//**delete an event
+		// ::> returns a message
 		break;
 		
 //-------------------------------------------------------------------------------------------------
 	//11
 	case "createtask":
 		createtask( $_POST['username'],$_POST['taskname'],$_POST['description'],$_POST['frequency']);
-		//**
-		// ::>
+		//**create a task, a task agroup programactions
+		// ::> returns a message
 		break;
 		
 	//12
 	case "deletetask":
 		deletetask( $_POST['username'],$_POST['taskname']);
-		//**
-		// ::>
+		//**delete the task but not the programactions inside
+		// ::> returns a message
 		break;
 		
 //-------------------------------------------------------------------------------------------------
 	//21
 	case "addtaskprogram":
 		addtaskprogram( $_POST['username'],$_POST['taskname'],$_POST['idaction']);
-		//**
-		// ::>
+		//**add a programaction to the task
+		// ::> returns a message
 		break;
 		
 	//22
 	case "removetaskprogram":
 		removetaskprogram( $_POST['username'],$_POST['taskname'],$_POST['idaction']);
-		//**
-		// ::>
+		//**remove a program action from a task
+		// ::> returns a message
 		break;
 		
 //-------------------------------------------------------------------------------------------------
-	//
+	//28
 	case "addcommandprogram":
 		addcommandprogram( $_POST['username'],$_POST['commandname'],$_POST['idaction'], $_POST['number']);
 		//**
 		// ::>
 		break;
 		
-	//
+	//29
 	case "removecommandprogram":
 		removecommandprogram( $_POST['username'],$_POST['commandname'],$_POST['idaction'], $_POST['number']);
 		//**
@@ -188,14 +188,14 @@ switch ($_POST['command']) {
 		break;
 		
 //-------------------------------------------------------------------------------------------------
-	//
+	//26
 	case "createcommand":
 		createcommand( $_POST['username'],$_POST['commandname']);
 		//**
 		// ::>
 		break;
 		
-	//
+	//27
 	case "deletecommand":
 		deletecommand( $_POST['username'],$_POST['commandname']);
 		//**
@@ -210,95 +210,101 @@ switch ($_POST['command']) {
 		// ::>
 		break;
 		
-//-------------------------------------------------------------------------------------------------		
+//-------------------------------------------------------------------------------------------------	
+	//17
 	case "createroom":
 		createroom($_POST['username'],$_POST['housename'],$_POST['roomname']);
 		//**create a new room with an existing user
-		// ::> returns a message | returns the result of the operation
+		// ::> returns a message
 		break;
 		
-	//
+	//18
 	case "deleteroom":
 		deleteroom($_POST['username'],$_POST['password'],$_POST['housename'],$_POST['roomname']);
 		//**delete a existing room by an administrator user
-		// ::> returns a message | returns the result of the operation
+		// ::> returns a message
 		break;
 		
-	//
+	//not implemented
 	/*case "modifyroom":
 		modifyroom($_POST['username'],$_POST['password'],$_POST['roomname']);
 		//**modify setings of an existing the room
-		// ::> returns a message | returns the result of the operation
+		// ::> returns a message
 		break;*/
 //-------------------------------------------------------------------------------------------------
-	//
+	//24
 	case "createaccesshouse":
 		createaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username'],$_POST['number']);
-		//**
-		// ::>
+		//**grant a user access to a house
+		// ::> returns a message
 		break;
 		
-	//
+	//36
 	case "deleteaccesshouse":
 		deleteaccesshouse($_POST['username'],$_POST['housename'],$_POST['n_username']);
-		//**
-		// ::>
+		//**delete a user access to a house
+		// ::> returns a message
 		break;
 		
 //-------------------------------------------------------------------------------------------------
-
+	//37
 	case "image":
 		image($_POST['idimage']);
-		//**
-		// ::>
+		//**look an updated image in the browser
+		// ::> watch image on browser
 		break;
-		
+	//38
 	case "subir":
 		subir2();
-		
-	break;
+		//**update an image to the server
+		// ::> returns a message
+		break;
+	
 //-------------------------------------------------------------------------------------------------
-		
+	//31
     case "linkserviceroom":
 		linkserviceroom($_POST['idservice'],$_POST['idroom']); 
-		//**
-		// ::>
+		//**assign a service to a room
+		// ::> returns a message
 		break;
-		
+	//32
     case "unlinkserviceroom":
 		unlinkserviceroom($_POST['idservice']); 
-		//**
-		// ::>
+		//**delete the service on the room
+		// ::> returns a message
 		break;
 //-------------------------------------------------------------------------------------------------
+	//33
     case "modifyservicetype":
 		modifyservicetype($_POST['username'], $_POST['iddevice'],$_POST['servicename'], $_POST['type']); 
-		//**
-		// ::>
-		break;
-		
+		//**modify the type of service instanced
+		// ::> returns a message
+		break;	
+	//34
     case "createpermissionservice":
 		createpermissionservice($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['n_username'],$_POST['number']); 
-		//**
-		// ::>
+		//**create permission to a user for a service
+		// ::> returns a message
 		break;
-		
+	//35
     case "deletepermissionservice":
 		deletepermissionservice($_POST['username'],$_POST['housename'],$_POST['roomname'],$_POST['servicename'],$_POST['n_username']); 
-		//**
-		// ::>
-		break;
-//-------------------------------------------------------------------------------------------------
-    case "createdevice":
-		createdevice($_POST['username'],$_POST['ipaddress'],$_POST['serial'],$_POST['devicename']); 
-		//**
-		// ::>
+		//**delete permission to a user for a service
+		// ::> returns a message
 		break;
 		
+//-------------------------------------------------------------------------------------------------
+	//25
+    case "createdevice":
+		createdevice($_POST['username'],$_POST['ipaddress'],$_POST['serial'],$_POST['devicename']); 
+		//**create a suported device
+		// ::> returns a message
+		break;
+	//30
     case "deletedevice":
 		deletedevice($_POST['username'],$_POST['password'],$_POST['iddevice']); 
-		//**
-		// ::>
+		//**delete an existing device created by this user
+		// ::> returns a message
 		break;
 
 //-------------------------------------------------------------------------------------------------

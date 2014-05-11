@@ -5,6 +5,7 @@
 //++------------++
 //|| VERSION 1  ||
 //++------------++
+// to suport the old implementation either
 //--------------------------------------------------------------------------------------
 function testNoERROR($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
@@ -59,6 +60,7 @@ function login($user, $pass) {
 	$SQLuser['result'][0]['ERROR'] = '0';
 	print json_encode($SQLuser);
 }
+
 //--------------------------------------------------------------------------------------
 function testEXIST( $where, $something, $id) {
 	// template of exist consult
@@ -225,6 +227,7 @@ function deleteuser($user, $pass){
 	$error = 14;//deleted user
 	message($error, 0);
 }
+
 //--------------------------------------------------------------------------------------
 function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	/* modify an existing user*/
@@ -268,6 +271,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 	$error = 15;//user MODIFY
 	message($error, 0);
 }
+
 //---------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -275,6 +279,7 @@ function modifyuser($user, $pass, $n_user, $n_pass, $n_email, $n_hint){
 //++------------++
 //|| VERSION 2  ||
 //++------------++
+// new interface implementation abilable
 //--------------------------------------------------------------------------------------
 function testNoERROR2($iduser, $error, $funct){
 	//** TEST NO ERROR AT THIS POINT **
@@ -526,8 +531,6 @@ function lostpass($user){
 
 	//server send an email recovery pasword
 	recovery_mail($email, $user, $pass);
-	
-	
 }
 
 //--------------------------------------------------------------------------------------
@@ -740,9 +743,6 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	// take de error message
 	/*$error = 16;//acction sent
 	message($error, 0);*/
-	
-	
-
 }
 
 //--------------------------------------------------------------------------------------
@@ -762,7 +762,6 @@ function ipcheck(){
 	exit();
 }
 
-
 //--------------------------------------------------------------------------------------
 function getweather($city, $country, $language){
 	/* returns the weather of a specific city and country */
@@ -779,8 +778,11 @@ function getweather($city, $country, $language){
 	$language = ($language == null || $language == '')? 'en':$language;
 	exec('./clima '.$city.','.$country.' '. $language,$output);
 	
-	//for localhost service
-	/*switch ($city){
+	/*********************************************/
+	/**UNCOMMENT this for localhost service      */
+	/*********************************************/
+	/*
+	switch ($city){
 		case "madrid":
 			print '{"description": "Sky is Clear", "main": "Clear", 
 					"sunrise": 1398403266, "temp min": 280.93000000000001, 
@@ -829,7 +831,9 @@ function createhouse($user, $house, $city, $country){
 	
 	$message = query("CALL createhouse('%s', '%s', '%s', '%s')", $user, $house, $city, $country);
 	
-	//create a directory to his images
+	/******************************************************/
+	/**UNCOMMENT this for create a directory to his images*/
+	/******************************************************/
 	/*
 	$dir = 'images/'.$house;
 	mkdir($dir, 0777);
@@ -873,7 +877,9 @@ function deletehouse($user, $pass, $house){
 	/*delete a existing house by an administrator user <-- user with access number 1*/
 	$message = query("CALL deletehouse('%s', '%s', '%s')", $user, $pass, $house);
 	
-	//delete the directory of house images
+	/***********************************************************/
+	/**UNCOMMENT this for delete the directory of house images */
+	/***********************************************************/
 	/*
 	$dir = 'images/'.$house;
 	rrmdir($dir);
@@ -1097,8 +1103,10 @@ function addcommandprogram($user, $command, $idaction, $pos){
 function removecommandprogram($user, $command, $idaction, $pos){
 	/* remove a program action to a command process*/
 	$message = query("CALL removecommandprogram ('%s','%s',%s,%s)",$user, $command, (int) $idaction, (int) $pos);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
@@ -1109,8 +1117,10 @@ function removecommandprogram($user, $command, $idaction, $pos){
 function createcommand($user, $command){
 	/* create a new command process for a user*/
 	$message = query("CALL createcommand ('%s','%s')", $user, $command);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
@@ -1121,8 +1131,10 @@ function createcommand($user, $command){
 function deletecommand($user, $command){
 	/* delete a command process*/
 	$message = query("CALL deletecommand ('%s','%s')", $user, $command);
+	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
 	print json_encode($json);
 }
 
@@ -1563,6 +1575,7 @@ function imageup($id){
 		}
 	}
 }
+
 //--------------------------------------------------------------------------------------
 /*
  * NOT USED
@@ -1712,6 +1725,7 @@ function goodbye_mail($email,$user){
 	
 	mail($email, "GOOD BYE! from EHC", $mail_message, $mail_headers);
 }
+
 //--------------------------------------------------------------------------------------
 function recovery_mail($email, $user, $pass){
 	/* send an email to the user with the recovery password */
