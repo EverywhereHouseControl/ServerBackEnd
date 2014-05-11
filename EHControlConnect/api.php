@@ -312,6 +312,8 @@ function message($error, $return){
 function createJSON2($user) {
 	//** creation of second type of json aplication uses**//
 	// VERSION DEMO 2
+	
+	//RELATIVE ADDRESS
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	
@@ -499,6 +501,91 @@ function login2($user, $pass) {
 	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
 	
 	print json_encode($result);
+}
+
+function login3($user, $pass, $regID, $OS) {
+	/* make de server conexion and return the user information*/
+	// this version save the mobilephone address to send them update messages
+	
+	$error = 0;
+	$funct = 1;
+
+	//relative path
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+
+	//only for save the iduser becouse we need that
+	$SQLuser = query("SELECT IDUSER, USERNAME, PASSWORD, EMAIL, HINT, DATEBEGIN, URL FROM USERS LEFT JOIN IMAGES USING (IDIMAGE) WHERE USERNAME='%s'  limit 2;", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$num	 = count($SQLuser['result']);
+	switch ($num){
+		case 0:	$error = 3;	break;
+		case 2:	$error = 4;	break;
+	}
+
+	testNoERROR2($iduser, $error, $funct);
+
+	//** TEST correct password **
+	if ($SQLuser['result'][0]['PASSWORD'] == $pass){
+		//correct pass, authorized
+		$_SESSION['IdUser'] = $SQLuser['result'][0]['IDUSER'];
+	}
+	else{
+		//incorrect pass. hint password
+		$error = 2;
+	}
+
+	testNoERROR2($iduser, $error, $funct);
+
+	$m = query("SELECT ENGLISH, SPANISH
+				FROM ERRORS
+				WHERE ERRORCODE=50 LIMIT 1; ");
+
+	//REGISTER THE ACTIVITY
+	query("INSERT INTO HISTORYACCESS
+				(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+		VALUES  (     NULL,   '%s',    NULL,  '%s',  '%s', CURRENT_TIMESTAMP);"
+			, $iduser, $error, $funct);
+	
+	//REGISTER THE MOBILE ID FOR THAT USER
+	query("INSERT INTO `LOGED`(`IDLOG`, `IDUSER`, `REGID`, `OS`) 
+						VALUES (NULL,       '%s',    '%s', '%s');", $iduser, $regID, $OS);
+
+	//USER information
+	$result['result'] = array_map('utf8_encode', $SQLuser['result'][0]);
+	/*more relevant inforamtion about this loged user */
+	//user image
+	$result['result']['URL']      = ($result['result']['URL'] == NULL)? NULL: 'http://'.$host.$uri.'/'.$result['result']['URL'];
+	$result['result']['TASKS']    = taskJSON($user);
+	$result['result']['COMMANDS'] = commandJSON($user);
+	$result['result']['SINGLES']  = singleProgramJSON($user);
+	$result['result']['DEVICES']  = deviceJSON($user);
+	$result['result']['JSON']     = createJSON2($user);
+
+	//return code inforamtion and messages asociated
+	$result['error']['ERROR'] 	= 0;
+	$result['error']['ENGLISH'] = utf8_encode($m['result'][0]['ENGLISH']);
+	$result['error']['SPANISH'] = utf8_encode($m['result'][0]['SPANISH']);
+
+	print json_encode($result);
+}
+
+//--------------------------------------------------------------------------------------
+function logout($user, $regID){
+	/* modify an existing user*/
+	// only to use after the login3
+
+	//DELETE log register of mobile ID 
+	$SQLuser = query("SELECT IDUSER FROM USERS WHERE USERNAME='%s' ;", $user);
+	$iduser  = $SQLuser['result'][0]['IDUSER'];
+	$message = query("DELETE FROM LOGED WHERE IDUSER='%s' AND REGID='%s';", $iduser, $regID);
+	
+	// take de error message
+	$json['error']['ERROR'] = 0;//79
+	$json['error']['ENGLISH'] = 'Logout success.';
+	$json['error']['SPANISH'] = 'Deslogado correcto.';
+
+	print json_encode($json);
 }
 
 //--------------------------------------------------------------------------------------
@@ -1771,12 +1858,38 @@ function randomPass(){
 function updateservicestate($idservice, $data){
 	/* raspberry pi connect to update the state of the service */
 
+	//RELATIVE ADDRESS
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	
 	$message = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
 	
 	// take de error message
 	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
 	
 	print json_encode($json);
+	
+	/*SEND A relogin message to all access users actually loged*/
+	if ($json['error']['ERROR'] == 0){
+		
+		//SEARCH all loged users
+		$SQLmobileID = query("SELECT DISTINCT REGID 
+							  FROM LOGED 
+							  WHERE IDUSER IN
+								(SELECT IDUSER 
+								FROM loginVIEW 
+								WHERE IDSERVICE='%s' 
+								GROUP BY IDUSER);", $idservice);
+		for ($i = 0 ; $i < count($SQLmobileID['result']); $i++ ){
+			$regID = $SQLmobileID['result'][$i]['REGID'];
+			$msg = 'relogin';
+			$api = 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0';
+			header("Location: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg");
+			
+			//*** DEBUG
+			//print "\nLocation: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg";
+		}
+	}
 }
 ?>
 

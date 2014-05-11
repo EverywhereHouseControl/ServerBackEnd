@@ -53,18 +53,18 @@ function query() {
 //loads up the source image, resizes it and saves with -thumb in the file name
 function thumb($srcFile, $sideInPx) {
 
-  $image = imagecreatefromjpeg($srcFile);
-  $width = imagesx($image);
-  $height = imagesy($image);
-  
-  $thumb = imagecreatetruecolor($sideInPx, $sideInPx);
-  
-  imagecopyresized($thumb,$image,0,0,0,0,$sideInPx,$sideInPx,$width,$height);
-  
-  imagejpeg($thumb, str_replace(".jpg","-thumb.jpg",$srcFile), 85);
-  
-  imagedestroy($thumb);
-  imagedestroy($image);
+	  $image = imagecreatefromjpeg($srcFile);
+	  $width = imagesx($image);
+	  $height = imagesy($image);
+	
+	  $thumb = imagecreatetruecolor($sideInPx, $sideInPx);
+	
+	  imagecopyresized($thumb,$image,0,0,0,0,$sideInPx,$sideInPx,$width,$height);
+	
+	  imagejpeg($thumb, str_replace(".jpg","-thumb.jpg",$srcFile), 85);
+	
+	  imagedestroy($thumb);
+	  imagedestroy($image);
 }
 
 ?>

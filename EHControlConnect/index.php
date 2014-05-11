@@ -33,6 +33,20 @@ switch ($_POST['command']) {
 		// ::> returns a message | return JSON configuration
 		break;
 		
+	//1
+	case "login3":
+		login3($_POST['username'], $_POST['password'],$_POST['regid'], $_POST['os']);
+		//**grant a user access to the aplication registration the mobile ID to send them messages
+		// ::> returns a message | return JSON configuration
+		break;
+		
+	//40
+	case "logout":
+		logout($_POST['username'],$_POST['regid']);
+		//**delete the mobile ID registration
+		// ::> returns a message
+		break;
+		
 	//2
     case "lostpass":
 		lostpass($_POST['username']); 
