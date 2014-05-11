@@ -1884,12 +1884,48 @@ function updateservicestate($idservice, $data){
 			$regID = $SQLmobileID['result'][$i]['REGID'];
 			$msg = 'relogin';
 			$api = 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0';
-			header("Location: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg");
-			
+			//header("Location: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg");
+			sendmobileandroid($api, $regID, $msg);
 			//*** DEBUG
 			//print "\nLocation: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg";
 		}
 	}
+}
+
+//--------------------------------------------------------------------------------------
+function sendmobileandroid($api, $regID, $msg){
+	// API access key from Google API's Console
+	define( 'API_ACCESS_KEY', '$api' );
+	
+	$registrationIds = array($regID);
+	
+	$message = $msg;
+	
+	// prep the bundle
+	$msg = array('mensaje' => "$message");
+	
+	$fields = array
+	(
+			'registration_ids' 	=> $registrationIds,
+			'data'				=> $msg
+	);
+	
+	$headers = array
+	(
+			'Authorization: key=' . API_ACCESS_KEY,
+			'Content-Type: application/json'
+	);
+	
+	$ch = curl_init();
+	curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+	curl_setopt( $ch,CURLOPT_POST, true );
+	curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+	curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+	curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+	curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+	$result = curl_exec($ch );
+	curl_close( $ch );
+	print $result;
 }
 ?>
 
