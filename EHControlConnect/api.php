@@ -1880,42 +1880,48 @@ function updateservicestate($idservice, $data){
 								FROM loginVIEW 
 								WHERE IDSERVICE='%s' 
 								GROUP BY IDUSER);", $idservice);
+		
+		//send notification foreach mobile with access to the service
 		for ($i = 0 ; $i < count($SQLmobileID['result']); $i++ ){
+			//MOBILE NICK TO LOCATE THAT
 			$regID = $SQLmobileID['result'][$i]['REGID'];
+			
+			//MESSAGE TO THE MOBILE
 			$msg = 'relogin';
+			
+			//APP ANDROID VERSION
 			$api = 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0';
+			
+			//NOTIFICATION SEND
 			//header("Location: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg");
 			sendmobileandroid($api, $regID, $msg);
-			//*** DEBUG
-			//print "\nLocation: http://$host.$uri/pushAndroid.php?api=$api&regID=$regID&msg=$msg";
 		}
 	}
 }
 
 //--------------------------------------------------------------------------------------
-function sendmobileandroid($api, $regID, $msg){
+function sendmobileandroid($api, $regID, $message){
 	// API access key from Google API's Console
-	define( 'API_ACCESS_KEY', '$api' );
+	define( 'API_ACCESS_KEY', $api );
 	
 	$registrationIds = array($regID);
 	
-	$message = $msg;
-	
-	// prep the bundle
+	// prepare the bundle
 	$msg = array('mensaje' => "$message");
 	
 	$fields = array
 	(
-			'registration_ids' 	=> $registrationIds,
-			'data'				=> $msg
+		'registration_ids' 	=> $registrationIds,
+		'data'				=> $msg
 	);
-	
+	 
 	$headers = array
 	(
-			'Authorization: key=' . API_ACCESS_KEY,
-			'Content-Type: application/json'
+		'Authorization: key=' . API_ACCESS_KEY,
+		'Content-Type: application/json'
 	);
-	
+	 
+	//google message send
 	$ch = curl_init();
 	curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
 	curl_setopt( $ch,CURLOPT_POST, true );
@@ -1923,8 +1929,10 @@ function sendmobileandroid($api, $regID, $msg){
 	curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
 	curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-	$result = curl_exec($ch );
+	$result = curl_exec( $ch );
 	curl_close( $ch );
+	
+	//***DEBUG PRINT
 	print $result;
 }
 ?>
