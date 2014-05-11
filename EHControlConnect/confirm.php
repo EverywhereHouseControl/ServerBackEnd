@@ -10,12 +10,18 @@ $code = $_GET ['code'];
 require ("lib.php");
 require ("api.php");
 
+//relative address active-server
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
+//search the equals confirm code
 $sqlregistration = query ( "SELECT * FROM REGISTRATIONS WHERE CODECONFIRM = '%s' limit 1;", $code );
 
+
 if (count ( $sqlregistration ['result'] ) == 1) {
+	/*if exit that confirm code*/
+	
+	// move user to the USERS table
 	query ( "DELETE FROM REGISTRATIONS WHERE CODECONFIRM = '%s' LIMIT 1;", $code );
 	query ( "INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE`, `DATEBEGIN`) VALUES
 									(NULL, '%s', '%s', '%s', '%s', NULL, '%s');", 
@@ -24,7 +30,10 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 										$sqlregistration ['result'][0]['EMAIL'],
 										$sqlregistration ['result'][0]['HINT'],
 										$sqlregistration ['result'][0]['DATEBEGIN']);
+	//send welcome mail
 	welcome_mail($sqlregistration ['result'][0]['EMAIL'], $sqlregistration ['result'][0]['USERNAME']);
+	
+	//view html confirm message
 	echo '<div style="margin-left: -300px;" dir="ltr" align="center">
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
@@ -33,6 +42,9 @@ if (count ( $sqlregistration ['result'] ) == 1) {
 		<div style="position: relative; left: 310px; top: -140px; width: 400px; height: 200px; text-align: left;"><span style="color: #0000ff; font-family: arial,helvetica,sans-serif; font-size: xx-large;">You have successfully confirmed your account.</span></div>
 		</div>';
 } else {
+	/* if the confirm code does not exists*/
+	
+	//view html code not found message
 	echo '<div style="margin-left: -400px;" dir="ltr" align="center">
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 11-05-2014 a las 13:30:07
+-- Tiempo de generación: 11-05-2014 a las 23:11:43
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -1661,6 +1661,43 @@ end;
 
 end$$
 
+DROP PROCEDURE IF EXISTS `updateservicestate`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+    COMMENT 'raspberry pi connect to update the state of the service.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (ids IS NULL OR stat IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*) INTO num
+	FROM SERVICES
+	WHERE `IDSERVICE`= ids;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 64;
+	ELSE
+		UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+		SET err = 78;
+
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    NULL,   NULL,  IF(err = 78, 0, err),  39, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 78, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
 DROP PROCEDURE IF EXISTS `userexist`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
@@ -1970,7 +2007,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(100) NOT NULL,
   `SPANISH` varchar(100) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=80 ;
 
 -- --------------------------------------------------------
 
@@ -2008,7 +2045,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(50) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
 
 -- --------------------------------------------------------
 
@@ -2029,7 +2066,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8691 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8780 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -2178,6 +2215,30 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `LOGED`
+--
+-- Creación: 11-05-2014 a las 17:32:58
+--
+
+DROP TABLE IF EXISTS `LOGED`;
+CREATE TABLE IF NOT EXISTS `LOGED` (
+  `IDLOG` int(11) NOT NULL AUTO_INCREMENT,
+  `IDUSER` int(11) NOT NULL,
+  `REGID` varchar(1000) NOT NULL,
+  `OS` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDLOG`),
+  KEY `IDUSER` (`IDUSER`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+--
+-- RELACIONES PARA LA TABLA `LOGED`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `loginVIEW`
 --
 DROP VIEW IF EXISTS `loginVIEW`;
@@ -2251,7 +2312,7 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`),
   KEY `IDACTION` (`IDACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=129 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
@@ -2658,6 +2719,12 @@ ALTER TABLE `DEVICES`
 ALTER TABLE `HISTORYACCESS`
   ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`),
   ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
+
+--
+-- Filtros para la tabla `LOGED`
+--
+ALTER TABLE `LOGED`
+  ADD CONSTRAINT `LOGED_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `PERMISSIONS`

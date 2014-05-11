@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 11-05-2014 a las 13:29:50
+-- Tiempo de generación: 11-05-2014 a las 23:11:29
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -1661,6 +1661,43 @@ end;
 
 end$$
 
+DROP PROCEDURE IF EXISTS `updateservicestate`$$
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+    COMMENT 'raspberry pi connect to update the state of the service.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (ids IS NULL OR stat IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*) INTO num
+	FROM SERVICES
+	WHERE `IDSERVICE`= ids;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 64;
+	ELSE
+		UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+		SET err = 78;
+
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    NULL,   NULL,  IF(err = 78, 0, err),  39, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 78, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
 DROP PROCEDURE IF EXISTS `userexist`$$
 CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
@@ -2123,7 +2160,7 @@ CREATE TABLE IF NOT EXISTS `ERRORS` (
   `ENGLISH` varchar(100) NOT NULL,
   `SPANISH` varchar(100) NOT NULL,
   PRIMARY KEY (`ERRORCODE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=80 ;
 
 --
 -- Volcado de datos para la tabla `ERRORS`
@@ -2207,7 +2244,9 @@ INSERT INTO `ERRORS` (`ERRORCODE`, `ENGLISH`, `SPANISH`) VALUES
 (74, 'This event already exist for this user.', 'Este evento ya existe para este usuario.'),
 (75, 'Create new event.', 'Nueva evento creado.'),
 (76, 'Event deleted.', 'Evento eliminado.'),
-(77, 'This event does not exist.', 'Este evento no existe.');
+(77, 'This event does not exist.', 'Este evento no existe.'),
+(78, 'Updated service state.', 'Estado del servicio actualizado.'),
+(79, 'Logout success.', 'Deslogado correcto.');
 
 -- --------------------------------------------------------
 
@@ -2245,7 +2284,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
   `FUNCTION` varchar(50) NOT NULL,
   PRIMARY KEY (`FUNCT`),
   UNIQUE KEY `FUNCTION` (`FUNCTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
 
 --
 -- Volcado de datos para la tabla `FUNCTIONS`
@@ -2279,6 +2318,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (8, 'ipcheck'),
 (31, 'linkserviceroom'),
 (1, 'login'),
+(40, 'logout'),
 (2, 'lostpass'),
 (20, 'modifyhouse'),
 (16, 'modifyprogramaction'),
@@ -2290,7 +2330,8 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 (22, 'removetaskprogram'),
 (23, 'schedulehouse'),
 (38, 'subir'),
-(32, 'unlinkserviceroom');
+(32, 'unlinkserviceroom'),
+(39, 'UPDATE');
 
 -- --------------------------------------------------------
 
@@ -2311,7 +2352,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8691 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8780 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -10897,7 +10938,96 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (8687, 29, NULL, 0, 15, '2014-05-10 19:53:31'),
 (8688, 0, NULL, 3, 1, '2014-05-10 21:10:36'),
 (8689, 128, NULL, 2, 1, '2014-05-10 21:10:53'),
-(8690, 0, NULL, 3, 1, '2014-05-10 21:10:58');
+(8690, 0, NULL, 3, 1, '2014-05-10 21:10:58'),
+(8691, 0, NULL, 2, 1, '2014-05-11 12:13:50'),
+(8692, 128, NULL, 0, 1, '2014-05-11 12:13:57'),
+(8693, 128, NULL, 0, 1, '2014-05-11 13:04:38'),
+(8694, 29, NULL, 0, 1, '2014-05-11 14:49:07'),
+(8695, 29, NULL, 0, 1, '2014-05-11 14:50:23'),
+(8696, 29, NULL, 0, 1, '2014-05-11 14:53:31'),
+(8697, 29, NULL, 0, 1, '2014-05-11 14:55:52'),
+(8698, 29, NULL, 0, 1, '2014-05-11 15:01:29'),
+(8699, 29, NULL, 0, 1, '2014-05-11 15:06:38'),
+(8700, 29, NULL, 0, 1, '2014-05-11 15:07:15'),
+(8701, NULL, NULL, 3, 15, '2014-05-11 15:14:43'),
+(8702, NULL, NULL, 0, 39, '2014-05-11 15:19:19'),
+(8703, NULL, NULL, 0, 39, '2014-05-11 15:24:46'),
+(8704, NULL, NULL, 64, 39, '2014-05-11 15:24:54'),
+(8705, 29, NULL, 0, 1, '2014-05-11 15:28:16'),
+(8706, 29, NULL, 0, 1, '2014-05-11 15:30:34'),
+(8707, 29, NULL, 0, 1, '2014-05-11 15:31:34'),
+(8708, NULL, NULL, 64, 39, '2014-05-11 15:36:08'),
+(8709, NULL, NULL, 0, 39, '2014-05-11 15:39:02'),
+(8710, NULL, NULL, 0, 39, '2014-05-11 15:39:16'),
+(8711, NULL, NULL, 64, 39, '2014-05-11 15:39:28'),
+(8712, 29, NULL, 0, 1, '2014-05-11 15:39:40'),
+(8713, 29, NULL, 0, 1, '2014-05-11 15:40:31'),
+(8714, 29, NULL, 0, 1, '2014-05-11 15:41:19'),
+(8715, 29, NULL, 0, 1, '2014-05-11 15:42:43'),
+(8716, 29, NULL, 77, 15, '2014-05-11 15:42:53'),
+(8717, 29, NULL, 77, 15, '2014-05-11 15:45:00'),
+(8718, 29, NULL, 0, 15, '2014-05-11 15:45:14'),
+(8719, 29, 9, 0, 14, '2014-05-11 15:47:24'),
+(8720, 29, NULL, 77, 15, '2014-05-11 15:47:39'),
+(8721, 29, 9, 0, 14, '2014-05-11 15:49:22'),
+(8722, 29, NULL, 0, 1, '2014-05-11 15:50:41'),
+(8723, 29, NULL, 77, 15, '2014-05-11 15:50:52'),
+(8724, 29, NULL, 0, 1, '2014-05-11 15:51:06'),
+(8725, 29, NULL, 77, 15, '2014-05-11 15:51:35'),
+(8726, 29, NULL, 0, 1, '2014-05-11 15:51:39'),
+(8727, 29, NULL, 0, 1, '2014-05-11 15:52:51'),
+(8728, 29, NULL, 0, 15, '2014-05-11 15:52:58'),
+(8729, 29, NULL, 0, 1, '2014-05-11 15:53:15'),
+(8730, 29, NULL, 0, 1, '2014-05-11 15:53:21'),
+(8731, 29, NULL, 0, 5, '2014-05-11 15:53:33'),
+(8732, 29, NULL, 0, 1, '2014-05-11 15:53:33'),
+(8733, 29, NULL, 0, 1, '2014-05-11 16:22:01'),
+(8734, 29, NULL, 0, 1, '2014-05-11 17:52:53'),
+(8735, 29, 9, 74, 14, '2014-05-11 17:53:14'),
+(8736, 29, 9, 0, 14, '2014-05-11 17:53:21'),
+(8737, 29, NULL, 0, 1, '2014-05-11 17:53:38'),
+(8738, 29, NULL, 0, 15, '2014-05-11 17:53:50'),
+(8739, 29, NULL, 77, 15, '2014-05-11 17:54:04'),
+(8740, 29, NULL, 77, 15, '2014-05-11 17:54:13'),
+(8741, 29, NULL, 0, 1, '2014-05-11 17:55:46'),
+(8742, 29, 9, 0, 14, '2014-05-11 17:56:28'),
+(8743, 29, 9, 74, 14, '2014-05-11 17:56:28'),
+(8744, 29, 9, 0, 14, '2014-05-11 17:56:34'),
+(8745, 29, NULL, 0, 1, '2014-05-11 17:56:53'),
+(8746, 29, NULL, 0, 1, '2014-05-11 17:56:54'),
+(8747, 29, NULL, 0, 1, '2014-05-11 18:01:50'),
+(8748, 128, NULL, 0, 1, '2014-05-11 18:14:33'),
+(8749, 0, NULL, 2, 1, '2014-05-11 18:30:08'),
+(8750, NULL, NULL, 0, 39, '2014-05-11 18:30:44'),
+(8751, NULL, NULL, 0, 39, '2014-05-11 18:31:35'),
+(8752, NULL, NULL, 0, 39, '2014-05-11 18:31:39'),
+(8753, 128, NULL, 0, 1, '2014-05-11 18:32:07'),
+(8754, 128, NULL, 0, 1, '2014-05-11 18:35:28'),
+(8755, 128, NULL, 0, 1, '2014-05-11 18:35:47'),
+(8756, 128, NULL, 0, 1, '2014-05-11 18:36:00'),
+(8757, 128, NULL, 0, 1, '2014-05-11 18:39:03'),
+(8758, 128, NULL, 0, 1, '2014-05-11 18:39:12'),
+(8759, 128, NULL, 0, 1, '2014-05-11 18:40:09'),
+(8760, 128, NULL, 0, 1, '2014-05-11 18:40:31'),
+(8761, 128, NULL, 0, 1, '2014-05-11 18:42:44'),
+(8762, 128, NULL, 0, 1, '2014-05-11 18:43:01'),
+(8763, 128, NULL, 0, 1, '2014-05-11 18:44:48'),
+(8764, 128, NULL, 0, 1, '2014-05-11 18:45:22'),
+(8765, 128, NULL, 0, 1, '2014-05-11 18:45:51'),
+(8766, NULL, NULL, 0, 39, '2014-05-11 18:47:15'),
+(8767, NULL, NULL, 0, 39, '2014-05-11 18:47:36'),
+(8768, NULL, NULL, 0, 39, '2014-05-11 18:47:48'),
+(8769, 29, NULL, 0, 1, '2014-05-11 18:48:49'),
+(8770, NULL, NULL, 0, 39, '2014-05-11 18:49:04'),
+(8771, 29, NULL, 0, 1, '2014-05-11 18:49:30'),
+(8772, NULL, NULL, 0, 39, '2014-05-11 18:51:12'),
+(8773, NULL, NULL, 0, 39, '2014-05-11 18:53:57'),
+(8774, NULL, NULL, 0, 39, '2014-05-11 18:55:51'),
+(8775, 128, NULL, 2, 1, '2014-05-11 19:00:07'),
+(8776, 128, NULL, 0, 1, '2014-05-11 19:00:19'),
+(8777, 29, NULL, 0, 1, '2014-05-11 19:43:41'),
+(8778, 29, NULL, 0, 1, '2014-05-11 19:44:07'),
+(8779, 29, NULL, 0, 1, '2014-05-11 19:46:18');
 
 -- --------------------------------------------------------
 
@@ -12307,6 +12437,30 @@ INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `LOGED`
+--
+-- Creación: 11-05-2014 a las 17:32:58
+--
+
+DROP TABLE IF EXISTS `LOGED`;
+CREATE TABLE IF NOT EXISTS `LOGED` (
+  `IDLOG` int(11) NOT NULL AUTO_INCREMENT,
+  `IDUSER` int(11) NOT NULL,
+  `REGID` varchar(1000) NOT NULL,
+  `OS` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDLOG`),
+  KEY `IDUSER` (`IDUSER`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+--
+-- RELACIONES PARA LA TABLA `LOGED`:
+--   `IDUSER`
+--       `USERS` -> `IDUSER`
+--
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `loginVIEW`
 --
 DROP VIEW IF EXISTS `loginVIEW`;
@@ -12398,7 +12552,7 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`),
   KEY `IDACTION` (`IDACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=129 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
@@ -12432,7 +12586,9 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `PROGRAMNAME`, `IDUSER`, `IDACTION`, 
 (124, 'Pillar a la abuela con la persiana', 128, 232, 'DOWN', '2014-03-30 09:00:00', '2014-04-26 19:04:26'),
 (125, 'arobobo', 128, 252, 'ON', '2014-03-30 09:07:00', '2014-04-26 19:07:29'),
 (126, 'Pillar a la abuela con la persiana.', 128, 232, 'DOWN', '2014-04-30 09:00:00', '2014-04-26 19:09:04'),
-(128, 'asdasd', 29, 192, 'NO ACTIONS FOR THIS SERVICE', '2014-05-10 04:05:00', '2014-05-10 16:06:36');
+(129, 'asdasd', 29, 192, '10052014', '0000-00-00 00:00:00', '2014-05-11 15:47:24'),
+(132, 'testing', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:28'),
+(133, 'testinga', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:34');
 
 -- --------------------------------------------------------
 
@@ -12576,7 +12732,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (161, NULL, 43, 'TV', 'TV NPG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (162, NULL, 43, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (163, NULL, 43, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
-(164, 7, 43, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(164, 7, 43, 'AIRCONDITIONING', NULL, 5, 'down', 'Control of air conditioning.', 'Control del aire acondicionado.'),
 (165, 10, 43, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (166, 9, 43, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (167, 8, 43, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
@@ -12844,7 +13000,7 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE
 (1, 'alex', '9b7f3f31cb34f95db0d725c083ff4729', 'algcano@ucm.es', 'hint', NULL, '2014-03-11 04:00:00'),
 (2, 'Colin Tirado', '87e2763c408e3dc4adc3e4177566b3b2', 'ctiradocaa@gmail.com', 'Adivina adivinanza.', NULL, '2014-03-25 21:36:35'),
 (10, 'luis', '502ff82f7f1f8218dd41201fe4353687', 'luis@gmail.com', 'what about me?', NULL, '2014-11-13 05:00:00'),
-(29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.com', ' ', 421, '2014-03-23 04:00:01'),
+(29, 'bertoldo', '6e1fd914c4532f9325e4107bd68e32c7', 'bertoldo@gmail.es', ' ', 421, '2014-03-23 04:00:01'),
 (64, 'sobek', '69dafe8b5866478aea48f3df384820', 'Sergioprimo23@Gmail.com', NULL, NULL, '2014-03-27 15:17:28'),
 (65, 'beaordepe', 'b32676f518207bc993997bf8b58adacc', 'beaordepe@gmail.com', NULL, NULL, '2014-03-27 15:58:12'),
 (66, 'Ismael', 'e1adc3949ba59abbe56e057f2f883e', 'irequena@outlook.com', NULL, NULL, '2014-03-27 16:14:53'),
@@ -13003,6 +13159,12 @@ ALTER TABLE `DEVICES`
 ALTER TABLE `HISTORYACCESS`
   ADD CONSTRAINT `HISTORYACCESS_ibfk_3` FOREIGN KEY (`ERROR`) REFERENCES `ERRORS` (`ERRORCODE`),
   ADD CONSTRAINT `HISTORYACCESS_ibfk_4` FOREIGN KEY (`FUNCT`) REFERENCES `FUNCTIONS` (`FUNCT`);
+
+--
+-- Filtros para la tabla `LOGED`
+--
+ALTER TABLE `LOGED`
+  ADD CONSTRAINT `LOGED_ibfk_1` FOREIGN KEY (`IDUSER`) REFERENCES `USERS` (`IDUSER`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `PERMISSIONS`
