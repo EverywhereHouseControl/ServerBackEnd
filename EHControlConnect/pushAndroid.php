@@ -1,8 +1,8 @@
 <?php
 
 // API access key from Google API's Console
-$api = $_GET['api'];
-define( 'API_ACCESS_KEY', '$api' );
+//$api = $_GET['api'];
+define( 'API_ACCESS_KEY', 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0' );
 
 $registrationIds = array($_GET['regID']);
 
@@ -32,8 +32,9 @@ curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
 curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
 $result = curl_exec($ch );
 curl_close( $ch );
-echo "ENVIADO!!";
-exit();
+//echo "ENVIADO!!";
+
+echo $result;
 
 
 ?>

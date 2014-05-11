@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 11-05-2014 a las 23:11:29
+-- Tiempo de generación: 12-05-2014 a las 01:14:22
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -2352,7 +2352,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8780 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8793 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
@@ -11027,7 +11027,20 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (8776, 128, NULL, 0, 1, '2014-05-11 19:00:19'),
 (8777, 29, NULL, 0, 1, '2014-05-11 19:43:41'),
 (8778, 29, NULL, 0, 1, '2014-05-11 19:44:07'),
-(8779, 29, NULL, 0, 1, '2014-05-11 19:46:18');
+(8779, 29, NULL, 0, 1, '2014-05-11 19:46:18'),
+(8780, 128, NULL, 2, 1, '2014-05-11 21:17:00'),
+(8781, 128, NULL, 0, 1, '2014-05-11 21:17:10'),
+(8782, NULL, NULL, 0, 39, '2014-05-11 21:17:33'),
+(8783, NULL, NULL, 0, 39, '2014-05-11 21:39:18'),
+(8784, NULL, NULL, 0, 39, '2014-05-11 21:44:06'),
+(8785, 128, NULL, 0, 1, '2014-05-11 21:47:11'),
+(8786, NULL, NULL, 0, 39, '2014-05-11 21:47:29'),
+(8787, NULL, NULL, 0, 39, '2014-05-11 21:49:12'),
+(8788, NULL, NULL, 0, 39, '2014-05-11 22:23:57'),
+(8789, NULL, NULL, 0, 39, '2014-05-11 22:26:36'),
+(8790, NULL, NULL, 0, 39, '2014-05-11 22:34:26'),
+(8791, NULL, NULL, 0, 39, '2014-05-11 22:35:16'),
+(8792, 0, NULL, 0, 8, '2014-05-11 23:06:39');
 
 -- --------------------------------------------------------
 
@@ -12450,13 +12463,20 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
   `OS` varchar(50) NOT NULL,
   PRIMARY KEY (`IDLOG`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
 --
 -- RELACIONES PARA LA TABLA `LOGED`:
 --   `IDUSER`
 --       `USERS` -> `IDUSER`
 --
+
+--
+-- Volcado de datos para la tabla `LOGED`
+--
+
+INSERT INTO `LOGED` (`IDLOG`, `IDUSER`, `REGID`, `OS`) VALUES
+(18, 128, 'APA91bHva6rb-wtKa9HqLgyKtPg1VTs573KvHb_hj3C9Xmo5X2jTnu7fgnG_pkmX90upvJMKJasWU8sXrezKy1OHxLrnbwm90SuNzZmBIumbHuY5tK3lMLYIwrcLhXn-tTf_qzKzAEDX1nWnsHi7iv1XyJu5OONjxA', 'Android');
 
 -- --------------------------------------------------------
 
@@ -12768,7 +12788,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (197, NULL, 47, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (198, NULL, 47, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (199, NULL, 47, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
-(200, 28, 47, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.');
+(200, 28, 47, 'LIGHTS', NULL, 2, 'DOWM', 'Control of lights.', 'Control de luces.');
 
 -- --------------------------------------------------------
 
