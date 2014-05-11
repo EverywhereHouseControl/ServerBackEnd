@@ -308,12 +308,29 @@ switch ($_POST['command']) {
 		break;
 
 //-------------------------------------------------------------------------------------------------
+	//39
+    case "UPDATE":
+    	updateservicestate($_POST['idservice'],$_POST['data']);
+    	//**raspberry pi connect to update the state of the service 
+    	// ::> returns a message
+    	break;
+//-------------------------------------------------------------------------------------------------
+		
     default:
-		$message = query(	"SELECT ERRORCODE AS ERROR, ENGLISH, SPANISH
+    	switch ($_GET['command']) {
+    		//39
+    		case "UPDATE":
+    			updateservicestate($_GET['idservice'],$_GET['data']);
+    			//**raspberry pi connect to update the state of the service
+    			// ::> returns a message
+    			break;
+    		default:
+    			$message = query(	"SELECT ERRORCODE AS ERROR, ENGLISH, SPANISH
 					FROM ERRORS
 					WHERE ERRORCODE= 38 LIMIT 1 ");
-		$json['error'] = $message['result'][0];
-		print json_encode($json);
+    			$json['error'] = $message['result'][0];
+    			print json_encode($json);
+    	}
 }
 
 exit();

@@ -1347,6 +1347,44 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
             	document.getElementById("loadfile").style.display="block";
             	document.getElementById("programname").style.display="none";
             	break;
+			case "UPDATE":
+            	document.getElementById("username").style.display="none";
+            	document.getElementById("password").style.display="none";
+            	document.getElementById("email").style.display="none";
+            	document.getElementById("hint").style.display="none";
+            	document.getElementById("n_username").style.display="none";
+            	document.getElementById("n_password").style.display="none";
+            	document.getElementById("n_email").style.display="none";
+            	document.getElementById("n_hint").style.display="none";
+            	document.getElementById("housename").style.display="none";
+            	document.getElementById("roomname").style.display="none";
+            	document.getElementById("servicename").style.display="none";
+            	document.getElementById("actionname").style.display="none";
+            	document.getElementById("n_housename").style.display="none";
+            	document.getElementById("n_roomname").style.display="none";
+            	document.getElementById("data").style.display="block";
+            	document.getElementById("start").style.display="none";
+            	document.getElementById("idaction").style.display="none";
+            	document.getElementById("iddevice").style.display="none";
+            	document.getElementById("idservice").style.display="block";
+            	document.getElementById("idroom").style.display="none";
+            	document.getElementById("taskname").style.display="none";
+            	document.getElementById("idtask").style.display="none";
+            	document.getElementById("commandname").style.display="none";
+            	document.getElementById("description").style.display="none";
+            	document.getElementById("frequency").style.display="none";
+            	document.getElementById("type").style.display="none";
+            	document.getElementById("devicename").style.display="none";
+            	document.getElementById("ipaddress").style.display="none";
+            	document.getElementById("city").style.display="none";
+            	document.getElementById("country").style.display="none";
+            	document.getElementById("language").style.display="none";
+            	document.getElementById("number").style.display="none";
+            	document.getElementById("serial").style.display="none";
+            	document.getElementById("image").style.display="none";
+            	document.getElementById("loadfile").style.display="none";
+            	document.getElementById("programname").style.display="none";
+            	break;
             	/*   case "login2":
             	document.getElementById("username").style.display="block";
             	document.getElementById("password").style.display="block";
@@ -1431,6 +1469,7 @@ if ($_POST['txtUsername'] != $username || $_POST['txtPassword'] != $password) {
   				<option value="deletepermissionservice">deletepermissionservice</option>
   				<option value="linkserviceroom">linkserviceroom</option>
   				<option value="unlinkserviceroom">unlinkserviceroom</option> 
+  				<option value="UPDATE">UPDATE</option> 
   				</select>                          <input type="submit"
 				value="Execute" /></pre></td></tr>
 <tr id="username" style="display:none;"><td><pre>  username:    <input name="username" size="50" type="text" /></pre></td></tr>

@@ -1767,5 +1767,16 @@ function randomPass(){
 	return $cad;
 }
 
+//--------------------------------------------------------------------------------------
+function updateservicestate($idservice, $data){
+	/* raspberry pi connect to update the state of the service */
+
+	$message = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
+	
+	// take de error message
+	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	
+	print json_encode($json);
+}
 ?>
 

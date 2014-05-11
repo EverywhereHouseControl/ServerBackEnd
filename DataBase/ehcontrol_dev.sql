@@ -1777,7 +1777,42 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 
 
 
+CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`
+( IN ids INTEGER, IN stat VARCHAR(50))
+    COMMENT 'raspberry pi connect to update the state of the service.'
+begin
 
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+
+end_proc:begin
+	IF (ids IS NULL OR stat IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*) INTO num
+	FROM SERVICES
+	WHERE `IDSERVICE`= ids;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 64;
+	ELSE
+		UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+		SET err = 78;
+
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    idu,   NULL,  IF(err = 78, 0, err),  39, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 78, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
 
 
 
