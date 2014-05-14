@@ -809,12 +809,12 @@ function doaction($user,$house,$room,$service,$action,$data) {
 			$raspberry .= '-';
 	}
 	
+	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
 	header("Location: $ipaddress?command=SEND&iddevice=$raspberryiddevice&idservice=$raspberryidservice&action=$raspberryaction&data=0");
 	//header("Location: http://ehcontrol.net/EHControlConnect/");
 	//echo "<a href='$ipaddress?valor=$raspberry'></a>";
-	
-	
+
 	//REGISTER ARDUINO ANSWER
 	query("INSERT INTO HISTORYACTION
 						(`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER`, `RETURNCODE`, `DATESTAMP`)
@@ -830,6 +830,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	// take de error message
 	/*$error = 16;//acction sent
 	message($error, 0);*/
+	
 }
 
 //--------------------------------------------------------------------------------------
@@ -895,7 +896,7 @@ function getweather($city, $country, $language){
 			break;
 	}*/
 	
-	return $output;
+	print $output[0];
 }
 
 //--------------------------------------------------------------------------------------

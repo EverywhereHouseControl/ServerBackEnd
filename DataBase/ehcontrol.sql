@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 12-05-2014 a las 01:14:22
+-- Tiempo de generación: 14-05-2014 a las 23:25:17
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -25,7 +25,7 @@ DELIMITER $$
 -- Procedimientos
 --
 DROP PROCEDURE IF EXISTS `addcommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'add an acction to a command.'
 begin
 
@@ -92,7 +92,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `addtaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -153,7 +153,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator grant access somobody to a house.'
 begin
 
@@ -207,7 +207,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createcommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Create a new command (conjunto de mandatos)'
 begin
 
@@ -256,7 +256,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createdevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
     COMMENT 'Create a new device.'
 begin
 
@@ -362,7 +362,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Create a new house if not exist.'
 begin
 
@@ -419,7 +419,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createpermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator give permission to somobody to a service.'
 begin
 
@@ -474,7 +474,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
 begin
 	DECLARE num, acc INTEGER DEFAULT 0;
@@ -561,7 +561,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Create a new room if not exist.'
 begin
 
@@ -617,7 +617,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createtask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
     COMMENT 'Create a task, will group programaction.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -668,7 +668,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
     COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
@@ -736,7 +736,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'Delete the access to a house of an user.'
 begin
 
@@ -797,7 +797,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletecommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Delete a command from an user (conjunto de mandatos)'
 begin
 
@@ -845,7 +845,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletedevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
     COMMENT 'Delete a device.'
 begin
 
@@ -899,7 +899,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletehouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
     COMMENT 'Delete a house if exist and the user is an administrator.'
 begin
 
@@ -948,7 +948,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletepermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'An admistrator delete permission to somobody to a service.'
 begin
 
@@ -999,7 +999,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
     COMMENT 'Delete program action.'
 begin
 	DECLARE num, acc, per INTEGER DEFAULT 0;
@@ -1051,7 +1051,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Delete a room if exist.'
 begin
 
@@ -1100,7 +1100,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletetask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
     COMMENT 'Delete a user task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1151,7 +1151,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Delete user if posible by deleting all information restring.'
 begin
 
@@ -1196,7 +1196,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `linkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
     COMMENT 'Attach the service with the room.'
 begin
 
@@ -1246,7 +1246,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `loginJSON`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
 begin
 
 SELECT *
@@ -1256,7 +1256,7 @@ SELECT *
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Modify house information.'
 begin
 
@@ -1319,7 +1319,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyservicetype`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
     COMMENT 'An admistrator modify the type of service instaled on the device.'
 begin
 
@@ -1359,7 +1359,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
     COMMENT 'Mdify the especcification of an existing user.'
 begin
 
@@ -1433,7 +1433,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `recoveryuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Generate a password to recovery user.'
 begin
 	DECLARE idu INTEGER DEFAULT NULL;
@@ -1454,7 +1454,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `removecommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'Remove an acction of a command.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1518,7 +1518,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
     COMMENT 'Add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1582,7 +1582,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `schedule`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
     COMMENT 'Request for all task afected to a house, by a user.'
 begin
 
@@ -1601,7 +1601,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `selectiduser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
 BEGIN
 DECLARE idu INTEGER;
 SELECT IDUSER into idu FROM USERS WHERE USERNAME=u;
@@ -1609,7 +1609,7 @@ set id = idu;
 END$$
 
 DROP PROCEDURE IF EXISTS `streaminghour`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
 BEGIN
 DROP  TABLE IF EXISTS STADISTICS  ;
 CREATE TABLE STADISTICS SELECT COUNT(*) AS Y, X
@@ -1621,7 +1621,7 @@ ORDER BY X;
 END$$
 
 DROP PROCEDURE IF EXISTS `unlinkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
     COMMENT 'Remove the room from a service.'
 begin
 
@@ -1662,7 +1662,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `updateservicestate`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
     COMMENT 'raspberry pi connect to update the state of the service.'
 begin
 
@@ -1699,7 +1699,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `userexist`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
 declare pass varchar(40);
 SELECT PASSWORD INTO pass FROM USERS WHERE USERNAME=u;
@@ -1717,14 +1717,14 @@ END$$
 -- Funciones
 --
 DROP FUNCTION IF EXISTS `ROUND_HOUR`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'returns nearest hour'
 RETURN DATE_FORMAT(datestamp + INTERVAL 30 MINUTE, '%Y-%m-%d %H:00')$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_HOURS`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N hour boundary. For example,\n           TRUNCATE_N_HOURS(sometime, 12) gives the nearest\n           preceding half-day (noon, or midnight'
@@ -1733,7 +1733,7 @@ RETURN DATE(datestamp) +
                           HOUR(datestamp) MOD n) HOUR$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_MINUTES`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N minute boundary. For example,\n           TRUNCATE_N_MINUTES(sometime, 15) gives the nearest\n           preceding quarter hour'
@@ -1748,7 +1748,7 @@ DELIMITER ;
 --
 -- Estructura de tabla para la tabla `ACCESSHOUSE`
 --
--- Creación: 13-04-2014 a las 22:59:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACCESSHOUSE`;
@@ -1782,14 +1782,16 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 (66, 24, 1, '2014-04-26 15:34:46'),
 (128, 24, 1, '2014-04-23 10:33:45'),
 (136, 24, 1, '2014-04-26 19:11:17'),
-(140, 24, 1, '2014-05-07 18:19:09');
+(140, 24, 1, '2014-05-07 18:19:09'),
+(141, 24, 1, '2014-05-12 10:29:09'),
+(142, 24, 1, '2014-05-12 22:30:31');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ACTIONMESSAGES`
 --
--- Creación: 15-04-2014 a las 19:48:45
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONMESSAGES`;
@@ -1815,7 +1817,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
 --
 -- Estructura de tabla para la tabla `ACTIONS`
 --
--- Creación: 17-04-2014 a las 10:27:48
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONS`;
@@ -1943,7 +1945,7 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 --
 -- Estructura de tabla para la tabla `COMMANDS`
 --
--- Creación: 15-04-2014 a las 19:49:30
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMANDS`;
@@ -2000,7 +2002,7 @@ CREATE TABLE IF NOT EXISTS `commandVIEW` (
 --
 -- Estructura de tabla para la tabla `COMMAND_PROGRAM`
 --
--- Creación: 15-04-2014 a las 14:24:32
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMAND_PROGRAM`;
@@ -2055,7 +2057,7 @@ CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
 --
 -- Estructura de tabla para la tabla `CRONACTIONS`
 --
--- Creación: 08-05-2014 a las 23:07:59
+-- Creación: 14-05-2014 a las 19:16:10
 --
 
 DROP TABLE IF EXISTS `CRONACTIONS`;
@@ -2086,7 +2088,7 @@ INSERT INTO `CRONACTIONS` (`city`, `country`, `language`, `Salida`, `id`) VALUES
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
--- Creación: 17-04-2014 a las 01:10:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `DEVICES`;
@@ -2151,7 +2153,7 @@ CREATE TABLE IF NOT EXISTS `deviceVIEW` (
 --
 -- Estructura de tabla para la tabla `ERRORS`
 --
--- Creación: 17-04-2014 a las 21:28:34
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `ERRORS`;
@@ -2275,7 +2277,7 @@ CREATE TABLE IF NOT EXISTS `eventProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `FUNCTIONS`
 --
--- Creación: 15-04-2014 a las 19:50:51
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `FUNCTIONS`;
@@ -2338,7 +2340,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 --
 -- Estructura de tabla para la tabla `HISTORYACCESS`
 --
--- Creación: 13-04-2014 a las 22:08:26
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `HISTORYACCESS`;
@@ -2352,14 +2354,10 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8793 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9189 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
---   `IDHOUSE`
---       `HOUSES` -> `IDHOUSE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `ERROR`
 --       `ERRORS` -> `ERRORCODE`
 --   `FUNCT`
@@ -11040,14 +11038,411 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (8789, NULL, NULL, 0, 39, '2014-05-11 22:26:36'),
 (8790, NULL, NULL, 0, 39, '2014-05-11 22:34:26'),
 (8791, NULL, NULL, 0, 39, '2014-05-11 22:35:16'),
-(8792, 0, NULL, 0, 8, '2014-05-11 23:06:39');
+(8792, 0, NULL, 0, 8, '2014-05-11 23:06:39'),
+(8793, 128, NULL, 0, 1, '2014-05-12 08:07:13'),
+(8794, 128, NULL, 0, 1, '2014-05-12 08:07:14'),
+(8795, NULL, NULL, 0, 39, '2014-05-12 08:09:11'),
+(8796, 128, NULL, 0, 1, '2014-05-12 08:29:35'),
+(8797, 128, NULL, 0, 1, '2014-05-12 08:32:05'),
+(8798, 128, NULL, 0, 1, '2014-05-12 08:32:05'),
+(8799, 128, NULL, 0, 1, '2014-05-12 08:37:40'),
+(8800, NULL, NULL, 0, 39, '2014-05-12 08:38:57'),
+(8801, 29, NULL, 0, 1, '2014-05-12 08:39:51'),
+(8802, 29, NULL, 0, 1, '2014-05-12 08:39:51'),
+(8803, NULL, NULL, 0, 39, '2014-05-12 08:40:25'),
+(8804, 29, NULL, 0, 1, '2014-05-12 08:41:08'),
+(8805, 29, NULL, 0, 1, '2014-05-12 08:41:10'),
+(8806, 29, NULL, 0, 1, '2014-05-12 08:50:49'),
+(8807, 29, NULL, 0, 1, '2014-05-12 08:51:19'),
+(8808, 29, NULL, 0, 1, '2014-05-12 08:51:19'),
+(8809, 29, NULL, 0, 1, '2014-05-12 08:51:53'),
+(8810, 29, NULL, 0, 1, '2014-05-12 08:51:53'),
+(8811, NULL, NULL, 0, 39, '2014-05-12 08:54:15'),
+(8812, 29, NULL, 0, 1, '2014-05-12 08:58:39'),
+(8813, 29, NULL, 0, 1, '2014-05-12 08:59:16'),
+(8814, 29, NULL, 0, 1, '2014-05-12 08:59:16'),
+(8815, 29, NULL, 0, 1, '2014-05-12 09:05:28'),
+(8816, 29, NULL, 0, 1, '2014-05-12 09:06:15'),
+(8817, 29, NULL, 0, 1, '2014-05-12 09:06:16'),
+(8818, NULL, NULL, 0, 39, '2014-05-12 09:07:02'),
+(8819, NULL, NULL, 0, 39, '2014-05-12 09:07:18'),
+(8820, 128, NULL, 0, 1, '2014-05-12 09:07:35'),
+(8821, 128, NULL, 0, 1, '2014-05-12 09:07:37'),
+(8822, NULL, NULL, 0, 39, '2014-05-12 09:08:26'),
+(8823, 128, NULL, 0, 1, '2014-05-12 09:09:03'),
+(8824, 128, NULL, 0, 1, '2014-05-12 09:09:03'),
+(8825, 128, NULL, 0, 1, '2014-05-12 09:14:04'),
+(8826, 128, NULL, 0, 1, '2014-05-12 09:14:05'),
+(8827, NULL, NULL, 0, 39, '2014-05-12 09:14:30'),
+(8828, 128, NULL, 0, 1, '2014-05-12 09:14:49'),
+(8829, 128, NULL, 0, 1, '2014-05-12 09:14:49'),
+(8830, NULL, NULL, 0, 39, '2014-05-12 09:15:16'),
+(8831, 29, NULL, 0, 1, '2014-05-12 09:15:55'),
+(8832, 29, NULL, 0, 1, '2014-05-12 09:15:55'),
+(8833, 29, NULL, 0, 1, '2014-05-12 09:27:45'),
+(8834, 128, NULL, 0, 1, '2014-05-12 09:29:14'),
+(8835, 128, NULL, 0, 1, '2014-05-12 09:29:16'),
+(8836, 128, NULL, 0, 1, '2014-05-12 09:36:35'),
+(8837, 128, NULL, 0, 1, '2014-05-12 09:41:57'),
+(8838, 0, NULL, 2, 1, '2014-05-12 09:41:58'),
+(8839, 128, NULL, 0, 1, '2014-05-12 09:43:25'),
+(8840, 128, NULL, 0, 1, '2014-05-12 09:43:40'),
+(8841, 0, NULL, 2, 1, '2014-05-12 09:43:41'),
+(8842, 128, NULL, 0, 1, '2014-05-12 09:47:39'),
+(8843, 128, NULL, 0, 1, '2014-05-12 09:47:40'),
+(8844, NULL, NULL, 0, 39, '2014-05-12 09:47:56'),
+(8845, NULL, NULL, 0, 39, '2014-05-12 09:48:10'),
+(8846, 128, NULL, 0, 1, '2014-05-12 09:52:14'),
+(8847, 128, NULL, 0, 1, '2014-05-12 09:52:15'),
+(8848, NULL, NULL, 0, 39, '2014-05-12 09:52:23'),
+(8849, NULL, NULL, 0, 39, '2014-05-12 09:52:50'),
+(8850, 128, NULL, 0, 1, '2014-05-12 09:56:36'),
+(8851, 128, NULL, 0, 1, '2014-05-12 09:56:37'),
+(8852, 29, NULL, 0, 1, '2014-05-12 09:58:09'),
+(8853, NULL, NULL, 0, 39, '2014-05-12 09:58:13'),
+(8854, 128, NULL, 0, 1, '2014-05-12 09:58:33'),
+(8855, 128, NULL, 0, 1, '2014-05-12 09:58:39'),
+(8856, NULL, NULL, 0, 39, '2014-05-12 09:59:29'),
+(8857, 128, NULL, 0, 1, '2014-05-12 10:00:30'),
+(8858, 128, NULL, 0, 1, '2014-05-12 10:00:38'),
+(8859, 128, NULL, 0, 1, '2014-05-12 10:04:36'),
+(8860, NULL, NULL, 0, 39, '2014-05-12 10:05:24'),
+(8861, 128, NULL, 0, 1, '2014-05-12 10:05:59'),
+(8862, 128, NULL, 0, 1, '2014-05-12 10:06:42'),
+(8863, 128, NULL, 0, 1, '2014-05-12 10:06:43'),
+(8864, 128, NULL, 0, 1, '2014-05-12 10:06:43'),
+(8865, 128, NULL, 0, 1, '2014-05-12 10:06:45'),
+(8866, NULL, NULL, 0, 39, '2014-05-12 10:07:01'),
+(8867, NULL, NULL, 0, 39, '2014-05-12 10:07:04'),
+(8868, NULL, NULL, 0, 39, '2014-05-12 10:07:50'),
+(8869, NULL, NULL, 0, 39, '2014-05-12 10:09:44'),
+(8870, NULL, NULL, 0, 39, '2014-05-12 10:10:11'),
+(8871, 128, NULL, 0, 1, '2014-05-12 10:14:11'),
+(8872, 128, NULL, 0, 1, '2014-05-12 10:14:12'),
+(8873, NULL, NULL, 0, 39, '2014-05-12 10:14:21'),
+(8874, 10, NULL, 0, 1, '2014-05-12 10:15:24'),
+(8875, 10, NULL, 0, 1, '2014-05-12 10:15:25'),
+(8876, 128, NULL, 0, 1, '2014-05-12 10:18:29'),
+(8877, 128, NULL, 0, 1, '2014-05-12 10:18:30'),
+(8878, 128, NULL, 0, 1, '2014-05-12 10:19:38'),
+(8879, 128, NULL, 0, 1, '2014-05-12 10:19:39'),
+(8880, NULL, NULL, 0, 39, '2014-05-12 10:20:23'),
+(8881, NULL, NULL, 0, 39, '2014-05-12 10:21:58'),
+(8882, 10, NULL, 0, 1, '2014-05-12 10:22:46'),
+(8883, 128, NULL, 0, 1, '2014-05-12 10:23:10'),
+(8884, 10, NULL, 0, 1, '2014-05-12 10:23:39'),
+(8885, 10, NULL, 0, 1, '2014-05-12 10:24:03'),
+(8886, NULL, NULL, 0, 39, '2014-05-12 10:24:24'),
+(8887, NULL, NULL, 0, 3, '2014-05-12 10:28:17'),
+(8888, 141, NULL, 0, 1, '2014-05-12 10:29:45'),
+(8889, 141, NULL, 0, 1, '2014-05-12 10:29:47'),
+(8890, 141, NULL, 0, 6, '2014-05-12 10:30:44'),
+(8891, 141, NULL, 0, 6, '2014-05-12 10:30:56'),
+(8892, 141, NULL, 0, 6, '2014-05-12 10:31:01'),
+(8893, NULL, NULL, 0, 39, '2014-05-12 10:31:36'),
+(8894, NULL, NULL, 0, 39, '2014-05-12 10:31:53'),
+(8895, NULL, NULL, 0, 3, '2014-05-12 10:32:01'),
+(8896, 128, NULL, 0, 1, '2014-05-12 10:32:03'),
+(8897, 0, NULL, 3, 1, '2014-05-12 10:32:11'),
+(8898, 140, NULL, 0, 1, '2014-05-12 10:32:25'),
+(8899, 140, NULL, 0, 1, '2014-05-12 10:35:26'),
+(8900, 140, NULL, 0, 1, '2014-05-12 10:37:11'),
+(8901, 141, NULL, 0, 1, '2014-05-12 10:37:12'),
+(8902, 141, NULL, 0, 1, '2014-05-12 10:38:12'),
+(8903, 141, NULL, 0, 1, '2014-05-12 10:38:13'),
+(8904, 141, NULL, 0, 1, '2014-05-12 10:40:13'),
+(8905, 141, NULL, 0, 1, '2014-05-12 10:41:00'),
+(8906, 140, NULL, 0, 1, '2014-05-12 10:41:27'),
+(8907, 140, NULL, 0, 1, '2014-05-12 10:41:45'),
+(8908, 140, NULL, 0, 1, '2014-05-12 10:41:46'),
+(8909, 141, NULL, 0, 1, '2014-05-12 10:41:49'),
+(8910, 141, NULL, 0, 5, '2014-05-12 10:45:36'),
+(8911, 141, NULL, 0, 1, '2014-05-12 10:45:37'),
+(8912, 10, NULL, 0, 1, '2014-05-12 10:46:27'),
+(8913, 10, NULL, 0, 1, '2014-05-12 10:46:28'),
+(8914, 141, NULL, 0, 1, '2014-05-12 10:47:01'),
+(8915, 141, NULL, 0, 1, '2014-05-12 10:47:02'),
+(8916, NULL, NULL, 0, 39, '2014-05-12 10:47:52'),
+(8917, 10, NULL, 0, 1, '2014-05-12 10:50:33'),
+(8918, 128, NULL, 0, 1, '2014-05-12 10:51:22'),
+(8919, 128, NULL, 0, 1, '2014-05-12 10:51:23'),
+(8920, NULL, NULL, 0, 39, '2014-05-12 10:51:48'),
+(8921, 128, NULL, 0, 1, '2014-05-12 10:51:59'),
+(8922, 128, NULL, 0, 1, '2014-05-12 10:52:00'),
+(8923, 128, NULL, 0, 1, '2014-05-12 10:52:26'),
+(8924, 128, NULL, 0, 1, '2014-05-12 10:52:28'),
+(8925, 128, NULL, 0, 5, '2014-05-12 10:52:38'),
+(8926, 128, NULL, 0, 1, '2014-05-12 10:52:38'),
+(8927, 128, NULL, 0, 5, '2014-05-12 10:52:53'),
+(8928, 128, NULL, 0, 1, '2014-05-12 10:52:53'),
+(8929, 0, NULL, 11, 6, '2014-05-12 11:00:35'),
+(8930, 141, NULL, 0, 1, '2014-05-12 11:05:32'),
+(8931, 141, NULL, 0, 1, '2014-05-12 11:05:32'),
+(8932, 141, NULL, 0, 1, '2014-05-12 11:05:45'),
+(8933, 128, NULL, 0, 1, '2014-05-12 11:06:00'),
+(8934, 128, NULL, 0, 1, '2014-05-12 11:06:01'),
+(8935, 128, NULL, 0, 1, '2014-05-12 11:08:25'),
+(8936, 10, NULL, 0, 1, '2014-05-12 11:20:23'),
+(8937, 10, NULL, 0, 1, '2014-05-12 11:20:24'),
+(8938, NULL, NULL, 0, 39, '2014-05-12 11:22:10'),
+(8939, 10, NULL, 0, 1, '2014-05-12 11:23:07'),
+(8940, 0, NULL, 11, 6, '2014-05-12 11:23:33'),
+(8941, 10, NULL, 0, 1, '2014-05-12 11:23:41'),
+(8942, 10, NULL, 0, 1, '2014-05-12 11:23:41'),
+(8943, 0, NULL, 11, 6, '2014-05-12 11:24:21'),
+(8944, 0, NULL, 11, 6, '2014-05-12 11:24:30'),
+(8945, 0, NULL, 11, 6, '2014-05-12 11:24:38'),
+(8946, 141, NULL, 68, 6, '2014-05-12 11:28:47'),
+(8947, 10, NULL, 0, 1, '2014-05-12 11:32:23'),
+(8948, 128, NULL, 0, 1, '2014-05-12 11:32:35'),
+(8949, 128, NULL, 0, 1, '2014-05-12 11:32:36'),
+(8950, 128, 24, 0, 20, '2014-05-12 11:32:48');
+INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
+(8951, 128, NULL, 0, 1, '2014-05-12 11:32:49'),
+(8952, 128, NULL, 0, 5, '2014-05-12 11:33:06'),
+(8953, 128, NULL, 0, 1, '2014-05-12 11:33:07'),
+(8954, 128, NULL, 0, 1, '2014-05-12 11:52:16'),
+(8955, 128, NULL, 0, 1, '2014-05-12 11:52:17'),
+(8956, 128, NULL, 0, 1, '2014-05-12 11:52:56'),
+(8957, 128, NULL, 0, 1, '2014-05-12 11:52:57'),
+(8958, NULL, NULL, 0, 39, '2014-05-12 11:53:20'),
+(8959, NULL, NULL, 0, 39, '2014-05-12 11:53:31'),
+(8960, 128, NULL, 0, 1, '2014-05-12 11:56:09'),
+(8961, 128, NULL, 0, 1, '2014-05-12 11:56:21'),
+(8962, NULL, NULL, 0, 39, '2014-05-12 11:56:47'),
+(8963, 128, NULL, 0, 1, '2014-05-12 11:56:51'),
+(8964, 128, NULL, 0, 1, '2014-05-12 14:59:32'),
+(8965, 128, NULL, 0, 1, '2014-05-12 14:59:34'),
+(8966, 128, NULL, 0, 1, '2014-05-12 14:59:58'),
+(8967, 128, NULL, 0, 1, '2014-05-12 15:01:11'),
+(8968, NULL, NULL, 0, 39, '2014-05-12 15:01:50'),
+(8969, NULL, NULL, 0, 39, '2014-05-12 15:02:01'),
+(8970, 128, NULL, 0, 1, '2014-05-12 15:02:23'),
+(8971, NULL, NULL, 0, 39, '2014-05-12 15:02:38'),
+(8972, 128, NULL, 0, 1, '2014-05-12 15:09:47'),
+(8973, 128, 24, 0, 14, '2014-05-12 15:12:01'),
+(8974, 128, 24, 74, 14, '2014-05-12 15:12:08'),
+(8975, 128, NULL, 2, 1, '2014-05-12 15:12:44'),
+(8976, 128, NULL, 0, 1, '2014-05-12 15:12:55'),
+(8977, 128, NULL, 0, 15, '2014-05-12 15:13:14'),
+(8978, 128, NULL, 0, 1, '2014-05-12 15:14:39'),
+(8979, 128, NULL, 0, 1, '2014-05-12 15:49:48'),
+(8980, NULL, NULL, 0, 39, '2014-05-12 16:19:48'),
+(8981, NULL, NULL, 0, 39, '2014-05-12 16:20:21'),
+(8982, 128, NULL, 0, 1, '2014-05-12 16:20:41'),
+(8983, 128, NULL, 0, 1, '2014-05-12 17:05:25'),
+(8984, 128, NULL, 0, 1, '2014-05-12 17:06:35'),
+(8985, 128, NULL, 0, 1, '2014-05-12 17:06:36'),
+(8986, NULL, NULL, 0, 39, '2014-05-12 17:07:14'),
+(8987, 128, NULL, 0, 1, '2014-05-12 17:07:22'),
+(8988, 10, NULL, 0, 1, '2014-05-12 17:08:16'),
+(8989, 10, NULL, 0, 1, '2014-05-12 17:08:16'),
+(8990, 128, NULL, 0, 1, '2014-05-12 17:11:54'),
+(8991, 128, NULL, 0, 1, '2014-05-12 17:11:55'),
+(8992, 128, NULL, 0, 1, '2014-05-12 17:42:40'),
+(8993, 141, NULL, 0, 1, '2014-05-12 18:02:21'),
+(8994, 141, NULL, 0, 1, '2014-05-12 18:02:23'),
+(8995, NULL, NULL, 0, 39, '2014-05-12 18:03:33'),
+(8996, 128, NULL, 0, 1, '2014-05-12 18:04:12'),
+(8997, 128, NULL, 0, 1, '2014-05-12 18:07:26'),
+(8998, 128, NULL, 0, 6, '2014-05-12 18:07:39'),
+(8999, 141, NULL, 0, 1, '2014-05-12 22:25:43'),
+(9000, 141, NULL, 0, 1, '2014-05-12 22:25:45'),
+(9001, NULL, NULL, 0, 3, '2014-05-12 22:27:57'),
+(9002, 141, NULL, 0, 1, '2014-05-12 22:27:58'),
+(9003, 142, NULL, 0, 1, '2014-05-12 22:31:34'),
+(9004, 142, NULL, 0, 6, '2014-05-12 22:31:46'),
+(9005, 142, NULL, 0, 6, '2014-05-12 22:31:47'),
+(9006, 142, NULL, 0, 6, '2014-05-12 22:31:50'),
+(9007, 142, NULL, 0, 6, '2014-05-12 22:31:50'),
+(9008, 142, NULL, 0, 5, '2014-05-12 22:33:27'),
+(9009, 142, NULL, 0, 1, '2014-05-12 22:33:27'),
+(9010, 0, NULL, 3, 1, '2014-05-12 22:37:09'),
+(9011, 141, NULL, 0, 1, '2014-05-12 22:37:24'),
+(9012, 141, NULL, 0, 1, '2014-05-12 22:37:25'),
+(9013, 29, NULL, 0, 1, '2014-05-12 22:37:58'),
+(9014, 29, NULL, 0, 1, '2014-05-12 22:37:59'),
+(9015, 29, NULL, 0, 6, '2014-05-12 22:38:43'),
+(9016, 29, NULL, 0, 6, '2014-05-12 22:38:45'),
+(9017, 29, NULL, 68, 6, '2014-05-12 22:38:47'),
+(9018, 29, NULL, 0, 6, '2014-05-12 22:38:48'),
+(9019, 29, NULL, 0, 6, '2014-05-12 22:38:48'),
+(9020, 29, NULL, 0, 6, '2014-05-12 22:38:55'),
+(9021, 29, NULL, 0, 6, '2014-05-12 22:39:06'),
+(9022, 128, NULL, 0, 1, '2014-05-12 23:30:45'),
+(9023, 128, NULL, 0, 1, '2014-05-13 15:00:35'),
+(9024, NULL, NULL, 0, 39, '2014-05-13 15:01:17'),
+(9025, 128, NULL, 0, 1, '2014-05-13 15:01:24'),
+(9026, 128, NULL, 0, 1, '2014-05-13 15:01:28'),
+(9027, 128, NULL, 0, 1, '2014-05-13 15:01:31'),
+(9028, 128, NULL, 0, 1, '2014-05-13 15:06:27'),
+(9029, NULL, NULL, 0, 39, '2014-05-13 15:06:42'),
+(9030, 128, NULL, 0, 1, '2014-05-13 15:15:14'),
+(9031, NULL, NULL, 0, 39, '2014-05-13 15:15:28'),
+(9032, 128, NULL, 0, 1, '2014-05-13 15:15:35'),
+(9033, 128, NULL, 0, 1, '2014-05-13 15:24:40'),
+(9034, NULL, NULL, 0, 39, '2014-05-13 15:24:46'),
+(9035, 128, NULL, 0, 1, '2014-05-13 15:24:51'),
+(9036, 128, NULL, 0, 1, '2014-05-13 15:25:32'),
+(9037, NULL, NULL, 0, 39, '2014-05-13 15:25:35'),
+(9038, 128, NULL, 0, 1, '2014-05-13 15:25:47'),
+(9039, NULL, NULL, 0, 39, '2014-05-13 15:26:00'),
+(9040, NULL, NULL, 0, 39, '2014-05-13 15:26:07'),
+(9041, 128, NULL, 0, 1, '2014-05-13 15:37:58'),
+(9042, NULL, NULL, 0, 39, '2014-05-13 15:38:06'),
+(9043, NULL, NULL, 0, 39, '2014-05-13 15:38:11'),
+(9044, NULL, NULL, 0, 39, '2014-05-13 15:38:21'),
+(9045, 128, NULL, 0, 1, '2014-05-13 15:38:24'),
+(9046, 128, NULL, 0, 1, '2014-05-13 15:39:22'),
+(9047, NULL, NULL, 0, 39, '2014-05-13 15:42:54'),
+(9048, 128, NULL, 0, 1, '2014-05-13 15:43:51'),
+(9049, NULL, NULL, 0, 39, '2014-05-13 15:43:55'),
+(9050, 128, NULL, 0, 1, '2014-05-13 15:44:46'),
+(9051, NULL, NULL, 0, 39, '2014-05-13 15:44:50'),
+(9052, 128, NULL, 0, 1, '2014-05-13 15:44:55'),
+(9053, 128, NULL, 0, 1, '2014-05-13 15:49:32'),
+(9054, NULL, NULL, 0, 39, '2014-05-13 15:49:41'),
+(9055, NULL, NULL, 0, 39, '2014-05-13 15:49:44'),
+(9056, 128, NULL, 0, 1, '2014-05-13 15:49:48'),
+(9057, 128, NULL, 0, 1, '2014-05-13 16:06:40'),
+(9058, NULL, NULL, 0, 39, '2014-05-13 16:06:49'),
+(9059, NULL, NULL, 0, 39, '2014-05-13 16:06:55'),
+(9060, 128, NULL, 0, 1, '2014-05-13 16:07:02'),
+(9061, 141, NULL, 0, 1, '2014-05-13 21:35:56'),
+(9062, 141, NULL, 0, 1, '2014-05-13 21:35:57'),
+(9063, NULL, NULL, 0, 39, '2014-05-13 21:36:15'),
+(9064, 141, NULL, 0, 1, '2014-05-13 21:37:23'),
+(9065, NULL, NULL, 0, 39, '2014-05-13 21:37:38'),
+(9066, NULL, NULL, 0, 39, '2014-05-13 21:38:54'),
+(9067, 128, NULL, 0, 1, '2014-05-13 21:40:02'),
+(9068, 128, NULL, 0, 1, '2014-05-13 22:44:34'),
+(9069, NULL, NULL, 0, 39, '2014-05-13 22:48:35'),
+(9070, NULL, NULL, 0, 39, '2014-05-13 22:48:59'),
+(9071, NULL, NULL, 0, 39, '2014-05-13 22:49:07'),
+(9072, NULL, NULL, 0, 39, '2014-05-13 22:49:49'),
+(9073, NULL, NULL, 0, 39, '2014-05-13 22:50:12'),
+(9074, NULL, NULL, 0, 39, '2014-05-13 22:57:33'),
+(9075, NULL, NULL, 0, 39, '2014-05-13 22:57:38'),
+(9076, NULL, NULL, 0, 39, '2014-05-13 22:57:59'),
+(9077, NULL, NULL, 0, 39, '2014-05-13 23:01:03'),
+(9078, NULL, NULL, 0, 39, '2014-05-13 23:13:06'),
+(9079, NULL, NULL, 0, 39, '2014-05-13 23:13:56'),
+(9080, NULL, NULL, 0, 39, '2014-05-13 23:52:09'),
+(9081, NULL, NULL, 0, 39, '2014-05-14 00:03:45'),
+(9082, NULL, NULL, 0, 39, '2014-05-14 00:07:07'),
+(9083, NULL, NULL, 0, 39, '2014-05-14 00:08:09'),
+(9084, 0, NULL, 11, 6, '2014-05-14 00:21:53'),
+(9085, 128, NULL, 0, 1, '2014-05-14 07:31:24'),
+(9086, 128, NULL, 0, 1, '2014-05-14 07:46:54'),
+(9087, 128, NULL, 0, 1, '2014-05-14 07:47:01'),
+(9088, 128, NULL, 0, 1, '2014-05-14 07:51:29'),
+(9089, 128, NULL, 0, 1, '2014-05-14 07:51:30'),
+(9090, 128, NULL, 0, 1, '2014-05-14 08:25:07'),
+(9091, 128, NULL, 0, 1, '2014-05-14 08:35:40'),
+(9092, 128, NULL, 0, 15, '2014-05-14 08:37:35'),
+(9093, 128, NULL, 0, 1, '2014-05-14 08:50:51'),
+(9094, 128, NULL, 0, 1, '2014-05-14 08:53:31'),
+(9095, 128, NULL, 0, 1, '2014-05-14 08:54:34'),
+(9096, 128, NULL, 0, 1, '2014-05-14 08:55:06'),
+(9097, 128, NULL, 0, 1, '2014-05-14 09:51:53'),
+(9098, NULL, NULL, 0, 39, '2014-05-14 09:52:19'),
+(9099, 128, NULL, 0, 1, '2014-05-14 09:52:45'),
+(9100, 128, NULL, 0, 1, '2014-05-14 09:52:46'),
+(9101, NULL, NULL, 0, 39, '2014-05-14 09:52:55'),
+(9102, 128, NULL, 0, 1, '2014-05-14 09:53:01'),
+(9103, 141, NULL, 0, 1, '2014-05-14 10:10:32'),
+(9104, 141, NULL, 0, 1, '2014-05-14 10:10:34'),
+(9105, NULL, NULL, 0, 39, '2014-05-14 10:11:16'),
+(9106, 141, NULL, 0, 1, '2014-05-14 10:11:35'),
+(9107, 128, NULL, 0, 1, '2014-05-14 10:11:37'),
+(9108, 141, NULL, 0, 6, '2014-05-14 10:11:59'),
+(9109, 141, NULL, 0, 6, '2014-05-14 10:12:00'),
+(9110, 128, NULL, 0, 1, '2014-05-14 10:13:34'),
+(9111, 128, NULL, 0, 1, '2014-05-14 10:15:37'),
+(9112, NULL, NULL, 0, 39, '2014-05-14 10:20:48'),
+(9113, 141, NULL, 0, 1, '2014-05-14 10:20:55'),
+(9114, NULL, NULL, 0, 39, '2014-05-14 10:21:21'),
+(9115, 141, NULL, 0, 1, '2014-05-14 10:21:50'),
+(9116, NULL, NULL, 0, 39, '2014-05-14 10:22:11'),
+(9117, 128, NULL, 0, 1, '2014-05-14 10:22:20'),
+(9118, 141, NULL, 0, 1, '2014-05-14 10:22:39'),
+(9119, NULL, NULL, 0, 39, '2014-05-14 10:22:47'),
+(9120, 0, NULL, 3, 2, '2014-05-14 10:24:23'),
+(9121, 142, NULL, 0, 2, '2014-05-14 10:24:35'),
+(9122, 141, NULL, 0, 1, '2014-05-14 10:29:22'),
+(9123, 141, NULL, 0, 1, '2014-05-14 11:18:52'),
+(9124, 141, NULL, 0, 1, '2014-05-14 11:18:53'),
+(9125, 141, NULL, 0, 1, '2014-05-14 11:25:25'),
+(9126, NULL, NULL, 0, 39, '2014-05-14 13:59:45'),
+(9127, NULL, NULL, 0, 39, '2014-05-14 14:00:48'),
+(9128, NULL, NULL, 0, 39, '2014-05-14 14:00:49'),
+(9129, NULL, NULL, 0, 39, '2014-05-14 14:01:25'),
+(9130, NULL, NULL, 0, 39, '2014-05-14 14:23:42'),
+(9131, 128, NULL, 0, 1, '2014-05-14 15:26:29'),
+(9132, 128, NULL, 0, 1, '2014-05-14 15:26:48'),
+(9133, 128, NULL, 0, 1, '2014-05-14 15:27:11'),
+(9134, 128, NULL, 0, 1, '2014-05-14 15:32:16'),
+(9135, 128, NULL, 0, 1, '2014-05-14 15:32:26'),
+(9136, 128, NULL, 0, 1, '2014-05-14 15:32:29'),
+(9137, 128, NULL, 0, 1, '2014-05-14 15:47:41'),
+(9138, 128, NULL, 0, 1, '2014-05-14 15:47:42'),
+(9139, 128, NULL, 0, 1, '2014-05-14 15:52:50'),
+(9140, 128, NULL, 0, 1, '2014-05-14 16:17:14'),
+(9141, 128, NULL, 0, 1, '2014-05-14 16:32:30'),
+(9142, 128, NULL, 0, 1, '2014-05-14 16:32:31'),
+(9143, 128, NULL, 0, 1, '2014-05-14 16:32:45'),
+(9144, 128, NULL, 0, 1, '2014-05-14 16:33:16'),
+(9145, 128, NULL, 0, 1, '2014-05-14 16:34:03'),
+(9146, 128, NULL, 0, 1, '2014-05-14 16:34:26'),
+(9147, 128, 24, 0, 20, '2014-05-14 16:35:47'),
+(9148, 128, NULL, 0, 1, '2014-05-14 16:35:47'),
+(9149, 128, 24, 0, 20, '2014-05-14 16:36:05'),
+(9150, 128, NULL, 0, 1, '2014-05-14 16:36:05'),
+(9151, 128, NULL, 0, 1, '2014-05-14 16:38:42'),
+(9152, 128, NULL, 0, 1, '2014-05-14 16:39:42'),
+(9153, 128, NULL, 0, 1, '2014-05-14 16:40:28'),
+(9154, 128, NULL, 0, 1, '2014-05-14 16:40:51'),
+(9155, 128, NULL, 0, 1, '2014-05-14 16:45:49'),
+(9156, 128, NULL, 0, 1, '2014-05-14 16:45:49'),
+(9157, 128, NULL, 0, 1, '2014-05-14 16:45:53'),
+(9158, 128, NULL, 0, 1, '2014-05-14 16:46:03'),
+(9159, 128, NULL, 0, 1, '2014-05-14 16:46:26'),
+(9160, 128, NULL, 0, 1, '2014-05-14 16:50:49'),
+(9161, 128, NULL, 0, 1, '2014-05-14 16:52:07'),
+(9162, 128, 24, 0, 20, '2014-05-14 16:52:43'),
+(9163, 128, NULL, 0, 1, '2014-05-14 16:52:43'),
+(9164, NULL, NULL, 0, 39, '2014-05-14 16:58:36'),
+(9165, 128, NULL, 0, 1, '2014-05-14 17:00:52'),
+(9166, 128, NULL, 0, 1, '2014-05-14 17:01:36'),
+(9167, 128, NULL, 0, 1, '2014-05-14 17:12:30'),
+(9168, 128, NULL, 0, 5, '2014-05-14 17:13:13'),
+(9169, 128, NULL, 0, 1, '2014-05-14 17:13:13'),
+(9170, 128, NULL, 0, 5, '2014-05-14 17:13:30'),
+(9171, 128, NULL, 0, 1, '2014-05-14 17:13:33'),
+(9172, 128, NULL, 0, 1, '2014-05-14 17:51:25'),
+(9173, NULL, NULL, 0, 39, '2014-05-14 19:17:12'),
+(9174, 0, NULL, 2, 1, '2014-05-14 19:17:24'),
+(9175, 128, NULL, 2, 1, '2014-05-14 19:17:32'),
+(9176, 141, NULL, 0, 1, '2014-05-14 19:28:28'),
+(9177, 141, NULL, 0, 1, '2014-05-14 19:28:29'),
+(9178, 141, NULL, 0, 1, '2014-05-14 19:31:03'),
+(9179, 128, NULL, 0, 1, '2014-05-14 19:48:58'),
+(9180, 128, NULL, 0, 1, '2014-05-14 19:50:17'),
+(9181, 128, NULL, 0, 1, '2014-05-14 19:51:41'),
+(9182, 128, NULL, 0, 6, '2014-05-14 21:00:54'),
+(9183, 128, NULL, 0, 6, '2014-05-14 21:01:41'),
+(9184, 0, NULL, 0, 8, '2014-05-14 21:09:50'),
+(9185, 0, NULL, 0, 8, '2014-05-14 21:09:58'),
+(9186, 128, NULL, 0, 1, '2014-05-14 21:23:47'),
+(9187, 128, NULL, 0, 1, '2014-05-14 21:23:55'),
+(9188, 128, NULL, 0, 1, '2014-05-14 21:24:00');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `HISTORYACTION`
 --
--- Creación: 15-04-2014 a las 19:51:13
+-- Creación: 14-05-2014 a las 19:16:12
 --
 
 DROP TABLE IF EXISTS `HISTORYACTION`;
@@ -11059,15 +11454,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `RETURNCODE` varchar(50) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1041 ;
-
---
--- RELACIONES PARA LA TABLA `HISTORYACTION`:
---   `IDACTION`
---       `ACTIONS` -> `IDACTION`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1059 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACTION`
@@ -12110,7 +12497,25 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 (1037, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-03 22:08:27'),
 (1038, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-03 22:10:16'),
 (1039, 0, NULL, 128, 'ON/OFF', '2014-05-05 14:42:02'),
-(1040, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-08 00:38:28');
+(1040, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-08 00:38:28'),
+(1041, 0, NULL, 141, 'ON/OFF', '2014-05-12 10:30:44'),
+(1042, 0, NULL, 141, 'IRCODES', '2014-05-12 10:30:56'),
+(1043, 0, NULL, 141, 'IRCODES', '2014-05-12 10:31:01'),
+(1044, 0, NULL, 128, 'ON/OFF', '2014-05-12 18:07:39'),
+(1045, 0, NULL, 142, 'ON/OFF', '2014-05-12 22:31:46'),
+(1046, 0, NULL, 142, 'ON/OFF', '2014-05-12 22:31:47'),
+(1047, 0, NULL, 142, 'UP/MEDIUM/DOWN', '2014-05-12 22:31:50'),
+(1048, 0, NULL, 142, 'UP/MEDIUM/DOWN', '2014-05-12 22:31:50'),
+(1049, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:43'),
+(1050, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:45'),
+(1051, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:48'),
+(1052, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:48'),
+(1053, 0, NULL, 29, 'ON/OFF', '2014-05-12 22:38:55'),
+(1054, 0, NULL, 29, 'ON/OFF', '2014-05-12 22:39:06'),
+(1055, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 10:11:59'),
+(1056, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 10:12:00'),
+(1057, 0, NULL, 128, 'IRCODES', '2014-05-14 21:00:54'),
+(1058, 0, NULL, 128, 'IRCODES', '2014-05-14 21:01:40');
 
 -- --------------------------------------------------------
 
@@ -12134,7 +12539,7 @@ CREATE TABLE IF NOT EXISTS `houseRoomServiceActionVIEW` (
 --
 -- Estructura de tabla para la tabla `HOUSES`
 --
--- Creación: 16-04-2014 a las 00:24:52
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `HOUSES`;
@@ -12152,21 +12557,13 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 --
--- RELACIONES PARA LA TABLA `HOUSES`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
-
---
 -- Volcado de datos para la tabla `HOUSES`
 --
 
 INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IDIMAGE`, `CITY`, `COUNTRY`, `GPS`, `DATEBEGIN`) VALUES
 (9, 0, 'casaBertoldo', 421, 'lisboa', '', NULL, '2014-03-23 19:51:49'),
 (10, 2, 'Mansión', 421, 'madrid', 'spain', NULL, '2014-03-25 21:39:22'),
-(24, 29, 'houseDEMO2', 432, 'madrid', 'spain', NULL, '2014-04-23 10:21:05'),
+(24, 29, 'houseDEMO2', 445, 'madrid', 'spain', NULL, '2014-04-23 10:21:05'),
 (25, 0, 'house2DEMO2', 263, 'colonia', '', NULL, '2014-04-25 09:30:50');
 
 -- --------------------------------------------------------
@@ -12174,7 +12571,7 @@ INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IDIMAGE`, `CITY`, `COUN
 --
 -- Estructura de tabla para la tabla `IMAGES`
 --
--- Creación: 22-04-2014 a las 09:21:16
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IMAGES`;
@@ -12183,226 +12580,30 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=437 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=448 ;
 
 --
 -- Volcado de datos para la tabla `IMAGES`
 --
 
 INSERT INTO `IMAGES` (`IDIMAGE`, `URL`, `TYPE`) VALUES
-(231, 'images/2014-04-2311.25.21.jpg', 'image/jpeg'),
-(232, 'images/2014-04-2310.18.56.jpg', 'image/jpeg'),
-(233, 'images/2014-04-2310.16.45.jpg', 'image/jpeg'),
-(234, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(235, 'images/DSCF2055.jpg', 'image/jpeg'),
-(236, 'images/1398188199880.jpg', 'image/jpeg'),
-(237, 'images/1398188199880_fact_2.jpg', 'image/jpeg'),
-(238, 'images/2014-04-1518.09.52.jpg', ''),
-(239, 'images/2014-04-1518.09.52.jpg', ''),
-(240, 'images/2014-04-1518.09.52.jpg', ''),
-(241, 'images/2014-04-1518.09.52.jpg', ''),
-(242, 'images/2014-04-1518.09.52.jpg', ''),
-(243, 'images/2014-04-1518.09.52.jpg', ''),
-(244, 'images/2014-04-1518.09.52.jpg', ''),
-(245, 'images/2014-04-1518.09.52.jpg', ''),
-(246, 'images/2014-04-1518.09.52.jpg', ''),
-(247, 'images/2014-04-1518.09.52.jpg', ''),
-(248, 'images/2014-04-1518.09.52.jpg', ''),
-(249, 'images/2014-04-1518.09.52.jpg', ''),
-(250, 'images/2014-04-2309.18.25.jpg', ''),
-(251, 'images/2014-04-2309.18.25.jpg', ''),
-(252, 'images/2014-04-2309.18.25.jpg', ''),
-(253, 'images/2014-04-2309.18.25.jpg', ''),
-(254, 'images/2014-04-2309.18.25.jpg', ''),
-(255, 'images/2014-04-2309.18.25.jpg', ''),
-(256, 'images/2014-04-2309.18.25.jpg', ''),
-(257, 'images/2014-04-2309.18.25.jpg', ''),
-(258, 'images/2014-04-2309.18.25.jpg', ''),
-(259, 'images/2014-04-2309.18.25.jpg', ''),
-(260, 'images/2014-04-2309.18.25.jpg', ''),
-(261, 'images/2014-04-2309.18.25.jpg', ''),
-(262, 'images/2014-04-2309.18.25.jpg', 'image/jpeg'),
 (263, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(264, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(265, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(266, 'images/1398285281121.jpg', 'image/jpeg'),
-(267, 'images/2014-04-2310.16.45.jpg', 'image/jpeg'),
-(268, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(269, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(270, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(271, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(272, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(273, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(274, 'images/AKA7.png', 'image/png'),
-(275, 'images/1398440224287.jpg', 'image/jpeg'),
-(276, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(277, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(278, 'images/2014-04-2322.34.50.jpg', 'image/jpeg'),
-(279, 'images/2014-04-2309.18.25.jpg', 'image/jpeg'),
-(280, 'images/1398505291615.jpg', 'image/jpeg'),
-(281, 'images/IMG-20140414-WA0000.jpg', 'image/jpeg'),
-(282, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(283, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(284, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(285, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(286, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(287, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(288, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(289, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(290, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(291, 'images/1398514858233.jpg', 'image/jpeg'),
-(292, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(293, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(294, 'images/1398515647192.jpg', 'image/jpeg'),
-(295, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(296, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(297, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(298, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(299, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(300, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(301, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(302, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(303, 'images/1398524697012.jpg', 'image/jpeg'),
-(304, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(305, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(306, 'images/1398524935873.jpg', 'image/jpeg'),
-(307, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(308, 'images/IMG-20140414-WA0004.jpg', 'image/jpeg'),
-(309, 'images/1398525838121.jpg', ''),
-(310, 'images/1398525941166.jpg', ''),
-(311, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(312, 'images/1398524935873_fact_1.jpg', 'image/jpeg'),
-(313, 'images/1398526112506.jpg', 'image/jpeg'),
-(314, 'images/1398526145470.jpg', 'image/jpeg'),
-(315, 'images/1398524935873_fact_1_fact_1.jpg', 'image/jpeg'),
-(316, 'images/1398526299487.jpg', 'image/jpeg'),
-(317, 'images/IMG-20140422-WA0000.jpg', 'image/jpeg'),
-(318, 'images/IMG-20140422-WA0000.jpg', 'image/jpeg'),
-(319, 'images/1398526460600.jpg', 'image/jpeg'),
-(320, 'images/1398526540477.jpg', 'image/jpeg'),
-(321, 'images/1398527183245.jpg', 'image/jpeg'),
-(322, 'images/1398527249246.jpg', 'image/jpeg'),
-(323, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(324, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(325, 'images/1398527481457.jpg', 'image/jpeg'),
-(326, 'images/1398527541988.jpg', 'image/jpeg'),
-(327, 'images/1398527728956.jpg', 'image/jpeg'),
-(328, 'images/1398527831281.jpg', 'image/jpeg'),
-(329, 'images/1398528082683.jpg', 'image/jpeg'),
-(330, 'images/1398528242992.jpg', 'image/jpeg'),
-(331, 'images/1398528290982.jpg', 'image/jpeg'),
-(332, 'images/1398528360904.jpg', 'image/jpeg'),
-(333, 'images/1398528946325.jpg', 'image/jpeg'),
-(334, 'images/1398529036561.jpg', 'image/jpeg'),
-(335, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(336, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(337, 'images/1398529263602.jpg', 'image/jpeg'),
-(338, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(339, 'images/1398529411829.jpg', 'image/jpeg'),
-(340, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(341, 'images/1398529263602_fact_1.jpg', 'image/jpeg'),
-(342, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(343, 'images/1398531559502.jpg', 'image/jpeg'),
-(344, 'images/1398531930888.jpg', 'image/jpeg'),
 (345, 'images/sam.h_name.jpg', 'image/jpeg'),
-(346, 'images/IMG-20140314-WA0002.jpg', 'image/jpeg'),
-(347, 'images/1399026800817.jpg', 'image/jpeg'),
-(348, 'images/1399027581589.jpg', 'image/jpeg'),
-(349, 'images/1399029811148.jpg', 'image/jpeg'),
-(350, 'images/1399301682734.jpg', 'image/jpeg'),
-(351, 'images/', ''),
-(352, 'images/android-logo.png', 'image/png'),
-(353, 'images/android-logo-small.gif', 'image/gif'),
-(354, 'images/1399503718040.jpg', ''),
-(355, 'images/1399503863821.jpg', ''),
-(356, 'images/1399503943266.jpg', ''),
-(357, 'images/1399504057311.jpg', ''),
-(358, 'images/1399504155261.jpg', ''),
-(359, 'images/1399504244195.jpg', ''),
-(360, 'images/1399504332292.jpg', 'image/jpeg'),
-(361, 'images/1399504547006.jpg', ''),
-(362, 'images/1399504972850.jpg', 'image/jpeg'),
-(363, 'images/1399505096521.jpg', ''),
-(364, 'images/1399505138845.jpg', ''),
-(365, 'images/1399505325394.jpg', ''),
-(366, 'images/1399505546029.jpg', 'image/jpeg'),
-(367, 'images/1399505779930.jpg', 'image/jpeg'),
-(368, 'images/1399505908171.jpg', 'image/jpeg'),
-(369, 'images/1399506070298.jpg', ''),
-(370, 'images/1399506363076.jpg', ''),
-(371, 'images/1399506452329.jpg', 'image/jpeg'),
-(372, 'images/1399506795058.jpg', 'image/jpeg'),
-(373, 'images/1399506913180.jpg', ''),
-(374, 'images/1399507256943.jpg', ''),
-(375, 'images/1399507385860.jpg', 'image/jpeg'),
-(376, 'images/1399504332292.jpg', ''),
-(377, 'images/1399504332292.jpg', ''),
-(378, 'images/1399504332292.jpg', ''),
-(379, 'images/1399504332292.jpg', ''),
-(380, 'images/1399508305504.jpg', 'image/jpeg'),
-(381, 'images/1399509018779.jpg', ''),
-(382, 'images/1399509167192.jpg', ''),
-(383, 'images/1399509322884.jpg', 'image/jpeg'),
-(384, 'images/1399531851429.jpg', ''),
-(385, 'images/1399531851429.jpg', ''),
-(386, 'images/1399532908503.jpg', 'image/jpeg'),
-(387, 'images/1399533347196.jpg', 'image/jpeg'),
-(388, 'images/1399533451751.jpg', ''),
-(389, 'images/1399534818318.jpg', ''),
-(390, 'images/1399534907150.jpg', ''),
-(391, 'images/1399535198411.jpg', ''),
-(392, 'images/1399535363077.jpg', ''),
-(393, 'images/1399535363077.jpg', ''),
-(394, 'images/1399535475959.jpg', ''),
-(395, 'images/1399536234144.jpg', ''),
-(396, 'images/1399536438961.jpg', ''),
-(397, 'images/1399536568350.jpg', 'image/jpeg'),
-(398, 'images/1399536747377.jpg', 'image/jpeg'),
-(399, 'images/1399536959934.jpg', ''),
-(400, 'images/1399536959934.jpg', ''),
-(401, 'images/1399537165678.jpg', ''),
-(402, 'images/1399537335004.jpg', ''),
-(403, 'images/1399537504345.jpg', ''),
-(404, 'images/1399537651236.jpg', ''),
-(405, 'images/1399537857302.jpg', 'image/jpeg'),
-(406, 'images/1399538111537.jpg', ''),
-(407, 'images/1399538455828.jpg', ''),
-(408, 'images/1399538592362.jpg', ''),
-(409, 'images/1399538787398.jpg', ''),
-(410, 'images/1399539058365.jpg', ''),
-(411, 'images/DSC_0017.jpg', ''),
-(412, 'images/DSC_0017.jpg', ''),
-(413, 'images/DSC_0017.jpg', ''),
-(414, 'images/DSC_0017.jpg', ''),
-(415, 'images/DSC_0017.jpg', ''),
-(416, 'images/dot_dot.png', 'image/png'),
-(417, 'images/button.png', 'image/png'),
-(418, 'images/DSC_0017.jpg', ''),
-(419, 'images/DSC_0017.jpg', ''),
-(420, 'images/DSC_0017.jpg', ''),
 (421, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(422, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(423, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(424, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(425, 'images/1399541867134_fact_1.jpg', 'image/jpeg'),
-(426, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(427, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(428, 'images/2014-05-0809_fact_1.08_fact_1.31_fact_1.jpg', 'image/jpeg'),
-(429, 'images/2014-05-0801_fact_1.12_fact_1.18_fact_1.jpg', 'image/jpeg'),
-(430, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(431, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(432, 'images/1399635502107_fact_1.jpg', 'image/jpeg'),
-(433, 'images/1399636595515_fact_1.jpg', 'image/jpeg'),
-(434, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(435, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(436, 'images/DSC_0017_fact_1.jpg', 'image/jpeg');
+(439, 'images/IMAG0001_fact_1.jpg', 'image/jpeg'),
+(442, 'images/1399934038766_fact_1.jpg', 'image/jpeg'),
+(443, 'images/IMG-20140513-WA0001_fact_1.jpg', 'image/jpeg'),
+(444, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
+(445, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(446, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(447, 'images/DSC_0017_fact_1.jpg', 'image/jpeg');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
 --
--- Creación: 24-04-2014 a las 21:46:35
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IRCODES`;
@@ -12452,7 +12653,7 @@ INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `
 --
 -- Estructura de tabla para la tabla `LOGED`
 --
--- Creación: 11-05-2014 a las 17:32:58
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `LOGED`;
@@ -12463,7 +12664,7 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
   `OS` varchar(50) NOT NULL,
   PRIMARY KEY (`IDLOG`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=76 ;
 
 --
 -- RELACIONES PARA LA TABLA `LOGED`:
@@ -12476,7 +12677,7 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
 --
 
 INSERT INTO `LOGED` (`IDLOG`, `IDUSER`, `REGID`, `OS`) VALUES
-(18, 128, 'APA91bHva6rb-wtKa9HqLgyKtPg1VTs573KvHb_hj3C9Xmo5X2jTnu7fgnG_pkmX90upvJMKJasWU8sXrezKy1OHxLrnbwm90SuNzZmBIumbHuY5tK3lMLYIwrcLhXn-tTf_qzKzAEDX1nWnsHi7iv1XyJu5OONjxA', 'Android');
+(74, 128, 'APA91bHva6rb-wtKa9HqLgyKtPg1VTs573KvHb_hj3C9Xmo5X2jTnu7fgnG_pkmX90upvJMKJasWU8sXrezKy1OHxLrnbwm90SuNzZmBIumbHuY5tK3lMLYIwrcLhXn-tTf_qzKzAEDX1nWnsHi7iv1XyJu5OONjxA', 'Android');
 
 -- --------------------------------------------------------
 
@@ -12514,7 +12715,7 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 --
 -- Estructura de tabla para la tabla `PERMISSIONS`
 --
--- Creación: 19-04-2014 a las 20:52:19
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PERMISSIONS`;
@@ -12558,7 +12759,7 @@ INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN
 --
 -- Estructura de tabla para la tabla `PROGRAMACTIONS`
 --
--- Creación: 24-04-2014 a las 22:07:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PROGRAMACTIONS`;
@@ -12572,12 +12773,10 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`),
   KEY `IDACTION` (`IDACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=135 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDACTION`
 --       `ACTIONS` -> `IDACTION`
 --
@@ -12605,7 +12804,6 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `PROGRAMNAME`, `IDUSER`, `IDACTION`, 
 (123, 'Pillar al perro con la persiana.', 128, 232, 'DOWN', '2014-03-29 08:00:00', '2014-04-26 19:03:07'),
 (124, 'Pillar a la abuela con la persiana', 128, 232, 'DOWN', '2014-03-30 09:00:00', '2014-04-26 19:04:26'),
 (125, 'arobobo', 128, 252, 'ON', '2014-03-30 09:07:00', '2014-04-26 19:07:29'),
-(126, 'Pillar a la abuela con la persiana.', 128, 232, 'DOWN', '2014-04-30 09:00:00', '2014-04-26 19:09:04'),
 (129, 'asdasd', 29, 192, '10052014', '0000-00-00 00:00:00', '2014-05-11 15:47:24'),
 (132, 'testing', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:28'),
 (133, 'testinga', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:34');
@@ -12615,7 +12813,7 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `PROGRAMNAME`, `IDUSER`, `IDACTION`, 
 --
 -- Estructura de tabla para la tabla `REGISTRATIONS`
 --
--- Creación: 17-04-2014 a las 18:32:39
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `REGISTRATIONS`;
@@ -12630,7 +12828,7 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
 
 --
 -- Volcado de datos para la tabla `REGISTRATIONS`
@@ -12638,14 +12836,15 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
 
 INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, `CODECONFIRM`) VALUES
 (32, 'lulu', 'lulu', 'djkluis@gmail.com', '', '2014-04-22 18:04:10', '3517605420'),
-(52, 'b', '08f8e0260c64418510cefb2b06eee5cd', 'b@', '', '2014-05-07 00:04:03', 'e8564041d28ffdae1400bffe6563e809');
+(52, 'b', '08f8e0260c64418510cefb2b06eee5cd', 'b@', '', '2014-05-07 00:04:03', 'e8564041d28ffdae1400bffe6563e809'),
+(55, 'yo', '6d0007e52f7afb7d5a0650b0ffb8a4d1', 'yo@', '', '2014-05-12 10:32:01', '31765c2ee76081d29c2c4aeb0d19771e');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ROOMS`
 --
--- Creación: 23-04-2014 a las 10:03:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `ROOMS`;
@@ -12663,8 +12862,6 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDHOUSE`
 --       `HOUSES` -> `IDHOUSE`
 --
@@ -12709,7 +12906,7 @@ CREATE TABLE IF NOT EXISTS `scheduleVIEW` (
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
--- Creación: 18-04-2014 a las 15:51:21
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `SERVICES`;
@@ -12780,7 +12977,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (189, NULL, 46, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (190, 27, 46, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (191, NULL, 46, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
-(192, 27, 46, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
+(192, 27, 46, 'LIGHTS', NULL, 2, 'pepe', 'Control of lights.', 'Control de luces.'),
 (193, 28, 47, 'TV', 'TV NPG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (194, NULL, 47, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (195, NULL, 47, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
@@ -12788,7 +12985,7 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (197, NULL, 47, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (198, NULL, 47, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (199, NULL, 47, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
-(200, 28, 47, 'LIGHTS', NULL, 2, 'DOWM', 'Control of lights.', 'Control de luces.');
+(200, 28, 47, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.');
 
 -- --------------------------------------------------------
 
@@ -12816,7 +13013,7 @@ CREATE TABLE IF NOT EXISTS `singleProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `SOFTWARE`
 --
--- Creación: 15-04-2014 a las 19:54:17
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `SOFTWARE`;
@@ -12832,7 +13029,7 @@ CREATE TABLE IF NOT EXISTS `SOFTWARE` (
 --
 -- Estructura de tabla para la tabla `STADISTICS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `STADISTICS`;
@@ -12905,7 +13102,7 @@ INSERT INTO `STADISTICS` (`Y`, `X`) VALUES
 --
 -- Estructura de tabla para la tabla `TASKPROGRAM`
 --
--- Creación: 12-04-2014 a las 14:42:09
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKPROGRAM`;
@@ -12929,7 +13126,7 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
 --
 -- Estructura de tabla para la tabla `TASKS`
 --
--- Creación: 15-04-2014 a las 19:55:00
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKS`;
@@ -12986,9 +13183,117 @@ CREATE TABLE IF NOT EXISTS `taskVIEW` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `TEMP`
+--
+-- Creación: 14-05-2014 a las 19:16:13
+--
+
+DROP TABLE IF EXISTS `TEMP`;
+CREATE TABLE IF NOT EXISTS `TEMP` (
+  `IDIMAGE` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `TEMP`
+--
+
+INSERT INTO `TEMP` (`IDIMAGE`) VALUES
+(239),
+(240),
+(241),
+(242),
+(243),
+(244),
+(245),
+(246),
+(247),
+(248),
+(249),
+(251),
+(252),
+(253),
+(254),
+(255),
+(256),
+(257),
+(258),
+(259),
+(260),
+(261),
+(262),
+(264),
+(265),
+(267),
+(268),
+(269),
+(270),
+(271),
+(272),
+(273),
+(276),
+(277),
+(279),
+(282),
+(283),
+(284),
+(285),
+(286),
+(287),
+(288),
+(289),
+(290),
+(292),
+(293),
+(295),
+(298),
+(299),
+(300),
+(301),
+(302),
+(304),
+(305),
+(311),
+(318),
+(323),
+(324),
+(335),
+(336),
+(338),
+(340),
+(342),
+(376),
+(377),
+(378),
+(379),
+(385),
+(393),
+(400),
+(412),
+(413),
+(414),
+(415),
+(418),
+(419),
+(420),
+(422),
+(423),
+(424),
+(426),
+(427),
+(430),
+(431),
+(434),
+(435),
+(436),
+(440),
+(441);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `USERS`
 --
--- Creación: 22-04-2014 a las 22:14:12
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `USERS`;
@@ -13003,13 +13308,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
-
---
--- RELACIONES PARA LA TABLA `USERS`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=143 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -13033,10 +13332,12 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', NULL, '2014-04-09 13:33:28'),
 (97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'lejandroladrondeguevara@gmail.com', 'about me.', NULL, '2014-04-15 10:45:56'),
 (103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', NULL, '2014-04-15 23:58:11'),
-(128, 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 'demo@gmail.es', ' ', 433, '2014-04-23 10:32:59'),
+(128, 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 'demo@gmail.es', ' ', 421, '2014-04-23 10:32:59'),
 (129, 'hlskhdlud', 'fa7f8233358e9b466effa1328168527', 'hlzlhdif@jfjfjf.cpm', 'caca', NULL, '2014-04-23 17:46:09'),
 (136, 'samer', 'f04210bd6070dce9de3442225124ef56', 'samer@fdi.ucm.es', 'al revés', 345, '2014-04-26 19:06:01'),
-(140, 'Miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguelalexandermaldonado@gmail.com', '', NULL, '2014-05-07 18:15:38');
+(140, 'Miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguelalexandermaldonado@gmail.com', '', NULL, '2014-05-07 18:15:38'),
+(141, 'q', '7694f4a66316e53c8cdd9d9954bd611d', 'q@yahoo.com', ' ', 439, '2014-05-12 10:28:17'),
+(142, 'cati', '137c73bbfae47722be52387e2ee2e4fd', 'caticmoreno@gmail.com', ' ', 442, '2014-05-12 22:27:57');
 
 --
 -- Disparadores `USERS`
@@ -13057,7 +13358,7 @@ DELIMITER ;
 --
 DROP TABLE IF EXISTS `commandVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 -- --------------------------------------------------------
 
@@ -13066,7 +13367,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `countHitsVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
 
 -- --------------------------------------------------------
 
@@ -13075,7 +13376,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `deviceVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
 
 -- --------------------------------------------------------
 
@@ -13084,7 +13385,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `eventProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13093,7 +13394,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `houseRoomServiceActionVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
 
 -- --------------------------------------------------------
 
@@ -13102,7 +13403,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 
@@ -13111,7 +13412,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `scheduleVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13120,7 +13421,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `singleProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13129,7 +13430,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `taskVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 --
 -- Restricciones para tablas volcadas
