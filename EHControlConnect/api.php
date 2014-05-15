@@ -811,7 +811,7 @@ function doaction($user,$house,$room,$service,$action,$data) {
 	
 	
 	//SEND ENCODE ACTION TO THE RASPBERRY-ARDUINO SISTEM  $IRCODE.$FCODE;
-	header("Location: $ipaddress?command=SEND&iddevice=$raspberryiddevice&idservice=$raspberryidservice&action=$raspberryaction&data=0");
+	header("Location: $ipaddress?command=$action&iddevice=$raspberryiddevice&idservice=$raspberryidservice&action=$raspberryaction&data=0");
 	//header("Location: http://ehcontrol.net/EHControlConnect/");
 	//echo "<a href='$ipaddress?valor=$raspberry'></a>";
 
