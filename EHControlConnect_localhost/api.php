@@ -864,39 +864,13 @@ function getweather($city, $country, $language){
 			, $iduser, $error, $funct);
 	*/
 	$language = ($language == null || $language == '')? 'en':$language;
-	exec('./clima '.$city.','.$country.' '. $language,$output);
+	//exec('./clima '.$city.','.$country.' '. $language,$output);
+	  $output=query("SELECT Salida FROM CRONACTIONS WHERE `city`='%s'
+                                              AND `country`='%s'
+                                              AND `language`='%s' ", $city, $country, $language);
+        
 	
-	/*********************************************/
-	/**UNCOMMENT this for localhost service      */
-	/*********************************************/
-	/*
-	switch ($city){
-		case "madrid":
-			print '{"description": "Sky is Clear", "main": "Clear", 
-					"sunrise": 1398403266, "temp min": 280.93000000000001, 
-					"sunset": 1398452657, "temp max": 283.70999999999998, 
-					"temperature": 282.38999999999999, "humidity": 75, 
-					"speed": 3.0800000000000001}';
-			break;
-			
-		case "colonia":
-			print '{"description": "few clouds", "main": "Clouds",
-					 "sunrise": 1398399353, "temp min": 290.37, 
-					"sunset": 1398451455, "temp max": 294.25999999999999,
-					 "temperature": 292.43000000000001, "humidity": 75,
-					 "speed": 2.0600000000000001}';
-			break;
-			
-		default:
-			print '{"description": "moderate rain", "main": "Rain",
-					 "sunrise": 1398401189, "temp min": 280.93000000000001,
-					 "sunset": 1398453561, "temp max": 282.58999999999997, 
-					"temperature": 281.69, "humidity": 95, 
-					"speed": 4.2599999999999998}';
-			break;
-	}*/
-	
-	print $output[0];
+	print $output['result'][0]['Salida'];
 }
 
 //--------------------------------------------------------------------------------------

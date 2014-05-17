@@ -2,6 +2,6 @@
 #use the command "crontab-e" to open the file in gnu linux cron
 #this script runs every minute
 
-* * * * * php /var/www/EHControlConnect/coneccionBBDD.php >> /var/www/EHControlConnect/coneccion.log 
+* * * * * php /var/www/EHControlConnect/connexionBBDD.php >> /var/www/EHControlConnect/connexion.log 
 
 #the log file.'s for displaying errors
