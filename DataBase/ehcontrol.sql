@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 12-05-2014 a las 01:14:22
+-- Tiempo de generación: 23-05-2014 a las 10:53:06
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -25,7 +25,7 @@ DELIMITER $$
 -- Procedimientos
 --
 DROP PROCEDURE IF EXISTS `addcommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'add an acction to a command.'
 begin
 
@@ -92,7 +92,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `addtaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -153,7 +153,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator grant access somobody to a house.'
 begin
 
@@ -207,7 +207,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createcommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Create a new command (conjunto de mandatos)'
 begin
 
@@ -256,7 +256,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createdevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
     COMMENT 'Create a new device.'
 begin
 
@@ -362,7 +362,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Create a new house if not exist.'
 begin
 
@@ -419,7 +419,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createpermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator give permission to somobody to a service.'
 begin
 
@@ -474,7 +474,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
 begin
 	DECLARE num, acc INTEGER DEFAULT 0;
@@ -561,7 +561,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Create a new room if not exist.'
 begin
 
@@ -617,7 +617,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createtask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
     COMMENT 'Create a task, will group programaction.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -668,7 +668,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
     COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
@@ -736,7 +736,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'Delete the access to a house of an user.'
 begin
 
@@ -797,7 +797,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletecommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Delete a command from an user (conjunto de mandatos)'
 begin
 
@@ -845,7 +845,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletedevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
     COMMENT 'Delete a device.'
 begin
 
@@ -899,7 +899,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletehouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
     COMMENT 'Delete a house if exist and the user is an administrator.'
 begin
 
@@ -948,7 +948,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletepermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'An admistrator delete permission to somobody to a service.'
 begin
 
@@ -999,7 +999,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
     COMMENT 'Delete program action.'
 begin
 	DECLARE num, acc, per INTEGER DEFAULT 0;
@@ -1051,7 +1051,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Delete a room if exist.'
 begin
 
@@ -1100,7 +1100,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletetask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
     COMMENT 'Delete a user task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1151,7 +1151,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Delete user if posible by deleting all information restring.'
 begin
 
@@ -1196,7 +1196,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `linkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
     COMMENT 'Attach the service with the room.'
 begin
 
@@ -1246,7 +1246,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `loginJSON`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
 begin
 
 SELECT *
@@ -1256,7 +1256,7 @@ SELECT *
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Modify house information.'
 begin
 
@@ -1319,7 +1319,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyservicetype`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
     COMMENT 'An admistrator modify the type of service instaled on the device.'
 begin
 
@@ -1359,7 +1359,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
     COMMENT 'Mdify the especcification of an existing user.'
 begin
 
@@ -1433,7 +1433,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `recoveryuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Generate a password to recovery user.'
 begin
 	DECLARE idu INTEGER DEFAULT NULL;
@@ -1454,7 +1454,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `removecommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'Remove an acction of a command.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1518,7 +1518,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
     COMMENT 'Add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1582,7 +1582,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `schedule`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
     COMMENT 'Request for all task afected to a house, by a user.'
 begin
 
@@ -1601,7 +1601,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `selectiduser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
 BEGIN
 DECLARE idu INTEGER;
 SELECT IDUSER into idu FROM USERS WHERE USERNAME=u;
@@ -1609,7 +1609,7 @@ set id = idu;
 END$$
 
 DROP PROCEDURE IF EXISTS `streaminghour`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
 BEGIN
 DROP  TABLE IF EXISTS STADISTICS  ;
 CREATE TABLE STADISTICS SELECT COUNT(*) AS Y, X
@@ -1621,7 +1621,7 @@ ORDER BY X;
 END$$
 
 DROP PROCEDURE IF EXISTS `unlinkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
     COMMENT 'Remove the room from a service.'
 begin
 
@@ -1662,12 +1662,13 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `updateservicestate`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
     COMMENT 'raspberry pi connect to update the state of the service.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE err INTEGER DEFAULT 0;
+	DECLARE s, st, boton VARCHAR(50);
 
 end_proc:begin
 	IF (ids IS NULL OR stat IS NULL) THEN 
@@ -1675,7 +1676,7 @@ end_proc:begin
 		LEAVE end_proc;
 	END IF;
 
-	SELECT COUNT(*) INTO num
+	SELECT COUNT(*),SERVICENAME, TYPE INTO num, s, st
 	FROM SERVICES
 	WHERE `IDSERVICE`= ids;
 			
@@ -1683,9 +1684,124 @@ end_proc:begin
 	WHEN 0 THEN
 		SET err = 64;
 	ELSE
-		UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
-		SET err = 78;
-
+		CASE
+		WHEN s = 'TV' THEN
+			
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND POWER = stat;
+			SET boton = 'POWER';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SETUP = stat;
+			SET boton = 'SETUP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND MUTE = stat;
+			SET boton = 'MUTE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FUNCTION = stat;
+			SET boton = 'FUNCTION';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ONE = stat;
+			SET boton = 'ONE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND TWO = stat;
+			SET boton = 'TWO';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND THREE = stat;
+			SET boton = 'THREE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FOUR = stat;
+			SET boton = 'FOUR';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FIVE = stat;
+			SET boton = 'FIVE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SIX = stat;
+			SET boton = 'SIX';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SEVEN = stat;
+			SET boton = 'SEVEN';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND EIGHT = stat;
+			SET boton = 'EIGHT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND NINE = stat;
+			SET boton = 'NINE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ZERO = stat;
+			SET boton = 'ZERO';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FAV = stat;
+			SET boton = 'FAV';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND UP = stat;
+			SET boton = 'UP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND DOWN = stat;
+			SET boton = 'DOWN';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `LEFT` = stat;
+			SET boton = 'LEFT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `RIGHT` = stat;
+			SET boton = 'RIGHT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND OK = stat;
+			SET boton = 'OK';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PLAY = stat;
+			SET boton = 'PLAY';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PAUSE = stat;
+			SET boton = 'PAUSE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND STOP = stat;
+			SET boton = 'STOP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FF = stat;
+			SET boton = 'FF';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FW = stat;
+			SET boton = 'FW';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEUP = stat;
+			SET boton = 'VOLUMEUP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEDOWN = stat;
+			SET boton = 'VOLUMEDOWN';
+			IF num = 0 THEN 
+			SET boton = stat;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			UPDATE `SERVICES` SET `STATUS`= boton WHERE `IDSERVICE`= ids;
+			SET err = 78;
+		ELSE
+			UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+			SET err = 78;
+		END CASE;
 	END CASE;
 end;
 
@@ -1699,7 +1815,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `userexist`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
 declare pass varchar(40);
 SELECT PASSWORD INTO pass FROM USERS WHERE USERNAME=u;
@@ -1717,14 +1833,14 @@ END$$
 -- Funciones
 --
 DROP FUNCTION IF EXISTS `ROUND_HOUR`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'returns nearest hour'
 RETURN DATE_FORMAT(datestamp + INTERVAL 30 MINUTE, '%Y-%m-%d %H:00')$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_HOURS`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N hour boundary. For example,\n           TRUNCATE_N_HOURS(sometime, 12) gives the nearest\n           preceding half-day (noon, or midnight'
@@ -1733,7 +1849,7 @@ RETURN DATE(datestamp) +
                           HOUR(datestamp) MOD n) HOUR$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_MINUTES`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N minute boundary. For example,\n           TRUNCATE_N_MINUTES(sometime, 15) gives the nearest\n           preceding quarter hour'
@@ -1748,7 +1864,7 @@ DELIMITER ;
 --
 -- Estructura de tabla para la tabla `ACCESSHOUSE`
 --
--- Creación: 13-04-2014 a las 22:59:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACCESSHOUSE`;
@@ -1777,19 +1893,22 @@ INSERT INTO `ACCESSHOUSE` (`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VAL
 (2, 10, 1, '2014-03-25 21:39:58'),
 (29, 9, 1, '2014-03-25 21:39:58'),
 (29, 10, 1, '2014-04-05 10:16:17'),
-(64, 24, 1, '2014-04-26 15:34:25'),
-(65, 24, 1, '2014-04-26 15:34:34'),
-(66, 24, 1, '2014-04-26 15:34:46'),
-(128, 24, 1, '2014-04-23 10:33:45'),
-(136, 24, 1, '2014-04-26 19:11:17'),
-(140, 24, 1, '2014-05-07 18:19:09');
+(64, 26, 1, '2014-04-26 15:34:25'),
+(65, 26, 1, '2014-04-26 15:34:34'),
+(66, 26, 1, '2014-04-26 15:34:46'),
+(128, 26, 1, '2014-05-14 23:00:11'),
+(136, 26, 1, '2014-04-26 19:11:17'),
+(140, 26, 1, '2014-05-07 18:19:09'),
+(141, 24, 1, '2014-05-12 10:29:09'),
+(141, 26, 1, '2014-05-14 23:00:11'),
+(142, 26, 1, '2014-05-12 22:30:31');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ACTIONMESSAGES`
 --
--- Creación: 15-04-2014 a las 19:48:45
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONMESSAGES`;
@@ -1815,7 +1934,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
 --
 -- Estructura de tabla para la tabla `ACTIONS`
 --
--- Creación: 17-04-2014 a las 10:27:48
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONS`;
@@ -1828,7 +1947,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `FCODE` varchar(20) NOT NULL,
   PRIMARY KEY (`IDACTION`),
   UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=253 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=275 ;
 
 --
 -- RELACIONES PARA LA TABLA `ACTIONS`:
@@ -1857,6 +1976,9 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 (14, 6, 'SCAN', NULL, NULL, ''),
 (15, 7, 'SEND', NULL, NULL, 'ON/OFF'),
 (16, 7, 'SCAN', NULL, NULL, ''),
+(17, 10, 'SEND', NULL, NULL, 'NUMBER'),
+(18, 11, 'SCAN', NULL, NULL, ''),
+(19, 11, 'SEND', NULL, NULL, 'IRCODES'),
 (173, 161, 'SCAN', NULL, NULL, ''),
 (174, 161, 'SEND', NULL, NULL, 'IRCODES'),
 (175, 162, 'SCAN', NULL, NULL, ''),
@@ -1889,8 +2011,6 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 (202, 175, 'SEND', NULL, NULL, 'OPEN/CLOSE'),
 (203, 176, 'SCAN', NULL, NULL, ''),
 (204, 176, 'SEND', NULL, NULL, 'ON/OFF'),
-(205, 177, 'SCAN', NULL, NULL, ''),
-(206, 177, 'SEND', NULL, NULL, 'IRCODES'),
 (207, 178, 'SCAN', NULL, NULL, ''),
 (208, 178, 'SEND', NULL, NULL, 'OPEN/CLOSE'),
 (209, 179, 'SCAN', NULL, NULL, ''),
@@ -1936,14 +2056,35 @@ INSERT INTO `ACTIONS` (`IDACTION`, `IDSERVICE`, `ACTIONNAME`, `ENGLISH`, `SPANIS
 (249, 199, 'SCAN', NULL, NULL, ''),
 (250, 199, 'SEND', NULL, NULL, 'OPEN/CLOSE'),
 (251, 200, 'SCAN', NULL, NULL, ''),
-(252, 200, 'SEND', NULL, NULL, 'ON/OFF');
+(252, 200, 'SEND', NULL, NULL, 'ON/OFF'),
+(254, 204, 'SCAN', NULL, NULL, ''),
+(255, 204, 'SEND', NULL, NULL, 'IRCODES'),
+(256, 205, 'SCAN', NULL, NULL, ''),
+(257, 205, 'SEND', NULL, NULL, 'OPEN/CLOSE'),
+(258, 206, 'SCAN', NULL, NULL, ''),
+(259, 206, 'SEND', NULL, NULL, 'ON/OFF'),
+(260, 207, 'SCAN', NULL, NULL, ''),
+(261, 207, 'SEND', NULL, NULL, 'IRCODES'),
+(262, 208, 'SCAN', NULL, NULL, ''),
+(263, 208, 'SEND', NULL, NULL, ''),
+(264, 209, 'SCAN', NULL, NULL, ''),
+(265, 209, 'SEND', NULL, NULL, 'UP/MEDIUM/DOWN'),
+(266, 210, 'SCAN', NULL, NULL, ''),
+(267, 210, 'SEND', NULL, NULL, 'OPEN/CLOSE'),
+(268, 211, 'SCAN', NULL, NULL, ''),
+(269, 211, 'SEND', NULL, NULL, 'ON/OFF'),
+(270, 214, 'SEND', NULL, NULL, 'NUMBER'),
+(271, 215, 'SCAN', NULL, NULL, ''),
+(272, 215, 'SEND', NULL, NULL, 'IRCODES'),
+(273, 217, 'SEND', NULL, NULL, 'ON/OFF'),
+(274, 218, 'SEND', NULL, NULL, 'ON/OFF');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `COMMANDS`
 --
--- Creación: 15-04-2014 a las 19:49:30
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMANDS`;
@@ -2000,7 +2141,7 @@ CREATE TABLE IF NOT EXISTS `commandVIEW` (
 --
 -- Estructura de tabla para la tabla `COMMAND_PROGRAM`
 --
--- Creación: 15-04-2014 a las 14:24:32
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMAND_PROGRAM`;
@@ -2055,7 +2196,7 @@ CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
 --
 -- Estructura de tabla para la tabla `CRONACTIONS`
 --
--- Creación: 08-05-2014 a las 23:07:59
+-- Creación: 14-05-2014 a las 19:16:10
 --
 
 DROP TABLE IF EXISTS `CRONACTIONS`;
@@ -2067,26 +2208,33 @@ CREATE TABLE IF NOT EXISTS `CRONACTIONS` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `id` (`city`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
 
 --
 -- Volcado de datos para la tabla `CRONACTIONS`
 --
 
 INSERT INTO `CRONACTIONS` (`city`, `country`, `language`, `Salida`, `id`) VALUES
-('barcelona', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1399610287, "temp min": 293.14999999999998, "sunset": 1399661846, "temp max": 302.04000000000002, "temperature": 297.13999999999999, "humidity": 49, "speed": 0.51000000000000001}', 23),
-('lima', 'usa', 'en', '{"description": "sky is clear", "main": "Clear", "sunrise": 1399631069, "temp min": 297.14999999999998, "sunset": 1399682471, "temp max": 297.58999999999997, "temperature": 297.38, "humidity": 57, "speed": 6.7000000000000002}', 24),
-('madrid', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1399611833, "temp min": 302.04000000000002, "sunset": 1399663114, "temp max": 304.25999999999999, "temperature": 303.02999999999997, "humidity": 38, "speed": 1.54}', 28),
-('madrid', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1399611833, "temp min": 302.04000000000002, "sunset": 1399663114, "temp max": 304.25999999999999, "temperature": 303.02999999999997, "humidity": 38, "speed": 1.54}', 29),
-('madrid', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1399611833, "temp min": 302.04000000000002, "sunset": 1399663114, "temp max": 304.25999999999999, "temperature": 303.02999999999997, "humidity": 38, "speed": 1.54}', 30),
-('londres', 'gb', 'en', '{"description": "broken clouds", "main": "Clouds", "sunrise": 1399609017, "temp min": 287.14999999999998, "sunset": 1399664213, "temp max": 292.04000000000002, "temperature": 289.94999999999999, "humidity": 51, "speed": 7.71}', 31);
+('', '', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400131434, "temp min": 291.60199999999998, "sunset": 1400182920, "temp max": 291.60199999999998, "temperature": 291.60199999999998, "humidity": 84, "speed": 2.6600000000000001}', 38),
+('spain', 'spain', 'en', '{"description": "few clouds", "main": "Clouds", "sunrise": 1400129872, "temp min": 293.70999999999998, "sunset": 1400181866, "temp max": 296.48000000000002, "temperature": 295.43000000000001, "humidity": 42, "speed": 1.03}', 39),
+('', '', 'en', '{"description": "scattered clouds", "main": "Clouds", "sunrise": 1400125296, "temp min": 283.50200000000001, "sunset": 1400181327, "temp max": 283.50200000000001, "temperature": 283.50200000000001, "humidity": 74, "speed": 4.6600000000000001}', 40),
+('colonia', '', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400297929, "temp min": 289.14999999999998, "sunset": 1400354301, "temp max": 290.93000000000001, "temperature": 289.98000000000002, "humidity": 66, "speed": 1.03}', 67),
+('madrid', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400302565, "temp min": 290.93000000000001, "sunset": 1400354780, "temp max": 295.93000000000001, "temperature": 293.44, "humidity": 38, "speed": 1.03}', 92),
+('lisboa', '', 'en', '{"description": "scattered clouds", "main": "Clouds", "sunrise": 1400304134, "temp min": 290.14999999999998, "sunset": 1400355827, "temp max": 297.58999999999997, "temperature": 295.05000000000001, "humidity": 63, "speed": 3.1000000000000001}', 101),
+('lima', '', 'en', '{"description": "overcast clouds", "main": "Clouds", "sunrise": 1400325493, "temp min": 293.14999999999998, "sunset": 1400367049, "temp max": 293.14999999999998, "temperature": 293.14999999999998, "humidity": 82, "speed": 4.0999999999999996}', 129),
+('londres', '', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400299484, "temp min": 293.14999999999998, "sunset": 1400356145, "temp max": 300.93000000000001, "temperature": 295.81, "humidity": 46, "speed": 1.5}', 136),
+('londres', 'gb', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400299484, "temp min": 293.14999999999998, "sunset": 1400356145, "temp max": 300.93000000000001, "temperature": 295.81, "humidity": 46, "speed": 1.5}', 151),
+('lima', 'peru', 'en', '{"description": "overcast clouds", "main": "Clouds", "sunrise": 1400325493, "temp min": 293.14999999999998, "sunset": 1400367049, "temp max": 293.14999999999998, "temperature": 293.14999999999998, "humidity": 82, "speed": 4.0999999999999996}', 152),
+('fuenlabrada', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400302608, "temp min": 290.93000000000001, "sunset": 1400354781, "temp max": 295.93000000000001, "temperature": 293.25999999999999, "humidity": 32, "speed": 3.0800000000000001}', 153),
+('lima', 'usa', 'en', '{"description": "light rain", "main": "Rain", "sunrise": 1400321798, "temp min": 279.81999999999999, "sunset": 1400374142, "temp max": 280.14999999999998, "temperature": 279.92000000000002, "humidity": 88, "speed": 0.51000000000000001}', 154),
+('barcelona', 'spain', 'en', '{"description": "Sky is Clear", "main": "Clear", "sunrise": 1400301002, "temp min": 292.04000000000002, "sunset": 1400353530, "temp max": 296.48000000000002, "temperature": 294.19, "humidity": 78, "speed": 3.0800000000000001}', 155);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
--- Creación: 17-04-2014 a las 01:10:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `DEVICES`;
@@ -2102,7 +2250,7 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
 
 --
 -- RELACIONES PARA LA TABLA `DEVICES`:
@@ -2121,7 +2269,10 @@ INSERT INTO `DEVICES` (`IDDEVICE`, `IDUSER`, `IPADDRESS`, `SERIAL`, `DEVICENAME`
 (44, 29, 'http://casaBertoldo/rasp/index.php', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-04-17 15:07:55', 1),
 (45, 29, 'http://casaBertoldo/rasp/index.php', '2', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-04-17 15:08:04', 1),
 (46, 0, 'http://mykelly.sytes.net/ejecuta.php', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-04-23 10:24:13', 1),
-(47, 0, 'http://mykelly.sytes.net/ejecuta.php', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-04-23 10:28:50', 1);
+(47, 0, 'http://mykelly.sytes.net/ejecuta.php', '1', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-04-23 10:28:50', 1),
+(48, 141, 'http://mykelly.sytes.net/ejecuta.php', '0', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-05-14 23:26:00', 1),
+(49, 141, 'http://mykelly.sytes.net/ejecuta.php', '00', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-05-14 23:26:00', 1),
+(50, 141, 'http://mykelly.sytes.net/ejecuta.php', '000', 'Arduino UNO', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '{"Microcontroller":"ATmega328",\n    "Operating Vol', '2014-05-14 23:26:00', 1);
 
 -- --------------------------------------------------------
 
@@ -2151,7 +2302,7 @@ CREATE TABLE IF NOT EXISTS `deviceVIEW` (
 --
 -- Estructura de tabla para la tabla `ERRORS`
 --
--- Creación: 17-04-2014 a las 21:28:34
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `ERRORS`;
@@ -2275,7 +2426,7 @@ CREATE TABLE IF NOT EXISTS `eventProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `FUNCTIONS`
 --
--- Creación: 15-04-2014 a las 19:50:51
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `FUNCTIONS`;
@@ -2338,7 +2489,7 @@ INSERT INTO `FUNCTIONS` (`FUNCT`, `FUNCTION`) VALUES
 --
 -- Estructura de tabla para la tabla `HISTORYACCESS`
 --
--- Creación: 13-04-2014 a las 22:08:26
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `HISTORYACCESS`;
@@ -2352,14 +2503,10 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8793 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11749 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
---   `IDHOUSE`
---       `HOUSES` -> `IDHOUSE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `ERROR`
 --       `ERRORS` -> `ERRORCODE`
 --   `FUNCT`
@@ -11040,14 +11187,2973 @@ INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`,
 (8789, NULL, NULL, 0, 39, '2014-05-11 22:26:36'),
 (8790, NULL, NULL, 0, 39, '2014-05-11 22:34:26'),
 (8791, NULL, NULL, 0, 39, '2014-05-11 22:35:16'),
-(8792, 0, NULL, 0, 8, '2014-05-11 23:06:39');
+(8792, 0, NULL, 0, 8, '2014-05-11 23:06:39'),
+(8793, 128, NULL, 0, 1, '2014-05-12 08:07:13'),
+(8794, 128, NULL, 0, 1, '2014-05-12 08:07:14'),
+(8795, NULL, NULL, 0, 39, '2014-05-12 08:09:11'),
+(8796, 128, NULL, 0, 1, '2014-05-12 08:29:35'),
+(8797, 128, NULL, 0, 1, '2014-05-12 08:32:05'),
+(8798, 128, NULL, 0, 1, '2014-05-12 08:32:05'),
+(8799, 128, NULL, 0, 1, '2014-05-12 08:37:40'),
+(8800, NULL, NULL, 0, 39, '2014-05-12 08:38:57'),
+(8801, 29, NULL, 0, 1, '2014-05-12 08:39:51'),
+(8802, 29, NULL, 0, 1, '2014-05-12 08:39:51'),
+(8803, NULL, NULL, 0, 39, '2014-05-12 08:40:25'),
+(8804, 29, NULL, 0, 1, '2014-05-12 08:41:08'),
+(8805, 29, NULL, 0, 1, '2014-05-12 08:41:10'),
+(8806, 29, NULL, 0, 1, '2014-05-12 08:50:49'),
+(8807, 29, NULL, 0, 1, '2014-05-12 08:51:19'),
+(8808, 29, NULL, 0, 1, '2014-05-12 08:51:19'),
+(8809, 29, NULL, 0, 1, '2014-05-12 08:51:53'),
+(8810, 29, NULL, 0, 1, '2014-05-12 08:51:53'),
+(8811, NULL, NULL, 0, 39, '2014-05-12 08:54:15'),
+(8812, 29, NULL, 0, 1, '2014-05-12 08:58:39'),
+(8813, 29, NULL, 0, 1, '2014-05-12 08:59:16'),
+(8814, 29, NULL, 0, 1, '2014-05-12 08:59:16'),
+(8815, 29, NULL, 0, 1, '2014-05-12 09:05:28'),
+(8816, 29, NULL, 0, 1, '2014-05-12 09:06:15'),
+(8817, 29, NULL, 0, 1, '2014-05-12 09:06:16'),
+(8818, NULL, NULL, 0, 39, '2014-05-12 09:07:02'),
+(8819, NULL, NULL, 0, 39, '2014-05-12 09:07:18'),
+(8820, 128, NULL, 0, 1, '2014-05-12 09:07:35'),
+(8821, 128, NULL, 0, 1, '2014-05-12 09:07:37'),
+(8822, NULL, NULL, 0, 39, '2014-05-12 09:08:26'),
+(8823, 128, NULL, 0, 1, '2014-05-12 09:09:03'),
+(8824, 128, NULL, 0, 1, '2014-05-12 09:09:03'),
+(8825, 128, NULL, 0, 1, '2014-05-12 09:14:04'),
+(8826, 128, NULL, 0, 1, '2014-05-12 09:14:05'),
+(8827, NULL, NULL, 0, 39, '2014-05-12 09:14:30'),
+(8828, 128, NULL, 0, 1, '2014-05-12 09:14:49'),
+(8829, 128, NULL, 0, 1, '2014-05-12 09:14:49'),
+(8830, NULL, NULL, 0, 39, '2014-05-12 09:15:16'),
+(8831, 29, NULL, 0, 1, '2014-05-12 09:15:55'),
+(8832, 29, NULL, 0, 1, '2014-05-12 09:15:55'),
+(8833, 29, NULL, 0, 1, '2014-05-12 09:27:45'),
+(8834, 128, NULL, 0, 1, '2014-05-12 09:29:14'),
+(8835, 128, NULL, 0, 1, '2014-05-12 09:29:16'),
+(8836, 128, NULL, 0, 1, '2014-05-12 09:36:35'),
+(8837, 128, NULL, 0, 1, '2014-05-12 09:41:57'),
+(8838, 0, NULL, 2, 1, '2014-05-12 09:41:58'),
+(8839, 128, NULL, 0, 1, '2014-05-12 09:43:25'),
+(8840, 128, NULL, 0, 1, '2014-05-12 09:43:40'),
+(8841, 0, NULL, 2, 1, '2014-05-12 09:43:41'),
+(8842, 128, NULL, 0, 1, '2014-05-12 09:47:39'),
+(8843, 128, NULL, 0, 1, '2014-05-12 09:47:40'),
+(8844, NULL, NULL, 0, 39, '2014-05-12 09:47:56'),
+(8845, NULL, NULL, 0, 39, '2014-05-12 09:48:10'),
+(8846, 128, NULL, 0, 1, '2014-05-12 09:52:14'),
+(8847, 128, NULL, 0, 1, '2014-05-12 09:52:15'),
+(8848, NULL, NULL, 0, 39, '2014-05-12 09:52:23'),
+(8849, NULL, NULL, 0, 39, '2014-05-12 09:52:50'),
+(8850, 128, NULL, 0, 1, '2014-05-12 09:56:36'),
+(8851, 128, NULL, 0, 1, '2014-05-12 09:56:37'),
+(8852, 29, NULL, 0, 1, '2014-05-12 09:58:09'),
+(8853, NULL, NULL, 0, 39, '2014-05-12 09:58:13'),
+(8854, 128, NULL, 0, 1, '2014-05-12 09:58:33'),
+(8855, 128, NULL, 0, 1, '2014-05-12 09:58:39'),
+(8856, NULL, NULL, 0, 39, '2014-05-12 09:59:29'),
+(8857, 128, NULL, 0, 1, '2014-05-12 10:00:30'),
+(8858, 128, NULL, 0, 1, '2014-05-12 10:00:38'),
+(8859, 128, NULL, 0, 1, '2014-05-12 10:04:36'),
+(8860, NULL, NULL, 0, 39, '2014-05-12 10:05:24'),
+(8861, 128, NULL, 0, 1, '2014-05-12 10:05:59'),
+(8862, 128, NULL, 0, 1, '2014-05-12 10:06:42'),
+(8863, 128, NULL, 0, 1, '2014-05-12 10:06:43'),
+(8864, 128, NULL, 0, 1, '2014-05-12 10:06:43'),
+(8865, 128, NULL, 0, 1, '2014-05-12 10:06:45'),
+(8866, NULL, NULL, 0, 39, '2014-05-12 10:07:01'),
+(8867, NULL, NULL, 0, 39, '2014-05-12 10:07:04'),
+(8868, NULL, NULL, 0, 39, '2014-05-12 10:07:50'),
+(8869, NULL, NULL, 0, 39, '2014-05-12 10:09:44'),
+(8870, NULL, NULL, 0, 39, '2014-05-12 10:10:11'),
+(8871, 128, NULL, 0, 1, '2014-05-12 10:14:11'),
+(8872, 128, NULL, 0, 1, '2014-05-12 10:14:12'),
+(8873, NULL, NULL, 0, 39, '2014-05-12 10:14:21'),
+(8874, 10, NULL, 0, 1, '2014-05-12 10:15:24'),
+(8875, 10, NULL, 0, 1, '2014-05-12 10:15:25'),
+(8876, 128, NULL, 0, 1, '2014-05-12 10:18:29'),
+(8877, 128, NULL, 0, 1, '2014-05-12 10:18:30'),
+(8878, 128, NULL, 0, 1, '2014-05-12 10:19:38'),
+(8879, 128, NULL, 0, 1, '2014-05-12 10:19:39'),
+(8880, NULL, NULL, 0, 39, '2014-05-12 10:20:23'),
+(8881, NULL, NULL, 0, 39, '2014-05-12 10:21:58'),
+(8882, 10, NULL, 0, 1, '2014-05-12 10:22:46'),
+(8883, 128, NULL, 0, 1, '2014-05-12 10:23:10'),
+(8884, 10, NULL, 0, 1, '2014-05-12 10:23:39'),
+(8885, 10, NULL, 0, 1, '2014-05-12 10:24:03'),
+(8886, NULL, NULL, 0, 39, '2014-05-12 10:24:24'),
+(8887, NULL, NULL, 0, 3, '2014-05-12 10:28:17'),
+(8888, 141, NULL, 0, 1, '2014-05-12 10:29:45'),
+(8889, 141, NULL, 0, 1, '2014-05-12 10:29:47'),
+(8890, 141, NULL, 0, 6, '2014-05-12 10:30:44'),
+(8891, 141, NULL, 0, 6, '2014-05-12 10:30:56'),
+(8892, 141, NULL, 0, 6, '2014-05-12 10:31:01'),
+(8893, NULL, NULL, 0, 39, '2014-05-12 10:31:36'),
+(8894, NULL, NULL, 0, 39, '2014-05-12 10:31:53'),
+(8895, NULL, NULL, 0, 3, '2014-05-12 10:32:01'),
+(8896, 128, NULL, 0, 1, '2014-05-12 10:32:03'),
+(8897, 0, NULL, 3, 1, '2014-05-12 10:32:11'),
+(8898, 140, NULL, 0, 1, '2014-05-12 10:32:25'),
+(8899, 140, NULL, 0, 1, '2014-05-12 10:35:26'),
+(8900, 140, NULL, 0, 1, '2014-05-12 10:37:11'),
+(8901, 141, NULL, 0, 1, '2014-05-12 10:37:12'),
+(8902, 141, NULL, 0, 1, '2014-05-12 10:38:12'),
+(8903, 141, NULL, 0, 1, '2014-05-12 10:38:13'),
+(8904, 141, NULL, 0, 1, '2014-05-12 10:40:13'),
+(8905, 141, NULL, 0, 1, '2014-05-12 10:41:00'),
+(8906, 140, NULL, 0, 1, '2014-05-12 10:41:27'),
+(8907, 140, NULL, 0, 1, '2014-05-12 10:41:45'),
+(8908, 140, NULL, 0, 1, '2014-05-12 10:41:46'),
+(8909, 141, NULL, 0, 1, '2014-05-12 10:41:49'),
+(8910, 141, NULL, 0, 5, '2014-05-12 10:45:36'),
+(8911, 141, NULL, 0, 1, '2014-05-12 10:45:37'),
+(8912, 10, NULL, 0, 1, '2014-05-12 10:46:27'),
+(8913, 10, NULL, 0, 1, '2014-05-12 10:46:28'),
+(8914, 141, NULL, 0, 1, '2014-05-12 10:47:01'),
+(8915, 141, NULL, 0, 1, '2014-05-12 10:47:02'),
+(8916, NULL, NULL, 0, 39, '2014-05-12 10:47:52'),
+(8917, 10, NULL, 0, 1, '2014-05-12 10:50:33'),
+(8918, 128, NULL, 0, 1, '2014-05-12 10:51:22'),
+(8919, 128, NULL, 0, 1, '2014-05-12 10:51:23'),
+(8920, NULL, NULL, 0, 39, '2014-05-12 10:51:48'),
+(8921, 128, NULL, 0, 1, '2014-05-12 10:51:59'),
+(8922, 128, NULL, 0, 1, '2014-05-12 10:52:00'),
+(8923, 128, NULL, 0, 1, '2014-05-12 10:52:26'),
+(8924, 128, NULL, 0, 1, '2014-05-12 10:52:28'),
+(8925, 128, NULL, 0, 5, '2014-05-12 10:52:38'),
+(8926, 128, NULL, 0, 1, '2014-05-12 10:52:38'),
+(8927, 128, NULL, 0, 5, '2014-05-12 10:52:53'),
+(8928, 128, NULL, 0, 1, '2014-05-12 10:52:53'),
+(8929, 0, NULL, 11, 6, '2014-05-12 11:00:35'),
+(8930, 141, NULL, 0, 1, '2014-05-12 11:05:32'),
+(8931, 141, NULL, 0, 1, '2014-05-12 11:05:32'),
+(8932, 141, NULL, 0, 1, '2014-05-12 11:05:45'),
+(8933, 128, NULL, 0, 1, '2014-05-12 11:06:00'),
+(8934, 128, NULL, 0, 1, '2014-05-12 11:06:01'),
+(8935, 128, NULL, 0, 1, '2014-05-12 11:08:25'),
+(8936, 10, NULL, 0, 1, '2014-05-12 11:20:23'),
+(8937, 10, NULL, 0, 1, '2014-05-12 11:20:24'),
+(8938, NULL, NULL, 0, 39, '2014-05-12 11:22:10'),
+(8939, 10, NULL, 0, 1, '2014-05-12 11:23:07'),
+(8940, 0, NULL, 11, 6, '2014-05-12 11:23:33'),
+(8941, 10, NULL, 0, 1, '2014-05-12 11:23:41'),
+(8942, 10, NULL, 0, 1, '2014-05-12 11:23:41'),
+(8943, 0, NULL, 11, 6, '2014-05-12 11:24:21'),
+(8944, 0, NULL, 11, 6, '2014-05-12 11:24:30'),
+(8945, 0, NULL, 11, 6, '2014-05-12 11:24:38'),
+(8946, 141, NULL, 68, 6, '2014-05-12 11:28:47'),
+(8947, 10, NULL, 0, 1, '2014-05-12 11:32:23'),
+(8948, 128, NULL, 0, 1, '2014-05-12 11:32:35'),
+(8949, 128, NULL, 0, 1, '2014-05-12 11:32:36'),
+(8950, 128, 24, 0, 20, '2014-05-12 11:32:48');
+INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
+(8951, 128, NULL, 0, 1, '2014-05-12 11:32:49'),
+(8952, 128, NULL, 0, 5, '2014-05-12 11:33:06'),
+(8953, 128, NULL, 0, 1, '2014-05-12 11:33:07'),
+(8954, 128, NULL, 0, 1, '2014-05-12 11:52:16'),
+(8955, 128, NULL, 0, 1, '2014-05-12 11:52:17'),
+(8956, 128, NULL, 0, 1, '2014-05-12 11:52:56'),
+(8957, 128, NULL, 0, 1, '2014-05-12 11:52:57'),
+(8958, NULL, NULL, 0, 39, '2014-05-12 11:53:20'),
+(8959, NULL, NULL, 0, 39, '2014-05-12 11:53:31'),
+(8960, 128, NULL, 0, 1, '2014-05-12 11:56:09'),
+(8961, 128, NULL, 0, 1, '2014-05-12 11:56:21'),
+(8962, NULL, NULL, 0, 39, '2014-05-12 11:56:47'),
+(8963, 128, NULL, 0, 1, '2014-05-12 11:56:51'),
+(8964, 128, NULL, 0, 1, '2014-05-12 14:59:32'),
+(8965, 128, NULL, 0, 1, '2014-05-12 14:59:34'),
+(8966, 128, NULL, 0, 1, '2014-05-12 14:59:58'),
+(8967, 128, NULL, 0, 1, '2014-05-12 15:01:11'),
+(8968, NULL, NULL, 0, 39, '2014-05-12 15:01:50'),
+(8969, NULL, NULL, 0, 39, '2014-05-12 15:02:01'),
+(8970, 128, NULL, 0, 1, '2014-05-12 15:02:23'),
+(8971, NULL, NULL, 0, 39, '2014-05-12 15:02:38'),
+(8972, 128, NULL, 0, 1, '2014-05-12 15:09:47'),
+(8973, 128, 24, 0, 14, '2014-05-12 15:12:01'),
+(8974, 128, 24, 74, 14, '2014-05-12 15:12:08'),
+(8975, 128, NULL, 2, 1, '2014-05-12 15:12:44'),
+(8976, 128, NULL, 0, 1, '2014-05-12 15:12:55'),
+(8977, 128, NULL, 0, 15, '2014-05-12 15:13:14'),
+(8978, 128, NULL, 0, 1, '2014-05-12 15:14:39'),
+(8979, 128, NULL, 0, 1, '2014-05-12 15:49:48'),
+(8980, NULL, NULL, 0, 39, '2014-05-12 16:19:48'),
+(8981, NULL, NULL, 0, 39, '2014-05-12 16:20:21'),
+(8982, 128, NULL, 0, 1, '2014-05-12 16:20:41'),
+(8983, 128, NULL, 0, 1, '2014-05-12 17:05:25'),
+(8984, 128, NULL, 0, 1, '2014-05-12 17:06:35'),
+(8985, 128, NULL, 0, 1, '2014-05-12 17:06:36'),
+(8986, NULL, NULL, 0, 39, '2014-05-12 17:07:14'),
+(8987, 128, NULL, 0, 1, '2014-05-12 17:07:22'),
+(8988, 10, NULL, 0, 1, '2014-05-12 17:08:16'),
+(8989, 10, NULL, 0, 1, '2014-05-12 17:08:16'),
+(8990, 128, NULL, 0, 1, '2014-05-12 17:11:54'),
+(8991, 128, NULL, 0, 1, '2014-05-12 17:11:55'),
+(8992, 128, NULL, 0, 1, '2014-05-12 17:42:40'),
+(8993, 141, NULL, 0, 1, '2014-05-12 18:02:21'),
+(8994, 141, NULL, 0, 1, '2014-05-12 18:02:23'),
+(8995, NULL, NULL, 0, 39, '2014-05-12 18:03:33'),
+(8996, 128, NULL, 0, 1, '2014-05-12 18:04:12'),
+(8997, 128, NULL, 0, 1, '2014-05-12 18:07:26'),
+(8998, 128, NULL, 0, 6, '2014-05-12 18:07:39'),
+(8999, 141, NULL, 0, 1, '2014-05-12 22:25:43'),
+(9000, 141, NULL, 0, 1, '2014-05-12 22:25:45'),
+(9001, NULL, NULL, 0, 3, '2014-05-12 22:27:57'),
+(9002, 141, NULL, 0, 1, '2014-05-12 22:27:58'),
+(9003, 142, NULL, 0, 1, '2014-05-12 22:31:34'),
+(9004, 142, NULL, 0, 6, '2014-05-12 22:31:46'),
+(9005, 142, NULL, 0, 6, '2014-05-12 22:31:47'),
+(9006, 142, NULL, 0, 6, '2014-05-12 22:31:50'),
+(9007, 142, NULL, 0, 6, '2014-05-12 22:31:50'),
+(9008, 142, NULL, 0, 5, '2014-05-12 22:33:27'),
+(9009, 142, NULL, 0, 1, '2014-05-12 22:33:27'),
+(9010, 0, NULL, 3, 1, '2014-05-12 22:37:09'),
+(9011, 141, NULL, 0, 1, '2014-05-12 22:37:24'),
+(9012, 141, NULL, 0, 1, '2014-05-12 22:37:25'),
+(9013, 29, NULL, 0, 1, '2014-05-12 22:37:58'),
+(9014, 29, NULL, 0, 1, '2014-05-12 22:37:59'),
+(9015, 29, NULL, 0, 6, '2014-05-12 22:38:43'),
+(9016, 29, NULL, 0, 6, '2014-05-12 22:38:45'),
+(9017, 29, NULL, 68, 6, '2014-05-12 22:38:47'),
+(9018, 29, NULL, 0, 6, '2014-05-12 22:38:48'),
+(9019, 29, NULL, 0, 6, '2014-05-12 22:38:48'),
+(9020, 29, NULL, 0, 6, '2014-05-12 22:38:55'),
+(9021, 29, NULL, 0, 6, '2014-05-12 22:39:06'),
+(9022, 128, NULL, 0, 1, '2014-05-12 23:30:45'),
+(9023, 128, NULL, 0, 1, '2014-05-13 15:00:35'),
+(9024, NULL, NULL, 0, 39, '2014-05-13 15:01:17'),
+(9025, 128, NULL, 0, 1, '2014-05-13 15:01:24'),
+(9026, 128, NULL, 0, 1, '2014-05-13 15:01:28'),
+(9027, 128, NULL, 0, 1, '2014-05-13 15:01:31'),
+(9028, 128, NULL, 0, 1, '2014-05-13 15:06:27'),
+(9029, NULL, NULL, 0, 39, '2014-05-13 15:06:42'),
+(9030, 128, NULL, 0, 1, '2014-05-13 15:15:14'),
+(9031, NULL, NULL, 0, 39, '2014-05-13 15:15:28'),
+(9032, 128, NULL, 0, 1, '2014-05-13 15:15:35'),
+(9033, 128, NULL, 0, 1, '2014-05-13 15:24:40'),
+(9034, NULL, NULL, 0, 39, '2014-05-13 15:24:46'),
+(9035, 128, NULL, 0, 1, '2014-05-13 15:24:51'),
+(9036, 128, NULL, 0, 1, '2014-05-13 15:25:32'),
+(9037, NULL, NULL, 0, 39, '2014-05-13 15:25:35'),
+(9038, 128, NULL, 0, 1, '2014-05-13 15:25:47'),
+(9039, NULL, NULL, 0, 39, '2014-05-13 15:26:00'),
+(9040, NULL, NULL, 0, 39, '2014-05-13 15:26:07'),
+(9041, 128, NULL, 0, 1, '2014-05-13 15:37:58'),
+(9042, NULL, NULL, 0, 39, '2014-05-13 15:38:06'),
+(9043, NULL, NULL, 0, 39, '2014-05-13 15:38:11'),
+(9044, NULL, NULL, 0, 39, '2014-05-13 15:38:21'),
+(9045, 128, NULL, 0, 1, '2014-05-13 15:38:24'),
+(9046, 128, NULL, 0, 1, '2014-05-13 15:39:22'),
+(9047, NULL, NULL, 0, 39, '2014-05-13 15:42:54'),
+(9048, 128, NULL, 0, 1, '2014-05-13 15:43:51'),
+(9049, NULL, NULL, 0, 39, '2014-05-13 15:43:55'),
+(9050, 128, NULL, 0, 1, '2014-05-13 15:44:46'),
+(9051, NULL, NULL, 0, 39, '2014-05-13 15:44:50'),
+(9052, 128, NULL, 0, 1, '2014-05-13 15:44:55'),
+(9053, 128, NULL, 0, 1, '2014-05-13 15:49:32'),
+(9054, NULL, NULL, 0, 39, '2014-05-13 15:49:41'),
+(9055, NULL, NULL, 0, 39, '2014-05-13 15:49:44'),
+(9056, 128, NULL, 0, 1, '2014-05-13 15:49:48'),
+(9057, 128, NULL, 0, 1, '2014-05-13 16:06:40'),
+(9058, NULL, NULL, 0, 39, '2014-05-13 16:06:49'),
+(9059, NULL, NULL, 0, 39, '2014-05-13 16:06:55'),
+(9060, 128, NULL, 0, 1, '2014-05-13 16:07:02'),
+(9061, 141, NULL, 0, 1, '2014-05-13 21:35:56'),
+(9062, 141, NULL, 0, 1, '2014-05-13 21:35:57'),
+(9063, NULL, NULL, 0, 39, '2014-05-13 21:36:15'),
+(9064, 141, NULL, 0, 1, '2014-05-13 21:37:23'),
+(9065, NULL, NULL, 0, 39, '2014-05-13 21:37:38'),
+(9066, NULL, NULL, 0, 39, '2014-05-13 21:38:54'),
+(9067, 128, NULL, 0, 1, '2014-05-13 21:40:02'),
+(9068, 128, NULL, 0, 1, '2014-05-13 22:44:34'),
+(9069, NULL, NULL, 0, 39, '2014-05-13 22:48:35'),
+(9070, NULL, NULL, 0, 39, '2014-05-13 22:48:59'),
+(9071, NULL, NULL, 0, 39, '2014-05-13 22:49:07'),
+(9072, NULL, NULL, 0, 39, '2014-05-13 22:49:49'),
+(9073, NULL, NULL, 0, 39, '2014-05-13 22:50:12'),
+(9074, NULL, NULL, 0, 39, '2014-05-13 22:57:33'),
+(9075, NULL, NULL, 0, 39, '2014-05-13 22:57:38'),
+(9076, NULL, NULL, 0, 39, '2014-05-13 22:57:59'),
+(9077, NULL, NULL, 0, 39, '2014-05-13 23:01:03'),
+(9078, NULL, NULL, 0, 39, '2014-05-13 23:13:06'),
+(9079, NULL, NULL, 0, 39, '2014-05-13 23:13:56'),
+(9080, NULL, NULL, 0, 39, '2014-05-13 23:52:09'),
+(9081, NULL, NULL, 0, 39, '2014-05-14 00:03:45'),
+(9082, NULL, NULL, 0, 39, '2014-05-14 00:07:07'),
+(9083, NULL, NULL, 0, 39, '2014-05-14 00:08:09'),
+(9084, 0, NULL, 11, 6, '2014-05-14 00:21:53'),
+(9085, 128, NULL, 0, 1, '2014-05-14 07:31:24'),
+(9086, 128, NULL, 0, 1, '2014-05-14 07:46:54'),
+(9087, 128, NULL, 0, 1, '2014-05-14 07:47:01'),
+(9088, 128, NULL, 0, 1, '2014-05-14 07:51:29'),
+(9089, 128, NULL, 0, 1, '2014-05-14 07:51:30'),
+(9090, 128, NULL, 0, 1, '2014-05-14 08:25:07'),
+(9091, 128, NULL, 0, 1, '2014-05-14 08:35:40'),
+(9092, 128, NULL, 0, 15, '2014-05-14 08:37:35'),
+(9093, 128, NULL, 0, 1, '2014-05-14 08:50:51'),
+(9094, 128, NULL, 0, 1, '2014-05-14 08:53:31'),
+(9095, 128, NULL, 0, 1, '2014-05-14 08:54:34'),
+(9096, 128, NULL, 0, 1, '2014-05-14 08:55:06'),
+(9097, 128, NULL, 0, 1, '2014-05-14 09:51:53'),
+(9098, NULL, NULL, 0, 39, '2014-05-14 09:52:19'),
+(9099, 128, NULL, 0, 1, '2014-05-14 09:52:45'),
+(9100, 128, NULL, 0, 1, '2014-05-14 09:52:46'),
+(9101, NULL, NULL, 0, 39, '2014-05-14 09:52:55'),
+(9102, 128, NULL, 0, 1, '2014-05-14 09:53:01'),
+(9103, 141, NULL, 0, 1, '2014-05-14 10:10:32'),
+(9104, 141, NULL, 0, 1, '2014-05-14 10:10:34'),
+(9105, NULL, NULL, 0, 39, '2014-05-14 10:11:16'),
+(9106, 141, NULL, 0, 1, '2014-05-14 10:11:35'),
+(9107, 128, NULL, 0, 1, '2014-05-14 10:11:37'),
+(9108, 141, NULL, 0, 6, '2014-05-14 10:11:59'),
+(9109, 141, NULL, 0, 6, '2014-05-14 10:12:00'),
+(9110, 128, NULL, 0, 1, '2014-05-14 10:13:34'),
+(9111, 128, NULL, 0, 1, '2014-05-14 10:15:37'),
+(9112, NULL, NULL, 0, 39, '2014-05-14 10:20:48'),
+(9113, 141, NULL, 0, 1, '2014-05-14 10:20:55'),
+(9114, NULL, NULL, 0, 39, '2014-05-14 10:21:21'),
+(9115, 141, NULL, 0, 1, '2014-05-14 10:21:50'),
+(9116, NULL, NULL, 0, 39, '2014-05-14 10:22:11'),
+(9117, 128, NULL, 0, 1, '2014-05-14 10:22:20'),
+(9118, 141, NULL, 0, 1, '2014-05-14 10:22:39'),
+(9119, NULL, NULL, 0, 39, '2014-05-14 10:22:47'),
+(9120, 0, NULL, 3, 2, '2014-05-14 10:24:23'),
+(9121, 142, NULL, 0, 2, '2014-05-14 10:24:35'),
+(9122, 141, NULL, 0, 1, '2014-05-14 10:29:22'),
+(9123, 141, NULL, 0, 1, '2014-05-14 11:18:52'),
+(9124, 141, NULL, 0, 1, '2014-05-14 11:18:53'),
+(9125, 141, NULL, 0, 1, '2014-05-14 11:25:25'),
+(9126, NULL, NULL, 0, 39, '2014-05-14 13:59:45'),
+(9127, NULL, NULL, 0, 39, '2014-05-14 14:00:48'),
+(9128, NULL, NULL, 0, 39, '2014-05-14 14:00:49'),
+(9129, NULL, NULL, 0, 39, '2014-05-14 14:01:25'),
+(9130, NULL, NULL, 0, 39, '2014-05-14 14:23:42'),
+(9131, 128, NULL, 0, 1, '2014-05-14 15:26:29'),
+(9132, 128, NULL, 0, 1, '2014-05-14 15:26:48'),
+(9133, 128, NULL, 0, 1, '2014-05-14 15:27:11'),
+(9134, 128, NULL, 0, 1, '2014-05-14 15:32:16'),
+(9135, 128, NULL, 0, 1, '2014-05-14 15:32:26'),
+(9136, 128, NULL, 0, 1, '2014-05-14 15:32:29'),
+(9137, 128, NULL, 0, 1, '2014-05-14 15:47:41'),
+(9138, 128, NULL, 0, 1, '2014-05-14 15:47:42'),
+(9139, 128, NULL, 0, 1, '2014-05-14 15:52:50'),
+(9140, 128, NULL, 0, 1, '2014-05-14 16:17:14'),
+(9141, 128, NULL, 0, 1, '2014-05-14 16:32:30'),
+(9142, 128, NULL, 0, 1, '2014-05-14 16:32:31'),
+(9143, 128, NULL, 0, 1, '2014-05-14 16:32:45'),
+(9144, 128, NULL, 0, 1, '2014-05-14 16:33:16'),
+(9145, 128, NULL, 0, 1, '2014-05-14 16:34:03'),
+(9146, 128, NULL, 0, 1, '2014-05-14 16:34:26'),
+(9147, 128, 24, 0, 20, '2014-05-14 16:35:47'),
+(9148, 128, NULL, 0, 1, '2014-05-14 16:35:47'),
+(9149, 128, 24, 0, 20, '2014-05-14 16:36:05'),
+(9150, 128, NULL, 0, 1, '2014-05-14 16:36:05'),
+(9151, 128, NULL, 0, 1, '2014-05-14 16:38:42'),
+(9152, 128, NULL, 0, 1, '2014-05-14 16:39:42'),
+(9153, 128, NULL, 0, 1, '2014-05-14 16:40:28'),
+(9154, 128, NULL, 0, 1, '2014-05-14 16:40:51'),
+(9155, 128, NULL, 0, 1, '2014-05-14 16:45:49'),
+(9156, 128, NULL, 0, 1, '2014-05-14 16:45:49'),
+(9157, 128, NULL, 0, 1, '2014-05-14 16:45:53'),
+(9158, 128, NULL, 0, 1, '2014-05-14 16:46:03'),
+(9159, 128, NULL, 0, 1, '2014-05-14 16:46:26'),
+(9160, 128, NULL, 0, 1, '2014-05-14 16:50:49'),
+(9161, 128, NULL, 0, 1, '2014-05-14 16:52:07'),
+(9162, 128, 24, 0, 20, '2014-05-14 16:52:43'),
+(9163, 128, NULL, 0, 1, '2014-05-14 16:52:43'),
+(9164, NULL, NULL, 0, 39, '2014-05-14 16:58:36'),
+(9165, 128, NULL, 0, 1, '2014-05-14 17:00:52'),
+(9166, 128, NULL, 0, 1, '2014-05-14 17:01:36'),
+(9167, 128, NULL, 0, 1, '2014-05-14 17:12:30'),
+(9168, 128, NULL, 0, 5, '2014-05-14 17:13:13'),
+(9169, 128, NULL, 0, 1, '2014-05-14 17:13:13'),
+(9170, 128, NULL, 0, 5, '2014-05-14 17:13:30'),
+(9171, 128, NULL, 0, 1, '2014-05-14 17:13:33'),
+(9172, 128, NULL, 0, 1, '2014-05-14 17:51:25'),
+(9173, NULL, NULL, 0, 39, '2014-05-14 19:17:12'),
+(9174, 0, NULL, 2, 1, '2014-05-14 19:17:24'),
+(9175, 128, NULL, 2, 1, '2014-05-14 19:17:32'),
+(9176, 141, NULL, 0, 1, '2014-05-14 19:28:28'),
+(9177, 141, NULL, 0, 1, '2014-05-14 19:28:29'),
+(9178, 141, NULL, 0, 1, '2014-05-14 19:31:03'),
+(9179, 128, NULL, 0, 1, '2014-05-14 19:48:58'),
+(9180, 128, NULL, 0, 1, '2014-05-14 19:50:17'),
+(9181, 128, NULL, 0, 1, '2014-05-14 19:51:41'),
+(9182, 128, NULL, 0, 6, '2014-05-14 21:00:54'),
+(9183, 128, NULL, 0, 6, '2014-05-14 21:01:41'),
+(9184, 0, NULL, 0, 8, '2014-05-14 21:09:50'),
+(9185, 0, NULL, 0, 8, '2014-05-14 21:09:58'),
+(9186, 128, NULL, 0, 1, '2014-05-14 21:23:47'),
+(9187, 128, NULL, 0, 1, '2014-05-14 21:23:55'),
+(9188, 128, NULL, 0, 1, '2014-05-14 21:24:00'),
+(9189, 128, NULL, 0, 1, '2014-05-14 21:31:11'),
+(9190, 128, NULL, 0, 1, '2014-05-14 21:33:41'),
+(9191, 128, NULL, 0, 1, '2014-05-14 21:33:44'),
+(9192, 128, NULL, 0, 1, '2014-05-14 21:33:50'),
+(9193, 128, NULL, 0, 1, '2014-05-14 21:36:26'),
+(9194, 128, NULL, 0, 1, '2014-05-14 21:36:56'),
+(9195, 128, NULL, 0, 1, '2014-05-14 21:43:38'),
+(9196, 128, NULL, 0, 1, '2014-05-14 21:44:09'),
+(9197, 128, NULL, 0, 1, '2014-05-14 21:44:10'),
+(9198, 128, NULL, 0, 1, '2014-05-14 21:44:41'),
+(9199, 128, NULL, 0, 1, '2014-05-14 21:45:10'),
+(9200, 128, NULL, 0, 1, '2014-05-14 21:45:45'),
+(9201, 128, NULL, 0, 1, '2014-05-14 21:48:07'),
+(9202, 128, NULL, 0, 1, '2014-05-14 21:48:13'),
+(9203, 128, NULL, 0, 1, '2014-05-14 21:54:14'),
+(9204, 128, NULL, 0, 1, '2014-05-14 21:54:17'),
+(9205, 128, NULL, 0, 1, '2014-05-14 21:54:23'),
+(9206, 128, NULL, 0, 1, '2014-05-14 21:58:28'),
+(9207, 128, NULL, 0, 1, '2014-05-14 21:58:38'),
+(9208, 128, NULL, 0, 1, '2014-05-14 22:03:51'),
+(9209, 128, NULL, 0, 1, '2014-05-14 22:04:31'),
+(9210, 128, NULL, 0, 1, '2014-05-14 22:06:44'),
+(9211, 128, NULL, 0, 1, '2014-05-14 22:06:50'),
+(9212, 128, NULL, 0, 1, '2014-05-14 22:08:13'),
+(9213, 128, NULL, 0, 1, '2014-05-14 22:09:46'),
+(9214, 128, NULL, 0, 1, '2014-05-14 22:10:03'),
+(9215, 128, NULL, 0, 1, '2014-05-14 22:10:12'),
+(9216, 128, NULL, 0, 1, '2014-05-14 22:11:22'),
+(9217, 128, NULL, 0, 1, '2014-05-14 22:12:02'),
+(9218, 128, NULL, 0, 1, '2014-05-14 22:13:10'),
+(9219, 128, NULL, 0, 1, '2014-05-14 22:15:28'),
+(9220, 128, NULL, 0, 1, '2014-05-14 22:22:26'),
+(9221, 128, NULL, 0, 1, '2014-05-14 22:22:27'),
+(9222, 128, NULL, 0, 1, '2014-05-14 22:28:19'),
+(9223, 128, NULL, 0, 1, '2014-05-14 22:28:25'),
+(9224, 128, NULL, 0, 1, '2014-05-14 22:29:12'),
+(9225, 128, NULL, 0, 1, '2014-05-14 22:29:17'),
+(9226, 128, NULL, 0, 1, '2014-05-14 22:38:17'),
+(9227, 128, NULL, 0, 1, '2014-05-14 22:38:22'),
+(9228, 128, NULL, 0, 1, '2014-05-14 22:38:28'),
+(9229, 128, NULL, 0, 1, '2014-05-14 22:38:48'),
+(9230, 128, NULL, 0, 1, '2014-05-14 22:40:06'),
+(9231, 141, NULL, 0, 1, '2014-05-14 22:42:28'),
+(9232, 141, NULL, 0, 1, '2014-05-14 22:42:29'),
+(9233, 128, NULL, 0, 1, '2014-05-14 22:42:52'),
+(9234, 128, NULL, 0, 1, '2014-05-14 22:43:55'),
+(9235, NULL, NULL, 0, 39, '2014-05-14 22:44:01'),
+(9236, 141, NULL, 0, 1, '2014-05-14 22:47:38'),
+(9237, NULL, NULL, 0, 39, '2014-05-14 22:47:51'),
+(9238, 141, NULL, 0, 1, '2014-05-14 22:48:08'),
+(9239, 141, NULL, 0, 1, '2014-05-14 22:48:09'),
+(9240, NULL, NULL, 0, 39, '2014-05-14 22:48:19'),
+(9241, 141, 26, 0, 7, '2014-05-14 23:00:11'),
+(9242, 141, NULL, 0, 1, '2014-05-14 23:00:35'),
+(9243, 141, NULL, 0, 1, '2014-05-14 23:05:48'),
+(9244, 141, NULL, 0, 1, '2014-05-14 23:05:49'),
+(9245, 141, 26, 0, 17, '2014-05-14 23:06:30'),
+(9246, 141, 26, 0, 17, '2014-05-14 23:06:55'),
+(9247, 141, 26, 0, 17, '2014-05-14 23:07:08'),
+(9248, 141, NULL, 47, 25, '2014-05-14 23:26:16'),
+(9249, 141, NULL, 2, 1, '2014-05-14 23:26:42'),
+(9250, 141, NULL, 0, 1, '2014-05-14 23:27:28'),
+(9251, 215, 29, 0, 31, '2014-05-14 23:40:23'),
+(9252, 214, 29, 0, 31, '2014-05-14 23:40:47'),
+(9253, 205, 29, 0, 31, '2014-05-14 23:41:35'),
+(9254, 213, 29, 0, 31, '2014-05-14 23:41:45'),
+(9255, 212, 29, 0, 31, '2014-05-14 23:42:33'),
+(9256, 211, 29, 0, 31, '2014-05-14 23:42:45'),
+(9257, 209, 29, 0, 31, '2014-05-14 23:42:57'),
+(9258, 141, NULL, 0, 1, '2014-05-14 23:43:33'),
+(9259, 141, NULL, 0, 1, '2014-05-14 23:43:34'),
+(9260, 141, NULL, 0, 1, '2014-05-14 23:45:13'),
+(9261, 141, NULL, 0, 1, '2014-05-14 23:45:14'),
+(9262, 204, 29, 0, 31, '2014-05-14 23:48:13'),
+(9263, 141, NULL, 0, 1, '2014-05-14 23:48:30'),
+(9264, 141, NULL, 0, 1, '2014-05-14 23:48:31'),
+(9265, 141, NULL, 0, 1, '2014-05-14 23:49:36'),
+(9266, 141, NULL, 0, 1, '2014-05-14 23:49:37'),
+(9267, 141, NULL, 0, 6, '2014-05-14 23:51:04'),
+(9268, 141, NULL, 0, 6, '2014-05-14 23:51:06'),
+(9269, 141, NULL, 0, 6, '2014-05-14 23:51:08'),
+(9270, 141, NULL, 0, 6, '2014-05-14 23:51:08'),
+(9271, 0, NULL, 11, 6, '2014-05-14 23:51:09'),
+(9272, 141, NULL, 0, 6, '2014-05-14 23:51:13'),
+(9273, 141, NULL, 0, 6, '2014-05-14 23:51:14'),
+(9274, 141, NULL, 0, 6, '2014-05-14 23:51:20'),
+(9275, 141, NULL, 0, 6, '2014-05-14 23:51:22'),
+(9276, 141, NULL, 0, 6, '2014-05-14 23:51:25'),
+(9277, NULL, NULL, 0, 39, '2014-05-14 23:51:27'),
+(9278, 141, NULL, 0, 6, '2014-05-14 23:51:29'),
+(9279, NULL, NULL, 0, 39, '2014-05-14 23:51:32'),
+(9280, 0, NULL, 11, 6, '2014-05-14 23:51:32'),
+(9281, 0, NULL, 11, 6, '2014-05-14 23:51:34'),
+(9282, NULL, NULL, 0, 39, '2014-05-14 23:51:37'),
+(9283, 141, NULL, 0, 6, '2014-05-14 23:51:42'),
+(9284, 141, NULL, 0, 6, '2014-05-14 23:51:42'),
+(9285, 141, NULL, 0, 6, '2014-05-14 23:51:44'),
+(9286, 141, NULL, 68, 6, '2014-05-14 23:51:44'),
+(9287, 141, NULL, 68, 6, '2014-05-14 23:51:45'),
+(9288, 141, NULL, 68, 6, '2014-05-14 23:51:45'),
+(9289, NULL, NULL, 0, 39, '2014-05-14 23:54:10'),
+(9290, NULL, NULL, 0, 39, '2014-05-14 23:55:04'),
+(9291, NULL, NULL, 0, 39, '2014-05-14 23:56:14'),
+(9292, NULL, NULL, 0, 39, '2014-05-15 00:04:00'),
+(9293, NULL, NULL, 0, 39, '2014-05-15 00:05:27'),
+(9294, 128, NULL, 0, 1, '2014-05-15 09:11:00'),
+(9295, 128, NULL, 0, 1, '2014-05-15 09:13:19'),
+(9296, 128, NULL, 0, 1, '2014-05-15 09:13:20'),
+(9297, 128, NULL, 0, 1, '2014-05-15 09:21:59'),
+(9298, 128, NULL, 0, 1, '2014-05-15 09:22:49'),
+(9299, 128, NULL, 0, 1, '2014-05-15 09:22:53'),
+(9300, 128, NULL, 0, 1, '2014-05-15 09:22:56'),
+(9301, 128, NULL, 0, 1, '2014-05-15 09:25:24'),
+(9302, 128, NULL, 0, 1, '2014-05-15 09:34:34'),
+(9303, 128, NULL, 0, 1, '2014-05-15 09:35:46'),
+(9304, 128, NULL, 0, 1, '2014-05-15 09:37:28'),
+(9305, 128, NULL, 0, 1, '2014-05-15 09:37:42'),
+(9306, 128, NULL, 0, 1, '2014-05-15 09:43:37'),
+(9307, 128, NULL, 0, 1, '2014-05-15 09:47:20'),
+(9308, 128, NULL, 0, 1, '2014-05-15 09:49:02'),
+(9309, 128, NULL, 0, 1, '2014-05-15 09:49:15'),
+(9310, 128, NULL, 0, 1, '2014-05-15 09:49:15'),
+(9311, 128, NULL, 0, 1, '2014-05-15 09:49:33'),
+(9312, 128, NULL, 0, 1, '2014-05-15 09:56:00'),
+(9313, 128, NULL, 0, 1, '2014-05-15 09:59:29'),
+(9314, 128, NULL, 0, 1, '2014-05-15 10:04:47'),
+(9315, 128, NULL, 0, 1, '2014-05-15 10:06:35'),
+(9316, 128, NULL, 0, 1, '2014-05-15 10:14:33'),
+(9317, 128, NULL, 0, 1, '2014-05-15 10:15:23'),
+(9318, 128, NULL, 0, 1, '2014-05-15 10:16:24'),
+(9319, 128, NULL, 0, 1, '2014-05-15 10:25:39'),
+(9320, 128, NULL, 0, 1, '2014-05-15 10:25:58'),
+(9321, 29, NULL, 0, 1, '2014-05-15 10:26:35'),
+(9322, 128, NULL, 0, 1, '2014-05-15 10:36:00'),
+(9323, 128, NULL, 0, 1, '2014-05-15 10:37:37'),
+(9324, 128, NULL, 0, 1, '2014-05-15 10:40:29'),
+(9325, 29, NULL, 0, 1, '2014-05-15 10:40:59'),
+(9326, 128, NULL, 0, 1, '2014-05-15 10:41:03'),
+(9327, 128, NULL, 0, 1, '2014-05-15 10:52:15'),
+(9328, 128, NULL, 0, 1, '2014-05-15 10:55:45'),
+(9329, 128, NULL, 0, 1, '2014-05-15 10:57:20'),
+(9330, 128, NULL, 0, 1, '2014-05-15 11:01:40'),
+(9331, 128, NULL, 0, 6, '2014-05-15 11:01:54'),
+(9332, 128, NULL, 0, 6, '2014-05-15 11:01:58'),
+(9333, 128, NULL, 68, 6, '2014-05-15 11:02:01'),
+(9334, 128, NULL, 68, 6, '2014-05-15 11:02:04'),
+(9335, 128, NULL, 68, 6, '2014-05-15 11:02:05'),
+(9336, 128, NULL, 68, 6, '2014-05-15 11:02:07'),
+(9337, 128, NULL, 0, 6, '2014-05-15 11:02:09'),
+(9338, 128, NULL, 0, 6, '2014-05-15 11:02:12'),
+(9339, 128, NULL, 0, 6, '2014-05-15 11:02:14'),
+(9340, 128, NULL, 0, 6, '2014-05-15 11:02:16'),
+(9341, 128, NULL, 68, 6, '2014-05-15 11:02:17'),
+(9342, 128, NULL, 0, 6, '2014-05-15 11:02:19'),
+(9343, 128, NULL, 0, 6, '2014-05-15 11:05:39'),
+(9344, 128, NULL, 0, 6, '2014-05-15 11:07:07'),
+(9345, NULL, NULL, 0, 39, '2014-05-15 11:07:24'),
+(9346, 0, NULL, 11, 6, '2014-05-15 11:08:02'),
+(9347, 29, NULL, 0, 1, '2014-05-15 11:09:08'),
+(9348, 29, NULL, 0, 1, '2014-05-15 11:09:09'),
+(9349, 0, NULL, 11, 6, '2014-05-15 11:10:05'),
+(9350, 0, NULL, 11, 6, '2014-05-15 11:17:13'),
+(9351, 0, NULL, 11, 6, '2014-05-15 11:17:20'),
+(9352, 0, NULL, 11, 6, '2014-05-15 11:17:56'),
+(9353, 0, NULL, 11, 6, '2014-05-15 11:18:16'),
+(9354, 0, NULL, 11, 6, '2014-05-15 11:18:19'),
+(9355, 0, NULL, 11, 6, '2014-05-15 11:18:22'),
+(9356, 0, NULL, 11, 6, '2014-05-15 11:18:41'),
+(9357, 29, NULL, 0, 1, '2014-05-15 11:23:05'),
+(9358, 29, NULL, 0, 1, '2014-05-15 11:23:06'),
+(9359, 29, NULL, 0, 15, '2014-05-15 11:23:49'),
+(9360, 29, NULL, 0, 1, '2014-05-15 11:24:50'),
+(9361, 128, NULL, 10, 6, '2014-05-15 11:26:06'),
+(9362, 29, NULL, 0, 6, '2014-05-15 11:27:22'),
+(9363, 29, NULL, 0, 6, '2014-05-15 11:27:33'),
+(9364, 0, NULL, 11, 6, '2014-05-15 11:27:47'),
+(9365, 0, NULL, 11, 6, '2014-05-15 11:28:57'),
+(9366, 0, NULL, 11, 6, '2014-05-15 11:29:08'),
+(9367, 0, NULL, 11, 6, '2014-05-15 11:30:38'),
+(9368, 0, NULL, 11, 6, '2014-05-15 11:30:52'),
+(9369, 128, NULL, 39, 6, '2014-05-15 11:31:09'),
+(9370, 128, NULL, 0, 6, '2014-05-15 11:32:47'),
+(9371, 128, NULL, 0, 6, '2014-05-15 11:33:22'),
+(9372, 128, NULL, 0, 6, '2014-05-15 11:33:32'),
+(9373, 128, NULL, 0, 6, '2014-05-15 11:33:33'),
+(9374, 128, NULL, 0, 6, '2014-05-15 11:34:03'),
+(9375, 128, NULL, 0, 6, '2014-05-15 11:36:06'),
+(9376, 29, NULL, 0, 1, '2014-05-15 11:39:20'),
+(9377, 141, NULL, 0, 1, '2014-05-15 11:39:28'),
+(9378, 141, NULL, 0, 1, '2014-05-15 11:39:29'),
+(9379, 141, NULL, 0, 1, '2014-05-15 11:39:53'),
+(9380, 141, NULL, 0, 1, '2014-05-15 11:41:32'),
+(9381, 141, NULL, 0, 1, '2014-05-15 11:41:35'),
+(9382, 141, NULL, 0, 1, '2014-05-15 11:49:48'),
+(9383, NULL, NULL, 0, 39, '2014-05-15 12:33:23'),
+(9384, 141, NULL, 0, 1, '2014-05-15 12:34:21'),
+(9385, 141, NULL, 0, 1, '2014-05-15 12:34:22'),
+(9386, NULL, NULL, 0, 39, '2014-05-15 12:34:29'),
+(9387, NULL, NULL, 0, 39, '2014-05-15 12:34:51'),
+(9388, 141, NULL, 0, 1, '2014-05-15 12:34:55'),
+(9389, 141, NULL, 0, 1, '2014-05-15 12:39:16'),
+(9390, NULL, NULL, 0, 39, '2014-05-15 12:39:46'),
+(9391, 141, NULL, 0, 1, '2014-05-15 12:39:59'),
+(9392, 141, NULL, 68, 6, '2014-05-15 12:40:55'),
+(9393, 141, NULL, 0, 6, '2014-05-15 12:42:36'),
+(9394, 141, NULL, 0, 6, '2014-05-15 12:42:39'),
+(9395, 141, NULL, 0, 6, '2014-05-15 12:42:39'),
+(9396, 141, NULL, 0, 6, '2014-05-15 12:42:40'),
+(9397, 141, NULL, 0, 6, '2014-05-15 12:42:41'),
+(9398, 141, NULL, 0, 6, '2014-05-15 12:42:41'),
+(9399, 141, NULL, 0, 6, '2014-05-15 12:42:42'),
+(9400, 141, NULL, 0, 6, '2014-05-15 12:42:42'),
+(9401, 141, NULL, 68, 6, '2014-05-15 12:42:42'),
+(9402, 141, NULL, 0, 6, '2014-05-15 12:42:43'),
+(9403, 141, NULL, 0, 6, '2014-05-15 12:42:43'),
+(9404, 141, NULL, 0, 6, '2014-05-15 12:42:44'),
+(9405, 141, NULL, 0, 6, '2014-05-15 12:42:44'),
+(9406, 141, NULL, 0, 6, '2014-05-15 12:42:44'),
+(9407, 141, NULL, 0, 6, '2014-05-15 12:42:45'),
+(9408, 141, NULL, 0, 6, '2014-05-15 12:42:45'),
+(9409, 141, NULL, 0, 6, '2014-05-15 12:42:46'),
+(9410, 141, NULL, 0, 6, '2014-05-15 12:42:46'),
+(9411, 141, NULL, 0, 6, '2014-05-15 12:42:47'),
+(9412, 141, NULL, 68, 6, '2014-05-15 12:42:57'),
+(9413, 141, NULL, 0, 6, '2014-05-15 12:42:59'),
+(9414, 141, NULL, 0, 6, '2014-05-15 12:43:01'),
+(9415, 141, NULL, 0, 6, '2014-05-15 12:43:12'),
+(9416, 141, NULL, 0, 6, '2014-05-15 12:43:13'),
+(9417, 141, NULL, 0, 6, '2014-05-15 12:43:15'),
+(9418, 141, NULL, 68, 6, '2014-05-15 12:43:16'),
+(9419, 141, NULL, 0, 6, '2014-05-15 12:43:17'),
+(9420, 141, NULL, 68, 6, '2014-05-15 12:43:18'),
+(9421, 141, NULL, 0, 6, '2014-05-15 12:43:20'),
+(9422, 141, NULL, 0, 6, '2014-05-15 12:43:21'),
+(9423, 141, NULL, 0, 6, '2014-05-15 12:43:21'),
+(9424, 141, NULL, 0, 6, '2014-05-15 12:43:22'),
+(9425, 141, NULL, 0, 1, '2014-05-15 12:43:24'),
+(9426, 141, NULL, 0, 6, '2014-05-15 12:43:25'),
+(9427, 141, NULL, 0, 6, '2014-05-15 12:43:25'),
+(9428, 141, NULL, 0, 6, '2014-05-15 12:43:28'),
+(9429, 141, NULL, 0, 6, '2014-05-15 12:43:30'),
+(9430, 141, NULL, 0, 6, '2014-05-15 12:43:31'),
+(9431, NULL, NULL, 0, 39, '2014-05-15 12:44:27'),
+(9432, 141, NULL, 0, 1, '2014-05-15 12:44:38'),
+(9433, NULL, NULL, 0, 39, '2014-05-15 12:45:17'),
+(9434, 141, NULL, 0, 1, '2014-05-15 12:55:10'),
+(9435, 141, NULL, 0, 1, '2014-05-15 12:59:21'),
+(9436, 141, NULL, 0, 1, '2014-05-15 13:02:28'),
+(9437, 0, NULL, 0, 8, '2014-05-15 14:54:39'),
+(9438, 141, NULL, 0, 1, '2014-05-15 14:56:04'),
+(9439, 141, NULL, 0, 1, '2014-05-15 14:56:13'),
+(9440, 128, NULL, 0, 1, '2014-05-15 14:56:59'),
+(9441, 128, NULL, 0, 1, '2014-05-15 14:57:00'),
+(9442, NULL, NULL, 0, 39, '2014-05-15 14:59:39'),
+(9443, 128, NULL, 0, 1, '2014-05-15 15:01:55'),
+(9444, 128, NULL, 0, 1, '2014-05-15 15:06:31'),
+(9445, 128, NULL, 0, 1, '2014-05-15 15:10:04'),
+(9446, 128, NULL, 0, 1, '2014-05-15 15:15:51'),
+(9447, 141, NULL, 0, 1, '2014-05-15 15:16:29'),
+(9448, 141, NULL, 0, 1, '2014-05-15 15:16:30'),
+(9449, 141, NULL, 0, 1, '2014-05-15 15:20:02'),
+(9450, 141, NULL, 0, 1, '2014-05-15 15:31:19'),
+(9451, 141, NULL, 0, 1, '2014-05-15 15:34:56'),
+(9452, 141, NULL, 0, 1, '2014-05-15 15:39:34'),
+(9453, 141, NULL, 0, 1, '2014-05-15 15:41:21'),
+(9454, 29, NULL, 0, 1, '2014-05-15 15:42:36'),
+(9455, 29, NULL, 0, 1, '2014-05-15 15:42:37'),
+(9456, 29, NULL, 0, 1, '2014-05-15 15:49:55'),
+(9457, 29, NULL, 0, 1, '2014-05-15 15:49:56'),
+(9458, 141, NULL, 0, 1, '2014-05-15 15:57:44'),
+(9459, 141, NULL, 0, 1, '2014-05-15 15:59:09'),
+(9460, 141, NULL, 0, 6, '2014-05-15 16:01:59'),
+(9461, 141, NULL, 0, 6, '2014-05-15 16:02:00'),
+(9462, 141, NULL, 0, 6, '2014-05-15 16:02:13'),
+(9463, 141, NULL, 0, 1, '2014-05-15 16:05:00'),
+(9464, 141, NULL, 0, 1, '2014-05-15 16:08:40'),
+(9465, 141, NULL, 0, 1, '2014-05-15 16:11:07'),
+(9466, 141, NULL, 0, 1, '2014-05-15 16:12:58'),
+(9467, 141, NULL, 0, 1, '2014-05-15 16:31:01'),
+(9468, 141, NULL, 0, 1, '2014-05-15 16:31:02'),
+(9469, 0, NULL, 3, 1, '2014-05-15 16:32:17'),
+(9470, 0, NULL, 3, 1, '2014-05-15 16:32:19'),
+(9471, 141, NULL, 0, 1, '2014-05-15 16:32:26'),
+(9472, 141, NULL, 0, 1, '2014-05-15 16:32:27'),
+(9473, 128, NULL, 0, 1, '2014-05-15 16:46:03'),
+(9474, 128, NULL, 0, 1, '2014-05-15 16:46:05'),
+(9475, 141, NULL, 0, 1, '2014-05-15 16:46:17'),
+(9476, 141, NULL, 0, 1, '2014-05-15 16:46:17'),
+(9477, 128, NULL, 0, 1, '2014-05-15 16:55:53'),
+(9478, 128, NULL, 0, 1, '2014-05-15 16:55:54'),
+(9479, 141, NULL, 0, 1, '2014-05-15 16:56:02'),
+(9480, 141, NULL, 0, 1, '2014-05-15 16:56:02'),
+(9481, 141, NULL, 0, 1, '2014-05-15 16:57:21'),
+(9482, 141, NULL, 0, 1, '2014-05-15 16:58:02'),
+(9483, 141, NULL, 0, 1, '2014-05-15 17:00:46'),
+(9484, 141, NULL, 0, 1, '2014-05-15 17:00:51'),
+(9485, 141, NULL, 0, 1, '2014-05-16 07:14:08'),
+(9486, 128, NULL, 0, 1, '2014-05-16 07:14:23'),
+(9487, 128, NULL, 0, 1, '2014-05-16 07:14:24'),
+(9488, 141, NULL, 0, 1, '2014-05-16 07:14:59'),
+(9489, 141, NULL, 0, 1, '2014-05-16 07:15:00'),
+(9490, 141, NULL, 0, 1, '2014-05-16 07:15:31'),
+(9491, 141, NULL, 0, 1, '2014-05-16 08:29:40'),
+(9492, 141, NULL, 0, 1, '2014-05-16 08:30:56'),
+(9493, 141, NULL, 0, 1, '2014-05-16 09:10:55'),
+(9494, 141, NULL, 0, 6, '2014-05-16 09:12:18'),
+(9495, 141, NULL, 0, 6, '2014-05-16 09:12:18'),
+(9496, 141, NULL, 0, 6, '2014-05-16 09:12:56'),
+(9497, 141, NULL, 0, 6, '2014-05-16 09:12:57'),
+(9498, 128, NULL, 0, 1, '2014-05-16 09:15:31'),
+(9499, 141, NULL, 0, 1, '2014-05-16 09:15:54'),
+(9500, 141, NULL, 0, 1, '2014-05-16 09:16:28'),
+(9501, 141, NULL, 0, 1, '2014-05-16 09:18:23'),
+(9502, 141, NULL, 0, 6, '2014-05-16 09:18:32'),
+(9503, 141, NULL, 0, 6, '2014-05-16 09:18:33'),
+(9504, 141, NULL, 0, 6, '2014-05-16 09:18:33'),
+(9505, 141, NULL, 0, 6, '2014-05-16 09:18:34'),
+(9506, 141, NULL, 0, 6, '2014-05-16 09:18:35'),
+(9507, 141, NULL, 0, 6, '2014-05-16 09:18:36'),
+(9508, 141, NULL, 0, 1, '2014-05-16 09:21:19'),
+(9509, 141, NULL, 0, 6, '2014-05-16 09:21:27'),
+(9510, 141, NULL, 0, 6, '2014-05-16 09:21:28'),
+(9511, 141, NULL, 0, 1, '2014-05-16 09:29:01'),
+(9512, 141, NULL, 0, 6, '2014-05-16 09:30:05'),
+(9513, 141, NULL, 0, 6, '2014-05-16 09:30:07'),
+(9514, 141, NULL, 0, 6, '2014-05-16 09:31:39'),
+(9515, 141, NULL, 0, 1, '2014-05-16 09:36:33'),
+(9516, 141, NULL, 0, 1, '2014-05-16 09:41:25'),
+(9517, 141, NULL, 0, 6, '2014-05-16 09:41:38'),
+(9518, 141, NULL, 0, 6, '2014-05-16 09:41:44'),
+(9519, 141, NULL, 0, 6, '2014-05-16 09:41:44'),
+(9520, 141, NULL, 0, 6, '2014-05-16 09:41:45'),
+(9521, 141, NULL, 0, 1, '2014-05-16 09:44:54'),
+(9522, 141, NULL, 0, 1, '2014-05-16 09:51:48'),
+(9523, 141, NULL, 0, 1, '2014-05-16 09:53:03'),
+(9524, 141, NULL, 0, 1, '2014-05-16 09:53:48'),
+(9525, 141, NULL, 0, 1, '2014-05-16 10:03:15'),
+(9526, 141, NULL, 0, 6, '2014-05-16 10:03:21'),
+(9527, 141, NULL, 0, 6, '2014-05-16 10:03:23'),
+(9528, 141, NULL, 0, 6, '2014-05-16 10:03:32'),
+(9529, 141, NULL, 0, 6, '2014-05-16 10:03:33'),
+(9530, 141, NULL, 0, 6, '2014-05-16 10:03:34'),
+(9531, 141, NULL, 0, 6, '2014-05-16 10:03:35'),
+(9532, 141, NULL, 0, 6, '2014-05-16 10:03:43'),
+(9533, 141, NULL, 0, 6, '2014-05-16 10:03:48'),
+(9534, 141, NULL, 0, 6, '2014-05-16 10:03:50'),
+(9535, 141, NULL, 0, 6, '2014-05-16 10:05:09'),
+(9536, 141, NULL, 0, 6, '2014-05-16 10:05:29'),
+(9537, 141, NULL, 0, 1, '2014-05-16 10:10:48'),
+(9538, NULL, NULL, 0, 39, '2014-05-16 10:27:02'),
+(9539, 0, NULL, 11, 6, '2014-05-16 10:30:04'),
+(9540, 0, NULL, 11, 6, '2014-05-16 10:30:08'),
+(9541, 0, NULL, 11, 6, '2014-05-16 10:30:27'),
+(9542, 0, NULL, 11, 6, '2014-05-16 10:31:12'),
+(9543, 128, NULL, 0, 1, '2014-05-16 10:31:29'),
+(9544, 128, NULL, 0, 1, '2014-05-16 10:31:30'),
+(9545, 128, NULL, 0, 6, '2014-05-16 10:31:34'),
+(9546, NULL, NULL, 0, 39, '2014-05-16 10:31:37'),
+(9547, 128, NULL, 0, 1, '2014-05-16 10:32:15'),
+(9548, 128, NULL, 0, 6, '2014-05-16 10:32:35'),
+(9549, NULL, NULL, 0, 39, '2014-05-16 10:32:39'),
+(9550, 128, NULL, 0, 6, '2014-05-16 10:34:03'),
+(9551, NULL, NULL, 0, 39, '2014-05-16 10:34:07'),
+(9552, 128, NULL, 0, 1, '2014-05-16 10:34:12'),
+(9553, 128, NULL, 0, 1, '2014-05-16 10:43:03'),
+(9554, 128, NULL, 0, 6, '2014-05-16 10:43:15'),
+(9555, NULL, NULL, 0, 39, '2014-05-16 10:43:18'),
+(9556, 128, NULL, 0, 1, '2014-05-16 10:45:36'),
+(9557, 128, NULL, 0, 1, '2014-05-16 10:46:38'),
+(9558, 128, NULL, 0, 6, '2014-05-16 10:46:48'),
+(9559, NULL, NULL, 0, 39, '2014-05-16 10:46:52'),
+(9560, 128, NULL, 0, 1, '2014-05-16 10:46:53'),
+(9561, 128, NULL, 0, 6, '2014-05-16 10:47:19'),
+(9562, NULL, NULL, 0, 39, '2014-05-16 10:47:22'),
+(9563, 128, NULL, 0, 1, '2014-05-16 10:47:23'),
+(9564, 128, NULL, 0, 6, '2014-05-16 10:47:40'),
+(9565, NULL, NULL, 0, 39, '2014-05-16 10:47:44'),
+(9566, 128, NULL, 0, 1, '2014-05-16 10:47:45'),
+(9567, 128, NULL, 0, 6, '2014-05-16 10:48:42'),
+(9568, NULL, NULL, 0, 39, '2014-05-16 10:48:45'),
+(9569, 128, NULL, 0, 1, '2014-05-16 10:48:45'),
+(9570, 128, NULL, 0, 6, '2014-05-16 10:48:51'),
+(9571, NULL, NULL, 0, 39, '2014-05-16 10:48:53'),
+(9572, 128, NULL, 0, 1, '2014-05-16 10:48:54'),
+(9573, 128, NULL, 0, 6, '2014-05-16 10:49:31'),
+(9574, NULL, NULL, 0, 39, '2014-05-16 10:49:33'),
+(9575, 128, NULL, 0, 1, '2014-05-16 10:49:34'),
+(9576, 128, NULL, 0, 6, '2014-05-16 10:49:41'),
+(9577, NULL, NULL, 0, 39, '2014-05-16 10:49:43'),
+(9578, 128, NULL, 0, 1, '2014-05-16 10:49:45'),
+(9579, 128, NULL, 0, 6, '2014-05-16 10:49:49'),
+(9580, NULL, NULL, 0, 39, '2014-05-16 10:49:52'),
+(9581, 128, NULL, 0, 6, '2014-05-16 10:49:52'),
+(9582, NULL, NULL, 0, 39, '2014-05-16 10:49:54'),
+(9583, 128, NULL, 0, 6, '2014-05-16 10:49:55'),
+(9584, NULL, NULL, 0, 39, '2014-05-16 10:49:57'),
+(9585, 128, NULL, 0, 6, '2014-05-16 10:49:57'),
+(9586, NULL, NULL, 0, 39, '2014-05-16 10:49:59'),
+(9587, 128, NULL, 0, 6, '2014-05-16 10:50:00'),
+(9588, NULL, NULL, 0, 39, '2014-05-16 10:50:03'),
+(9589, 128, NULL, 0, 6, '2014-05-16 10:50:05'),
+(9590, 128, NULL, 0, 1, '2014-05-16 10:50:07'),
+(9591, 128, NULL, 0, 6, '2014-05-16 10:50:08'),
+(9592, NULL, NULL, 0, 39, '2014-05-16 10:50:08'),
+(9593, NULL, NULL, 0, 39, '2014-05-16 10:50:10'),
+(9594, 128, NULL, 0, 1, '2014-05-16 10:50:11'),
+(9595, 128, NULL, 0, 1, '2014-05-16 10:50:11'),
+(9596, 128, NULL, 0, 1, '2014-05-16 10:50:12'),
+(9597, 128, NULL, 0, 1, '2014-05-16 10:50:12'),
+(9598, 128, NULL, 0, 1, '2014-05-16 10:50:13'),
+(9599, 128, NULL, 0, 1, '2014-05-16 10:50:13'),
+(9600, 128, NULL, 0, 6, '2014-05-16 10:50:27'),
+(9601, NULL, NULL, 0, 39, '2014-05-16 10:50:31'),
+(9602, 128, NULL, 0, 1, '2014-05-16 10:50:32'),
+(9603, 128, NULL, 0, 6, '2014-05-16 10:50:40'),
+(9604, NULL, NULL, 0, 39, '2014-05-16 10:50:43'),
+(9605, 128, NULL, 0, 1, '2014-05-16 10:50:44'),
+(9606, 128, NULL, 0, 6, '2014-05-16 10:50:53'),
+(9607, NULL, NULL, 0, 39, '2014-05-16 10:50:55'),
+(9608, 128, NULL, 0, 1, '2014-05-16 10:50:56'),
+(9609, 128, NULL, 0, 6, '2014-05-16 10:51:03'),
+(9610, NULL, NULL, 0, 39, '2014-05-16 10:51:06'),
+(9611, 128, NULL, 0, 1, '2014-05-16 10:51:07'),
+(9612, 128, NULL, 0, 6, '2014-05-16 10:52:06'),
+(9613, NULL, NULL, 0, 39, '2014-05-16 10:52:10'),
+(9614, 128, NULL, 0, 1, '2014-05-16 10:52:11'),
+(9615, 128, NULL, 0, 6, '2014-05-16 10:52:18'),
+(9616, NULL, NULL, 0, 39, '2014-05-16 10:52:20'),
+(9617, 128, NULL, 0, 1, '2014-05-16 10:52:21'),
+(9618, 128, NULL, 0, 6, '2014-05-16 10:53:20'),
+(9619, NULL, NULL, 0, 39, '2014-05-16 10:53:23'),
+(9620, 128, NULL, 0, 1, '2014-05-16 10:53:23'),
+(9621, 128, NULL, 0, 6, '2014-05-16 10:53:26'),
+(9622, NULL, NULL, 0, 39, '2014-05-16 10:53:29'),
+(9623, 128, NULL, 0, 1, '2014-05-16 10:53:29'),
+(9624, 128, NULL, 0, 6, '2014-05-16 10:53:32'),
+(9625, NULL, NULL, 0, 39, '2014-05-16 10:53:35'),
+(9626, 128, NULL, 0, 1, '2014-05-16 10:53:36'),
+(9627, 128, NULL, 0, 6, '2014-05-16 10:53:37'),
+(9628, NULL, NULL, 0, 39, '2014-05-16 10:53:39'),
+(9629, 128, NULL, 0, 1, '2014-05-16 10:53:41'),
+(9630, 128, NULL, 0, 6, '2014-05-16 10:53:41'),
+(9631, NULL, NULL, 0, 39, '2014-05-16 10:53:44'),
+(9632, 128, NULL, 0, 1, '2014-05-16 10:53:44'),
+(9633, 128, NULL, 0, 6, '2014-05-16 10:53:47'),
+(9634, NULL, NULL, 0, 39, '2014-05-16 10:53:50'),
+(9635, 128, NULL, 0, 1, '2014-05-16 10:53:50'),
+(9636, 128, NULL, 0, 6, '2014-05-16 10:55:35'),
+(9637, NULL, NULL, 0, 39, '2014-05-16 10:55:38'),
+(9638, 128, NULL, 0, 1, '2014-05-16 10:55:39'),
+(9639, 128, NULL, 0, 6, '2014-05-16 10:55:47'),
+(9640, NULL, NULL, 0, 39, '2014-05-16 10:55:51'),
+(9641, 128, NULL, 0, 1, '2014-05-16 10:55:51'),
+(9642, 128, NULL, 0, 6, '2014-05-16 10:55:56'),
+(9643, NULL, NULL, 0, 39, '2014-05-16 10:55:59'),
+(9644, 128, NULL, 0, 1, '2014-05-16 10:55:59'),
+(9645, 128, NULL, 0, 6, '2014-05-16 10:56:10'),
+(9646, NULL, NULL, 0, 39, '2014-05-16 10:56:13'),
+(9647, 128, NULL, 0, 1, '2014-05-16 10:56:14'),
+(9648, 128, NULL, 0, 6, '2014-05-16 10:56:17'),
+(9649, NULL, NULL, 0, 39, '2014-05-16 10:56:19'),
+(9650, 128, NULL, 0, 6, '2014-05-16 10:56:20'),
+(9651, NULL, NULL, 0, 39, '2014-05-16 10:56:22'),
+(9652, 128, NULL, 0, 6, '2014-05-16 10:56:22'),
+(9653, 128, NULL, 0, 1, '2014-05-16 10:56:25'),
+(9654, 128, NULL, 0, 6, '2014-05-16 10:56:25'),
+(9655, NULL, NULL, 0, 39, '2014-05-16 10:56:26'),
+(9656, 128, NULL, 0, 6, '2014-05-16 10:56:27'),
+(9657, NULL, NULL, 0, 39, '2014-05-16 10:56:28'),
+(9658, 128, NULL, 0, 1, '2014-05-16 10:56:30'),
+(9659, 128, NULL, 0, 6, '2014-05-16 10:56:30'),
+(9660, NULL, NULL, 0, 39, '2014-05-16 10:56:31'),
+(9661, 128, NULL, 0, 1, '2014-05-16 10:56:33'),
+(9662, 128, NULL, 0, 1, '2014-05-16 10:56:33'),
+(9663, NULL, NULL, 0, 39, '2014-05-16 10:56:33'),
+(9664, 128, NULL, 0, 1, '2014-05-16 10:56:33'),
+(9665, 128, NULL, 0, 1, '2014-05-16 10:56:33'),
+(9666, 128, NULL, 0, 1, '2014-05-16 10:57:53'),
+(9667, 128, NULL, 0, 6, '2014-05-16 10:58:00'),
+(9668, NULL, NULL, 0, 39, '2014-05-16 10:58:03'),
+(9669, 128, NULL, 0, 1, '2014-05-16 10:58:04'),
+(9670, 128, NULL, 0, 6, '2014-05-16 10:58:08'),
+(9671, NULL, NULL, 0, 39, '2014-05-16 10:58:12'),
+(9672, 128, NULL, 0, 1, '2014-05-16 10:58:13'),
+(9673, 128, NULL, 0, 1, '2014-05-16 11:00:32'),
+(9674, 128, NULL, 0, 1, '2014-05-16 11:02:04'),
+(9675, 128, NULL, 0, 1, '2014-05-16 11:03:11'),
+(9676, 128, NULL, 0, 1, '2014-05-16 11:05:54'),
+(9677, 128, NULL, 0, 1, '2014-05-16 11:07:07'),
+(9678, 128, NULL, 0, 6, '2014-05-16 11:07:20'),
+(9679, NULL, NULL, 0, 39, '2014-05-16 11:07:22'),
+(9680, 128, NULL, 0, 1, '2014-05-16 11:07:23'),
+(9681, 128, NULL, 0, 6, '2014-05-16 11:07:46'),
+(9682, NULL, NULL, 0, 39, '2014-05-16 11:07:48'),
+(9683, 128, NULL, 0, 1, '2014-05-16 11:07:49'),
+(9684, 128, NULL, 0, 6, '2014-05-16 11:08:46'),
+(9685, NULL, NULL, 0, 39, '2014-05-16 11:08:48'),
+(9686, 128, NULL, 0, 1, '2014-05-16 11:08:50'),
+(9687, 128, NULL, 0, 6, '2014-05-16 11:09:25'),
+(9688, NULL, NULL, 0, 39, '2014-05-16 11:09:29'),
+(9689, 128, NULL, 0, 1, '2014-05-16 11:09:30'),
+(9690, 128, NULL, 0, 1, '2014-05-16 11:16:04'),
+(9691, 128, NULL, 0, 6, '2014-05-16 11:16:15'),
+(9692, NULL, NULL, 0, 39, '2014-05-16 11:16:17'),
+(9693, 128, NULL, 0, 1, '2014-05-16 11:16:18'),
+(9694, 128, NULL, 0, 6, '2014-05-16 11:16:31'),
+(9695, NULL, NULL, 0, 39, '2014-05-16 11:16:33'),
+(9696, 128, NULL, 0, 1, '2014-05-16 11:16:34'),
+(9697, 128, NULL, 0, 1, '2014-05-16 11:17:14'),
+(9698, 128, NULL, 0, 6, '2014-05-16 11:18:18'),
+(9699, NULL, NULL, 0, 39, '2014-05-16 11:18:20'),
+(9700, 128, NULL, 0, 1, '2014-05-16 11:18:20'),
+(9701, 128, NULL, 0, 1, '2014-05-16 11:22:10'),
+(9702, 128, NULL, 0, 6, '2014-05-16 11:22:51'),
+(9703, NULL, NULL, 0, 39, '2014-05-16 11:22:54'),
+(9704, 128, NULL, 0, 1, '2014-05-16 11:22:56'),
+(9705, 128, NULL, 0, 6, '2014-05-16 11:24:10'),
+(9706, NULL, NULL, 0, 39, '2014-05-16 11:24:13'),
+(9707, 128, NULL, 0, 1, '2014-05-16 11:24:13'),
+(9708, 128, NULL, 0, 6, '2014-05-16 11:24:31'),
+(9709, 128, NULL, 0, 1, '2014-05-16 11:25:27'),
+(9710, 128, NULL, 0, 6, '2014-05-16 11:25:57'),
+(9711, NULL, NULL, 0, 39, '2014-05-16 11:25:59'),
+(9712, 128, NULL, 0, 1, '2014-05-16 11:26:00'),
+(9713, 128, NULL, 0, 1, '2014-05-16 11:26:52'),
+(9714, 128, NULL, 0, 6, '2014-05-16 11:27:04'),
+(9715, NULL, NULL, 0, 39, '2014-05-16 11:27:07'),
+(9716, 128, NULL, 0, 1, '2014-05-16 11:27:08'),
+(9717, 128, NULL, 0, 6, '2014-05-16 11:27:23'),
+(9718, NULL, NULL, 0, 39, '2014-05-16 11:27:26'),
+(9719, 128, NULL, 0, 1, '2014-05-16 11:27:26'),
+(9720, 128, NULL, 0, 1, '2014-05-16 11:28:32'),
+(9721, 128, NULL, 0, 6, '2014-05-16 11:29:12'),
+(9722, NULL, NULL, 0, 39, '2014-05-16 11:29:14'),
+(9723, 128, NULL, 0, 1, '2014-05-16 11:29:15'),
+(9724, 128, NULL, 0, 1, '2014-05-16 11:34:12'),
+(9725, 128, NULL, 0, 6, '2014-05-16 11:34:46'),
+(9726, NULL, NULL, 0, 39, '2014-05-16 11:34:48'),
+(9727, 128, NULL, 0, 1, '2014-05-16 11:34:49'),
+(9728, 128, NULL, 0, 1, '2014-05-16 11:35:24'),
+(9729, 128, NULL, 0, 6, '2014-05-16 11:36:50'),
+(9730, NULL, NULL, 0, 39, '2014-05-16 11:36:53'),
+(9731, 128, NULL, 0, 1, '2014-05-16 11:36:53'),
+(9732, 128, NULL, 0, 1, '2014-05-16 11:37:05'),
+(9733, 128, NULL, 0, 1, '2014-05-16 11:44:24'),
+(9734, 141, NULL, 0, 1, '2014-05-16 14:54:58'),
+(9735, 141, NULL, 0, 1, '2014-05-16 15:00:00'),
+(9736, 141, NULL, 0, 1, '2014-05-16 15:00:01'),
+(9737, 128, NULL, 0, 1, '2014-05-16 15:03:34'),
+(9738, 128, NULL, 0, 1, '2014-05-16 15:03:35'),
+(9739, 128, NULL, 0, 1, '2014-05-16 15:08:20'),
+(9740, 128, NULL, 0, 1, '2014-05-16 15:08:21'),
+(9741, 141, NULL, 0, 1, '2014-05-16 15:08:39'),
+(9742, 141, NULL, 0, 1, '2014-05-16 15:08:40'),
+(9743, 141, NULL, 0, 6, '2014-05-16 15:09:31'),
+(9744, 128, NULL, 0, 1, '2014-05-16 15:11:28'),
+(9745, 128, NULL, 0, 1, '2014-05-16 15:11:29'),
+(9746, 128, NULL, 0, 6, '2014-05-16 15:11:47'),
+(9747, 128, NULL, 0, 1, '2014-05-16 15:11:52'),
+(9748, 128, NULL, 0, 1, '2014-05-16 15:11:53'),
+(9749, 128, NULL, 0, 6, '2014-05-16 15:12:12'),
+(9750, 128, NULL, 0, 6, '2014-05-16 15:12:21'),
+(9751, 128, NULL, 0, 6, '2014-05-16 15:13:16'),
+(9752, 128, NULL, 0, 6, '2014-05-16 15:52:23'),
+(9753, 128, NULL, 0, 6, '2014-05-16 15:52:34'),
+(9754, 128, NULL, 0, 1, '2014-05-16 16:14:50'),
+(9755, 128, NULL, 0, 1, '2014-05-16 16:14:56'),
+(9756, 141, NULL, 0, 1, '2014-05-16 16:15:04'),
+(9757, 141, NULL, 0, 1, '2014-05-16 16:15:05'),
+(9758, 141, NULL, 0, 1, '2014-05-16 16:30:46'),
+(9759, 141, NULL, 0, 1, '2014-05-16 16:31:46'),
+(9760, 141, NULL, 0, 1, '2014-05-16 16:33:24'),
+(9761, 141, NULL, 0, 1, '2014-05-16 16:33:59'),
+(9762, 141, NULL, 0, 1, '2014-05-16 16:36:17'),
+(9763, NULL, NULL, 0, 39, '2014-05-16 16:40:59'),
+(9764, NULL, NULL, 0, 39, '2014-05-16 16:46:59'),
+(9765, 141, NULL, 0, 1, '2014-05-16 16:54:15'),
+(9766, 141, NULL, 0, 1, '2014-05-16 16:57:20'),
+(9767, 141, NULL, 0, 1, '2014-05-16 16:58:57'),
+(9768, 141, NULL, 0, 1, '2014-05-16 17:21:23'),
+(9769, 141, NULL, 0, 1, '2014-05-16 17:21:24'),
+(9770, 141, NULL, 0, 6, '2014-05-16 17:22:04'),
+(9771, NULL, NULL, 0, 39, '2014-05-16 17:23:02'),
+(9772, 141, NULL, 0, 1, '2014-05-16 17:23:03'),
+(9773, 141, NULL, 0, 1, '2014-05-16 17:23:11'),
+(9774, NULL, NULL, 0, 39, '2014-05-16 17:24:50'),
+(9775, 141, NULL, 0, 1, '2014-05-16 17:24:50'),
+(9776, 128, NULL, 0, 1, '2014-05-16 20:01:11'),
+(9777, 128, NULL, 0, 1, '2014-05-16 20:01:12'),
+(9778, 141, NULL, 0, 1, '2014-05-16 20:01:32'),
+(9779, 141, NULL, 0, 1, '2014-05-16 20:01:36'),
+(9780, 128, NULL, 0, 1, '2014-05-16 20:13:31'),
+(9781, 128, NULL, 0, 1, '2014-05-16 21:17:35'),
+(9782, 128, NULL, 0, 1, '2014-05-16 21:17:36'),
+(9783, 128, NULL, 0, 6, '2014-05-16 21:18:04'),
+(9784, 128, NULL, 0, 6, '2014-05-16 21:18:16'),
+(9785, 0, NULL, 11, 6, '2014-05-16 21:18:22'),
+(9786, 0, NULL, 11, 6, '2014-05-16 21:18:24'),
+(9787, 0, NULL, 11, 6, '2014-05-16 21:18:26'),
+(9788, 128, NULL, 0, 1, '2014-05-16 21:22:39'),
+(9789, 128, NULL, 0, 6, '2014-05-16 21:23:22'),
+(9790, 128, NULL, 0, 6, '2014-05-16 21:23:25'),
+(9791, 0, NULL, 11, 6, '2014-05-16 21:23:29'),
+(9792, 0, NULL, 11, 6, '2014-05-16 21:23:30'),
+(9793, 0, NULL, 11, 6, '2014-05-16 21:23:31'),
+(9794, 128, NULL, 0, 6, '2014-05-16 21:23:35'),
+(9795, 0, NULL, 11, 6, '2014-05-16 21:23:55'),
+(9796, 128, NULL, 0, 6, '2014-05-16 21:24:00'),
+(9797, 128, NULL, 0, 6, '2014-05-16 21:24:04'),
+(9798, 128, NULL, 0, 6, '2014-05-16 21:24:07'),
+(9799, 128, NULL, 0, 6, '2014-05-16 21:24:10'),
+(9800, 0, NULL, 11, 6, '2014-05-16 21:24:20'),
+(9801, 128, NULL, 0, 6, '2014-05-16 21:24:26'),
+(9802, 128, NULL, 0, 6, '2014-05-16 21:24:29'),
+(9803, 141, NULL, 0, 1, '2014-05-17 00:28:10'),
+(9804, 141, NULL, 0, 1, '2014-05-17 00:28:12'),
+(9805, NULL, 26, 21, 14, '2014-05-17 00:30:07'),
+(9806, NULL, 26, 21, 14, '2014-05-17 00:30:14'),
+(9807, 141, 26, 0, 14, '2014-05-17 00:30:31'),
+(9808, 141, 26, 74, 14, '2014-05-17 00:30:37'),
+(9809, 141, NULL, 0, 1, '2014-05-17 00:30:57'),
+(9810, 141, NULL, 0, 1, '2014-05-17 00:30:58'),
+(9811, 141, NULL, 0, 15, '2014-05-17 00:31:37'),
+(9812, 141, NULL, 0, 1, '2014-05-17 00:31:58'),
+(9813, 141, NULL, 0, 1, '2014-05-17 00:31:59'),
+(9814, 141, NULL, 0, 1, '2014-05-17 00:32:33'),
+(9815, 128, NULL, 0, 1, '2014-05-17 09:07:52'),
+(9816, 128, NULL, 0, 1, '2014-05-17 09:07:53'),
+(9817, NULL, NULL, 0, 39, '2014-05-17 09:08:01'),
+(9818, NULL, NULL, 0, 39, '2014-05-17 09:08:27'),
+(9819, 128, NULL, 0, 1, '2014-05-17 09:10:35'),
+(9820, 128, NULL, 0, 1, '2014-05-17 09:10:37'),
+(9821, NULL, NULL, 0, 39, '2014-05-17 09:10:50'),
+(9822, NULL, NULL, 0, 39, '2014-05-17 09:11:07'),
+(9823, 0, NULL, 11, 6, '2014-05-17 09:11:43'),
+(9824, 128, NULL, 0, 6, '2014-05-17 09:11:51'),
+(9825, 128, NULL, 0, 6, '2014-05-17 09:12:01'),
+(9826, 0, NULL, 11, 6, '2014-05-17 09:12:08'),
+(9827, 128, NULL, 0, 6, '2014-05-17 09:12:19'),
+(9828, 141, NULL, 0, 1, '2014-05-17 09:12:41'),
+(9829, 141, NULL, 0, 1, '2014-05-17 09:12:42'),
+(9830, 141, NULL, 0, 6, '2014-05-17 09:12:48'),
+(9831, 141, NULL, 0, 6, '2014-05-17 09:13:01'),
+(9832, NULL, NULL, 0, 39, '2014-05-17 09:13:45'),
+(9833, 141, NULL, 0, 1, '2014-05-17 09:13:46'),
+(9834, 141, NULL, 0, 6, '2014-05-17 09:13:56'),
+(9835, 141, NULL, 0, 6, '2014-05-17 09:14:05'),
+(9836, 141, NULL, 0, 6, '2014-05-17 09:14:15'),
+(9837, 141, NULL, 0, 6, '2014-05-17 09:14:24'),
+(9838, 141, NULL, 0, 6, '2014-05-17 09:14:32'),
+(9839, 0, NULL, 11, 6, '2014-05-17 09:14:50'),
+(9840, 141, NULL, 0, 6, '2014-05-17 09:14:54'),
+(9841, 141, NULL, 0, 6, '2014-05-17 09:15:00'),
+(9842, 141, NULL, 0, 6, '2014-05-17 09:15:08'),
+(9843, 128, NULL, 0, 1, '2014-05-17 09:15:31'),
+(9844, 128, NULL, 0, 1, '2014-05-17 09:15:32'),
+(9845, 128, NULL, 0, 6, '2014-05-17 09:15:36'),
+(9846, 128, NULL, 0, 6, '2014-05-17 09:15:53'),
+(9847, 128, NULL, 0, 6, '2014-05-17 09:16:06'),
+(9848, 128, NULL, 0, 6, '2014-05-17 09:16:36'),
+(9849, NULL, NULL, 0, 39, '2014-05-17 09:17:28'),
+(9850, NULL, NULL, 0, 39, '2014-05-17 09:17:34'),
+(9851, NULL, NULL, 0, 39, '2014-05-17 09:17:50'),
+(9852, 128, NULL, 0, 6, '2014-05-17 09:18:01'),
+(9853, 128, NULL, 0, 1, '2014-05-17 09:23:25'),
+(9854, 128, NULL, 0, 1, '2014-05-17 09:23:37'),
+(9855, 128, NULL, 0, 1, '2014-05-17 09:23:37'),
+(9856, NULL, NULL, 0, 39, '2014-05-17 09:23:49'),
+(9857, 128, NULL, 0, 6, '2014-05-17 09:24:12'),
+(9858, 128, NULL, 0, 6, '2014-05-17 09:24:25'),
+(9859, 128, NULL, 0, 1, '2014-05-17 09:24:49'),
+(9860, 128, NULL, 0, 6, '2014-05-17 09:25:01'),
+(9861, 128, NULL, 0, 6, '2014-05-17 09:25:32'),
+(9862, 0, NULL, 11, 6, '2014-05-17 09:25:44'),
+(9863, 128, NULL, 0, 6, '2014-05-17 09:25:49'),
+(9864, NULL, NULL, 0, 39, '2014-05-17 09:26:55'),
+(9865, NULL, NULL, 0, 39, '2014-05-17 09:27:30'),
+(9866, NULL, NULL, 0, 39, '2014-05-17 09:28:36'),
+(9867, NULL, NULL, 0, 39, '2014-05-17 09:28:47'),
+(9868, 128, NULL, 0, 1, '2014-05-17 09:39:32'),
+(9869, 128, 26, 0, 20, '2014-05-17 09:40:19'),
+(9870, 128, NULL, 0, 1, '2014-05-17 09:40:19'),
+(9871, 128, NULL, 0, 1, '2014-05-17 09:41:14'),
+(9872, 128, 26, 0, 20, '2014-05-17 09:41:31'),
+(9873, 128, NULL, 0, 1, '2014-05-17 09:41:31'),
+(9874, 128, NULL, 0, 1, '2014-05-17 09:42:38'),
+(9875, 128, 26, 0, 20, '2014-05-17 09:42:53'),
+(9876, 128, NULL, 0, 1, '2014-05-17 09:42:53'),
+(9877, 128, NULL, 0, 1, '2014-05-17 09:45:45'),
+(9878, 128, 26, 0, 20, '2014-05-17 09:45:57'),
+(9879, 128, NULL, 0, 1, '2014-05-17 09:45:57'),
+(9880, 128, NULL, 0, 5, '2014-05-17 09:47:38'),
+(9881, 128, NULL, 0, 1, '2014-05-17 09:47:39'),
+(9882, 128, NULL, 0, 1, '2014-05-17 10:00:36'),
+(9883, 128, 26, 0, 20, '2014-05-17 10:01:03'),
+(9884, 128, NULL, 0, 1, '2014-05-17 10:01:03'),
+(9885, 128, NULL, 0, 1, '2014-05-17 10:05:12'),
+(9886, 128, 26, 0, 20, '2014-05-17 10:05:22'),
+(9887, 128, NULL, 0, 1, '2014-05-17 10:05:22'),
+(9888, 128, NULL, 0, 1, '2014-05-17 10:09:04'),
+(9889, 128, NULL, 0, 5, '2014-05-17 10:10:07'),
+(9890, 128, NULL, 0, 1, '2014-05-17 10:10:08'),
+(9891, 128, NULL, 0, 5, '2014-05-17 10:11:05'),
+(9892, 128, NULL, 0, 1, '2014-05-17 10:11:05'),
+(9893, 128, NULL, 0, 1, '2014-05-17 10:11:55'),
+(9894, 0, NULL, 11, 6, '2014-05-17 10:12:14'),
+(9895, 128, NULL, 0, 6, '2014-05-17 10:12:24'),
+(9896, 128, NULL, 0, 1, '2014-05-17 10:13:05'),
+(9897, 128, 26, 0, 20, '2014-05-17 10:13:15'),
+(9898, 128, NULL, 0, 1, '2014-05-17 10:13:15'),
+(9899, 128, NULL, 0, 6, '2014-05-17 10:14:05'),
+(9900, 128, NULL, 0, 6, '2014-05-17 10:15:19'),
+(9901, 128, NULL, 0, 1, '2014-05-17 10:15:29'),
+(9902, 128, NULL, 0, 6, '2014-05-17 10:16:48'),
+(9903, 128, NULL, 0, 1, '2014-05-17 10:17:10'),
+(9904, 128, NULL, 0, 6, '2014-05-17 10:17:12'),
+(9905, NULL, NULL, 0, 39, '2014-05-17 10:17:17'),
+(9906, 128, NULL, 0, 1, '2014-05-17 10:17:18'),
+(9907, 128, NULL, 0, 1, '2014-05-17 10:17:57'),
+(9908, 0, NULL, 11, 6, '2014-05-17 10:18:12'),
+(9909, 0, NULL, 11, 6, '2014-05-17 10:18:23'),
+(9910, 128, NULL, 0, 6, '2014-05-17 10:18:27'),
+(9911, NULL, NULL, 0, 39, '2014-05-17 10:20:21'),
+(9912, 128, NULL, 0, 1, '2014-05-17 10:20:21'),
+(9913, 128, NULL, 0, 6, '2014-05-17 10:20:50'),
+(9914, 128, NULL, 0, 6, '2014-05-17 10:20:57'),
+(9915, 128, NULL, 0, 6, '2014-05-17 10:21:03'),
+(9916, 128, NULL, 0, 1, '2014-05-17 10:21:15'),
+(9917, 128, NULL, 0, 1, '2014-05-17 10:21:36'),
+(9918, 128, NULL, 0, 1, '2014-05-17 10:21:43'),
+(9919, 0, NULL, 11, 6, '2014-05-17 10:21:56'),
+(9920, 128, NULL, 0, 6, '2014-05-17 10:22:02'),
+(9921, NULL, NULL, 0, 39, '2014-05-17 10:22:25'),
+(9922, 128, NULL, 0, 1, '2014-05-17 10:22:26'),
+(9923, 128, NULL, 0, 1, '2014-05-17 10:22:27'),
+(9924, NULL, NULL, 0, 39, '2014-05-17 10:22:47'),
+(9925, NULL, NULL, 0, 39, '2014-05-17 10:23:15'),
+(9926, 128, NULL, 0, 1, '2014-05-17 10:23:16'),
+(9927, 128, NULL, 0, 1, '2014-05-17 10:23:17'),
+(9928, NULL, NULL, 0, 39, '2014-05-17 10:23:20'),
+(9929, 128, NULL, 0, 1, '2014-05-17 10:23:21'),
+(9930, 128, NULL, 0, 1, '2014-05-17 10:23:21'),
+(9931, 128, NULL, 0, 6, '2014-05-17 10:23:41'),
+(9932, NULL, NULL, 0, 39, '2014-05-17 10:23:44'),
+(9933, 128, NULL, 0, 1, '2014-05-17 10:23:44'),
+(9934, 128, NULL, 0, 1, '2014-05-17 10:23:44'),
+(9935, 128, NULL, 0, 1, '2014-05-17 10:24:01'),
+(9936, 128, NULL, 0, 6, '2014-05-17 10:24:38'),
+(9937, 0, NULL, 11, 6, '2014-05-17 10:25:03'),
+(9938, 128, NULL, 0, 6, '2014-05-17 10:25:12'),
+(9939, NULL, NULL, 0, 39, '2014-05-17 10:26:24'),
+(9940, 128, NULL, 0, 1, '2014-05-17 10:26:25'),
+(9941, 128, NULL, 0, 1, '2014-05-17 10:26:27'),
+(9942, 128, NULL, 0, 6, '2014-05-17 10:27:12'),
+(9943, NULL, NULL, 0, 39, '2014-05-17 10:27:58'),
+(9944, 128, NULL, 0, 1, '2014-05-17 10:27:59'),
+(9945, 128, NULL, 0, 1, '2014-05-17 10:28:03'),
+(9946, NULL, NULL, 0, 39, '2014-05-17 10:30:27'),
+(9947, 128, NULL, 0, 1, '2014-05-17 10:30:28'),
+(9948, 128, NULL, 0, 1, '2014-05-17 10:30:31'),
+(9949, 128, NULL, 0, 6, '2014-05-17 10:32:24'),
+(9950, 128, NULL, 0, 6, '2014-05-17 10:32:34'),
+(9951, NULL, NULL, 0, 39, '2014-05-17 10:32:37'),
+(9952, 128, NULL, 0, 1, '2014-05-17 10:32:38'),
+(9953, 128, NULL, 0, 1, '2014-05-17 10:32:39'),
+(9954, 128, NULL, 0, 6, '2014-05-17 10:33:18'),
+(9955, 128, NULL, 0, 6, '2014-05-17 10:36:48'),
+(9956, 128, NULL, 0, 6, '2014-05-17 10:37:15'),
+(9957, NULL, NULL, 0, 39, '2014-05-17 10:37:22'),
+(9958, 128, NULL, 0, 1, '2014-05-17 10:37:23'),
+(9959, 128, NULL, 0, 1, '2014-05-17 10:37:24'),
+(9960, 128, NULL, 0, 1, '2014-05-17 10:38:18'),
+(9961, 128, NULL, 0, 6, '2014-05-17 10:38:41'),
+(9962, NULL, NULL, 0, 39, '2014-05-17 10:38:44'),
+(9963, 128, NULL, 0, 1, '2014-05-17 10:38:46'),
+(9964, 128, NULL, 68, 6, '2014-05-17 10:38:47'),
+(9965, 128, NULL, 68, 6, '2014-05-17 10:38:56'),
+(9966, 128, NULL, 0, 6, '2014-05-17 10:39:03'),
+(9967, NULL, NULL, 0, 39, '2014-05-17 10:39:07'),
+(9968, 128, NULL, 0, 1, '2014-05-17 10:39:08'),
+(9969, 128, NULL, 0, 1, '2014-05-17 10:39:09'),
+(9970, 128, NULL, 0, 6, '2014-05-17 10:39:10'),
+(9971, NULL, NULL, 0, 39, '2014-05-17 10:39:13'),
+(9972, 128, NULL, 0, 1, '2014-05-17 10:39:14'),
+(9973, 128, NULL, 0, 1, '2014-05-17 10:39:14'),
+(9974, NULL, NULL, 0, 39, '2014-05-17 10:39:30'),
+(9975, 128, NULL, 0, 1, '2014-05-17 10:39:30'),
+(9976, 128, NULL, 0, 1, '2014-05-17 10:41:12'),
+(9977, 141, NULL, 0, 1, '2014-05-17 10:50:20'),
+(9978, 141, NULL, 0, 1, '2014-05-17 10:50:40'),
+(9979, 141, NULL, 0, 1, '2014-05-17 10:50:41'),
+(9980, 141, NULL, 0, 6, '2014-05-17 10:50:43'),
+(9981, NULL, NULL, 0, 39, '2014-05-17 10:50:46'),
+(9982, 141, NULL, 0, 1, '2014-05-17 10:51:19'),
+(9983, 128, NULL, 2, 1, '2014-05-17 10:54:19'),
+(9984, 128, NULL, 0, 1, '2014-05-17 10:54:29'),
+(9985, 128, NULL, 0, 1, '2014-05-17 10:54:30'),
+(9986, 128, NULL, 0, 6, '2014-05-17 10:54:43'),
+(9987, NULL, NULL, 0, 39, '2014-05-17 10:54:46'),
+(9988, 128, NULL, 0, 1, '2014-05-17 10:54:47'),
+(9989, 128, NULL, 0, 1, '2014-05-17 10:54:57'),
+(9990, NULL, NULL, 0, 39, '2014-05-17 10:57:03'),
+(9991, 128, NULL, 0, 1, '2014-05-17 10:58:18'),
+(9992, 128, NULL, 0, 6, '2014-05-17 10:58:31'),
+(9993, NULL, NULL, 0, 39, '2014-05-17 10:58:33'),
+(9994, 128, NULL, 0, 1, '2014-05-17 10:58:33'),
+(9995, 128, NULL, 0, 1, '2014-05-17 10:58:45'),
+(9996, 128, NULL, 0, 6, '2014-05-17 10:58:55'),
+(9997, NULL, NULL, 0, 39, '2014-05-17 10:58:57'),
+(9998, 128, NULL, 0, 1, '2014-05-17 10:58:58'),
+(9999, 128, NULL, 0, 6, '2014-05-17 10:59:44'),
+(10000, NULL, NULL, 0, 39, '2014-05-17 10:59:46'),
+(10001, 128, NULL, 0, 1, '2014-05-17 10:59:47'),
+(10002, 128, NULL, 0, 1, '2014-05-17 10:59:57'),
+(10003, 128, NULL, 0, 6, '2014-05-17 11:00:14'),
+(10004, NULL, NULL, 0, 39, '2014-05-17 11:00:18'),
+(10005, 128, NULL, 0, 1, '2014-05-17 11:00:20'),
+(10006, 128, NULL, 0, 6, '2014-05-17 11:00:21'),
+(10007, NULL, NULL, 0, 39, '2014-05-17 11:00:24'),
+(10008, 128, NULL, 0, 1, '2014-05-17 11:00:25'),
+(10009, NULL, NULL, 0, 39, '2014-05-17 11:01:24'),
+(10010, 128, NULL, 0, 1, '2014-05-17 11:01:27'),
+(10011, NULL, NULL, 0, 39, '2014-05-17 11:01:39'),
+(10012, 128, NULL, 0, 1, '2014-05-17 11:01:41'),
+(10013, NULL, NULL, 0, 39, '2014-05-17 11:02:32'),
+(10014, 128, NULL, 0, 1, '2014-05-17 11:02:34'),
+(10015, NULL, NULL, 0, 39, '2014-05-17 11:02:34'),
+(10016, 128, NULL, 0, 1, '2014-05-17 11:02:35'),
+(10017, 128, NULL, 0, 6, '2014-05-17 11:02:39'),
+(10018, NULL, NULL, 0, 39, '2014-05-17 11:15:52'),
+(10019, 128, NULL, 0, 1, '2014-05-17 11:16:38'),
+(10020, NULL, NULL, 0, 39, '2014-05-17 11:17:33'),
+(10021, NULL, NULL, 0, 39, '2014-05-17 11:17:37'),
+(10022, 128, NULL, 0, 1, '2014-05-17 11:18:18'),
+(10023, 128, NULL, 0, 6, '2014-05-17 11:18:25'),
+(10024, 128, NULL, 0, 6, '2014-05-17 11:18:32'),
+(10025, 128, NULL, 0, 6, '2014-05-17 11:18:36'),
+(10026, NULL, NULL, 0, 39, '2014-05-17 11:18:39'),
+(10027, 128, NULL, 0, 1, '2014-05-17 11:18:40');
+INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
+(10028, 128, NULL, 0, 1, '2014-05-17 11:18:40'),
+(10029, 128, NULL, 0, 6, '2014-05-17 11:19:06'),
+(10030, NULL, NULL, 0, 39, '2014-05-17 11:19:10'),
+(10031, 128, NULL, 0, 1, '2014-05-17 11:19:10'),
+(10032, 128, NULL, 0, 1, '2014-05-17 11:19:11'),
+(10033, 128, NULL, 0, 6, '2014-05-17 11:19:18'),
+(10034, NULL, NULL, 0, 39, '2014-05-17 11:19:22'),
+(10035, 128, NULL, 0, 1, '2014-05-17 11:19:23'),
+(10036, 128, NULL, 0, 1, '2014-05-17 11:19:23'),
+(10037, 128, NULL, 0, 1, '2014-05-17 11:21:21'),
+(10038, 128, NULL, 0, 6, '2014-05-17 11:22:03'),
+(10039, NULL, NULL, 0, 39, '2014-05-17 11:22:06'),
+(10040, 128, NULL, 0, 1, '2014-05-17 11:22:07'),
+(10041, 128, NULL, 0, 1, '2014-05-17 11:22:07'),
+(10042, 128, NULL, 0, 6, '2014-05-17 11:22:17'),
+(10043, NULL, NULL, 0, 39, '2014-05-17 11:22:21'),
+(10044, 128, NULL, 0, 1, '2014-05-17 11:22:21'),
+(10045, 128, NULL, 0, 1, '2014-05-17 11:22:22'),
+(10046, 128, NULL, 0, 1, '2014-05-17 11:22:56'),
+(10047, 128, NULL, 0, 1, '2014-05-17 11:25:12'),
+(10048, 128, NULL, 0, 6, '2014-05-17 11:32:37'),
+(10049, 128, NULL, 0, 6, '2014-05-17 11:33:12'),
+(10050, 128, NULL, 0, 1, '2014-05-17 11:33:20'),
+(10051, 128, NULL, 0, 6, '2014-05-17 11:33:29'),
+(10052, 128, NULL, 0, 1, '2014-05-17 11:33:32'),
+(10053, 128, NULL, 0, 1, '2014-05-17 11:33:32'),
+(10054, 128, NULL, 0, 1, '2014-05-17 11:33:33'),
+(10055, 128, NULL, 0, 6, '2014-05-17 11:33:40'),
+(10056, 128, NULL, 0, 1, '2014-05-17 11:34:33'),
+(10057, 128, NULL, 0, 1, '2014-05-17 11:34:34'),
+(10058, 128, NULL, 0, 1, '2014-05-17 11:34:54'),
+(10059, 128, NULL, 0, 6, '2014-05-17 11:35:40'),
+(10060, 128, NULL, 0, 1, '2014-05-17 11:36:19'),
+(10061, 128, NULL, 0, 6, '2014-05-17 11:36:43'),
+(10062, 128, NULL, 0, 1, '2014-05-17 11:44:19'),
+(10063, 128, NULL, 0, 1, '2014-05-17 11:45:17'),
+(10064, 128, NULL, 0, 6, '2014-05-17 11:45:24'),
+(10065, 128, NULL, 0, 6, '2014-05-17 11:45:35'),
+(10066, 128, NULL, 0, 1, '2014-05-17 11:45:42'),
+(10067, 128, NULL, 0, 1, '2014-05-17 11:45:43'),
+(10068, 128, NULL, 0, 1, '2014-05-17 11:45:43'),
+(10069, 128, NULL, 0, 6, '2014-05-17 11:48:08'),
+(10070, 128, NULL, 0, 1, '2014-05-17 11:48:14'),
+(10071, 128, NULL, 0, 1, '2014-05-17 11:48:14'),
+(10072, 128, NULL, 0, 1, '2014-05-17 11:48:14'),
+(10073, 128, NULL, 0, 6, '2014-05-17 11:48:22'),
+(10074, 128, NULL, 0, 1, '2014-05-17 11:48:26'),
+(10075, 128, NULL, 0, 1, '2014-05-17 11:48:26'),
+(10076, 128, NULL, 0, 1, '2014-05-17 11:48:27'),
+(10077, 128, NULL, 0, 6, '2014-05-17 11:48:32'),
+(10078, 128, NULL, 0, 1, '2014-05-17 11:48:35'),
+(10079, 128, NULL, 0, 1, '2014-05-17 11:48:35'),
+(10080, 128, NULL, 0, 1, '2014-05-17 11:48:35'),
+(10081, 128, NULL, 68, 6, '2014-05-17 11:48:36'),
+(10082, 128, NULL, 0, 6, '2014-05-17 11:48:41'),
+(10083, 128, NULL, 0, 1, '2014-05-17 11:48:44'),
+(10084, 128, NULL, 0, 1, '2014-05-17 11:48:45'),
+(10085, 128, NULL, 0, 1, '2014-05-17 11:48:46'),
+(10086, 128, NULL, 0, 6, '2014-05-17 11:48:48'),
+(10087, 128, NULL, 0, 1, '2014-05-17 11:48:51'),
+(10088, 128, NULL, 0, 1, '2014-05-17 11:48:51'),
+(10089, 128, NULL, 0, 1, '2014-05-17 11:48:52'),
+(10090, 128, NULL, 0, 6, '2014-05-17 11:49:13'),
+(10091, 128, NULL, 0, 1, '2014-05-17 11:49:44'),
+(10092, 128, NULL, 0, 6, '2014-05-17 11:49:52'),
+(10093, 128, NULL, 0, 1, '2014-05-17 11:51:15'),
+(10094, 128, NULL, 0, 6, '2014-05-17 11:51:20'),
+(10095, 128, NULL, 0, 6, '2014-05-17 11:51:25'),
+(10096, 128, NULL, 0, 1, '2014-05-17 11:51:27'),
+(10097, 128, NULL, 0, 1, '2014-05-17 11:51:27'),
+(10098, 128, NULL, 0, 1, '2014-05-17 11:51:28'),
+(10099, 128, NULL, 0, 1, '2014-05-17 11:51:29'),
+(10100, 128, NULL, 0, 1, '2014-05-17 11:51:29'),
+(10101, 128, NULL, 0, 1, '2014-05-17 11:51:30'),
+(10102, 128, NULL, 0, 6, '2014-05-17 11:51:32'),
+(10103, 128, NULL, 0, 1, '2014-05-17 11:51:36'),
+(10104, 128, NULL, 0, 1, '2014-05-17 11:51:36'),
+(10105, 128, NULL, 0, 1, '2014-05-17 11:51:37'),
+(10106, 128, NULL, 0, 6, '2014-05-17 11:51:42'),
+(10107, 128, NULL, 0, 1, '2014-05-17 11:51:44'),
+(10108, 128, NULL, 0, 1, '2014-05-17 11:51:45'),
+(10109, 128, NULL, 0, 1, '2014-05-17 11:51:46'),
+(10110, 128, NULL, 0, 6, '2014-05-17 11:52:01'),
+(10111, 128, NULL, 0, 1, '2014-05-17 11:52:05'),
+(10112, 128, NULL, 0, 1, '2014-05-17 11:52:06'),
+(10113, 128, NULL, 0, 1, '2014-05-17 11:52:06'),
+(10114, 128, NULL, 0, 1, '2014-05-17 11:52:07'),
+(10115, 128, NULL, 0, 1, '2014-05-17 11:52:13'),
+(10116, 128, NULL, 0, 1, '2014-05-17 11:53:01'),
+(10117, 128, NULL, 0, 1, '2014-05-17 11:53:46'),
+(10118, 128, NULL, 0, 1, '2014-05-17 11:53:47'),
+(10119, 128, NULL, 0, 1, '2014-05-17 11:53:50'),
+(10120, 128, NULL, 0, 6, '2014-05-17 11:54:04'),
+(10121, 128, NULL, 0, 1, '2014-05-17 11:54:07'),
+(10122, 128, NULL, 0, 1, '2014-05-17 11:54:08'),
+(10123, 128, 26, 74, 14, '2014-05-17 11:54:25'),
+(10124, 128, NULL, 0, 1, '2014-05-17 11:54:36'),
+(10125, 128, NULL, 0, 1, '2014-05-17 11:55:18'),
+(10126, 128, NULL, 0, 6, '2014-05-17 11:55:32'),
+(10127, 128, NULL, 0, 1, '2014-05-17 11:55:35'),
+(10128, 128, NULL, 0, 1, '2014-05-17 11:55:35'),
+(10129, 128, NULL, 0, 1, '2014-05-17 11:55:44'),
+(10130, 128, NULL, 0, 6, '2014-05-17 11:55:54'),
+(10131, 128, NULL, 0, 1, '2014-05-17 11:55:57'),
+(10132, 128, NULL, 0, 1, '2014-05-17 11:55:58'),
+(10133, 128, NULL, 0, 6, '2014-05-17 11:56:03'),
+(10134, 128, NULL, 0, 1, '2014-05-17 11:56:05'),
+(10135, 128, NULL, 0, 1, '2014-05-17 11:56:06'),
+(10136, 128, NULL, 0, 1, '2014-05-17 11:56:10'),
+(10137, 128, 26, 0, 20, '2014-05-17 11:57:06'),
+(10138, 128, NULL, 0, 1, '2014-05-17 11:57:07'),
+(10139, NULL, NULL, 0, 39, '2014-05-17 11:57:51'),
+(10140, 128, NULL, 0, 1, '2014-05-17 11:58:04'),
+(10141, 128, NULL, 0, 1, '2014-05-17 11:58:20'),
+(10142, 128, NULL, 0, 1, '2014-05-17 11:58:31'),
+(10143, NULL, NULL, 0, 39, '2014-05-17 11:58:33'),
+(10144, 128, NULL, 0, 1, '2014-05-17 11:58:34'),
+(10145, 128, NULL, 0, 1, '2014-05-17 11:58:39'),
+(10146, 128, NULL, 0, 1, '2014-05-17 11:58:53'),
+(10147, 128, NULL, 0, 1, '2014-05-17 11:58:54'),
+(10148, NULL, NULL, 0, 39, '2014-05-17 11:59:41'),
+(10149, 128, NULL, 0, 1, '2014-05-17 11:59:42'),
+(10150, 128, NULL, 0, 1, '2014-05-17 11:59:49'),
+(10151, NULL, NULL, 0, 39, '2014-05-17 12:01:04'),
+(10152, 128, NULL, 0, 1, '2014-05-17 12:01:05'),
+(10153, 128, NULL, 0, 1, '2014-05-17 12:01:11'),
+(10154, 128, NULL, 0, 1, '2014-05-17 12:01:24'),
+(10155, NULL, NULL, 0, 39, '2014-05-17 12:01:44'),
+(10156, NULL, NULL, 0, 39, '2014-05-17 12:01:55'),
+(10157, NULL, NULL, 0, 39, '2014-05-17 12:02:14'),
+(10158, NULL, NULL, 0, 39, '2014-05-17 12:04:59'),
+(10159, 128, NULL, 0, 1, '2014-05-17 12:05:00'),
+(10160, 128, NULL, 0, 1, '2014-05-17 12:06:06'),
+(10161, 128, NULL, 0, 1, '2014-05-17 12:06:12'),
+(10162, 128, NULL, 0, 1, '2014-05-17 12:06:38'),
+(10163, 128, NULL, 0, 1, '2014-05-17 12:06:43'),
+(10164, 128, NULL, 0, 1, '2014-05-17 12:07:08'),
+(10165, 128, NULL, 0, 1, '2014-05-17 12:07:13'),
+(10166, 128, NULL, 0, 1, '2014-05-17 12:07:19'),
+(10167, NULL, NULL, 0, 39, '2014-05-17 12:14:17'),
+(10168, NULL, NULL, 0, 39, '2014-05-17 12:14:23'),
+(10169, 128, NULL, 0, 1, '2014-05-17 12:14:25'),
+(10170, NULL, NULL, 0, 39, '2014-05-17 12:16:09'),
+(10171, 128, NULL, 0, 1, '2014-05-17 12:16:19'),
+(10172, NULL, NULL, 0, 39, '2014-05-17 12:16:28'),
+(10173, 128, NULL, 0, 1, '2014-05-17 12:16:29'),
+(10174, 128, NULL, 0, 1, '2014-05-17 12:16:33'),
+(10175, NULL, NULL, 0, 39, '2014-05-17 12:16:50'),
+(10176, 128, NULL, 0, 1, '2014-05-17 12:16:50'),
+(10177, 128, NULL, 0, 1, '2014-05-17 12:16:55'),
+(10178, NULL, NULL, 0, 39, '2014-05-17 12:17:25'),
+(10179, 128, NULL, 0, 1, '2014-05-17 12:17:26'),
+(10180, 128, NULL, 0, 1, '2014-05-17 12:17:29'),
+(10181, NULL, NULL, 0, 39, '2014-05-17 12:17:56'),
+(10182, 128, NULL, 0, 1, '2014-05-17 12:17:57'),
+(10183, 128, NULL, 0, 1, '2014-05-17 12:18:03'),
+(10184, NULL, NULL, 0, 39, '2014-05-17 12:18:57'),
+(10185, 128, NULL, 0, 1, '2014-05-17 12:18:58'),
+(10186, 128, NULL, 0, 1, '2014-05-17 12:19:16'),
+(10187, 128, NULL, 0, 1, '2014-05-17 12:19:17'),
+(10188, 128, NULL, 0, 1, '2014-05-17 12:19:18'),
+(10189, 128, NULL, 0, 6, '2014-05-17 12:19:25'),
+(10190, NULL, NULL, 0, 39, '2014-05-17 12:19:27'),
+(10191, 128, NULL, 0, 1, '2014-05-17 12:19:28'),
+(10192, 128, NULL, 0, 1, '2014-05-17 12:19:28'),
+(10193, 128, NULL, 0, 1, '2014-05-17 12:19:34'),
+(10194, 128, NULL, 0, 6, '2014-05-17 12:19:35'),
+(10195, NULL, NULL, 0, 39, '2014-05-17 12:19:38'),
+(10196, 128, NULL, 0, 1, '2014-05-17 12:19:38'),
+(10197, 128, NULL, 0, 1, '2014-05-17 12:19:38'),
+(10198, 128, NULL, 0, 1, '2014-05-17 12:19:46'),
+(10199, 128, NULL, 0, 1, '2014-05-17 12:19:55'),
+(10200, 128, NULL, 0, 6, '2014-05-17 12:20:12'),
+(10201, 128, NULL, 0, 6, '2014-05-17 12:20:13'),
+(10202, NULL, NULL, 0, 39, '2014-05-17 12:20:18'),
+(10203, 128, NULL, 0, 1, '2014-05-17 12:20:20'),
+(10204, 128, NULL, 0, 6, '2014-05-17 12:20:20'),
+(10205, 128, NULL, 0, 1, '2014-05-17 12:20:23'),
+(10206, 128, NULL, 0, 1, '2014-05-17 12:20:26'),
+(10207, NULL, NULL, 0, 39, '2014-05-17 12:20:27'),
+(10208, 128, NULL, 0, 1, '2014-05-17 12:20:28'),
+(10209, 128, NULL, 0, 1, '2014-05-17 12:20:29'),
+(10210, 128, NULL, 0, 1, '2014-05-17 12:20:33'),
+(10211, 128, NULL, 0, 6, '2014-05-17 12:20:51'),
+(10212, NULL, NULL, 0, 39, '2014-05-17 12:20:58'),
+(10213, 128, NULL, 0, 1, '2014-05-17 12:20:59'),
+(10214, 128, NULL, 0, 1, '2014-05-17 12:21:00'),
+(10215, 128, NULL, 0, 1, '2014-05-17 12:21:04'),
+(10216, 128, NULL, 0, 6, '2014-05-17 12:21:09'),
+(10217, NULL, NULL, 0, 39, '2014-05-17 12:21:12'),
+(10218, 128, NULL, 0, 1, '2014-05-17 12:21:13'),
+(10219, 128, NULL, 0, 1, '2014-05-17 12:21:13'),
+(10220, 128, NULL, 0, 1, '2014-05-17 12:21:19'),
+(10221, 128, NULL, 0, 6, '2014-05-17 12:21:25'),
+(10222, 128, NULL, 0, 6, '2014-05-17 12:21:42'),
+(10223, 128, NULL, 0, 6, '2014-05-17 12:21:45'),
+(10224, NULL, NULL, 0, 39, '2014-05-17 12:21:49'),
+(10225, 128, NULL, 0, 6, '2014-05-17 12:21:49'),
+(10226, 128, NULL, 0, 1, '2014-05-17 12:21:50'),
+(10227, NULL, NULL, 0, 39, '2014-05-17 12:21:51'),
+(10228, 128, NULL, 0, 1, '2014-05-17 12:21:52'),
+(10229, 128, NULL, 0, 1, '2014-05-17 12:21:52'),
+(10230, 128, NULL, 0, 1, '2014-05-17 12:21:53'),
+(10231, 128, NULL, 0, 1, '2014-05-17 12:21:55'),
+(10232, 128, NULL, 0, 6, '2014-05-17 12:22:18'),
+(10233, NULL, NULL, 0, 39, '2014-05-17 12:22:32'),
+(10234, 128, NULL, 0, 1, '2014-05-17 12:22:33'),
+(10235, 128, NULL, 0, 1, '2014-05-17 12:22:36'),
+(10236, 128, NULL, 0, 1, '2014-05-17 12:23:34'),
+(10237, 128, NULL, 0, 6, '2014-05-17 12:24:22'),
+(10238, NULL, NULL, 0, 39, '2014-05-17 12:24:27'),
+(10239, 128, NULL, 0, 1, '2014-05-17 12:24:28'),
+(10240, 128, NULL, 0, 6, '2014-05-17 12:24:28'),
+(10241, NULL, NULL, 0, 39, '2014-05-17 12:24:33'),
+(10242, 128, NULL, 0, 1, '2014-05-17 12:24:34'),
+(10243, 128, NULL, 0, 1, '2014-05-17 12:24:34'),
+(10244, 128, NULL, 0, 1, '2014-05-17 12:24:36'),
+(10245, 128, NULL, 0, 1, '2014-05-17 12:25:08'),
+(10246, NULL, NULL, 0, 39, '2014-05-17 12:26:24'),
+(10247, 128, NULL, 0, 1, '2014-05-17 12:26:25'),
+(10248, 128, NULL, 0, 1, '2014-05-17 12:27:43'),
+(10249, 128, NULL, 0, 1, '2014-05-17 12:27:45'),
+(10250, 128, NULL, 0, 1, '2014-05-17 12:27:47'),
+(10251, 128, NULL, 0, 1, '2014-05-17 12:27:49'),
+(10252, 128, NULL, 0, 1, '2014-05-17 12:27:51'),
+(10253, 128, NULL, 0, 1, '2014-05-17 12:27:53'),
+(10254, 128, NULL, 0, 1, '2014-05-17 12:27:55'),
+(10255, 128, NULL, 0, 1, '2014-05-17 12:27:57'),
+(10256, 128, NULL, 0, 1, '2014-05-17 12:28:03'),
+(10257, 128, NULL, 0, 6, '2014-05-17 12:28:46'),
+(10258, NULL, NULL, 0, 39, '2014-05-17 12:28:48'),
+(10259, 128, NULL, 0, 1, '2014-05-17 12:28:49'),
+(10260, 128, NULL, 0, 1, '2014-05-17 12:28:50'),
+(10261, 128, NULL, 0, 6, '2014-05-17 12:31:06'),
+(10262, NULL, NULL, 0, 39, '2014-05-17 12:31:08'),
+(10263, 128, NULL, 0, 1, '2014-05-17 12:31:09'),
+(10264, 128, NULL, 0, 1, '2014-05-17 12:31:11'),
+(10265, 128, NULL, 0, 6, '2014-05-17 12:31:23'),
+(10266, NULL, NULL, 0, 39, '2014-05-17 12:31:25'),
+(10267, 128, NULL, 0, 1, '2014-05-17 12:31:26'),
+(10268, 128, NULL, 0, 1, '2014-05-17 12:31:28'),
+(10269, 128, NULL, 0, 6, '2014-05-17 12:31:39'),
+(10270, NULL, NULL, 0, 39, '2014-05-17 12:31:42'),
+(10271, 128, NULL, 0, 1, '2014-05-17 12:31:43'),
+(10272, 128, NULL, 0, 1, '2014-05-17 12:31:44'),
+(10273, 128, NULL, 0, 6, '2014-05-17 12:33:11'),
+(10274, NULL, NULL, 0, 39, '2014-05-17 12:33:14'),
+(10275, 128, NULL, 0, 1, '2014-05-17 12:33:15'),
+(10276, 128, NULL, 0, 1, '2014-05-17 12:33:17'),
+(10277, 128, NULL, 0, 6, '2014-05-17 12:33:23'),
+(10278, NULL, NULL, 0, 39, '2014-05-17 12:33:27'),
+(10279, 128, NULL, 0, 1, '2014-05-17 12:33:27'),
+(10280, 128, NULL, 0, 1, '2014-05-17 12:33:29'),
+(10281, 128, NULL, 0, 6, '2014-05-17 12:34:24'),
+(10282, 128, NULL, 0, 6, '2014-05-17 12:34:39'),
+(10283, 128, NULL, 0, 6, '2014-05-17 12:35:27'),
+(10284, NULL, NULL, 0, 39, '2014-05-17 12:35:31'),
+(10285, 128, NULL, 0, 1, '2014-05-17 12:35:32'),
+(10286, 128, NULL, 0, 1, '2014-05-17 12:35:33'),
+(10287, 128, NULL, 0, 6, '2014-05-17 12:35:42'),
+(10288, NULL, NULL, 0, 39, '2014-05-17 12:35:45'),
+(10289, 128, NULL, 0, 1, '2014-05-17 12:35:46'),
+(10290, 128, NULL, 0, 1, '2014-05-17 12:35:48'),
+(10291, 128, NULL, 0, 6, '2014-05-17 12:35:53'),
+(10292, NULL, NULL, 0, 39, '2014-05-17 12:35:56'),
+(10293, 128, NULL, 0, 1, '2014-05-17 12:35:57'),
+(10294, 128, NULL, 0, 1, '2014-05-17 12:35:58'),
+(10295, 128, NULL, 0, 6, '2014-05-17 12:36:16'),
+(10296, 128, NULL, 0, 6, '2014-05-17 12:36:41'),
+(10297, NULL, NULL, 0, 39, '2014-05-17 12:36:45'),
+(10298, 128, NULL, 0, 1, '2014-05-17 12:36:45'),
+(10299, 128, NULL, 0, 1, '2014-05-17 12:36:48'),
+(10300, 128, NULL, 0, 6, '2014-05-17 12:36:54'),
+(10301, NULL, NULL, 0, 39, '2014-05-17 12:36:57'),
+(10302, 128, NULL, 0, 1, '2014-05-17 12:36:58'),
+(10303, 128, NULL, 0, 1, '2014-05-17 12:36:59'),
+(10304, 128, NULL, 0, 1, '2014-05-17 12:37:28'),
+(10305, 128, NULL, 0, 6, '2014-05-17 12:37:39'),
+(10306, NULL, NULL, 0, 39, '2014-05-17 12:37:41'),
+(10307, 128, NULL, 0, 1, '2014-05-17 12:37:42'),
+(10308, 128, NULL, 0, 1, '2014-05-17 12:37:45'),
+(10309, 128, NULL, 0, 6, '2014-05-17 12:37:52'),
+(10310, NULL, NULL, 0, 39, '2014-05-17 12:37:55'),
+(10311, 128, NULL, 0, 1, '2014-05-17 12:37:56'),
+(10312, 128, NULL, 0, 1, '2014-05-17 12:37:59'),
+(10313, 128, NULL, 0, 6, '2014-05-17 12:38:05'),
+(10314, NULL, NULL, 0, 39, '2014-05-17 12:38:08'),
+(10315, 128, NULL, 0, 1, '2014-05-17 12:38:09'),
+(10316, 128, NULL, 0, 1, '2014-05-17 12:38:11'),
+(10317, 128, NULL, 0, 6, '2014-05-17 12:38:32'),
+(10318, NULL, NULL, 0, 39, '2014-05-17 12:38:39'),
+(10319, 128, NULL, 0, 1, '2014-05-17 12:38:40'),
+(10320, 128, NULL, 0, 1, '2014-05-17 12:38:43'),
+(10321, 128, NULL, 0, 6, '2014-05-17 12:38:51'),
+(10322, NULL, NULL, 0, 39, '2014-05-17 12:38:54'),
+(10323, 128, NULL, 0, 1, '2014-05-17 12:38:54'),
+(10324, 128, NULL, 0, 1, '2014-05-17 12:38:57'),
+(10325, 128, NULL, 0, 6, '2014-05-17 12:39:17'),
+(10326, NULL, NULL, 0, 39, '2014-05-17 12:39:20'),
+(10327, 128, NULL, 0, 1, '2014-05-17 12:39:21'),
+(10328, 128, NULL, 0, 1, '2014-05-17 12:39:23'),
+(10329, 128, NULL, 0, 1, '2014-05-17 12:39:42'),
+(10330, 128, NULL, 0, 1, '2014-05-17 12:39:44'),
+(10331, 128, NULL, 0, 1, '2014-05-17 12:48:03'),
+(10332, NULL, NULL, 0, 39, '2014-05-17 12:54:00'),
+(10333, 141, NULL, 0, 1, '2014-05-17 12:54:24'),
+(10334, 141, NULL, 0, 1, '2014-05-17 12:54:25'),
+(10335, NULL, NULL, 0, 39, '2014-05-17 12:54:43'),
+(10336, NULL, NULL, 0, 39, '2014-05-17 12:57:32'),
+(10337, 141, NULL, 0, 1, '2014-05-17 12:57:33'),
+(10338, 128, NULL, 0, 1, '2014-05-17 12:57:35'),
+(10339, 141, NULL, 0, 1, '2014-05-17 12:57:39'),
+(10340, 128, NULL, 0, 1, '2014-05-17 12:59:21'),
+(10341, 128, NULL, 0, 6, '2014-05-17 12:59:37'),
+(10342, NULL, NULL, 0, 39, '2014-05-17 12:59:41'),
+(10343, 128, NULL, 0, 1, '2014-05-17 12:59:41'),
+(10344, 141, NULL, 0, 1, '2014-05-17 12:59:41'),
+(10345, 128, NULL, 0, 1, '2014-05-17 12:59:44'),
+(10346, 128, NULL, 0, 6, '2014-05-17 12:59:50'),
+(10347, NULL, NULL, 0, 39, '2014-05-17 12:59:55'),
+(10348, 141, NULL, 0, 1, '2014-05-17 12:59:56'),
+(10349, 128, NULL, 0, 1, '2014-05-17 12:59:56'),
+(10350, 128, NULL, 0, 1, '2014-05-17 12:59:59'),
+(10351, 128, NULL, 0, 1, '2014-05-17 13:14:43'),
+(10352, 128, NULL, 0, 6, '2014-05-17 13:14:56'),
+(10353, NULL, NULL, 0, 39, '2014-05-17 13:14:59'),
+(10354, 128, NULL, 0, 1, '2014-05-17 13:15:00'),
+(10355, 141, NULL, 0, 1, '2014-05-17 13:15:00'),
+(10356, 128, NULL, 0, 1, '2014-05-17 13:15:02'),
+(10357, 128, NULL, 0, 1, '2014-05-17 13:15:03'),
+(10358, NULL, NULL, 0, 39, '2014-05-17 13:27:02'),
+(10359, 141, NULL, 0, 1, '2014-05-17 13:27:03'),
+(10360, 128, NULL, 0, 1, '2014-05-17 13:27:06'),
+(10361, 128, NULL, 0, 1, '2014-05-17 13:33:58'),
+(10362, 128, NULL, 0, 6, '2014-05-17 13:34:06'),
+(10363, 128, NULL, 0, 6, '2014-05-17 13:34:30'),
+(10364, NULL, NULL, 0, 39, '2014-05-17 13:34:34'),
+(10365, 141, NULL, 0, 1, '2014-05-17 13:34:36'),
+(10366, 128, NULL, 0, 1, '2014-05-17 13:34:36'),
+(10367, 128, NULL, 0, 6, '2014-05-17 13:34:38'),
+(10368, 128, NULL, 0, 1, '2014-05-17 13:34:38'),
+(10369, NULL, NULL, 0, 39, '2014-05-17 13:34:41'),
+(10370, 128, NULL, 0, 1, '2014-05-17 13:34:41'),
+(10371, 141, NULL, 0, 1, '2014-05-17 13:34:42'),
+(10372, 128, NULL, 0, 1, '2014-05-17 13:34:45'),
+(10373, 128, NULL, 0, 6, '2014-05-17 13:34:57'),
+(10374, NULL, NULL, 0, 39, '2014-05-17 13:35:01'),
+(10375, 141, NULL, 0, 1, '2014-05-17 13:35:03'),
+(10376, 128, NULL, 0, 1, '2014-05-17 13:35:03'),
+(10377, 128, NULL, 0, 6, '2014-05-17 13:35:05'),
+(10378, 128, NULL, 0, 1, '2014-05-17 13:35:05'),
+(10379, NULL, NULL, 0, 39, '2014-05-17 13:35:08'),
+(10380, 128, NULL, 0, 1, '2014-05-17 13:35:08'),
+(10381, 141, NULL, 0, 1, '2014-05-17 13:35:09'),
+(10382, 128, NULL, 0, 1, '2014-05-17 13:35:13'),
+(10383, 141, NULL, 0, 1, '2014-05-17 13:50:52'),
+(10384, 128, NULL, 2, 1, '2014-05-17 13:53:09'),
+(10385, 128, NULL, 0, 1, '2014-05-17 13:53:17'),
+(10386, 128, NULL, 0, 1, '2014-05-17 13:53:18'),
+(10387, 128, NULL, 0, 6, '2014-05-17 13:53:31'),
+(10388, NULL, NULL, 0, 39, '2014-05-17 13:53:34'),
+(10389, 128, NULL, 0, 1, '2014-05-17 13:53:35'),
+(10390, 128, NULL, 0, 1, '2014-05-17 13:53:38'),
+(10391, 128, NULL, 0, 1, '2014-05-17 14:48:45'),
+(10392, 128, NULL, 0, 6, '2014-05-17 14:48:54'),
+(10393, NULL, NULL, 0, 39, '2014-05-17 14:48:57'),
+(10394, 128, NULL, 0, 1, '2014-05-17 14:48:58'),
+(10395, 128, NULL, 0, 1, '2014-05-17 14:49:00'),
+(10396, 128, NULL, 0, 1, '2014-05-17 14:49:12'),
+(10397, 128, NULL, 0, 1, '2014-05-17 14:54:32'),
+(10398, 128, NULL, 0, 6, '2014-05-17 14:54:45'),
+(10399, NULL, NULL, 0, 39, '2014-05-17 14:54:49'),
+(10400, 128, NULL, 0, 1, '2014-05-17 14:54:50'),
+(10401, 128, NULL, 0, 1, '2014-05-17 14:54:53'),
+(10402, 128, NULL, 0, 1, '2014-05-17 14:55:03'),
+(10403, 128, NULL, 0, 1, '2014-05-17 14:56:47'),
+(10404, 128, NULL, 0, 6, '2014-05-17 14:56:56'),
+(10405, NULL, NULL, 0, 39, '2014-05-17 14:57:00'),
+(10406, 128, NULL, 0, 1, '2014-05-17 14:57:00'),
+(10407, 128, NULL, 0, 1, '2014-05-17 14:57:04'),
+(10408, 128, NULL, 0, 1, '2014-05-17 14:57:24'),
+(10409, 128, NULL, 0, 6, '2014-05-17 14:57:33'),
+(10410, NULL, NULL, 0, 39, '2014-05-17 14:57:36'),
+(10411, 128, NULL, 0, 1, '2014-05-17 14:57:37'),
+(10412, 128, NULL, 0, 1, '2014-05-17 14:57:41'),
+(10413, 128, NULL, 0, 1, '2014-05-17 14:57:54'),
+(10414, 128, NULL, 0, 1, '2014-05-17 15:00:05'),
+(10415, 128, NULL, 0, 6, '2014-05-17 15:00:18'),
+(10416, 128, NULL, 0, 6, '2014-05-17 15:00:48'),
+(10417, 128, NULL, 0, 6, '2014-05-17 15:00:53'),
+(10418, 128, NULL, 0, 6, '2014-05-17 15:00:56'),
+(10419, NULL, NULL, 0, 39, '2014-05-17 15:00:56'),
+(10420, 128, NULL, 0, 1, '2014-05-17 15:00:57'),
+(10421, NULL, NULL, 0, 39, '2014-05-17 15:00:59'),
+(10422, 128, NULL, 0, 1, '2014-05-17 15:00:59'),
+(10423, 128, NULL, 0, 1, '2014-05-17 15:01:01'),
+(10424, 128, NULL, 0, 1, '2014-05-17 15:01:03'),
+(10425, 128, NULL, 0, 1, '2014-05-17 15:01:03'),
+(10426, 128, NULL, 0, 1, '2014-05-17 15:01:05'),
+(10427, 128, NULL, 0, 1, '2014-05-17 15:01:16'),
+(10428, 128, NULL, 0, 1, '2014-05-17 15:03:34'),
+(10429, 128, NULL, 0, 6, '2014-05-17 15:03:47'),
+(10430, NULL, NULL, 0, 39, '2014-05-17 15:03:51'),
+(10431, 128, NULL, 0, 1, '2014-05-17 15:03:52'),
+(10432, 128, NULL, 0, 1, '2014-05-17 15:03:53'),
+(10433, 128, NULL, 0, 1, '2014-05-17 15:04:16'),
+(10434, 128, NULL, 0, 6, '2014-05-17 15:04:26'),
+(10435, NULL, NULL, 0, 39, '2014-05-17 15:04:29'),
+(10436, 128, NULL, 0, 1, '2014-05-17 15:04:30'),
+(10437, 128, NULL, 0, 1, '2014-05-17 15:04:32'),
+(10438, 128, NULL, 0, 1, '2014-05-17 15:05:28'),
+(10439, 128, NULL, 0, 1, '2014-05-17 15:05:31'),
+(10440, 128, NULL, 0, 6, '2014-05-17 15:05:42'),
+(10441, NULL, NULL, 0, 39, '2014-05-17 15:05:46'),
+(10442, 128, NULL, 0, 1, '2014-05-17 15:05:47'),
+(10443, 128, NULL, 0, 1, '2014-05-17 15:05:47'),
+(10444, 128, NULL, 0, 1, '2014-05-17 15:05:52'),
+(10445, 128, NULL, 0, 6, '2014-05-17 15:06:12'),
+(10446, NULL, NULL, 0, 39, '2014-05-17 15:06:15'),
+(10447, 128, NULL, 0, 1, '2014-05-17 15:06:15'),
+(10448, 128, NULL, 0, 1, '2014-05-17 15:08:19'),
+(10449, 128, NULL, 0, 6, '2014-05-17 15:08:33'),
+(10450, NULL, NULL, 0, 39, '2014-05-17 15:08:35'),
+(10451, 128, NULL, 0, 1, '2014-05-17 15:08:36'),
+(10452, 128, NULL, 0, 1, '2014-05-17 15:10:39'),
+(10453, 128, NULL, 0, 6, '2014-05-17 15:10:54'),
+(10454, NULL, NULL, 0, 39, '2014-05-17 15:10:58'),
+(10455, 128, NULL, 0, 1, '2014-05-17 15:10:58'),
+(10456, NULL, NULL, 0, 39, '2014-05-17 15:31:16'),
+(10457, 128, NULL, 0, 1, '2014-05-17 15:31:17'),
+(10458, 128, NULL, 0, 1, '2014-05-17 15:33:12'),
+(10459, 128, NULL, 0, 6, '2014-05-17 15:33:22'),
+(10460, NULL, NULL, 0, 39, '2014-05-17 15:33:24'),
+(10461, 128, NULL, 0, 1, '2014-05-17 15:33:25'),
+(10462, 128, NULL, 0, 1, '2014-05-17 15:33:25'),
+(10463, 128, NULL, 0, 6, '2014-05-17 15:33:27'),
+(10464, 128, NULL, 0, 6, '2014-05-17 15:34:02'),
+(10465, 128, NULL, 0, 6, '2014-05-17 15:34:13'),
+(10466, 128, NULL, 0, 6, '2014-05-17 15:34:30'),
+(10467, 128, NULL, 0, 6, '2014-05-17 15:34:33'),
+(10468, NULL, NULL, 0, 39, '2014-05-17 15:34:37'),
+(10469, 128, NULL, 0, 1, '2014-05-17 15:34:37'),
+(10470, 128, NULL, 0, 1, '2014-05-17 15:34:38'),
+(10471, 128, NULL, 0, 6, '2014-05-17 15:34:46'),
+(10472, NULL, NULL, 0, 39, '2014-05-17 15:34:51'),
+(10473, 128, NULL, 0, 1, '2014-05-17 15:34:53'),
+(10474, 128, NULL, 0, 1, '2014-05-17 15:34:54'),
+(10475, 128, NULL, 0, 1, '2014-05-17 15:42:21'),
+(10476, 128, NULL, 0, 6, '2014-05-17 15:42:33'),
+(10477, NULL, NULL, 0, 39, '2014-05-17 15:42:36'),
+(10478, 128, NULL, 0, 1, '2014-05-17 15:42:36'),
+(10479, 128, NULL, 0, 1, '2014-05-17 15:44:22'),
+(10480, 128, NULL, 0, 1, '2014-05-17 15:44:41'),
+(10481, 128, NULL, 0, 6, '2014-05-17 15:44:56'),
+(10482, NULL, NULL, 0, 39, '2014-05-17 15:45:00'),
+(10483, 128, NULL, 0, 1, '2014-05-17 15:45:01'),
+(10484, 128, NULL, 0, 1, '2014-05-17 15:46:08'),
+(10485, 128, NULL, 0, 6, '2014-05-17 15:46:19'),
+(10486, NULL, NULL, 0, 39, '2014-05-17 15:46:22'),
+(10487, 128, NULL, 0, 1, '2014-05-17 15:46:23'),
+(10488, 128, NULL, 0, 1, '2014-05-17 15:47:53'),
+(10489, 128, NULL, 0, 6, '2014-05-17 15:48:00'),
+(10490, NULL, NULL, 0, 39, '2014-05-17 15:48:03'),
+(10491, 128, NULL, 0, 1, '2014-05-17 15:48:03'),
+(10492, 128, NULL, 0, 1, '2014-05-17 15:49:01'),
+(10493, 128, NULL, 0, 6, '2014-05-17 15:49:08'),
+(10494, NULL, NULL, 0, 39, '2014-05-17 15:49:11'),
+(10495, 128, NULL, 0, 1, '2014-05-17 15:49:11'),
+(10496, 128, NULL, 0, 1, '2014-05-17 15:50:04'),
+(10497, 128, NULL, 0, 6, '2014-05-17 15:50:11'),
+(10498, NULL, NULL, 0, 39, '2014-05-17 15:50:13'),
+(10499, 128, NULL, 0, 1, '2014-05-17 15:50:14'),
+(10500, 128, NULL, 0, 1, '2014-05-17 15:51:05'),
+(10501, 128, NULL, 0, 1, '2014-05-17 15:51:21'),
+(10502, 128, NULL, 0, 6, '2014-05-17 15:51:27'),
+(10503, NULL, NULL, 0, 39, '2014-05-17 15:51:29'),
+(10504, 128, NULL, 0, 1, '2014-05-17 15:51:30'),
+(10505, 128, NULL, 0, 1, '2014-05-17 15:51:37'),
+(10506, 128, NULL, 0, 1, '2014-05-17 15:56:48'),
+(10507, 128, NULL, 0, 6, '2014-05-17 15:56:55'),
+(10508, NULL, NULL, 0, 39, '2014-05-17 15:56:58'),
+(10509, 128, NULL, 0, 1, '2014-05-17 15:56:59'),
+(10510, 128, NULL, 0, 1, '2014-05-17 16:00:11'),
+(10511, 128, NULL, 0, 6, '2014-05-17 16:00:27'),
+(10512, NULL, NULL, 0, 39, '2014-05-17 16:00:42'),
+(10513, 128, NULL, 0, 1, '2014-05-17 16:00:56'),
+(10514, 128, NULL, 0, 1, '2014-05-17 16:02:46'),
+(10515, 128, NULL, 0, 6, '2014-05-17 16:02:56'),
+(10516, NULL, NULL, 0, 39, '2014-05-17 16:02:58'),
+(10517, 128, NULL, 0, 1, '2014-05-17 16:02:59'),
+(10518, 128, NULL, 0, 1, '2014-05-17 16:04:54'),
+(10519, 128, NULL, 0, 6, '2014-05-17 16:05:15'),
+(10520, NULL, NULL, 0, 39, '2014-05-17 16:05:18'),
+(10521, 128, NULL, 0, 1, '2014-05-17 16:05:19'),
+(10522, 128, NULL, 0, 1, '2014-05-17 16:06:15'),
+(10523, 128, NULL, 0, 6, '2014-05-17 16:06:25'),
+(10524, NULL, NULL, 0, 39, '2014-05-17 16:06:29'),
+(10525, 128, NULL, 0, 1, '2014-05-17 16:06:29'),
+(10526, 128, NULL, 0, 1, '2014-05-17 16:10:48'),
+(10527, 128, NULL, 0, 6, '2014-05-17 16:11:23'),
+(10528, NULL, NULL, 0, 39, '2014-05-17 16:11:25'),
+(10529, 128, NULL, 0, 1, '2014-05-17 16:11:26'),
+(10530, 128, NULL, 0, 1, '2014-05-17 16:12:00'),
+(10531, 128, NULL, 0, 1, '2014-05-17 16:13:44'),
+(10532, 128, NULL, 0, 6, '2014-05-17 16:13:59'),
+(10533, NULL, NULL, 0, 39, '2014-05-17 16:14:05'),
+(10534, 128, NULL, 0, 1, '2014-05-17 16:14:09'),
+(10535, 128, NULL, 0, 1, '2014-05-17 16:17:05'),
+(10536, 128, NULL, 0, 1, '2014-05-17 16:17:54'),
+(10537, 128, NULL, 0, 6, '2014-05-17 16:18:04'),
+(10538, NULL, NULL, 0, 39, '2014-05-17 16:18:07'),
+(10539, 128, NULL, 0, 1, '2014-05-17 16:18:07'),
+(10540, 128, NULL, 0, 1, '2014-05-17 16:18:15'),
+(10541, 128, NULL, 0, 6, '2014-05-17 16:18:27'),
+(10542, NULL, NULL, 0, 39, '2014-05-17 16:18:31'),
+(10543, 128, NULL, 0, 1, '2014-05-17 16:18:33'),
+(10544, 128, NULL, 0, 1, '2014-05-17 16:18:35'),
+(10545, 128, NULL, 0, 6, '2014-05-17 16:19:27'),
+(10546, 128, NULL, 0, 1, '2014-05-17 16:19:28'),
+(10547, 128, NULL, 0, 1, '2014-05-17 16:19:51'),
+(10548, 128, NULL, 0, 1, '2014-05-17 16:20:02'),
+(10549, 128, NULL, 0, 6, '2014-05-17 16:20:12'),
+(10550, NULL, NULL, 0, 39, '2014-05-17 16:20:16'),
+(10551, 128, NULL, 0, 1, '2014-05-17 16:20:16'),
+(10552, NULL, NULL, 0, 39, '2014-05-17 16:25:42'),
+(10553, 128, NULL, 0, 1, '2014-05-17 16:25:47'),
+(10554, 128, NULL, 0, 1, '2014-05-17 16:28:07'),
+(10555, 128, NULL, 0, 1, '2014-05-17 16:28:08'),
+(10556, 128, NULL, 0, 6, '2014-05-17 16:28:20'),
+(10557, 128, NULL, 0, 6, '2014-05-17 16:28:32'),
+(10558, NULL, NULL, 0, 39, '2014-05-17 16:28:36'),
+(10559, 128, NULL, 0, 1, '2014-05-17 16:28:37'),
+(10560, 128, NULL, 0, 1, '2014-05-17 16:28:38'),
+(10561, 128, NULL, 0, 1, '2014-05-17 16:29:26'),
+(10562, 128, NULL, 0, 6, '2014-05-17 16:29:36'),
+(10563, NULL, NULL, 0, 39, '2014-05-17 16:29:38'),
+(10564, 128, NULL, 0, 1, '2014-05-17 16:29:39'),
+(10565, 128, NULL, 0, 1, '2014-05-17 16:30:59'),
+(10566, 128, NULL, 0, 1, '2014-05-17 16:31:11'),
+(10567, 128, NULL, 0, 1, '2014-05-17 16:32:07'),
+(10568, 128, NULL, 0, 6, '2014-05-17 16:32:15'),
+(10569, NULL, NULL, 0, 39, '2014-05-17 16:32:19'),
+(10570, 128, NULL, 0, 1, '2014-05-17 16:32:19'),
+(10571, 128, NULL, 0, 1, '2014-05-17 16:34:10'),
+(10572, 128, NULL, 0, 6, '2014-05-17 16:34:19'),
+(10573, NULL, NULL, 0, 39, '2014-05-17 16:34:23'),
+(10574, 128, NULL, 0, 1, '2014-05-17 16:34:24'),
+(10575, 128, NULL, 0, 1, '2014-05-17 16:36:14'),
+(10576, 128, NULL, 0, 6, '2014-05-17 16:36:23'),
+(10577, 128, NULL, 0, 6, '2014-05-17 16:37:11'),
+(10578, 128, NULL, 0, 6, '2014-05-17 16:37:31'),
+(10579, 128, NULL, 0, 6, '2014-05-17 16:43:51'),
+(10580, 128, NULL, 0, 6, '2014-05-17 16:44:56'),
+(10581, 128, NULL, 0, 6, '2014-05-17 16:45:10'),
+(10582, NULL, NULL, 0, 39, '2014-05-17 16:45:13'),
+(10583, 128, NULL, 0, 6, '2014-05-17 16:45:53'),
+(10584, NULL, NULL, 0, 39, '2014-05-17 16:45:57'),
+(10585, 128, NULL, 0, 1, '2014-05-17 16:45:59'),
+(10586, 128, NULL, 0, 6, '2014-05-17 16:46:06'),
+(10587, NULL, NULL, 0, 39, '2014-05-17 16:46:09'),
+(10588, 128, NULL, 0, 1, '2014-05-17 16:46:10'),
+(10589, 128, NULL, 0, 1, '2014-05-17 16:47:38'),
+(10590, 128, 26, 0, 20, '2014-05-17 16:58:07'),
+(10591, 128, NULL, 0, 1, '2014-05-17 16:58:08'),
+(10592, 128, NULL, 0, 1, '2014-05-17 17:13:07'),
+(10593, NULL, NULL, 0, 39, '2014-05-17 17:13:48'),
+(10594, 128, NULL, 0, 1, '2014-05-17 17:13:49'),
+(10595, 128, NULL, 0, 1, '2014-05-17 17:13:53'),
+(10596, NULL, NULL, 0, 39, '2014-05-17 17:23:44'),
+(10597, NULL, NULL, 0, 39, '2014-05-17 17:26:21'),
+(10598, NULL, NULL, 0, 39, '2014-05-17 17:27:09'),
+(10599, NULL, NULL, 0, 39, '2014-05-17 17:28:28'),
+(10600, NULL, NULL, 0, 39, '2014-05-17 17:31:17'),
+(10601, NULL, NULL, 0, 39, '2014-05-17 17:34:45'),
+(10602, 128, NULL, 0, 1, '2014-05-17 17:35:03'),
+(10603, NULL, NULL, 0, 39, '2014-05-17 17:35:18'),
+(10604, 128, NULL, 0, 1, '2014-05-17 17:35:19'),
+(10605, 128, NULL, 0, 1, '2014-05-17 17:35:23'),
+(10606, 128, NULL, 0, 1, '2014-05-17 17:43:45'),
+(10607, NULL, NULL, 0, 39, '2014-05-17 18:02:40'),
+(10608, NULL, NULL, 0, 39, '2014-05-17 18:02:58'),
+(10609, NULL, NULL, 0, 39, '2014-05-17 18:07:56'),
+(10610, 128, NULL, 0, 1, '2014-05-17 20:45:20'),
+(10611, 141, NULL, 0, 1, '2014-05-17 21:17:10'),
+(10612, 141, NULL, 0, 1, '2014-05-17 21:17:12'),
+(10613, 141, NULL, 0, 6, '2014-05-17 21:18:03'),
+(10614, 141, NULL, 0, 6, '2014-05-17 21:18:13'),
+(10615, 141, NULL, 0, 6, '2014-05-17 21:18:27'),
+(10616, 141, NULL, 0, 6, '2014-05-17 21:18:27'),
+(10617, 128, NULL, 0, 1, '2014-05-17 23:55:41'),
+(10618, 128, NULL, 0, 6, '2014-05-17 23:55:50'),
+(10619, 128, NULL, 0, 6, '2014-05-17 23:55:56'),
+(10620, 128, NULL, 0, 6, '2014-05-17 23:56:05'),
+(10621, 128, NULL, 0, 6, '2014-05-17 23:56:15'),
+(10622, 128, NULL, 0, 6, '2014-05-17 23:56:20'),
+(10623, 128, NULL, 0, 6, '2014-05-17 23:56:27'),
+(10624, 128, NULL, 0, 6, '2014-05-17 23:56:32'),
+(10625, 128, NULL, 0, 6, '2014-05-17 23:56:36'),
+(10626, 141, NULL, 0, 1, '2014-05-18 09:24:15'),
+(10627, 141, NULL, 0, 1, '2014-05-18 09:24:16'),
+(10628, 128, NULL, 0, 1, '2014-05-18 09:43:58'),
+(10629, 128, NULL, 0, 6, '2014-05-18 09:44:13'),
+(10630, 128, NULL, 0, 6, '2014-05-18 09:44:41'),
+(10631, NULL, NULL, 0, 39, '2014-05-18 09:44:45'),
+(10632, 128, NULL, 0, 1, '2014-05-18 09:44:46'),
+(10633, 141, NULL, 0, 1, '2014-05-18 09:44:46'),
+(10634, 128, NULL, 0, 1, '2014-05-18 09:45:47'),
+(10635, 128, NULL, 0, 6, '2014-05-18 09:45:59'),
+(10636, NULL, NULL, 0, 39, '2014-05-18 09:46:02'),
+(10637, 141, NULL, 0, 1, '2014-05-18 09:46:03'),
+(10638, 128, NULL, 0, 6, '2014-05-18 09:46:56'),
+(10639, NULL, NULL, 0, 39, '2014-05-18 09:46:59'),
+(10640, 141, NULL, 0, 1, '2014-05-18 09:47:00'),
+(10641, NULL, NULL, 0, 39, '2014-05-18 09:47:29'),
+(10642, 141, NULL, 0, 1, '2014-05-18 09:47:29'),
+(10643, 128, NULL, 0, 1, '2014-05-18 09:47:54'),
+(10644, 128, NULL, 0, 1, '2014-05-18 09:47:55'),
+(10645, 128, NULL, 0, 6, '2014-05-18 09:48:11'),
+(10646, NULL, NULL, 0, 39, '2014-05-18 09:48:15'),
+(10647, 141, NULL, 0, 1, '2014-05-18 09:48:16'),
+(10648, 128, NULL, 0, 1, '2014-05-18 09:48:16'),
+(10649, 128, NULL, 0, 1, '2014-05-18 09:50:21'),
+(10650, 128, NULL, 0, 6, '2014-05-18 09:50:32'),
+(10651, NULL, NULL, 0, 39, '2014-05-18 09:50:35'),
+(10652, 128, NULL, 0, 1, '2014-05-18 09:50:36'),
+(10653, 141, NULL, 0, 1, '2014-05-18 09:50:36'),
+(10654, 128, NULL, 0, 1, '2014-05-18 10:00:46'),
+(10655, 128, NULL, 0, 6, '2014-05-18 10:01:01'),
+(10656, NULL, NULL, 0, 39, '2014-05-18 10:01:04'),
+(10657, 128, NULL, 0, 1, '2014-05-18 10:01:05'),
+(10658, 141, NULL, 0, 1, '2014-05-18 10:01:06'),
+(10659, 128, NULL, 0, 6, '2014-05-18 10:01:12'),
+(10660, NULL, NULL, 0, 39, '2014-05-18 10:01:14'),
+(10661, 128, NULL, 0, 1, '2014-05-18 10:01:15'),
+(10662, 141, NULL, 0, 1, '2014-05-18 10:01:15'),
+(10663, 128, NULL, 0, 6, '2014-05-18 10:01:19'),
+(10664, NULL, NULL, 0, 39, '2014-05-18 10:01:24'),
+(10665, 128, NULL, 0, 1, '2014-05-18 10:01:24'),
+(10666, 141, NULL, 0, 1, '2014-05-18 10:01:25'),
+(10667, 128, NULL, 0, 6, '2014-05-18 10:02:48'),
+(10668, 128, NULL, 0, 6, '2014-05-18 10:03:06'),
+(10669, 128, NULL, 0, 6, '2014-05-18 10:03:09'),
+(10670, NULL, NULL, 0, 39, '2014-05-18 10:03:12'),
+(10671, 128, NULL, 0, 1, '2014-05-18 10:03:13'),
+(10672, 128, NULL, 0, 1, '2014-05-18 10:03:13'),
+(10673, 141, NULL, 0, 1, '2014-05-18 10:03:13'),
+(10674, 128, NULL, 0, 1, '2014-05-18 10:05:01'),
+(10675, 128, NULL, 0, 6, '2014-05-18 10:05:09'),
+(10676, 128, NULL, 0, 6, '2014-05-18 10:05:44'),
+(10677, NULL, NULL, 0, 39, '2014-05-18 10:05:46'),
+(10678, 141, NULL, 0, 1, '2014-05-18 10:05:48'),
+(10679, 128, NULL, 0, 1, '2014-05-18 10:05:48'),
+(10680, 128, NULL, 0, 1, '2014-05-18 10:12:54'),
+(10681, 128, NULL, 0, 6, '2014-05-18 10:13:04'),
+(10682, NULL, NULL, 0, 39, '2014-05-18 10:13:07'),
+(10683, 128, NULL, 0, 1, '2014-05-18 10:13:07'),
+(10684, 141, NULL, 0, 1, '2014-05-18 10:13:07'),
+(10685, 128, NULL, 0, 1, '2014-05-18 10:17:44'),
+(10686, 128, NULL, 0, 6, '2014-05-18 10:18:53'),
+(10687, NULL, NULL, 0, 39, '2014-05-18 10:18:57'),
+(10688, 128, NULL, 0, 1, '2014-05-18 10:18:58'),
+(10689, 141, NULL, 0, 1, '2014-05-18 10:18:58'),
+(10690, 128, NULL, 0, 1, '2014-05-18 10:20:34'),
+(10691, 128, NULL, 0, 6, '2014-05-18 10:20:50'),
+(10692, NULL, NULL, 0, 39, '2014-05-18 10:20:54'),
+(10693, 128, NULL, 0, 1, '2014-05-18 10:20:54'),
+(10694, 141, NULL, 0, 1, '2014-05-18 10:20:55'),
+(10695, 128, NULL, 0, 1, '2014-05-18 10:24:26'),
+(10696, 128, NULL, 0, 6, '2014-05-18 10:24:36'),
+(10697, NULL, NULL, 0, 39, '2014-05-18 10:24:38'),
+(10698, 128, NULL, 0, 1, '2014-05-18 10:24:39'),
+(10699, 141, NULL, 0, 1, '2014-05-18 10:24:39'),
+(10700, 141, NULL, 0, 1, '2014-05-18 10:25:49'),
+(10701, 128, NULL, 0, 1, '2014-05-18 10:27:38'),
+(10702, 128, NULL, 0, 6, '2014-05-18 10:27:45'),
+(10703, NULL, NULL, 0, 39, '2014-05-18 10:27:49'),
+(10704, 128, NULL, 0, 1, '2014-05-18 10:27:49'),
+(10705, 141, NULL, 0, 1, '2014-05-18 10:27:50'),
+(10706, 128, NULL, 0, 1, '2014-05-18 10:28:25'),
+(10707, 128, NULL, 0, 6, '2014-05-18 10:28:30'),
+(10708, NULL, NULL, 0, 39, '2014-05-18 10:28:33'),
+(10709, 128, NULL, 0, 1, '2014-05-18 10:28:33'),
+(10710, 141, NULL, 0, 1, '2014-05-18 10:28:34'),
+(10711, 128, NULL, 0, 6, '2014-05-18 10:28:41'),
+(10712, NULL, NULL, 0, 39, '2014-05-18 10:28:43'),
+(10713, 141, NULL, 0, 1, '2014-05-18 10:28:44'),
+(10714, 128, NULL, 0, 1, '2014-05-18 10:28:44'),
+(10715, 128, NULL, 0, 1, '2014-05-18 10:30:48'),
+(10716, 128, NULL, 0, 6, '2014-05-18 10:33:42'),
+(10717, NULL, NULL, 0, 39, '2014-05-18 10:33:45'),
+(10718, 128, NULL, 0, 1, '2014-05-18 10:33:46'),
+(10719, 141, NULL, 0, 1, '2014-05-18 10:33:46'),
+(10720, 128, NULL, 0, 1, '2014-05-18 10:34:47'),
+(10721, 128, NULL, 0, 6, '2014-05-18 10:34:54'),
+(10722, NULL, NULL, 0, 39, '2014-05-18 10:34:58'),
+(10723, 141, NULL, 0, 1, '2014-05-18 10:34:58'),
+(10724, 128, NULL, 0, 1, '2014-05-18 10:34:58'),
+(10725, 128, NULL, 0, 1, '2014-05-18 10:35:43'),
+(10726, 128, NULL, 0, 1, '2014-05-18 10:35:45'),
+(10727, 128, NULL, 0, 6, '2014-05-18 10:35:51'),
+(10728, NULL, NULL, 0, 39, '2014-05-18 10:35:54'),
+(10729, 128, NULL, 0, 1, '2014-05-18 10:35:54'),
+(10730, 141, NULL, 0, 1, '2014-05-18 10:35:55'),
+(10731, 128, NULL, 0, 1, '2014-05-18 10:35:55'),
+(10732, 128, NULL, 0, 6, '2014-05-18 10:35:55'),
+(10733, 128, NULL, 0, 6, '2014-05-18 10:35:58'),
+(10734, NULL, NULL, 0, 39, '2014-05-18 10:35:58'),
+(10735, 128, NULL, 0, 1, '2014-05-18 10:35:59'),
+(10736, 141, NULL, 0, 1, '2014-05-18 10:35:59'),
+(10737, 128, NULL, 0, 1, '2014-05-18 10:36:00'),
+(10738, NULL, NULL, 0, 39, '2014-05-18 10:36:01'),
+(10739, 128, NULL, 0, 1, '2014-05-18 10:36:02'),
+(10740, 128, NULL, 0, 1, '2014-05-18 10:36:02'),
+(10741, 141, NULL, 0, 1, '2014-05-18 10:36:02'),
+(10742, 128, NULL, 0, 1, '2014-05-18 10:45:00'),
+(10743, 128, NULL, 0, 6, '2014-05-18 10:50:52'),
+(10744, NULL, NULL, 0, 39, '2014-05-18 10:50:56'),
+(10745, 141, NULL, 0, 1, '2014-05-18 10:50:56'),
+(10746, 128, NULL, 0, 1, '2014-05-18 10:50:57'),
+(10747, 128, NULL, 0, 6, '2014-05-18 10:51:30'),
+(10748, NULL, NULL, 0, 39, '2014-05-18 10:51:32'),
+(10749, 128, NULL, 0, 1, '2014-05-18 10:51:33'),
+(10750, 141, NULL, 0, 1, '2014-05-18 10:51:33'),
+(10751, 141, NULL, 0, 1, '2014-05-18 10:59:53'),
+(10752, 128, NULL, 0, 1, '2014-05-18 11:01:44'),
+(10753, 128, NULL, 0, 6, '2014-05-18 11:01:50'),
+(10754, NULL, NULL, 0, 39, '2014-05-18 11:01:53'),
+(10755, 141, NULL, 0, 1, '2014-05-18 11:01:54'),
+(10756, 128, NULL, 0, 1, '2014-05-18 11:01:54'),
+(10757, NULL, NULL, 0, 39, '2014-05-18 11:02:08'),
+(10758, 128, NULL, 0, 1, '2014-05-18 11:02:09'),
+(10759, 141, NULL, 0, 1, '2014-05-18 11:02:09'),
+(10760, 141, NULL, 0, 1, '2014-05-18 11:02:25'),
+(10761, NULL, NULL, 0, 39, '2014-05-18 11:02:34'),
+(10762, 128, NULL, 0, 1, '2014-05-18 11:02:35'),
+(10763, 141, NULL, 0, 1, '2014-05-18 11:03:54'),
+(10764, NULL, NULL, 0, 39, '2014-05-18 11:05:05'),
+(10765, 141, NULL, 0, 1, '2014-05-18 11:05:05'),
+(10766, 128, NULL, 0, 1, '2014-05-18 11:05:06'),
+(10767, 141, NULL, 0, 1, '2014-05-18 11:05:13'),
+(10768, 128, NULL, 0, 1, '2014-05-18 11:07:21'),
+(10769, 128, NULL, 0, 6, '2014-05-18 11:07:32'),
+(10770, NULL, NULL, 0, 39, '2014-05-18 11:07:36'),
+(10771, 128, NULL, 0, 1, '2014-05-18 11:07:37'),
+(10772, 141, NULL, 0, 1, '2014-05-18 11:07:37'),
+(10773, 128, NULL, 0, 6, '2014-05-18 11:08:13'),
+(10774, NULL, NULL, 0, 39, '2014-05-18 11:08:17'),
+(10775, 141, NULL, 0, 1, '2014-05-18 11:08:18'),
+(10776, 128, NULL, 0, 1, '2014-05-18 11:08:18'),
+(10777, 128, NULL, 0, 1, '2014-05-18 11:08:35'),
+(10778, 128, NULL, 0, 1, '2014-05-18 11:13:31'),
+(10779, 128, NULL, 0, 6, '2014-05-18 11:13:38'),
+(10780, NULL, NULL, 0, 39, '2014-05-18 11:13:41'),
+(10781, 128, NULL, 0, 1, '2014-05-18 11:13:42'),
+(10782, 128, NULL, 0, 1, '2014-05-18 11:14:31'),
+(10783, 128, NULL, 0, 6, '2014-05-18 11:14:41'),
+(10784, NULL, NULL, 0, 39, '2014-05-18 11:14:43'),
+(10785, 128, NULL, 0, 1, '2014-05-18 11:14:44'),
+(10786, 128, NULL, 0, 1, '2014-05-18 11:24:21'),
+(10787, 128, NULL, 0, 6, '2014-05-18 11:24:28'),
+(10788, NULL, NULL, 0, 39, '2014-05-18 11:24:32'),
+(10789, 128, NULL, 0, 1, '2014-05-18 11:24:34'),
+(10790, 128, NULL, 0, 6, '2014-05-18 11:26:43'),
+(10791, NULL, NULL, 0, 39, '2014-05-18 11:26:47'),
+(10792, 128, NULL, 0, 1, '2014-05-18 11:26:49'),
+(10793, 128, NULL, 0, 1, '2014-05-18 11:31:15'),
+(10794, 128, NULL, 0, 6, '2014-05-18 11:31:22'),
+(10795, NULL, NULL, 0, 39, '2014-05-18 11:31:27'),
+(10796, 128, NULL, 0, 1, '2014-05-18 11:31:30'),
+(10797, 128, NULL, 0, 6, '2014-05-18 11:31:36'),
+(10798, NULL, NULL, 0, 39, '2014-05-18 11:31:39'),
+(10799, 128, NULL, 0, 1, '2014-05-18 11:31:42'),
+(10800, 128, NULL, 0, 6, '2014-05-18 11:31:49'),
+(10801, NULL, NULL, 0, 39, '2014-05-18 11:31:52'),
+(10802, 128, NULL, 0, 1, '2014-05-18 11:31:54'),
+(10803, 141, NULL, 0, 1, '2014-05-18 11:32:55'),
+(10804, 128, NULL, 0, 1, '2014-05-18 11:33:52'),
+(10805, 128, NULL, 0, 1, '2014-05-18 11:34:18'),
+(10806, 128, NULL, 0, 1, '2014-05-18 11:34:19'),
+(10807, NULL, NULL, 0, 39, '2014-05-18 11:34:20'),
+(10808, 128, NULL, 0, 1, '2014-05-18 11:34:23'),
+(10809, NULL, NULL, 0, 39, '2014-05-18 11:34:33'),
+(10810, 128, NULL, 0, 1, '2014-05-18 11:34:41'),
+(10811, 128, NULL, 0, 1, '2014-05-18 11:36:06'),
+(10812, 128, NULL, 0, 1, '2014-05-18 11:36:07'),
+(10813, 128, NULL, 0, 6, '2014-05-18 11:36:28'),
+(10814, 128, NULL, 0, 1, '2014-05-18 11:37:51'),
+(10815, 128, NULL, 0, 1, '2014-05-18 12:16:54'),
+(10816, 128, NULL, 0, 1, '2014-05-18 12:16:56'),
+(10817, 128, NULL, 0, 6, '2014-05-18 12:17:05'),
+(10818, NULL, NULL, 0, 39, '2014-05-18 12:17:10'),
+(10819, 128, NULL, 0, 1, '2014-05-18 12:17:12'),
+(10820, 128, NULL, 0, 1, '2014-05-18 12:17:13'),
+(10821, 128, NULL, 0, 6, '2014-05-18 12:17:25'),
+(10822, NULL, NULL, 0, 39, '2014-05-18 12:17:29'),
+(10823, 128, NULL, 0, 1, '2014-05-18 12:17:30'),
+(10824, 128, NULL, 0, 1, '2014-05-18 12:17:32'),
+(10825, 128, NULL, 0, 6, '2014-05-18 12:17:42'),
+(10826, NULL, NULL, 0, 39, '2014-05-18 12:17:45'),
+(10827, 128, NULL, 0, 1, '2014-05-18 12:17:47'),
+(10828, 128, NULL, 0, 1, '2014-05-18 12:17:49'),
+(10829, 128, NULL, 0, 6, '2014-05-18 12:17:56'),
+(10830, NULL, NULL, 0, 39, '2014-05-18 12:17:58'),
+(10831, 128, NULL, 0, 1, '2014-05-18 12:17:58'),
+(10832, 128, NULL, 0, 1, '2014-05-18 12:18:00'),
+(10833, 128, NULL, 0, 6, '2014-05-18 12:18:05'),
+(10834, 128, NULL, 0, 6, '2014-05-18 12:18:11'),
+(10835, NULL, NULL, 0, 39, '2014-05-18 12:18:14'),
+(10836, 128, NULL, 0, 1, '2014-05-18 12:18:15'),
+(10837, 128, NULL, 0, 1, '2014-05-18 12:18:17'),
+(10838, 141, NULL, 0, 1, '2014-05-18 12:43:05'),
+(10839, 128, NULL, 0, 1, '2014-05-18 13:17:41'),
+(10840, 128, NULL, 0, 1, '2014-05-18 13:19:11'),
+(10841, 128, NULL, 0, 6, '2014-05-18 13:19:17'),
+(10842, NULL, NULL, 64, 39, '2014-05-18 13:19:25'),
+(10843, 128, NULL, 0, 1, '2014-05-18 13:19:46'),
+(10844, 128, NULL, 0, 1, '2014-05-18 13:19:47'),
+(10845, 128, NULL, 0, 6, '2014-05-18 13:19:50'),
+(10846, NULL, NULL, 0, 39, '2014-05-18 13:19:54'),
+(10847, 128, NULL, 0, 1, '2014-05-18 13:19:57'),
+(10848, 128, NULL, 0, 6, '2014-05-18 13:20:05'),
+(10849, NULL, NULL, 0, 39, '2014-05-18 13:20:11'),
+(10850, 128, NULL, 0, 1, '2014-05-18 13:20:14'),
+(10851, 128, NULL, 0, 1, '2014-05-18 13:24:52'),
+(10852, 128, NULL, 0, 1, '2014-05-18 13:25:49'),
+(10853, 128, NULL, 0, 6, '2014-05-18 13:26:10'),
+(10854, NULL, NULL, 0, 39, '2014-05-18 13:26:14'),
+(10855, 128, NULL, 0, 1, '2014-05-18 13:26:17'),
+(10856, 128, NULL, 0, 6, '2014-05-18 13:26:30'),
+(10857, 128, NULL, 0, 6, '2014-05-18 13:26:42'),
+(10858, NULL, NULL, 0, 39, '2014-05-18 13:26:44'),
+(10859, 128, NULL, 0, 1, '2014-05-18 13:26:47'),
+(10860, 128, NULL, 0, 6, '2014-05-18 13:26:53'),
+(10861, NULL, NULL, 0, 39, '2014-05-18 13:26:56'),
+(10862, 128, NULL, 0, 1, '2014-05-18 13:27:01'),
+(10863, 128, NULL, 0, 1, '2014-05-18 13:27:07'),
+(10864, 128, NULL, 0, 6, '2014-05-18 13:27:20'),
+(10865, 141, NULL, 0, 1, '2014-05-18 13:27:21'),
+(10866, 141, NULL, 0, 1, '2014-05-18 13:27:22'),
+(10867, NULL, NULL, 0, 39, '2014-05-18 13:27:26'),
+(10868, 128, NULL, 0, 1, '2014-05-18 13:27:28'),
+(10869, 141, NULL, 0, 1, '2014-05-18 13:27:29'),
+(10870, 128, NULL, 0, 1, '2014-05-18 13:27:29'),
+(10871, 141, NULL, 0, 6, '2014-05-18 13:27:45'),
+(10872, NULL, NULL, 0, 39, '2014-05-18 13:27:48'),
+(10873, 141, NULL, 0, 1, '2014-05-18 13:27:51'),
+(10874, 128, NULL, 0, 1, '2014-05-18 13:28:20'),
+(10875, 128, NULL, 0, 1, '2014-05-18 13:28:21'),
+(10876, 141, NULL, 0, 1, '2014-05-18 13:28:30'),
+(10877, 128, NULL, 0, 6, '2014-05-18 13:29:15'),
+(10878, NULL, NULL, 0, 39, '2014-05-18 13:29:19'),
+(10879, 141, NULL, 0, 1, '2014-05-18 13:29:19'),
+(10880, 128, NULL, 0, 1, '2014-05-18 13:29:56'),
+(10881, 128, NULL, 0, 6, '2014-05-18 13:29:59'),
+(10882, NULL, NULL, 0, 39, '2014-05-18 13:30:02'),
+(10883, 141, NULL, 0, 1, '2014-05-18 13:30:13'),
+(10884, 128, NULL, 0, 6, '2014-05-18 13:31:42'),
+(10885, NULL, NULL, 0, 39, '2014-05-18 13:31:58'),
+(10886, 141, NULL, 0, 1, '2014-05-18 13:31:58'),
+(10887, 128, NULL, 0, 1, '2014-05-18 13:32:03'),
+(10888, NULL, NULL, 0, 39, '2014-05-18 13:32:08'),
+(10889, 141, NULL, 0, 1, '2014-05-18 13:32:09'),
+(10890, 128, NULL, 0, 1, '2014-05-18 13:32:11'),
+(10891, NULL, NULL, 0, 39, '2014-05-18 13:32:19'),
+(10892, 141, NULL, 0, 1, '2014-05-18 13:32:20'),
+(10893, 128, NULL, 0, 1, '2014-05-18 13:32:25'),
+(10894, 128, NULL, 0, 1, '2014-05-18 13:32:45'),
+(10895, 128, NULL, 0, 6, '2014-05-18 13:32:55'),
+(10896, 128, NULL, 0, 6, '2014-05-18 13:33:09'),
+(10897, 128, NULL, 0, 1, '2014-05-18 13:33:42'),
+(10898, 128, NULL, 0, 1, '2014-05-18 13:33:44'),
+(10899, 128, NULL, 0, 6, '2014-05-18 13:33:50'),
+(10900, 128, NULL, 0, 6, '2014-05-18 13:34:25'),
+(10901, NULL, NULL, 0, 39, '2014-05-18 13:35:19'),
+(10902, 141, NULL, 0, 1, '2014-05-18 13:35:20'),
+(10903, 128, NULL, 0, 1, '2014-05-18 13:35:59'),
+(10904, 128, NULL, 0, 6, '2014-05-18 13:36:08'),
+(10905, 128, NULL, 0, 6, '2014-05-18 13:37:09'),
+(10906, 128, NULL, 0, 1, '2014-05-18 13:37:17'),
+(10907, NULL, NULL, 0, 39, '2014-05-18 13:37:20'),
+(10908, 141, NULL, 0, 1, '2014-05-18 13:37:21'),
+(10909, 128, NULL, 0, 1, '2014-05-18 13:37:22'),
+(10910, 128, NULL, 0, 1, '2014-05-18 13:37:23'),
+(10911, 141, NULL, 0, 1, '2014-05-18 13:39:06'),
+(10912, 141, NULL, 0, 1, '2014-05-18 13:42:06'),
+(10913, 141, NULL, 0, 1, '2014-05-18 13:42:08'),
+(10914, NULL, NULL, 0, 39, '2014-05-18 13:42:22'),
+(10915, 141, NULL, 0, 1, '2014-05-18 13:42:24'),
+(10916, 128, NULL, 0, 1, '2014-05-18 13:43:42'),
+(10917, 128, NULL, 0, 1, '2014-05-18 13:43:51'),
+(10918, 128, NULL, 0, 1, '2014-05-18 13:43:51'),
+(10919, 141, NULL, 0, 1, '2014-05-18 13:44:40'),
+(10920, 141, NULL, 0, 1, '2014-05-18 13:44:42'),
+(10921, NULL, NULL, 0, 39, '2014-05-18 13:45:33'),
+(10922, 141, NULL, 0, 1, '2014-05-18 13:45:35'),
+(10923, NULL, NULL, 0, 39, '2014-05-18 13:45:45'),
+(10924, 141, NULL, 0, 1, '2014-05-18 13:45:47'),
+(10925, NULL, NULL, 0, 39, '2014-05-18 13:47:20'),
+(10926, 141, NULL, 0, 1, '2014-05-18 13:47:23'),
+(10927, NULL, NULL, 0, 39, '2014-05-18 13:48:09'),
+(10928, 141, NULL, 0, 1, '2014-05-18 13:48:12'),
+(10929, NULL, NULL, 0, 39, '2014-05-18 13:48:30'),
+(10930, 141, NULL, 0, 1, '2014-05-18 13:48:33'),
+(10931, 128, NULL, 0, 1, '2014-05-18 13:49:13'),
+(10932, 128, NULL, 0, 1, '2014-05-18 13:49:15'),
+(10933, 128, NULL, 0, 6, '2014-05-18 13:49:24'),
+(10934, NULL, NULL, 0, 39, '2014-05-18 13:49:28'),
+(10935, 141, NULL, 0, 1, '2014-05-18 13:49:31'),
+(10936, 128, NULL, 0, 1, '2014-05-18 13:49:31'),
+(10937, NULL, NULL, 0, 39, '2014-05-18 13:49:38'),
+(10938, 141, NULL, 0, 1, '2014-05-18 13:49:40'),
+(10939, 128, NULL, 0, 1, '2014-05-18 13:49:41'),
+(10940, NULL, NULL, 0, 39, '2014-05-18 13:50:09'),
+(10941, 141, NULL, 0, 1, '2014-05-18 13:50:12'),
+(10942, 128, NULL, 0, 1, '2014-05-18 13:50:16'),
+(10943, NULL, NULL, 0, 39, '2014-05-18 13:50:24'),
+(10944, 141, NULL, 0, 1, '2014-05-18 13:50:26'),
+(10945, 128, NULL, 0, 1, '2014-05-18 13:50:26'),
+(10946, NULL, NULL, 0, 39, '2014-05-18 13:50:28'),
+(10947, NULL, NULL, 0, 39, '2014-05-18 13:50:30'),
+(10948, 128, NULL, 0, 1, '2014-05-18 13:50:30'),
+(10949, 141, NULL, 0, 1, '2014-05-18 13:50:30'),
+(10950, 128, NULL, 0, 1, '2014-05-18 13:50:33'),
+(10951, 141, NULL, 0, 1, '2014-05-18 13:50:33'),
+(10952, NULL, NULL, 0, 39, '2014-05-18 13:50:39'),
+(10953, 141, NULL, 0, 1, '2014-05-18 13:50:42'),
+(10954, NULL, NULL, 0, 39, '2014-05-18 13:50:43'),
+(10955, 128, NULL, 0, 1, '2014-05-18 13:50:43'),
+(10956, 141, NULL, 0, 1, '2014-05-18 13:50:46'),
+(10957, NULL, NULL, 0, 39, '2014-05-18 13:50:46'),
+(10958, 128, NULL, 0, 1, '2014-05-18 13:50:46'),
+(10959, 141, NULL, 0, 1, '2014-05-18 13:50:48'),
+(10960, 128, NULL, 0, 1, '2014-05-18 13:50:48'),
+(10961, NULL, NULL, 0, 39, '2014-05-18 13:51:19'),
+(10962, 141, NULL, 0, 1, '2014-05-18 13:51:21'),
+(10963, NULL, NULL, 0, 39, '2014-05-18 13:51:59'),
+(10964, 141, NULL, 0, 1, '2014-05-18 13:52:02'),
+(10965, NULL, NULL, 0, 39, '2014-05-18 13:52:33'),
+(10966, 141, NULL, 0, 1, '2014-05-18 13:52:36'),
+(10967, 128, NULL, 0, 6, '2014-05-18 13:52:54'),
+(10968, 128, NULL, 0, 6, '2014-05-18 13:59:55'),
+(10969, 128, NULL, 0, 6, '2014-05-18 14:00:09'),
+(10970, NULL, NULL, 0, 39, '2014-05-18 14:00:17'),
+(10971, 141, NULL, 0, 1, '2014-05-18 14:00:19'),
+(10972, 128, NULL, 0, 1, '2014-05-18 14:00:21'),
+(10973, 128, NULL, 0, 6, '2014-05-18 14:00:26'),
+(10974, NULL, NULL, 0, 39, '2014-05-18 14:00:30'),
+(10975, 128, NULL, 0, 1, '2014-05-18 14:00:33'),
+(10976, 128, NULL, 0, 6, '2014-05-18 14:00:55'),
+(10977, 141, NULL, 0, 1, '2014-05-18 14:02:45'),
+(10978, 141, NULL, 0, 1, '2014-05-18 14:30:00'),
+(10979, 128, NULL, 0, 6, '2014-05-18 14:50:48'),
+(10980, NULL, NULL, 0, 39, '2014-05-18 14:50:51'),
+(10981, 128, NULL, 0, 1, '2014-05-18 14:50:54'),
+(10982, 141, NULL, 0, 1, '2014-05-18 14:50:54'),
+(10983, 128, NULL, 0, 6, '2014-05-18 14:51:04'),
+(10984, NULL, NULL, 0, 39, '2014-05-18 14:51:07'),
+(10985, 128, NULL, 0, 1, '2014-05-18 14:51:10'),
+(10986, 141, NULL, 0, 1, '2014-05-18 14:51:10'),
+(10987, 128, NULL, 0, 6, '2014-05-18 14:51:15'),
+(10988, NULL, NULL, 0, 39, '2014-05-18 14:51:17'),
+(10989, 128, NULL, 0, 1, '2014-05-18 14:51:20'),
+(10990, 141, NULL, 0, 1, '2014-05-18 14:51:20'),
+(10991, 128, NULL, 68, 6, '2014-05-18 14:51:25'),
+(10992, 128, NULL, 0, 6, '2014-05-18 14:51:42'),
+(10993, 128, NULL, 0, 6, '2014-05-18 14:52:21'),
+(10994, 128, NULL, 0, 6, '2014-05-18 14:53:08'),
+(10995, 128, NULL, 0, 6, '2014-05-18 14:54:46'),
+(10996, NULL, NULL, 0, 39, '2014-05-18 14:54:52'),
+(10997, 141, NULL, 0, 1, '2014-05-18 14:54:55'),
+(10998, 128, NULL, 0, 1, '2014-05-18 14:54:56'),
+(10999, 128, NULL, 0, 6, '2014-05-18 14:54:58'),
+(11000, NULL, NULL, 0, 39, '2014-05-18 14:55:00'),
+(11001, 128, NULL, 0, 1, '2014-05-18 14:55:03'),
+(11002, 141, NULL, 0, 1, '2014-05-18 14:55:03'),
+(11003, 128, NULL, 0, 6, '2014-05-18 14:55:16'),
+(11004, 128, NULL, 0, 6, '2014-05-18 14:55:22'),
+(11005, 128, NULL, 0, 6, '2014-05-18 14:55:37'),
+(11006, 128, NULL, 0, 6, '2014-05-18 14:56:15'),
+(11007, 128, NULL, 0, 6, '2014-05-18 14:56:33'),
+(11008, NULL, NULL, 0, 39, '2014-05-18 14:56:37'),
+(11009, 141, NULL, 0, 1, '2014-05-18 14:56:39'),
+(11010, 128, NULL, 0, 1, '2014-05-18 14:56:41'),
+(11011, 128, NULL, 0, 6, '2014-05-18 14:57:41'),
+(11012, NULL, NULL, 0, 39, '2014-05-18 14:57:47'),
+(11013, 128, NULL, 0, 6, '2014-05-18 14:57:47'),
+(11014, 141, NULL, 0, 1, '2014-05-18 14:57:50'),
+(11015, NULL, NULL, 0, 39, '2014-05-18 14:57:51'),
+(11016, 128, NULL, 0, 1, '2014-05-18 14:57:53'),
+(11017, 128, NULL, 0, 1, '2014-05-18 14:57:54'),
+(11018, 128, NULL, 0, 6, '2014-05-18 14:59:26'),
+(11019, NULL, NULL, 0, 39, '2014-05-18 14:59:30'),
+(11020, 141, NULL, 0, 1, '2014-05-18 14:59:30'),
+(11021, 128, NULL, 0, 1, '2014-05-18 14:59:34'),
+(11022, 128, NULL, 0, 6, '2014-05-18 14:59:36'),
+(11023, NULL, NULL, 0, 39, '2014-05-18 14:59:38'),
+(11024, 141, NULL, 0, 1, '2014-05-18 14:59:39'),
+(11025, 128, NULL, 0, 1, '2014-05-18 14:59:40'),
+(11026, 141, NULL, 0, 1, '2014-05-18 15:01:43'),
+(11027, NULL, NULL, 0, 39, '2014-05-18 15:04:00'),
+(11028, 141, NULL, 0, 1, '2014-05-18 15:04:02'),
+(11029, 128, NULL, 0, 1, '2014-05-18 15:04:14'),
+(11030, 128, NULL, 0, 6, '2014-05-18 15:04:23'),
+(11031, NULL, NULL, 0, 39, '2014-05-18 15:07:42'),
+(11032, 141, NULL, 0, 1, '2014-05-18 15:07:45'),
+(11033, NULL, NULL, 0, 39, '2014-05-18 15:07:54'),
+(11034, 128, NULL, 0, 1, '2014-05-18 15:08:41'),
+(11035, 128, NULL, 0, 1, '2014-05-18 15:08:43'),
+(11036, 128, NULL, 0, 6, '2014-05-18 15:08:52'),
+(11037, NULL, NULL, 0, 39, '2014-05-18 15:08:56'),
+(11038, 141, NULL, 0, 1, '2014-05-18 15:08:57'),
+(11039, 128, NULL, 0, 1, '2014-05-18 15:08:59'),
+(11040, 141, NULL, 0, 1, '2014-05-18 15:11:13'),
+(11041, 128, NULL, 0, 6, '2014-05-18 15:12:49'),
+(11042, NULL, NULL, 0, 39, '2014-05-18 15:12:53'),
+(11043, 141, NULL, 0, 1, '2014-05-18 15:12:56'),
+(11044, 128, NULL, 0, 1, '2014-05-18 15:12:56'),
+(11045, 128, NULL, 0, 1, '2014-05-18 15:12:57'),
+(11046, 128, NULL, 0, 1, '2014-05-18 15:20:38'),
+(11047, 128, NULL, 0, 1, '2014-05-18 15:47:55'),
+(11048, 128, NULL, 0, 6, '2014-05-18 15:48:07'),
+(11049, NULL, NULL, 0, 39, '2014-05-18 15:48:11'),
+(11050, 128, NULL, 0, 1, '2014-05-18 15:48:14'),
+(11051, 141, NULL, 0, 1, '2014-05-18 15:48:14'),
+(11052, 128, NULL, 0, 6, '2014-05-18 15:48:23'),
+(11053, NULL, NULL, 0, 39, '2014-05-18 15:48:26'),
+(11054, 128, NULL, 0, 1, '2014-05-18 15:48:29'),
+(11055, 128, NULL, 0, 6, '2014-05-18 15:48:34'),
+(11056, NULL, NULL, 0, 39, '2014-05-18 15:48:36'),
+(11057, 141, NULL, 0, 1, '2014-05-18 15:48:37'),
+(11058, 141, NULL, 0, 1, '2014-05-18 15:48:39'),
+(11059, 128, NULL, 0, 1, '2014-05-18 15:48:39'),
+(11060, 128, NULL, 0, 6, '2014-05-18 15:48:47'),
+(11061, NULL, NULL, 0, 39, '2014-05-18 15:48:50'),
+(11062, 128, NULL, 0, 1, '2014-05-18 15:48:53'),
+(11063, 141, NULL, 0, 1, '2014-05-18 15:49:14'),
+(11064, 128, NULL, 0, 1, '2014-05-18 15:51:08'),
+(11065, 128, NULL, 0, 6, '2014-05-18 15:51:14'),
+(11066, NULL, NULL, 0, 39, '2014-05-18 15:51:17'),
+(11067, 128, NULL, 0, 1, '2014-05-18 15:51:20'),
+(11068, 141, NULL, 0, 1, '2014-05-18 15:51:36'),
+(11069, 128, NULL, 0, 6, '2014-05-18 15:52:18'),
+(11070, NULL, NULL, 0, 39, '2014-05-18 15:52:21'),
+(11071, 141, NULL, 0, 1, '2014-05-18 15:52:24'),
+(11072, 128, NULL, 0, 1, '2014-05-18 15:52:24'),
+(11073, 128, NULL, 0, 6, '2014-05-18 15:52:34'),
+(11074, NULL, NULL, 0, 39, '2014-05-18 15:52:38'),
+(11075, 141, NULL, 0, 1, '2014-05-18 15:52:40'),
+(11076, 128, NULL, 0, 1, '2014-05-18 15:52:48'),
+(11077, 128, NULL, 0, 6, '2014-05-18 15:52:57'),
+(11078, NULL, NULL, 0, 39, '2014-05-18 15:53:00'),
+(11079, 141, NULL, 0, 1, '2014-05-18 15:53:14');
+INSERT INTO `HISTORYACCESS` (`IDHISTORY`, `IDUSER`, `IDHOUSE`, `ERROR`, `FUNCT`, `DATESTAMP`) VALUES
+(11080, 128, NULL, 0, 1, '2014-05-18 15:53:16'),
+(11081, 128, NULL, 0, 1, '2014-05-18 15:55:26'),
+(11082, 128, NULL, 0, 6, '2014-05-18 15:55:33'),
+(11083, NULL, NULL, 0, 39, '2014-05-18 15:55:37'),
+(11084, 128, NULL, 0, 1, '2014-05-18 15:56:28'),
+(11085, 128, NULL, 0, 6, '2014-05-18 15:56:33'),
+(11086, NULL, NULL, 0, 39, '2014-05-18 15:56:37'),
+(11087, 141, NULL, 0, 1, '2014-05-18 15:56:38'),
+(11088, 128, NULL, 0, 1, '2014-05-18 15:56:40'),
+(11089, 141, NULL, 0, 1, '2014-05-18 15:58:43'),
+(11090, 128, NULL, 0, 1, '2014-05-18 16:10:12'),
+(11091, 128, NULL, 0, 6, '2014-05-18 16:10:17'),
+(11092, NULL, NULL, 0, 39, '2014-05-18 16:10:20'),
+(11093, 141, NULL, 0, 1, '2014-05-18 16:10:23'),
+(11094, 128, NULL, 0, 1, '2014-05-18 16:10:53'),
+(11095, 128, NULL, 0, 1, '2014-05-18 16:11:58'),
+(11096, 128, NULL, 0, 6, '2014-05-18 16:12:20'),
+(11097, NULL, NULL, 0, 39, '2014-05-18 16:12:22'),
+(11098, 141, NULL, 0, 1, '2014-05-18 16:12:25'),
+(11099, 128, NULL, 0, 1, '2014-05-18 16:12:35'),
+(11100, 128, NULL, 0, 1, '2014-05-18 16:14:35'),
+(11101, 128, NULL, 0, 6, '2014-05-18 16:14:40'),
+(11102, 128, NULL, 0, 6, '2014-05-18 16:15:20'),
+(11103, NULL, NULL, 0, 39, '2014-05-18 16:15:22'),
+(11104, 128, NULL, 0, 1, '2014-05-18 16:15:25'),
+(11105, 141, NULL, 0, 1, '2014-05-18 16:15:25'),
+(11106, 128, NULL, 0, 6, '2014-05-18 16:15:28'),
+(11107, NULL, NULL, 0, 39, '2014-05-18 16:15:31'),
+(11108, 141, NULL, 0, 1, '2014-05-18 16:17:43'),
+(11109, 128, NULL, 0, 6, '2014-05-18 16:17:49'),
+(11110, NULL, NULL, 0, 39, '2014-05-18 16:17:51'),
+(11111, 141, NULL, 0, 1, '2014-05-18 16:17:54'),
+(11112, 128, NULL, 0, 1, '2014-05-18 16:17:54'),
+(11113, 128, NULL, 0, 6, '2014-05-18 16:18:42'),
+(11114, NULL, NULL, 0, 39, '2014-05-18 16:18:48'),
+(11115, 128, NULL, 0, 1, '2014-05-18 16:18:52'),
+(11116, 128, NULL, 0, 1, '2014-05-18 16:18:57'),
+(11117, 128, NULL, 0, 6, '2014-05-18 16:19:06'),
+(11118, 128, NULL, 0, 6, '2014-05-18 16:19:06'),
+(11119, NULL, NULL, 0, 39, '2014-05-18 16:19:10'),
+(11120, 141, NULL, 0, 1, '2014-05-18 16:19:10'),
+(11121, 141, NULL, 0, 1, '2014-05-18 16:19:13'),
+(11122, 128, NULL, 0, 1, '2014-05-18 16:19:14'),
+(11123, 128, NULL, 0, 6, '2014-05-18 16:19:29'),
+(11124, NULL, NULL, 0, 39, '2014-05-18 16:19:32'),
+(11125, NULL, NULL, 0, 39, '2014-05-18 16:19:51'),
+(11126, 141, NULL, 0, 1, '2014-05-18 16:19:52'),
+(11127, 141, NULL, 0, 1, '2014-05-18 16:19:55'),
+(11128, 128, NULL, 0, 6, '2014-05-18 16:20:12'),
+(11129, 128, NULL, 0, 1, '2014-05-18 16:20:50'),
+(11130, 128, NULL, 0, 1, '2014-05-18 16:20:51'),
+(11131, 128, NULL, 0, 6, '2014-05-18 16:20:56'),
+(11132, NULL, NULL, 0, 39, '2014-05-18 16:20:59'),
+(11133, 128, NULL, 0, 1, '2014-05-18 16:21:01'),
+(11134, 128, NULL, 0, 6, '2014-05-18 16:21:05'),
+(11135, NULL, NULL, 0, 39, '2014-05-18 16:21:10'),
+(11136, 128, NULL, 0, 1, '2014-05-18 16:26:06'),
+(11137, 128, NULL, 0, 6, '2014-05-18 16:26:13'),
+(11138, NULL, NULL, 0, 39, '2014-05-18 16:26:17'),
+(11139, 128, NULL, 0, 1, '2014-05-18 16:26:23'),
+(11140, 128, NULL, 0, 1, '2014-05-18 16:26:24'),
+(11141, 128, NULL, 0, 6, '2014-05-18 16:26:33'),
+(11142, NULL, NULL, 0, 39, '2014-05-18 16:26:35'),
+(11143, 128, NULL, 0, 1, '2014-05-18 16:30:38'),
+(11144, 128, NULL, 0, 1, '2014-05-18 16:31:27'),
+(11145, 128, NULL, 0, 6, '2014-05-18 16:31:37'),
+(11146, NULL, NULL, 0, 39, '2014-05-18 16:31:41'),
+(11147, 128, NULL, 0, 1, '2014-05-18 16:32:23'),
+(11148, 128, NULL, 0, 1, '2014-05-18 16:32:24'),
+(11149, 128, NULL, 0, 6, '2014-05-18 16:32:29'),
+(11150, NULL, NULL, 0, 39, '2014-05-18 16:32:31'),
+(11151, 128, NULL, 0, 1, '2014-05-18 16:32:34'),
+(11152, 128, NULL, 0, 6, '2014-05-18 16:32:39'),
+(11153, NULL, NULL, 0, 39, '2014-05-18 16:32:42'),
+(11154, 128, NULL, 0, 1, '2014-05-18 16:33:37'),
+(11155, 128, NULL, 0, 6, '2014-05-18 16:33:43'),
+(11156, NULL, NULL, 0, 39, '2014-05-18 16:33:46'),
+(11157, 128, NULL, 0, 6, '2014-05-18 16:34:33'),
+(11158, NULL, NULL, 0, 39, '2014-05-18 16:34:36'),
+(11159, 128, NULL, 0, 1, '2014-05-18 16:34:44'),
+(11160, 128, NULL, 0, 1, '2014-05-18 16:43:04'),
+(11161, 128, NULL, 0, 6, '2014-05-18 16:43:10'),
+(11162, NULL, NULL, 0, 39, '2014-05-18 16:43:13'),
+(11163, 128, NULL, 0, 1, '2014-05-18 16:43:16'),
+(11164, 128, NULL, 0, 6, '2014-05-18 16:43:20'),
+(11165, NULL, NULL, 0, 39, '2014-05-18 16:43:23'),
+(11166, 128, NULL, 0, 1, '2014-05-18 16:44:20'),
+(11167, 128, NULL, 0, 6, '2014-05-18 16:44:34'),
+(11168, NULL, NULL, 0, 39, '2014-05-18 16:44:37'),
+(11169, 128, NULL, 0, 1, '2014-05-18 16:44:40'),
+(11170, 128, NULL, 0, 6, '2014-05-18 16:44:44'),
+(11171, NULL, NULL, 0, 39, '2014-05-18 16:44:46'),
+(11172, 128, NULL, 0, 1, '2014-05-18 16:54:41'),
+(11173, 128, NULL, 0, 6, '2014-05-18 16:54:46'),
+(11174, NULL, NULL, 0, 39, '2014-05-18 16:54:50'),
+(11175, 128, NULL, 0, 1, '2014-05-18 16:54:53'),
+(11176, 128, NULL, 0, 6, '2014-05-18 16:54:56'),
+(11177, NULL, NULL, 0, 39, '2014-05-18 16:54:58'),
+(11178, 128, NULL, 0, 1, '2014-05-18 16:55:33'),
+(11179, 128, NULL, 0, 6, '2014-05-18 16:55:40'),
+(11180, NULL, NULL, 0, 39, '2014-05-18 16:55:43'),
+(11181, 128, NULL, 0, 1, '2014-05-18 16:55:46'),
+(11182, 128, NULL, 0, 6, '2014-05-18 16:55:51'),
+(11183, NULL, NULL, 0, 39, '2014-05-18 16:55:53'),
+(11184, 128, NULL, 0, 1, '2014-05-18 16:55:54'),
+(11185, 128, NULL, 0, 6, '2014-05-18 16:56:10'),
+(11186, NULL, NULL, 0, 39, '2014-05-18 16:56:13'),
+(11187, 128, NULL, 0, 1, '2014-05-18 16:58:41'),
+(11188, 128, NULL, 0, 6, '2014-05-18 16:58:47'),
+(11189, NULL, NULL, 0, 39, '2014-05-18 16:58:50'),
+(11190, 128, NULL, 0, 1, '2014-05-18 16:58:53'),
+(11191, 128, NULL, 0, 6, '2014-05-18 16:58:58'),
+(11192, NULL, NULL, 0, 39, '2014-05-18 16:59:00'),
+(11193, 128, NULL, 0, 1, '2014-05-18 16:59:01'),
+(11194, 128, NULL, 0, 6, '2014-05-18 16:59:14'),
+(11195, NULL, NULL, 0, 39, '2014-05-18 16:59:18'),
+(11196, 128, NULL, 0, 1, '2014-05-18 16:59:19'),
+(11197, 128, NULL, 0, 1, '2014-05-18 17:02:37'),
+(11198, 128, NULL, 0, 6, '2014-05-18 17:02:42'),
+(11199, NULL, NULL, 0, 39, '2014-05-18 17:02:45'),
+(11200, 128, NULL, 0, 1, '2014-05-18 17:02:47'),
+(11201, 128, NULL, 0, 6, '2014-05-18 17:03:19'),
+(11202, NULL, NULL, 0, 39, '2014-05-18 17:03:21'),
+(11203, 128, NULL, 0, 1, '2014-05-18 17:03:24'),
+(11204, 128, NULL, 0, 6, '2014-05-18 17:03:31'),
+(11205, NULL, NULL, 0, 39, '2014-05-18 17:03:33'),
+(11206, 128, NULL, 0, 1, '2014-05-18 17:03:34'),
+(11207, 128, NULL, 0, 6, '2014-05-18 17:03:46'),
+(11208, NULL, NULL, 0, 39, '2014-05-18 17:03:50'),
+(11209, 128, NULL, 0, 1, '2014-05-18 17:03:50'),
+(11210, 128, NULL, 0, 6, '2014-05-18 17:04:01'),
+(11211, NULL, NULL, 0, 39, '2014-05-18 17:04:04'),
+(11212, 128, NULL, 0, 1, '2014-05-18 17:04:05'),
+(11213, 128, NULL, 0, 1, '2014-05-18 17:05:08'),
+(11214, 141, NULL, 0, 1, '2014-05-18 18:24:45'),
+(11215, NULL, NULL, 0, 39, '2014-05-18 18:24:56'),
+(11216, 141, NULL, 0, 1, '2014-05-18 18:24:58'),
+(11217, NULL, NULL, 0, 39, '2014-05-18 18:25:09'),
+(11218, 141, NULL, 0, 1, '2014-05-18 18:26:05'),
+(11219, NULL, NULL, 0, 39, '2014-05-18 18:26:19'),
+(11220, NULL, NULL, 0, 39, '2014-05-18 18:26:27'),
+(11221, 141, NULL, 0, 1, '2014-05-18 18:27:20'),
+(11222, NULL, NULL, 0, 39, '2014-05-18 18:29:05'),
+(11223, 141, NULL, 0, 1, '2014-05-18 18:29:08'),
+(11224, NULL, NULL, 0, 39, '2014-05-18 18:32:19'),
+(11225, 141, NULL, 0, 1, '2014-05-18 18:32:28'),
+(11226, 128, NULL, 0, 1, '2014-05-18 19:33:03'),
+(11227, 128, NULL, 0, 1, '2014-05-18 19:34:45'),
+(11228, 128, NULL, 0, 6, '2014-05-18 19:35:21'),
+(11229, NULL, NULL, 0, 39, '2014-05-18 19:35:29'),
+(11230, 128, NULL, 0, 1, '2014-05-18 19:40:40'),
+(11231, 128, NULL, 0, 6, '2014-05-18 19:41:24'),
+(11232, NULL, NULL, 0, 39, '2014-05-18 19:41:27'),
+(11233, 128, NULL, 0, 1, '2014-05-18 19:41:36'),
+(11234, 141, NULL, 0, 1, '2014-05-18 19:44:43'),
+(11235, 128, NULL, 0, 6, '2014-05-18 20:54:43'),
+(11236, NULL, NULL, 0, 39, '2014-05-18 20:54:46'),
+(11237, 128, NULL, 0, 6, '2014-05-18 20:54:49'),
+(11238, 128, NULL, 0, 6, '2014-05-18 20:54:56'),
+(11239, 141, NULL, 0, 1, '2014-05-18 21:05:19'),
+(11240, 141, NULL, 0, 1, '2014-05-18 21:16:39'),
+(11241, 128, NULL, 0, 1, '2014-05-19 06:42:32'),
+(11242, 128, NULL, 0, 5, '2014-05-19 06:43:20'),
+(11243, 128, NULL, 0, 1, '2014-05-19 06:43:21'),
+(11244, 128, NULL, 0, 1, '2014-05-19 06:48:37'),
+(11245, 128, 26, 0, 20, '2014-05-19 06:51:26'),
+(11246, 128, NULL, 0, 1, '2014-05-19 06:51:26'),
+(11247, 128, NULL, 0, 6, '2014-05-19 06:53:02'),
+(11248, 128, NULL, 0, 1, '2014-05-19 06:57:30'),
+(11249, 128, NULL, 0, 5, '2014-05-19 06:58:02'),
+(11250, 128, NULL, 0, 1, '2014-05-19 06:58:02'),
+(11251, 141, NULL, 0, 1, '2014-05-19 06:58:25'),
+(11252, 141, NULL, 0, 1, '2014-05-19 06:58:26'),
+(11253, 141, NULL, 0, 1, '2014-05-19 07:04:26'),
+(11254, 141, NULL, 0, 1, '2014-05-19 07:22:27'),
+(11255, 128, NULL, 0, 1, '2014-05-19 07:23:05'),
+(11256, 128, NULL, 0, 1, '2014-05-19 07:23:06'),
+(11257, 128, 26, 0, 20, '2014-05-19 07:23:33'),
+(11258, 128, NULL, 0, 1, '2014-05-19 07:23:33'),
+(11259, 128, NULL, 0, 1, '2014-05-19 07:40:53'),
+(11260, 128, NULL, 0, 1, '2014-05-19 07:41:22'),
+(11261, 128, NULL, 0, 1, '2014-05-19 07:41:23'),
+(11262, NULL, NULL, 0, 39, '2014-05-19 07:41:49'),
+(11263, 128, NULL, 0, 1, '2014-05-19 07:41:53'),
+(11264, 128, NULL, 0, 1, '2014-05-19 08:03:03'),
+(11265, 141, NULL, 0, 1, '2014-05-19 08:03:27'),
+(11266, 141, NULL, 0, 1, '2014-05-19 08:03:28'),
+(11267, 141, NULL, 0, 1, '2014-05-19 08:09:55'),
+(11268, 141, NULL, 0, 5, '2014-05-19 08:10:10'),
+(11269, 141, NULL, 0, 1, '2014-05-19 08:10:10'),
+(11270, 128, NULL, 0, 1, '2014-05-19 08:10:36'),
+(11271, 128, NULL, 0, 1, '2014-05-19 08:10:37'),
+(11272, 141, NULL, 0, 1, '2014-05-19 08:20:37'),
+(11273, 141, NULL, 0, 1, '2014-05-19 08:20:47'),
+(11274, 141, NULL, 0, 1, '2014-05-19 11:53:45'),
+(11275, 128, NULL, 0, 1, '2014-05-19 11:54:44'),
+(11276, 128, NULL, 0, 1, '2014-05-19 11:54:45'),
+(11277, 128, NULL, 0, 6, '2014-05-19 16:51:18'),
+(11278, 128, NULL, 0, 1, '2014-05-19 19:22:33'),
+(11279, NULL, NULL, 0, 39, '2014-05-19 21:00:30'),
+(11280, NULL, NULL, 0, 39, '2014-05-19 21:00:48'),
+(11281, NULL, NULL, 0, 39, '2014-05-19 21:00:59'),
+(11282, NULL, NULL, 0, 39, '2014-05-19 21:01:03'),
+(11283, NULL, NULL, 0, 39, '2014-05-19 21:01:11'),
+(11284, NULL, NULL, 0, 39, '2014-05-19 21:04:42'),
+(11285, 128, NULL, 0, 1, '2014-05-19 21:04:52'),
+(11286, NULL, NULL, 0, 39, '2014-05-19 21:04:53'),
+(11287, 128, NULL, 0, 1, '2014-05-19 21:04:55'),
+(11288, NULL, NULL, 0, 39, '2014-05-19 21:05:03'),
+(11289, 128, NULL, 0, 1, '2014-05-19 21:05:07'),
+(11290, NULL, NULL, 0, 39, '2014-05-19 21:05:13'),
+(11291, 128, NULL, 0, 1, '2014-05-19 21:05:16'),
+(11292, NULL, NULL, 0, 39, '2014-05-19 21:05:32'),
+(11293, NULL, NULL, 0, 39, '2014-05-19 21:05:35'),
+(11294, 128, NULL, 0, 1, '2014-05-19 21:05:37'),
+(11295, 128, NULL, 0, 1, '2014-05-19 21:05:40'),
+(11296, NULL, NULL, 0, 39, '2014-05-19 21:05:43'),
+(11297, 128, NULL, 0, 1, '2014-05-19 21:05:46'),
+(11298, NULL, NULL, 0, 39, '2014-05-19 21:05:48'),
+(11299, 128, NULL, 0, 1, '2014-05-19 21:05:50'),
+(11300, NULL, NULL, 0, 39, '2014-05-19 21:05:54'),
+(11301, 128, NULL, 0, 1, '2014-05-19 21:05:57'),
+(11302, NULL, NULL, 0, 39, '2014-05-19 21:06:02'),
+(11303, 128, NULL, 0, 1, '2014-05-19 21:06:05'),
+(11304, NULL, NULL, 0, 39, '2014-05-19 21:06:13'),
+(11305, 128, NULL, 0, 1, '2014-05-19 21:06:22'),
+(11306, 128, NULL, 0, 1, '2014-05-19 21:10:12'),
+(11307, 128, NULL, 0, 1, '2014-05-19 21:10:12'),
+(11308, 128, NULL, 0, 1, '2014-05-19 21:10:13'),
+(11309, 128, NULL, 0, 1, '2014-05-19 21:10:14'),
+(11310, 128, NULL, 0, 1, '2014-05-19 21:10:15'),
+(11311, 128, NULL, 0, 1, '2014-05-19 21:10:15'),
+(11312, 128, NULL, 0, 1, '2014-05-19 21:10:16'),
+(11313, 128, NULL, 0, 1, '2014-05-19 21:10:16'),
+(11314, 128, NULL, 0, 1, '2014-05-19 21:10:17'),
+(11315, 128, NULL, 0, 1, '2014-05-19 21:10:18'),
+(11316, 128, NULL, 0, 1, '2014-05-19 21:10:19'),
+(11317, 128, NULL, 0, 1, '2014-05-19 21:10:20'),
+(11318, 128, NULL, 0, 1, '2014-05-19 21:10:20'),
+(11319, 128, NULL, 0, 1, '2014-05-19 21:10:21'),
+(11320, 128, NULL, 0, 1, '2014-05-19 21:10:22'),
+(11321, 128, NULL, 0, 1, '2014-05-19 21:10:22'),
+(11322, 128, NULL, 0, 1, '2014-05-19 21:10:24'),
+(11323, NULL, NULL, 0, 39, '2014-05-19 21:26:58'),
+(11324, NULL, NULL, 0, 39, '2014-05-19 21:27:14'),
+(11325, NULL, NULL, 0, 39, '2014-05-19 21:28:57'),
+(11326, 128, NULL, 0, 1, '2014-05-19 21:29:01'),
+(11327, NULL, NULL, 0, 39, '2014-05-19 21:29:35'),
+(11328, 128, NULL, 0, 1, '2014-05-19 21:29:40'),
+(11329, NULL, NULL, 0, 39, '2014-05-19 21:29:44'),
+(11330, 128, NULL, 0, 1, '2014-05-19 21:29:47'),
+(11331, NULL, NULL, 0, 39, '2014-05-19 21:30:03'),
+(11332, 128, NULL, 0, 1, '2014-05-19 21:30:07'),
+(11333, NULL, NULL, 0, 39, '2014-05-19 21:30:25'),
+(11334, NULL, NULL, 0, 39, '2014-05-19 21:30:52'),
+(11335, NULL, NULL, 0, 39, '2014-05-19 21:31:09'),
+(11336, 128, NULL, 0, 1, '2014-05-19 21:32:25'),
+(11337, 141, NULL, 0, 1, '2014-05-20 10:36:27'),
+(11338, 141, NULL, 0, 1, '2014-05-20 11:06:38'),
+(11339, 141, NULL, 0, 1, '2014-05-20 11:07:17'),
+(11340, 128, NULL, 0, 1, '2014-05-20 16:02:13'),
+(11341, 128, NULL, 0, 1, '2014-05-20 16:35:22'),
+(11342, 128, NULL, 0, 6, '2014-05-20 16:35:28'),
+(11343, 128, NULL, 0, 1, '2014-05-20 23:06:49'),
+(11344, 128, NULL, 0, 1, '2014-05-20 23:06:59'),
+(11345, 128, NULL, 0, 1, '2014-05-20 23:17:15'),
+(11346, 128, NULL, 0, 1, '2014-05-20 23:17:17'),
+(11347, 128, NULL, 0, 1, '2014-05-20 23:17:55'),
+(11348, 128, NULL, 0, 1, '2014-05-20 23:17:58'),
+(11349, 128, NULL, 0, 1, '2014-05-20 23:18:48'),
+(11350, 128, NULL, 0, 1, '2014-05-20 23:18:50'),
+(11351, 128, NULL, 0, 1, '2014-05-20 23:19:50'),
+(11352, 128, NULL, 0, 1, '2014-05-20 23:19:52'),
+(11353, 128, NULL, 0, 1, '2014-05-20 23:30:37'),
+(11354, 128, NULL, 0, 1, '2014-05-20 23:30:41'),
+(11355, 128, NULL, 0, 1, '2014-05-20 23:31:34'),
+(11356, 128, NULL, 0, 1, '2014-05-20 23:31:42'),
+(11357, 128, NULL, 0, 1, '2014-05-20 23:32:28'),
+(11358, 128, NULL, 0, 1, '2014-05-20 23:32:31'),
+(11359, 128, NULL, 0, 1, '2014-05-20 23:33:02'),
+(11360, 128, NULL, 0, 1, '2014-05-20 23:33:06'),
+(11361, 128, NULL, 0, 1, '2014-05-20 23:40:48'),
+(11362, 128, NULL, 0, 1, '2014-05-20 23:40:53'),
+(11363, 128, NULL, 0, 1, '2014-05-20 23:42:29'),
+(11364, 128, NULL, 0, 1, '2014-05-20 23:46:47'),
+(11365, 128, NULL, 0, 1, '2014-05-20 23:46:49'),
+(11366, 128, NULL, 0, 1, '2014-05-20 23:47:02'),
+(11367, 128, NULL, 0, 1, '2014-05-20 23:47:04'),
+(11368, 128, NULL, 0, 1, '2014-05-20 23:48:24'),
+(11369, 128, NULL, 0, 1, '2014-05-20 23:48:58'),
+(11370, 128, NULL, 0, 1, '2014-05-20 23:49:32'),
+(11371, 128, NULL, 0, 1, '2014-05-20 23:50:39'),
+(11372, 128, NULL, 0, 1, '2014-05-20 23:50:47'),
+(11373, 128, NULL, 0, 1, '2014-05-20 23:54:25'),
+(11374, 128, NULL, 0, 1, '2014-05-20 23:54:27'),
+(11375, 128, NULL, 0, 1, '2014-05-20 23:55:08'),
+(11376, 128, NULL, 0, 1, '2014-05-20 23:55:11'),
+(11377, 128, NULL, 0, 1, '2014-05-20 23:55:47'),
+(11378, 128, NULL, 0, 1, '2014-05-20 23:56:02'),
+(11379, 128, NULL, 0, 1, '2014-05-20 23:58:11'),
+(11380, 128, NULL, 0, 1, '2014-05-20 23:58:13'),
+(11381, 128, NULL, 0, 1, '2014-05-20 23:59:07'),
+(11382, 128, NULL, 0, 1, '2014-05-20 23:59:09'),
+(11383, 128, NULL, 0, 1, '2014-05-20 23:59:28'),
+(11384, 128, NULL, 0, 1, '2014-05-20 23:59:30'),
+(11385, 128, NULL, 0, 1, '2014-05-21 00:00:12'),
+(11386, 128, NULL, 0, 1, '2014-05-21 00:00:14'),
+(11387, 128, NULL, 0, 1, '2014-05-21 00:00:27'),
+(11388, 128, NULL, 0, 1, '2014-05-21 00:00:29'),
+(11389, 128, NULL, 0, 1, '2014-05-21 00:01:31'),
+(11390, 128, NULL, 0, 1, '2014-05-21 00:01:34'),
+(11391, 128, NULL, 0, 1, '2014-05-21 00:10:36'),
+(11392, 128, NULL, 0, 1, '2014-05-21 00:11:28'),
+(11393, 128, NULL, 0, 1, '2014-05-21 00:11:31'),
+(11394, 128, NULL, 0, 1, '2014-05-21 00:27:22'),
+(11395, 128, NULL, 0, 1, '2014-05-21 00:28:13'),
+(11396, 128, NULL, 0, 1, '2014-05-21 00:28:15'),
+(11397, 128, NULL, 0, 1, '2014-05-21 00:29:39'),
+(11398, 128, NULL, 0, 1, '2014-05-21 00:29:55'),
+(11399, 128, NULL, 0, 1, '2014-05-21 00:29:57'),
+(11400, 128, NULL, 0, 1, '2014-05-21 00:30:50'),
+(11401, 128, NULL, 0, 1, '2014-05-21 00:31:09'),
+(11402, 128, NULL, 0, 1, '2014-05-21 00:31:12'),
+(11403, 128, NULL, 0, 1, '2014-05-21 00:34:00'),
+(11404, 128, NULL, 0, 1, '2014-05-21 00:34:12'),
+(11405, 128, NULL, 0, 1, '2014-05-21 00:35:00'),
+(11406, 128, NULL, 0, 1, '2014-05-21 00:35:02'),
+(11407, 128, NULL, 0, 1, '2014-05-21 00:35:47'),
+(11408, 128, NULL, 0, 1, '2014-05-21 00:35:50'),
+(11409, 128, NULL, 0, 1, '2014-05-21 00:36:12'),
+(11410, 128, NULL, 0, 1, '2014-05-21 00:36:21'),
+(11411, 128, NULL, 0, 1, '2014-05-21 00:37:09'),
+(11412, 128, NULL, 0, 1, '2014-05-21 00:37:12'),
+(11413, 128, NULL, 0, 1, '2014-05-21 00:37:37'),
+(11414, 128, NULL, 0, 1, '2014-05-21 00:37:40'),
+(11415, 128, NULL, 0, 1, '2014-05-21 00:38:13'),
+(11416, 128, NULL, 0, 1, '2014-05-21 00:38:15'),
+(11417, 128, NULL, 0, 1, '2014-05-21 00:40:48'),
+(11418, 128, NULL, 0, 1, '2014-05-21 00:40:55'),
+(11419, 128, NULL, 0, 1, '2014-05-21 00:40:58'),
+(11420, 128, NULL, 0, 1, '2014-05-21 00:42:11'),
+(11421, 128, NULL, 0, 1, '2014-05-21 00:42:14'),
+(11422, 128, NULL, 0, 1, '2014-05-21 00:43:25'),
+(11423, 128, NULL, 0, 1, '2014-05-21 00:43:27'),
+(11424, 128, NULL, 0, 1, '2014-05-21 00:43:45'),
+(11425, 128, NULL, 0, 1, '2014-05-21 00:43:48'),
+(11426, 128, NULL, 0, 1, '2014-05-21 00:44:23'),
+(11427, 128, NULL, 0, 1, '2014-05-21 00:44:25'),
+(11428, 128, NULL, 0, 1, '2014-05-21 00:47:13'),
+(11429, 128, NULL, 0, 1, '2014-05-21 00:47:16'),
+(11430, 128, NULL, 0, 1, '2014-05-21 00:48:09'),
+(11431, 128, NULL, 0, 1, '2014-05-21 00:48:12'),
+(11432, 128, NULL, 0, 1, '2014-05-21 00:48:59'),
+(11433, 128, NULL, 0, 1, '2014-05-21 00:49:01'),
+(11434, 128, NULL, 0, 1, '2014-05-21 00:49:24'),
+(11435, 128, NULL, 0, 1, '2014-05-21 00:49:26'),
+(11436, 128, NULL, 0, 1, '2014-05-21 00:50:14'),
+(11437, 128, NULL, 0, 1, '2014-05-21 00:50:17'),
+(11438, 128, NULL, 0, 1, '2014-05-21 00:50:58'),
+(11439, 128, NULL, 0, 1, '2014-05-21 00:51:00'),
+(11440, 128, NULL, 0, 1, '2014-05-21 00:51:51'),
+(11441, 128, NULL, 0, 1, '2014-05-21 00:51:53'),
+(11442, 128, NULL, 0, 1, '2014-05-21 00:52:12'),
+(11443, 128, NULL, 0, 1, '2014-05-21 00:52:14'),
+(11444, 128, NULL, 0, 1, '2014-05-21 00:53:20'),
+(11445, 128, NULL, 0, 1, '2014-05-21 00:53:23'),
+(11446, 128, NULL, 0, 1, '2014-05-21 00:53:47'),
+(11447, 128, NULL, 0, 1, '2014-05-21 00:53:49'),
+(11448, 128, NULL, 0, 1, '2014-05-21 00:54:26'),
+(11449, 128, NULL, 0, 1, '2014-05-21 00:54:29'),
+(11450, 128, NULL, 0, 1, '2014-05-21 00:54:54'),
+(11451, 128, NULL, 0, 1, '2014-05-21 00:54:56'),
+(11452, 128, NULL, 0, 1, '2014-05-21 00:56:40'),
+(11453, 128, NULL, 0, 1, '2014-05-21 00:56:42'),
+(11454, 128, NULL, 0, 1, '2014-05-21 00:56:55'),
+(11455, 128, NULL, 0, 1, '2014-05-21 00:56:57'),
+(11456, 128, NULL, 0, 1, '2014-05-21 00:57:09'),
+(11457, 128, NULL, 0, 1, '2014-05-21 00:57:11'),
+(11458, 128, NULL, 0, 1, '2014-05-21 00:57:23'),
+(11459, 128, NULL, 0, 1, '2014-05-21 00:57:25'),
+(11460, 128, NULL, 0, 1, '2014-05-21 00:58:51'),
+(11461, 128, NULL, 0, 1, '2014-05-21 00:58:53'),
+(11462, 128, NULL, 0, 1, '2014-05-21 01:00:16'),
+(11463, 128, NULL, 0, 1, '2014-05-21 01:00:19'),
+(11464, 128, NULL, 0, 1, '2014-05-21 01:04:45'),
+(11465, 128, NULL, 0, 1, '2014-05-21 01:04:47'),
+(11466, 128, NULL, 0, 1, '2014-05-21 01:05:15'),
+(11467, 128, NULL, 0, 1, '2014-05-21 01:05:20'),
+(11468, 128, NULL, 0, 1, '2014-05-21 01:05:34'),
+(11469, 128, NULL, 0, 1, '2014-05-21 01:05:37'),
+(11470, 128, NULL, 0, 1, '2014-05-21 01:10:35'),
+(11471, 128, NULL, 0, 1, '2014-05-21 01:10:37'),
+(11472, 128, NULL, 0, 1, '2014-05-21 01:11:59'),
+(11473, 128, NULL, 0, 1, '2014-05-21 01:12:01'),
+(11474, 128, NULL, 0, 1, '2014-05-21 01:12:46'),
+(11475, 128, NULL, 0, 1, '2014-05-21 01:12:49'),
+(11476, 128, NULL, 0, 1, '2014-05-21 01:13:18'),
+(11477, 128, NULL, 0, 1, '2014-05-21 01:13:20'),
+(11478, 128, NULL, 0, 1, '2014-05-21 01:14:10'),
+(11479, 128, NULL, 0, 1, '2014-05-21 01:14:13'),
+(11480, 128, NULL, 0, 1, '2014-05-21 01:15:28'),
+(11481, 128, NULL, 0, 1, '2014-05-21 01:15:30'),
+(11482, 128, NULL, 0, 1, '2014-05-21 01:17:08'),
+(11483, 128, NULL, 0, 1, '2014-05-21 01:17:13'),
+(11484, 128, NULL, 0, 1, '2014-05-21 01:17:40'),
+(11485, 128, NULL, 0, 1, '2014-05-21 01:17:42'),
+(11486, 128, NULL, 0, 1, '2014-05-21 01:18:19'),
+(11487, 128, NULL, 0, 1, '2014-05-21 01:18:22'),
+(11488, 128, NULL, 0, 1, '2014-05-21 01:20:33'),
+(11489, 128, NULL, 0, 1, '2014-05-21 01:20:45'),
+(11490, 128, NULL, 0, 1, '2014-05-21 01:20:54'),
+(11491, 128, NULL, 0, 1, '2014-05-21 01:21:20'),
+(11492, 128, NULL, 0, 1, '2014-05-21 01:21:22'),
+(11493, 128, NULL, 0, 1, '2014-05-21 01:27:12'),
+(11494, 128, NULL, 0, 1, '2014-05-21 01:27:17'),
+(11495, 128, NULL, 0, 1, '2014-05-21 01:36:36'),
+(11496, 128, NULL, 0, 1, '2014-05-21 01:36:38'),
+(11497, 128, NULL, 0, 1, '2014-05-21 01:37:00'),
+(11498, 128, NULL, 0, 1, '2014-05-21 01:37:02'),
+(11499, 128, NULL, 0, 1, '2014-05-21 01:37:28'),
+(11500, 128, NULL, 0, 1, '2014-05-21 01:38:07'),
+(11501, 128, NULL, 0, 1, '2014-05-21 01:38:10'),
+(11502, 128, NULL, 0, 1, '2014-05-21 01:39:08'),
+(11503, 128, NULL, 0, 1, '2014-05-21 01:39:10'),
+(11504, 128, NULL, 0, 1, '2014-05-21 01:40:14'),
+(11505, 128, NULL, 0, 1, '2014-05-21 01:40:20'),
+(11506, 128, NULL, 0, 1, '2014-05-21 01:42:47'),
+(11507, 128, NULL, 0, 1, '2014-05-21 01:43:11'),
+(11508, 128, NULL, 0, 1, '2014-05-21 01:44:59'),
+(11509, 128, NULL, 0, 1, '2014-05-21 01:45:03'),
+(11510, 128, NULL, 0, 1, '2014-05-21 01:45:16'),
+(11511, 128, NULL, 0, 1, '2014-05-21 01:45:21'),
+(11512, 128, NULL, 0, 1, '2014-05-21 01:48:36'),
+(11513, 128, NULL, 0, 1, '2014-05-21 01:48:41'),
+(11514, 128, NULL, 0, 1, '2014-05-21 01:48:50'),
+(11515, 128, NULL, 0, 1, '2014-05-21 01:49:07'),
+(11516, 128, NULL, 0, 1, '2014-05-21 01:49:19'),
+(11517, 128, NULL, 0, 1, '2014-05-21 01:51:11'),
+(11518, 128, NULL, 0, 1, '2014-05-21 01:51:14'),
+(11519, 128, NULL, 0, 1, '2014-05-21 01:51:22'),
+(11520, 128, NULL, 0, 1, '2014-05-21 01:51:33'),
+(11521, 128, NULL, 0, 1, '2014-05-21 01:51:42'),
+(11522, 128, NULL, 0, 1, '2014-05-21 01:52:02'),
+(11523, 128, NULL, 0, 1, '2014-05-21 01:55:35'),
+(11524, 128, NULL, 0, 1, '2014-05-21 01:55:37'),
+(11525, 128, NULL, 0, 1, '2014-05-21 02:04:03'),
+(11526, 128, NULL, 0, 1, '2014-05-21 02:04:05'),
+(11527, 128, NULL, 0, 1, '2014-05-21 02:06:13'),
+(11528, 128, NULL, 0, 1, '2014-05-21 02:06:21'),
+(11529, 128, NULL, 0, 6, '2014-05-21 02:06:25'),
+(11530, 128, NULL, 0, 6, '2014-05-21 02:06:25'),
+(11531, 128, NULL, 0, 6, '2014-05-21 02:06:26'),
+(11532, 128, NULL, 0, 6, '2014-05-21 02:06:27'),
+(11533, 128, NULL, 0, 6, '2014-05-21 02:06:27'),
+(11534, 128, NULL, 0, 6, '2014-05-21 02:06:27'),
+(11535, 128, NULL, 0, 6, '2014-05-21 02:06:28'),
+(11536, 128, NULL, 0, 6, '2014-05-21 02:06:28'),
+(11537, 128, NULL, 0, 6, '2014-05-21 02:06:29'),
+(11538, 128, NULL, 0, 6, '2014-05-21 02:06:29'),
+(11539, 128, NULL, 0, 6, '2014-05-21 02:06:30'),
+(11540, 128, NULL, 0, 6, '2014-05-21 02:06:30'),
+(11541, 128, NULL, 0, 6, '2014-05-21 02:06:31'),
+(11542, 128, NULL, 0, 6, '2014-05-21 02:06:31'),
+(11543, 128, NULL, 0, 6, '2014-05-21 02:06:32'),
+(11544, 128, NULL, 0, 6, '2014-05-21 02:06:32'),
+(11545, 128, NULL, 0, 6, '2014-05-21 02:06:33'),
+(11546, 128, NULL, 0, 6, '2014-05-21 02:06:33'),
+(11547, 128, NULL, 0, 1, '2014-05-21 02:09:45'),
+(11548, 128, NULL, 0, 1, '2014-05-21 02:10:07'),
+(11549, 128, NULL, 0, 1, '2014-05-21 02:11:51'),
+(11550, 128, NULL, 0, 1, '2014-05-21 02:11:54'),
+(11551, 128, NULL, 0, 6, '2014-05-21 02:11:58'),
+(11552, 128, NULL, 0, 6, '2014-05-21 02:11:58'),
+(11553, 128, NULL, 0, 6, '2014-05-21 02:11:59'),
+(11554, 128, NULL, 0, 6, '2014-05-21 02:11:59'),
+(11555, 128, NULL, 0, 6, '2014-05-21 02:12:00'),
+(11556, 128, NULL, 0, 6, '2014-05-21 02:12:00'),
+(11557, 128, NULL, 0, 1, '2014-05-21 02:20:06'),
+(11558, 128, NULL, 0, 1, '2014-05-21 02:20:24'),
+(11559, 128, NULL, 0, 1, '2014-05-21 02:20:27'),
+(11560, 128, NULL, 0, 1, '2014-05-21 02:27:14'),
+(11561, 128, NULL, 0, 1, '2014-05-21 02:27:16'),
+(11562, 128, NULL, 0, 1, '2014-05-21 02:27:48'),
+(11563, 128, NULL, 0, 1, '2014-05-21 02:28:15'),
+(11564, 128, NULL, 0, 1, '2014-05-21 02:28:57'),
+(11565, 128, NULL, 0, 1, '2014-05-21 02:29:03'),
+(11566, 128, NULL, 0, 1, '2014-05-21 02:31:23'),
+(11567, 128, NULL, 0, 1, '2014-05-21 02:31:26'),
+(11568, 128, NULL, 0, 1, '2014-05-21 02:34:13'),
+(11569, 128, NULL, 0, 1, '2014-05-21 02:34:15'),
+(11570, 128, NULL, 0, 1, '2014-05-21 02:34:17'),
+(11571, 128, NULL, 0, 1, '2014-05-21 02:34:20'),
+(11572, 128, NULL, 0, 1, '2014-05-21 02:34:22'),
+(11573, 128, NULL, 0, 1, '2014-05-21 02:34:24'),
+(11574, 128, NULL, 0, 1, '2014-05-21 02:34:27'),
+(11575, 128, NULL, 0, 1, '2014-05-21 02:34:30'),
+(11576, 128, NULL, 0, 1, '2014-05-21 02:34:35'),
+(11577, 128, NULL, 0, 1, '2014-05-21 02:34:43'),
+(11578, 128, NULL, 0, 1, '2014-05-21 02:34:49'),
+(11579, 128, NULL, 0, 1, '2014-05-21 06:47:41'),
+(11580, 128, NULL, 0, 1, '2014-05-21 06:48:00'),
+(11581, 128, 26, 0, 20, '2014-05-21 06:52:27'),
+(11582, 128, NULL, 0, 1, '2014-05-21 06:52:27'),
+(11583, 128, NULL, 0, 1, '2014-05-21 07:36:53'),
+(11584, 128, NULL, 0, 1, '2014-05-21 07:36:59'),
+(11585, 128, NULL, 0, 1, '2014-05-21 07:37:45'),
+(11586, 128, NULL, 0, 1, '2014-05-21 07:37:48'),
+(11587, 128, NULL, 0, 1, '2014-05-21 08:04:42'),
+(11588, 128, NULL, 0, 1, '2014-05-21 08:04:45'),
+(11589, 128, NULL, 0, 6, '2014-05-21 08:05:26'),
+(11590, 128, NULL, 0, 6, '2014-05-21 08:05:27'),
+(11591, 128, NULL, 0, 6, '2014-05-21 08:05:28'),
+(11592, 128, NULL, 0, 6, '2014-05-21 08:05:28'),
+(11593, 128, NULL, 0, 1, '2014-05-21 12:50:07'),
+(11594, 128, NULL, 0, 1, '2014-05-21 12:50:09'),
+(11595, 128, NULL, 0, 1, '2014-05-21 12:50:25'),
+(11596, 128, NULL, 0, 1, '2014-05-21 12:50:31'),
+(11597, 128, NULL, 0, 6, '2014-05-21 12:51:36'),
+(11598, 128, NULL, 0, 6, '2014-05-21 12:51:37'),
+(11599, 128, NULL, 0, 6, '2014-05-21 12:51:38'),
+(11600, 128, NULL, 0, 6, '2014-05-21 12:51:38'),
+(11601, 128, NULL, 0, 6, '2014-05-21 12:51:39'),
+(11602, 128, NULL, 0, 6, '2014-05-21 12:51:39'),
+(11603, 128, NULL, 0, 6, '2014-05-21 12:51:40'),
+(11604, 128, NULL, 0, 6, '2014-05-21 12:51:40'),
+(11605, 128, NULL, 0, 6, '2014-05-21 12:51:42'),
+(11606, 128, NULL, 0, 6, '2014-05-21 12:51:42'),
+(11607, 128, NULL, 0, 1, '2014-05-21 12:52:42'),
+(11608, 128, NULL, 0, 6, '2014-05-21 12:53:06'),
+(11609, 128, NULL, 0, 6, '2014-05-21 12:53:07'),
+(11610, 128, NULL, 0, 6, '2014-05-21 12:53:07'),
+(11611, 141, NULL, 0, 1, '2014-05-21 12:58:13'),
+(11612, 128, NULL, 0, 1, '2014-05-21 12:58:54'),
+(11613, 128, NULL, 0, 1, '2014-05-21 12:58:55'),
+(11614, 128, NULL, 0, 1, '2014-05-21 16:10:51'),
+(11615, 128, NULL, 0, 1, '2014-05-21 16:10:54'),
+(11616, 128, NULL, 0, 1, '2014-05-21 16:21:48'),
+(11617, 128, NULL, 0, 1, '2014-05-21 16:21:51'),
+(11618, 128, NULL, 0, 1, '2014-05-21 16:21:55'),
+(11619, 128, NULL, 0, 6, '2014-05-21 16:22:09'),
+(11620, 128, NULL, 0, 6, '2014-05-21 16:22:09'),
+(11621, 128, NULL, 0, 6, '2014-05-21 16:24:11'),
+(11622, 29, NULL, 0, 1, '2014-05-21 21:17:49'),
+(11623, 128, NULL, 0, 1, '2014-05-22 02:06:59'),
+(11624, 128, NULL, 0, 1, '2014-05-22 02:07:18'),
+(11625, 128, NULL, 0, 1, '2014-05-22 02:07:21'),
+(11626, 128, NULL, 0, 1, '2014-05-22 02:08:58'),
+(11627, 128, NULL, 0, 1, '2014-05-22 02:09:12'),
+(11628, 29, NULL, 0, 1, '2014-05-22 14:04:45'),
+(11629, 128, NULL, 0, 1, '2014-05-22 14:44:43'),
+(11630, 128, NULL, 0, 1, '2014-05-22 14:44:44'),
+(11631, 128, NULL, 0, 6, '2014-05-22 14:45:23'),
+(11632, 128, NULL, 0, 1, '2014-05-22 14:46:40'),
+(11633, 29, NULL, 0, 1, '2014-05-22 20:20:04'),
+(11634, 29, NULL, 0, 1, '2014-05-22 20:20:23'),
+(11635, 29, NULL, 0, 1, '2014-05-22 20:23:47'),
+(11636, 29, NULL, 0, 1, '2014-05-22 20:31:12'),
+(11637, 29, NULL, 0, 1, '2014-05-22 20:32:45'),
+(11638, 29, NULL, 0, 1, '2014-05-22 20:42:41'),
+(11639, 29, NULL, 0, 1, '2014-05-22 20:45:48'),
+(11640, 29, NULL, 0, 1, '2014-05-22 20:51:28'),
+(11641, 29, NULL, 0, 1, '2014-05-22 20:57:20'),
+(11642, 128, NULL, 0, 1, '2014-05-22 20:59:01'),
+(11643, 128, NULL, 0, 1, '2014-05-22 20:59:04'),
+(11644, 29, NULL, 0, 1, '2014-05-22 21:04:22'),
+(11645, 128, NULL, 0, 1, '2014-05-22 21:07:05'),
+(11646, 29, NULL, 0, 1, '2014-05-22 21:07:53'),
+(11647, 29, NULL, 0, 1, '2014-05-22 21:07:53'),
+(11648, 29, NULL, 0, 1, '2014-05-22 21:09:38'),
+(11649, 29, NULL, 0, 1, '2014-05-22 21:10:25'),
+(11650, 29, NULL, 0, 1, '2014-05-22 21:10:56'),
+(11651, 29, NULL, 0, 1, '2014-05-22 21:12:21'),
+(11652, 29, NULL, 0, 1, '2014-05-22 21:13:22'),
+(11653, 29, NULL, 0, 1, '2014-05-22 21:13:30'),
+(11654, 29, NULL, 0, 1, '2014-05-22 21:21:56'),
+(11655, 29, NULL, 0, 1, '2014-05-22 21:25:01'),
+(11656, 29, NULL, 0, 1, '2014-05-22 21:27:23'),
+(11657, 29, NULL, 0, 1, '2014-05-22 21:28:13'),
+(11658, 29, NULL, 0, 1, '2014-05-22 21:31:17'),
+(11659, 29, NULL, 0, 1, '2014-05-22 21:32:52'),
+(11660, 29, NULL, 0, 1, '2014-05-22 21:36:26'),
+(11661, 29, NULL, 0, 1, '2014-05-22 21:46:19'),
+(11662, 29, NULL, 0, 1, '2014-05-22 21:50:58'),
+(11663, 29, NULL, 0, 15, '2014-05-22 21:51:23'),
+(11664, 29, NULL, 77, 15, '2014-05-22 21:52:00'),
+(11665, 29, 9, 0, 14, '2014-05-22 21:52:30'),
+(11666, 29, NULL, 0, 1, '2014-05-22 21:52:57'),
+(11667, 29, NULL, 0, 1, '2014-05-22 21:53:39'),
+(11668, 29, NULL, 0, 15, '2014-05-22 21:53:59'),
+(11669, 128, NULL, 0, 1, '2014-05-22 22:11:14'),
+(11670, 141, NULL, 0, 1, '2014-05-22 22:11:36'),
+(11671, 141, NULL, 0, 1, '2014-05-22 22:11:39'),
+(11672, 29, NULL, 0, 1, '2014-05-22 22:12:40'),
+(11673, 141, 26, 0, 14, '2014-05-22 22:13:00'),
+(11674, 29, 9, 0, 14, '2014-05-22 22:13:27'),
+(11675, 141, NULL, 0, 1, '2014-05-22 22:13:52'),
+(11676, 141, NULL, 0, 1, '2014-05-22 22:13:55'),
+(11677, 29, 9, 0, 14, '2014-05-22 22:13:56'),
+(11678, 29, NULL, 0, 1, '2014-05-22 22:14:18'),
+(11679, 29, 9, 0, 14, '2014-05-22 22:15:00'),
+(11680, 29, NULL, 0, 1, '2014-05-22 22:17:27'),
+(11681, 29, 9, 0, 14, '2014-05-22 22:17:55'),
+(11682, 29, NULL, 0, 1, '2014-05-22 22:29:23'),
+(11683, 29, 9, 0, 14, '2014-05-22 22:29:48'),
+(11684, 29, NULL, 0, 1, '2014-05-22 22:32:48'),
+(11685, 29, 9, 0, 14, '2014-05-22 22:33:06'),
+(11686, 29, NULL, 0, 1, '2014-05-22 22:35:18'),
+(11687, 29, NULL, 0, 15, '2014-05-22 22:35:36'),
+(11688, 29, NULL, 0, 1, '2014-05-22 22:42:37'),
+(11689, 29, NULL, 0, 15, '2014-05-22 22:42:50'),
+(11690, 29, NULL, 0, 15, '2014-05-22 22:42:57'),
+(11691, 29, NULL, 0, 15, '2014-05-22 22:43:01'),
+(11692, 29, NULL, 77, 15, '2014-05-22 22:43:29'),
+(11693, 29, 9, 0, 14, '2014-05-22 22:43:56'),
+(11694, 29, NULL, 0, 1, '2014-05-22 22:44:12'),
+(11695, 128, NULL, 0, 1, '2014-05-23 01:17:11'),
+(11696, 128, NULL, 0, 1, '2014-05-23 01:17:30'),
+(11697, 128, NULL, 0, 1, '2014-05-23 01:17:52'),
+(11698, 128, NULL, 0, 1, '2014-05-23 01:17:56'),
+(11699, 128, NULL, 0, 1, '2014-05-23 01:18:56'),
+(11700, 128, NULL, 0, 1, '2014-05-23 01:19:42'),
+(11701, 128, NULL, 0, 1, '2014-05-23 01:22:59'),
+(11702, 128, NULL, 0, 1, '2014-05-23 01:23:02'),
+(11703, 128, NULL, 0, 1, '2014-05-23 01:28:18'),
+(11704, 128, NULL, 0, 1, '2014-05-23 01:28:23'),
+(11705, 128, NULL, 0, 1, '2014-05-23 01:29:41'),
+(11706, 128, NULL, 0, 1, '2014-05-23 01:29:44'),
+(11707, 128, NULL, 0, 1, '2014-05-23 01:30:57'),
+(11708, 128, NULL, 0, 1, '2014-05-23 01:31:00'),
+(11709, 128, NULL, 0, 1, '2014-05-23 01:32:15'),
+(11710, 128, NULL, 0, 1, '2014-05-23 01:32:18'),
+(11711, 128, NULL, 0, 1, '2014-05-23 01:32:58'),
+(11712, 128, NULL, 0, 1, '2014-05-23 01:34:10'),
+(11713, 128, NULL, 0, 1, '2014-05-23 01:43:07'),
+(11714, 128, NULL, 0, 1, '2014-05-23 01:44:20'),
+(11715, 128, NULL, 0, 1, '2014-05-23 01:48:19'),
+(11716, 128, NULL, 0, 1, '2014-05-23 01:48:21'),
+(11717, 128, NULL, 0, 1, '2014-05-23 01:49:31'),
+(11718, 128, NULL, 0, 1, '2014-05-23 01:49:35'),
+(11719, 128, NULL, 0, 1, '2014-05-23 01:51:27'),
+(11720, 128, NULL, 0, 1, '2014-05-23 01:51:30'),
+(11721, 128, NULL, 0, 1, '2014-05-23 01:53:00'),
+(11722, 128, NULL, 0, 1, '2014-05-23 01:53:04'),
+(11723, 128, NULL, 0, 1, '2014-05-23 01:58:18'),
+(11724, 128, NULL, 0, 1, '2014-05-23 01:59:15'),
+(11725, 128, NULL, 0, 1, '2014-05-23 02:00:58'),
+(11726, 128, NULL, 0, 1, '2014-05-23 02:01:43'),
+(11727, 128, NULL, 0, 1, '2014-05-23 02:02:33'),
+(11728, 128, NULL, 0, 1, '2014-05-23 02:02:36'),
+(11729, 128, NULL, 0, 1, '2014-05-23 02:07:30'),
+(11730, 128, NULL, 0, 1, '2014-05-23 02:07:34'),
+(11731, 128, NULL, 0, 1, '2014-05-23 08:10:17'),
+(11732, 128, NULL, 0, 1, '2014-05-23 08:10:18'),
+(11733, 142, NULL, 2, 1, '2014-05-23 08:14:39'),
+(11734, 128, NULL, 0, 1, '2014-05-23 08:26:13'),
+(11735, 128, NULL, 0, 1, '2014-05-23 08:26:14'),
+(11736, 128, NULL, 0, 1, '2014-05-23 08:30:08'),
+(11737, 128, NULL, 0, 1, '2014-05-23 08:30:08'),
+(11738, 128, 26, 0, 14, '2014-05-23 08:31:53'),
+(11739, 128, 26, 0, 14, '2014-05-23 08:32:29'),
+(11740, 128, 26, 0, 14, '2014-05-23 08:33:46'),
+(11741, 141, NULL, 0, 1, '2014-05-23 08:33:59'),
+(11742, 141, NULL, 0, 1, '2014-05-23 08:34:00'),
+(11743, 128, NULL, 0, 1, '2014-05-23 08:34:42'),
+(11744, 128, NULL, 0, 1, '2014-05-23 08:34:43'),
+(11745, 128, NULL, 0, 1, '2014-05-23 08:35:18'),
+(11746, 128, NULL, 0, 1, '2014-05-23 08:35:21'),
+(11747, 128, NULL, 0, 1, '2014-05-23 08:47:51'),
+(11748, 128, NULL, 0, 1, '2014-05-23 08:47:52');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `HISTORYACTION`
 --
--- Creación: 15-04-2014 a las 19:51:13
+-- Creación: 14-05-2014 a las 19:16:12
 --
 
 DROP TABLE IF EXISTS `HISTORYACTION`;
@@ -11059,15 +14165,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `RETURNCODE` varchar(50) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1041 ;
-
---
--- RELACIONES PARA LA TABLA `HISTORYACTION`:
---   `IDACTION`
---       `ACTIONS` -> `IDACTION`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1614 ;
 
 --
 -- Volcado de datos para la tabla `HISTORYACTION`
@@ -12110,7 +15208,580 @@ INSERT INTO `HISTORYACTION` (`IDHISTORYACTION`, `IDACTION`, `IDPROGRAM`, `IDUSER
 (1037, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-03 22:08:27'),
 (1038, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-03 22:10:16'),
 (1039, 0, NULL, 128, 'ON/OFF', '2014-05-05 14:42:02'),
-(1040, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-08 00:38:28');
+(1040, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-08 00:38:28'),
+(1041, 0, NULL, 141, 'ON/OFF', '2014-05-12 10:30:44'),
+(1042, 0, NULL, 141, 'IRCODES', '2014-05-12 10:30:56'),
+(1043, 0, NULL, 141, 'IRCODES', '2014-05-12 10:31:01'),
+(1044, 0, NULL, 128, 'ON/OFF', '2014-05-12 18:07:39'),
+(1045, 0, NULL, 142, 'ON/OFF', '2014-05-12 22:31:46'),
+(1046, 0, NULL, 142, 'ON/OFF', '2014-05-12 22:31:47'),
+(1047, 0, NULL, 142, 'UP/MEDIUM/DOWN', '2014-05-12 22:31:50'),
+(1048, 0, NULL, 142, 'UP/MEDIUM/DOWN', '2014-05-12 22:31:50'),
+(1049, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:43'),
+(1050, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:45'),
+(1051, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:48'),
+(1052, 0, NULL, 29, 'IRCODES', '2014-05-12 22:38:48'),
+(1053, 0, NULL, 29, 'ON/OFF', '2014-05-12 22:38:55'),
+(1054, 0, NULL, 29, 'ON/OFF', '2014-05-12 22:39:06'),
+(1055, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 10:11:59'),
+(1056, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 10:12:00'),
+(1057, 0, NULL, 128, 'IRCODES', '2014-05-14 21:00:54'),
+(1058, 0, NULL, 128, 'IRCODES', '2014-05-14 21:01:40'),
+(1059, 0, NULL, 141, 'NUMBER', '2014-05-14 23:51:04'),
+(1060, 0, NULL, 141, 'NUMBER', '2014-05-14 23:51:05'),
+(1061, 0, NULL, 141, 'NUMBER', '2014-05-14 23:51:06'),
+(1062, 0, NULL, 141, 'NUMBER', '2014-05-14 23:51:07'),
+(1063, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 23:51:13'),
+(1064, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 23:51:14'),
+(1065, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 23:51:20'),
+(1066, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-14 23:51:22'),
+(1067, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-14 23:51:25'),
+(1068, 0, NULL, 141, 'ON/OFF', '2014-05-14 23:51:29'),
+(1069, 0, NULL, 141, 'IRCODES', '2014-05-14 23:51:42'),
+(1070, 0, NULL, 141, 'IRCODES', '2014-05-14 23:51:42'),
+(1071, 0, NULL, 141, 'IRCODES', '2014-05-14 23:51:44'),
+(1072, 0, NULL, 128, 'IRCODES', '2014-05-15 11:01:54'),
+(1073, 0, NULL, 128, 'IRCODES', '2014-05-15 11:01:58'),
+(1074, 0, NULL, 128, 'IRCODES', '2014-05-15 11:02:09'),
+(1075, 0, NULL, 128, 'IRCODES', '2014-05-15 11:02:12'),
+(1076, 0, NULL, 128, 'IRCODES', '2014-05-15 11:02:14'),
+(1077, 0, NULL, 128, 'IRCODES', '2014-05-15 11:02:16'),
+(1078, 0, NULL, 128, 'IRCODES', '2014-05-15 11:02:19'),
+(1079, 0, NULL, 128, '', '2014-05-15 11:05:38'),
+(1080, 0, NULL, 128, '', '2014-05-15 11:07:07'),
+(1081, 0, NULL, 128, '', '2014-05-15 11:26:06'),
+(1082, 0, NULL, 29, '', '2014-05-15 11:27:22'),
+(1083, 0, NULL, 29, '', '2014-05-15 11:27:33'),
+(1084, 0, NULL, 128, '', '2014-05-15 11:31:09'),
+(1085, 0, NULL, 128, '', '2014-05-15 11:32:47'),
+(1086, 0, NULL, 128, '', '2014-05-15 11:33:22'),
+(1087, 0, NULL, 128, '', '2014-05-15 11:33:31'),
+(1088, 0, NULL, 128, '', '2014-05-15 11:33:33'),
+(1089, 0, NULL, 128, '', '2014-05-15 11:34:03'),
+(1090, 0, NULL, 128, '', '2014-05-15 11:36:06'),
+(1091, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:36'),
+(1092, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:39'),
+(1093, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:39'),
+(1094, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:40'),
+(1095, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:41'),
+(1096, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:41'),
+(1097, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:42'),
+(1098, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:42'),
+(1099, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:43'),
+(1100, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:43'),
+(1101, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:44'),
+(1102, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:44'),
+(1103, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:44'),
+(1104, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:45'),
+(1105, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:45'),
+(1106, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:46'),
+(1107, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:46'),
+(1108, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:47'),
+(1109, 0, NULL, 141, 'IRCODES', '2014-05-15 12:42:59'),
+(1110, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:01'),
+(1111, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:12'),
+(1112, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:13'),
+(1113, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:14'),
+(1114, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:17'),
+(1115, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:19'),
+(1116, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:21'),
+(1117, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:21'),
+(1118, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:22'),
+(1119, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:24'),
+(1120, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:25'),
+(1121, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:28'),
+(1122, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:30'),
+(1123, 0, NULL, 141, 'IRCODES', '2014-05-15 12:43:31'),
+(1124, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-15 16:01:59'),
+(1125, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-15 16:02:00'),
+(1126, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-15 16:02:13'),
+(1127, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:12:17'),
+(1128, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:12:18'),
+(1129, 0, NULL, 141, 'ON/OFF', '2014-05-16 09:12:56'),
+(1130, 0, NULL, 141, 'ON/OFF', '2014-05-16 09:12:57'),
+(1131, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:32'),
+(1132, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:33'),
+(1133, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:33'),
+(1134, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:34'),
+(1135, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:35'),
+(1136, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:18:36'),
+(1137, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:21:27'),
+(1138, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:21:28'),
+(1139, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:30:05'),
+(1140, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:30:07'),
+(1141, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:31:39'),
+(1142, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:41:33'),
+(1143, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:41:43'),
+(1144, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:41:44'),
+(1145, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 09:41:45'),
+(1146, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 10:03:21'),
+(1147, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 10:03:23'),
+(1148, 0, NULL, 141, 'ON/OFF', '2014-05-16 10:03:32'),
+(1149, 0, NULL, 141, 'ON/OFF', '2014-05-16 10:03:33'),
+(1150, 0, NULL, 141, 'ON/OFF', '2014-05-16 10:03:34'),
+(1151, 0, NULL, 141, 'ON/OFF', '2014-05-16 10:03:35'),
+(1152, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-16 10:03:43'),
+(1153, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 10:03:48'),
+(1154, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 10:03:50'),
+(1155, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-16 10:05:08'),
+(1156, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-16 10:05:29'),
+(1157, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:31:34'),
+(1158, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:32:35'),
+(1159, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:34:03'),
+(1160, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:43:15'),
+(1161, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:46:48'),
+(1162, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:47:19'),
+(1163, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:47:40'),
+(1164, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:48:42'),
+(1165, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:48:51'),
+(1166, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:49:31'),
+(1167, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:49:41'),
+(1168, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:49:49'),
+(1169, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:49:52'),
+(1170, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:49:55'),
+(1171, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:49:57'),
+(1172, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:00'),
+(1173, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:05'),
+(1174, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:08'),
+(1175, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:27'),
+(1176, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:40'),
+(1177, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:50:53'),
+(1178, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:51:03'),
+(1179, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:52:06'),
+(1180, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:52:18'),
+(1181, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:20'),
+(1182, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:26'),
+(1183, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:31'),
+(1184, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:37'),
+(1185, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:41'),
+(1186, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 10:53:47'),
+(1187, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:55:34'),
+(1188, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:55:47'),
+(1189, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:55:56'),
+(1190, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:10'),
+(1191, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:17'),
+(1192, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:19'),
+(1193, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:22'),
+(1194, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:25'),
+(1195, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:27'),
+(1196, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:56:30'),
+(1197, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:58:00'),
+(1198, 0, NULL, 128, 'ON/OFF', '2014-05-16 10:58:08'),
+(1199, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:07:20'),
+(1200, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:07:46'),
+(1201, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:08:46'),
+(1202, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:09:25'),
+(1203, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:16:15'),
+(1204, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:16:31'),
+(1205, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:18:18'),
+(1206, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:22:51'),
+(1207, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:24:10'),
+(1208, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:24:31'),
+(1209, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:25:56'),
+(1210, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:27:04'),
+(1211, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:27:23'),
+(1212, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:29:12'),
+(1213, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:34:46'),
+(1214, 0, NULL, 128, 'ON/OFF', '2014-05-16 11:36:50'),
+(1215, 0, NULL, 141, 'ON/OFF', '2014-05-16 15:09:31'),
+(1216, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 15:11:47'),
+(1217, 0, NULL, 128, 'ON/OFF', '2014-05-16 15:12:12'),
+(1218, 0, NULL, 128, 'ON/OFF', '2014-05-16 15:12:21'),
+(1219, 0, NULL, 128, 'ON/OFF', '2014-05-16 15:13:16'),
+(1220, 0, NULL, 128, 'IRCODES', '2014-05-16 15:52:23'),
+(1221, 0, NULL, 128, 'IRCODES', '2014-05-16 15:52:34'),
+(1222, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-16 17:22:04'),
+(1223, 0, NULL, 128, 'IRCODES', '2014-05-16 21:18:03'),
+(1224, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-16 21:18:16'),
+(1225, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 21:23:22'),
+(1226, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 21:23:25'),
+(1227, 0, NULL, 128, 'ON/OFF', '2014-05-16 21:23:35'),
+(1228, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-16 21:24:00'),
+(1229, 0, NULL, 128, 'ON/OFF', '2014-05-16 21:24:04'),
+(1230, 0, NULL, 128, 'ON/OFF', '2014-05-16 21:24:07'),
+(1231, 0, NULL, 128, 'ON/OFF', '2014-05-16 21:24:10'),
+(1232, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 21:24:26'),
+(1233, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-16 21:24:29'),
+(1234, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-17 09:11:51'),
+(1235, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 09:12:01'),
+(1236, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:12:19'),
+(1237, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-17 09:12:48'),
+(1238, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:13:01'),
+(1239, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:13:56'),
+(1240, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:14:05'),
+(1241, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:14:15'),
+(1242, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:14:24'),
+(1243, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:14:32'),
+(1244, 0, NULL, 141, 'OPEN/CLOSE', '2014-05-17 09:14:54'),
+(1245, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:15:00'),
+(1246, 0, NULL, 141, 'ON/OFF', '2014-05-17 09:15:08'),
+(1247, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:15:36'),
+(1248, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:15:53'),
+(1249, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:16:06'),
+(1250, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:16:36'),
+(1251, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:18:01'),
+(1252, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:24:12'),
+(1253, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:24:25'),
+(1254, 0, NULL, 128, 'ON/OFF', '2014-05-17 09:25:01'),
+(1255, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 09:25:31'),
+(1256, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-17 09:25:49'),
+(1257, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:12:24'),
+(1258, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:14:05'),
+(1259, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:15:19'),
+(1260, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:16:48'),
+(1261, 0, NULL, 128, 'IRCODES', '2014-05-17 10:17:12'),
+(1262, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:18:27'),
+(1263, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:20:39'),
+(1264, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:20:57'),
+(1265, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:21:03'),
+(1266, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:22:02'),
+(1267, 0, NULL, 128, 'IRCODES', '2014-05-17 10:23:41'),
+(1268, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:24:37'),
+(1269, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:25:12'),
+(1270, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:27:12'),
+(1271, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:32:24'),
+(1272, 0, NULL, 128, 'IRCODES', '2014-05-17 10:32:34'),
+(1273, 0, NULL, 128, 'ON/OFF', '2014-05-17 10:33:18'),
+(1274, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:36:48'),
+(1275, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 10:37:15'),
+(1276, 0, NULL, 128, 'IRCODES', '2014-05-17 10:38:40'),
+(1277, 0, NULL, 128, 'IRCODES', '2014-05-17 10:39:02'),
+(1278, 0, NULL, 128, 'IRCODES', '2014-05-17 10:39:10'),
+(1279, 0, NULL, 141, 'ON/OFF', '2014-05-17 10:50:43'),
+(1280, 0, NULL, 128, 'ON/OFF', '2014-05-17 10:54:43'),
+(1281, 0, NULL, 128, 'ON/OFF', '2014-05-17 10:58:31'),
+(1282, 0, NULL, 128, 'ON/OFF', '2014-05-17 10:58:55'),
+(1283, 0, NULL, 128, 'IRCODES', '2014-05-17 10:59:44'),
+(1284, 0, NULL, 128, 'IRCODES', '2014-05-17 11:00:14'),
+(1285, 0, NULL, 128, 'IRCODES', '2014-05-17 11:00:21'),
+(1286, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 11:02:39'),
+(1287, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-17 11:18:25'),
+(1288, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 11:18:32'),
+(1289, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:18:36'),
+(1290, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:19:06'),
+(1291, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:19:18'),
+(1292, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:22:03'),
+(1293, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:22:17'),
+(1294, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:32:37'),
+(1295, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:33:12'),
+(1296, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:33:29'),
+(1297, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 11:33:40'),
+(1298, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:35:38'),
+(1299, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:36:43'),
+(1300, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 11:45:24'),
+(1301, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:45:35'),
+(1302, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:48:08'),
+(1303, 0, NULL, 128, 'IRCODES', '2014-05-17 11:48:22'),
+(1304, 0, NULL, 128, 'IRCODES', '2014-05-17 11:48:32'),
+(1305, 0, NULL, 128, 'IRCODES', '2014-05-17 11:48:41'),
+(1306, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:48:48'),
+(1307, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:49:13'),
+(1308, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:49:52'),
+(1309, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:51:20'),
+(1310, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:51:25'),
+(1311, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:51:32'),
+(1312, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:51:42'),
+(1313, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:52:01'),
+(1314, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:54:04'),
+(1315, 0, NULL, 128, 'IRCODES', '2014-05-17 11:55:32'),
+(1316, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:55:54'),
+(1317, 0, NULL, 128, 'ON/OFF', '2014-05-17 11:56:02'),
+(1318, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:19:25'),
+(1319, 0, NULL, 128, 'IRCODES', '2014-05-17 12:19:35'),
+(1320, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:20:07'),
+(1321, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:20:10'),
+(1322, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:20:19'),
+(1323, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:20:41'),
+(1324, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:21:08'),
+(1325, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 12:21:24'),
+(1326, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:21:36'),
+(1327, 0, NULL, 128, 'IRCODES', '2014-05-17 12:21:39'),
+(1328, 0, NULL, 128, 'IRCODES', '2014-05-17 12:21:49'),
+(1329, 0, NULL, 128, 'IRCODES', '2014-05-17 12:22:18'),
+(1330, 0, NULL, 128, 'IRCODES', '2014-05-17 12:24:21'),
+(1331, 0, NULL, 128, 'IRCODES', '2014-05-17 12:24:28'),
+(1332, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:28:45'),
+(1333, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:31:06'),
+(1334, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:31:23'),
+(1335, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:31:38'),
+(1336, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:33:11'),
+(1337, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:33:23'),
+(1338, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:34:24'),
+(1339, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:34:39'),
+(1340, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:35:27'),
+(1341, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:35:42'),
+(1342, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:35:53'),
+(1343, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:36:16'),
+(1344, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:36:41'),
+(1345, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:36:54'),
+(1346, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:37:39'),
+(1347, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:37:52'),
+(1348, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:38:05'),
+(1349, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:38:31'),
+(1350, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:38:51'),
+(1351, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:39:17'),
+(1352, 0, NULL, 128, 'ON/OFF', '2014-05-17 12:59:37'),
+(1353, 0, NULL, 128, 'IRCODES', '2014-05-17 12:59:50'),
+(1354, 0, NULL, 128, 'ON/OFF', '2014-05-17 13:14:56'),
+(1355, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 13:34:06'),
+(1356, 0, NULL, 128, 'IRCODES', '2014-05-17 13:34:30'),
+(1357, 0, NULL, 128, 'IRCODES', '2014-05-17 13:34:38'),
+(1358, 0, NULL, 128, 'ON/OFF', '2014-05-17 13:34:57'),
+(1359, 0, NULL, 128, 'ON/OFF', '2014-05-17 13:35:05'),
+(1360, 0, NULL, 128, 'ON/OFF', '2014-05-17 13:53:31'),
+(1361, 0, NULL, 128, 'ON/OFF', '2014-05-17 14:48:54'),
+(1362, 0, NULL, 128, 'ON/OFF', '2014-05-17 14:54:45'),
+(1363, 0, NULL, 128, 'ON/OFF', '2014-05-17 14:56:56'),
+(1364, 0, NULL, 128, 'ON/OFF', '2014-05-17 14:57:33'),
+(1365, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:00:18'),
+(1366, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:00:34'),
+(1367, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:00:47'),
+(1368, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:00:56'),
+(1369, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:03:47'),
+(1370, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:04:26'),
+(1371, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:05:42'),
+(1372, 0, NULL, 128, 'IRCODES', '2014-05-17 15:06:12'),
+(1373, 0, NULL, 128, 'IRCODES', '2014-05-17 15:08:33'),
+(1374, 0, NULL, 128, 'IRCODES', '2014-05-17 15:10:54'),
+(1375, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:33:22'),
+(1376, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:33:27'),
+(1377, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-17 15:34:02'),
+(1378, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 15:34:13'),
+(1379, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 15:34:30'),
+(1380, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:34:32'),
+(1381, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:34:46'),
+(1382, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:42:33'),
+(1383, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:44:56'),
+(1384, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:46:19'),
+(1385, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:48:00'),
+(1386, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:49:08'),
+(1387, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:50:11'),
+(1388, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:51:27'),
+(1389, 0, NULL, 128, 'ON/OFF', '2014-05-17 15:56:55'),
+(1390, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:00:24'),
+(1391, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:02:56'),
+(1392, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:05:15'),
+(1393, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:06:25'),
+(1394, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:11:23'),
+(1395, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:13:59'),
+(1396, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:18:03'),
+(1397, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:18:27'),
+(1398, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:19:26'),
+(1399, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:20:09'),
+(1400, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 16:28:20'),
+(1401, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:28:32'),
+(1402, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:29:36'),
+(1403, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:32:15'),
+(1404, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:34:19'),
+(1405, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:36:23'),
+(1406, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:37:11'),
+(1407, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:37:31'),
+(1408, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:43:51'),
+(1409, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:44:56'),
+(1410, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:45:10'),
+(1411, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:45:53'),
+(1412, 0, NULL, 128, 'ON/OFF', '2014-05-17 16:46:06'),
+(1413, 0, NULL, 141, 'UP/MEDIUM/DOWN', '2014-05-17 21:18:03'),
+(1414, 0, NULL, 141, 'ON/OFF', '2014-05-17 21:18:13'),
+(1415, 0, NULL, 141, 'IRCODES', '2014-05-17 21:18:27'),
+(1416, 0, NULL, 141, 'IRCODES', '2014-05-17 21:18:27'),
+(1417, 0, NULL, 128, 'ON/OFF', '2014-05-17 23:55:50'),
+(1418, 0, NULL, 128, 'ON/OFF', '2014-05-17 23:55:56'),
+(1419, 0, NULL, 128, 'IRCODES', '2014-05-17 23:56:05'),
+(1420, 0, NULL, 128, 'IRCODES', '2014-05-17 23:56:15'),
+(1421, 0, NULL, 128, 'IRCODES', '2014-05-17 23:56:20'),
+(1422, 0, NULL, 128, 'ON/OFF', '2014-05-17 23:56:26'),
+(1423, 0, NULL, 128, 'ON/OFF', '2014-05-17 23:56:31'),
+(1424, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-17 23:56:36'),
+(1425, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:44:13'),
+(1426, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:44:41'),
+(1427, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:45:59'),
+(1428, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:46:56'),
+(1429, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:48:11'),
+(1430, 0, NULL, 128, 'ON/OFF', '2014-05-18 09:50:32'),
+(1431, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:01:01'),
+(1432, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:01:12'),
+(1433, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:01:19'),
+(1434, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 10:02:48'),
+(1435, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 10:03:06'),
+(1436, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:03:09'),
+(1437, 0, NULL, 128, 'IRCODES', '2014-05-18 10:05:09'),
+(1438, 0, NULL, 128, 'IRCODES', '2014-05-18 10:05:44'),
+(1439, 0, NULL, 128, 'IRCODES', '2014-05-18 10:13:04'),
+(1440, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:18:53'),
+(1441, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:20:50'),
+(1442, 0, NULL, 128, 'IRCODES', '2014-05-18 10:24:36'),
+(1443, 0, NULL, 128, 'IRCODES', '2014-05-18 10:27:45'),
+(1444, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:28:30'),
+(1445, 0, NULL, 128, 'IRCODES', '2014-05-18 10:28:40'),
+(1446, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:33:41'),
+(1447, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:34:54'),
+(1448, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:35:51'),
+(1449, 0, NULL, 128, 'IRCODES', '2014-05-18 10:35:55'),
+(1450, 0, NULL, 128, 'IRCODES', '2014-05-18 10:35:58'),
+(1451, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:50:52'),
+(1452, 0, NULL, 128, 'ON/OFF', '2014-05-18 10:51:29'),
+(1453, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:01:50'),
+(1454, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:07:32'),
+(1455, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:08:13'),
+(1456, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:13:38'),
+(1457, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:14:41'),
+(1458, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:24:28'),
+(1459, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:26:43'),
+(1460, 0, NULL, 128, 'ON/OFF', '2014-05-18 11:31:22'),
+(1461, 0, NULL, 128, 'IRCODES', '2014-05-18 11:31:36'),
+(1462, 0, NULL, 128, 'IRCODES', '2014-05-18 11:31:49'),
+(1463, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-18 11:36:28'),
+(1464, 0, NULL, 128, 'ON/OFF', '2014-05-18 12:17:05'),
+(1465, 0, NULL, 128, 'ON/OFF', '2014-05-18 12:17:25'),
+(1466, 0, NULL, 128, 'IRCODES', '2014-05-18 12:17:41'),
+(1467, 0, NULL, 128, 'IRCODES', '2014-05-18 12:17:55'),
+(1468, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 12:18:05'),
+(1469, 0, NULL, 128, 'IRCODES', '2014-05-18 12:18:10'),
+(1470, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:19:17'),
+(1471, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:19:50'),
+(1472, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:20:05'),
+(1473, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:26:10'),
+(1474, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:26:30'),
+(1475, 0, NULL, 128, 'IRCODES', '2014-05-18 13:26:42'),
+(1476, 0, NULL, 128, 'IRCODES', '2014-05-18 13:26:53'),
+(1477, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:27:20'),
+(1478, 0, NULL, 141, 'ON/OFF', '2014-05-18 13:27:45'),
+(1479, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:29:14'),
+(1480, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:29:59'),
+(1481, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:31:42'),
+(1482, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:32:55'),
+(1483, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:33:09'),
+(1484, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:33:50'),
+(1485, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:34:25'),
+(1486, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:36:08'),
+(1487, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:37:09'),
+(1488, 0, NULL, 128, 'ON/OFF', '2014-05-18 13:49:24'),
+(1489, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-18 13:52:54'),
+(1490, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 13:59:55'),
+(1491, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:00:06'),
+(1492, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:00:26'),
+(1493, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:00:42'),
+(1494, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:50:48'),
+(1495, 0, NULL, 128, 'IRCODES', '2014-05-18 14:51:04'),
+(1496, 0, NULL, 128, 'IRCODES', '2014-05-18 14:51:15'),
+(1497, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-18 14:51:42'),
+(1498, 0, NULL, 128, 'IRCODES', '2014-05-18 14:52:21'),
+(1499, 0, NULL, 128, 'IRCODES', '2014-05-18 14:53:08'),
+(1500, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:54:46'),
+(1501, 0, NULL, 128, 'IRCODES', '2014-05-18 14:54:58'),
+(1502, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-18 14:55:16'),
+(1503, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:55:22'),
+(1504, 0, NULL, 128, 'ON/OFF', '2014-05-18 14:55:37'),
+(1505, 0, NULL, 128, 'IRCODES', '2014-05-18 14:56:15'),
+(1506, 0, NULL, 128, 'IRCODES', '2014-05-18 14:56:33'),
+(1507, 0, NULL, 128, 'IRCODES', '2014-05-18 14:57:41'),
+(1508, 0, NULL, 128, 'IRCODES', '2014-05-18 14:57:47'),
+(1509, 0, NULL, 128, 'IRCODES', '2014-05-18 14:59:26'),
+(1510, 0, NULL, 128, 'IRCODES', '2014-05-18 14:59:36'),
+(1511, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 15:04:23'),
+(1512, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:08:52'),
+(1513, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:12:46'),
+(1514, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:48:07'),
+(1515, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:48:23'),
+(1516, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:48:34'),
+(1517, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:48:47'),
+(1518, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:51:14'),
+(1519, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:52:18'),
+(1520, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:52:34'),
+(1521, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:52:57'),
+(1522, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:55:33'),
+(1523, 0, NULL, 128, 'ON/OFF', '2014-05-18 15:56:33'),
+(1524, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:10:17'),
+(1525, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:12:19'),
+(1526, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:14:40'),
+(1527, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:15:20'),
+(1528, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:15:28'),
+(1529, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:17:48'),
+(1530, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:18:42'),
+(1531, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:19:06'),
+(1532, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:19:06'),
+(1533, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:19:29'),
+(1534, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:20:12'),
+(1535, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:20:56'),
+(1536, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:21:05'),
+(1537, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:26:13'),
+(1538, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:26:33'),
+(1539, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:31:37'),
+(1540, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:32:29'),
+(1541, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:32:39'),
+(1542, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:33:43'),
+(1543, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:34:33'),
+(1544, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:43:10'),
+(1545, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:43:20'),
+(1546, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:44:34'),
+(1547, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:44:44'),
+(1548, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:54:46'),
+(1549, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:54:56'),
+(1550, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:55:40'),
+(1551, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:55:50'),
+(1552, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:56:10'),
+(1553, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:58:47'),
+(1554, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:58:58'),
+(1555, 0, NULL, 128, 'ON/OFF', '2014-05-18 16:59:14'),
+(1556, 0, NULL, 128, 'ON/OFF', '2014-05-18 17:02:42'),
+(1557, 0, NULL, 128, 'ON/OFF', '2014-05-18 17:03:19'),
+(1558, 0, NULL, 128, 'ON/OFF', '2014-05-18 17:03:30'),
+(1559, 0, NULL, 128, 'ON/OFF', '2014-05-18 17:03:46'),
+(1560, 0, NULL, 128, 'ON/OFF', '2014-05-18 17:04:01'),
+(1561, 0, NULL, 128, 'ON/OFF', '2014-05-18 19:35:21'),
+(1562, 0, NULL, 128, 'ON/OFF', '2014-05-18 19:41:24'),
+(1563, 0, NULL, 128, 'ON/OFF', '2014-05-18 20:54:43'),
+(1564, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 20:54:49'),
+(1565, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-18 20:54:56'),
+(1566, 0, NULL, 128, 'ON/OFF', '2014-05-19 06:53:02'),
+(1567, 0, NULL, 128, 'ON/OFF', '2014-05-19 16:51:18'),
+(1568, 0, NULL, 128, 'ON/OFF', '2014-05-20 16:35:28'),
+(1569, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:25'),
+(1570, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:25'),
+(1571, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:26'),
+(1572, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:26'),
+(1573, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:27'),
+(1574, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:27'),
+(1575, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:28'),
+(1576, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:28'),
+(1577, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:29'),
+(1578, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:29'),
+(1579, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:30'),
+(1580, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:30'),
+(1581, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:31'),
+(1582, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:31'),
+(1583, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:32'),
+(1584, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:32'),
+(1585, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:33'),
+(1586, 0, NULL, 128, 'ON/OFF', '2014-05-21 02:06:33'),
+(1587, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:11:58'),
+(1588, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:11:58'),
+(1589, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:11:59'),
+(1590, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:11:59'),
+(1591, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:12:00'),
+(1592, 0, NULL, 128, 'UP/MEDIUM/DOWN', '2014-05-21 02:12:00'),
+(1593, 0, NULL, 128, 'ON/OFF', '2014-05-21 08:05:26'),
+(1594, 0, NULL, 128, 'ON/OFF', '2014-05-21 08:05:27'),
+(1595, 0, NULL, 128, 'ON/OFF', '2014-05-21 08:05:28'),
+(1596, 0, NULL, 128, 'ON/OFF', '2014-05-21 08:05:28'),
+(1597, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:36'),
+(1598, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:37'),
+(1599, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:38'),
+(1600, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:38'),
+(1601, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:39'),
+(1602, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:39'),
+(1603, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:40'),
+(1604, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:40'),
+(1605, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:41'),
+(1606, 0, NULL, 128, 'ON/OFF', '2014-05-21 12:51:42'),
+(1607, 0, NULL, 128, 'IRCODES', '2014-05-21 12:53:06'),
+(1608, 0, NULL, 128, 'IRCODES', '2014-05-21 12:53:07'),
+(1609, 0, NULL, 128, 'IRCODES', '2014-05-21 12:53:07'),
+(1610, 0, NULL, 128, 'ON/OFF', '2014-05-21 16:22:09'),
+(1611, 0, NULL, 128, 'ON/OFF', '2014-05-21 16:22:09'),
+(1612, 0, NULL, 128, 'OPEN/CLOSE', '2014-05-21 16:24:11'),
+(1613, 0, NULL, 128, 'ON/OFF', '2014-05-22 14:45:23');
 
 -- --------------------------------------------------------
 
@@ -12134,7 +15805,7 @@ CREATE TABLE IF NOT EXISTS `houseRoomServiceActionVIEW` (
 --
 -- Estructura de tabla para la tabla `HOUSES`
 --
--- Creación: 16-04-2014 a las 00:24:52
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `HOUSES`;
@@ -12149,32 +15820,25 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
---
--- RELACIONES PARA LA TABLA `HOUSES`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Volcado de datos para la tabla `HOUSES`
 --
 
 INSERT INTO `HOUSES` (`IDHOUSE`, `IDUSER`, `HOUSENAME`, `IDIMAGE`, `CITY`, `COUNTRY`, `GPS`, `DATEBEGIN`) VALUES
-(9, 0, 'casaBertoldo', 421, 'lisboa', '', NULL, '2014-03-23 19:51:49'),
-(10, 2, 'Mansión', 421, 'madrid', 'spain', NULL, '2014-03-25 21:39:22'),
-(24, 29, 'houseDEMO2', 432, 'madrid', 'spain', NULL, '2014-04-23 10:21:05'),
-(25, 0, 'house2DEMO2', 263, 'colonia', '', NULL, '2014-04-25 09:30:50');
+(9, 0, 'casaBertoldo', 421, 'londres', 'gb', NULL, '2014-03-23 19:51:49'),
+(10, 2, 'Mansión', 421, 'lima', 'peru', NULL, '2014-03-25 21:39:22'),
+(24, 29, 'houseDEMO2', 445, 'fuenlabrada', 'spain', NULL, '2014-04-23 10:21:05'),
+(25, 0, 'house2DEMO2', 263, 'lima', 'usa', NULL, '2014-04-25 09:30:50'),
+(26, 141, 'fdi DEMO3', 469, 'madrid', 'spain', NULL, '2014-05-14 23:00:08');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IMAGES`
 --
--- Creación: 22-04-2014 a las 09:21:16
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IMAGES`;
@@ -12183,226 +15847,53 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=437 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=471 ;
 
 --
 -- Volcado de datos para la tabla `IMAGES`
 --
 
 INSERT INTO `IMAGES` (`IDIMAGE`, `URL`, `TYPE`) VALUES
-(231, 'images/2014-04-2311.25.21.jpg', 'image/jpeg'),
-(232, 'images/2014-04-2310.18.56.jpg', 'image/jpeg'),
-(233, 'images/2014-04-2310.16.45.jpg', 'image/jpeg'),
-(234, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(235, 'images/DSCF2055.jpg', 'image/jpeg'),
-(236, 'images/1398188199880.jpg', 'image/jpeg'),
-(237, 'images/1398188199880_fact_2.jpg', 'image/jpeg'),
-(238, 'images/2014-04-1518.09.52.jpg', ''),
-(239, 'images/2014-04-1518.09.52.jpg', ''),
-(240, 'images/2014-04-1518.09.52.jpg', ''),
-(241, 'images/2014-04-1518.09.52.jpg', ''),
-(242, 'images/2014-04-1518.09.52.jpg', ''),
-(243, 'images/2014-04-1518.09.52.jpg', ''),
-(244, 'images/2014-04-1518.09.52.jpg', ''),
-(245, 'images/2014-04-1518.09.52.jpg', ''),
-(246, 'images/2014-04-1518.09.52.jpg', ''),
-(247, 'images/2014-04-1518.09.52.jpg', ''),
-(248, 'images/2014-04-1518.09.52.jpg', ''),
-(249, 'images/2014-04-1518.09.52.jpg', ''),
-(250, 'images/2014-04-2309.18.25.jpg', ''),
-(251, 'images/2014-04-2309.18.25.jpg', ''),
-(252, 'images/2014-04-2309.18.25.jpg', ''),
-(253, 'images/2014-04-2309.18.25.jpg', ''),
-(254, 'images/2014-04-2309.18.25.jpg', ''),
-(255, 'images/2014-04-2309.18.25.jpg', ''),
-(256, 'images/2014-04-2309.18.25.jpg', ''),
-(257, 'images/2014-04-2309.18.25.jpg', ''),
-(258, 'images/2014-04-2309.18.25.jpg', ''),
-(259, 'images/2014-04-2309.18.25.jpg', ''),
-(260, 'images/2014-04-2309.18.25.jpg', ''),
-(261, 'images/2014-04-2309.18.25.jpg', ''),
-(262, 'images/2014-04-2309.18.25.jpg', 'image/jpeg'),
 (263, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(264, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(265, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(266, 'images/1398285281121.jpg', 'image/jpeg'),
-(267, 'images/2014-04-2310.16.45.jpg', 'image/jpeg'),
-(268, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(269, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(270, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(271, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(272, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(273, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(274, 'images/AKA7.png', 'image/png'),
-(275, 'images/1398440224287.jpg', 'image/jpeg'),
-(276, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(277, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(278, 'images/2014-04-2322.34.50.jpg', 'image/jpeg'),
-(279, 'images/2014-04-2309.18.25.jpg', 'image/jpeg'),
-(280, 'images/1398505291615.jpg', 'image/jpeg'),
-(281, 'images/IMG-20140414-WA0000.jpg', 'image/jpeg'),
-(282, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(283, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(284, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(285, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(286, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(287, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(288, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(289, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(290, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(291, 'images/1398514858233.jpg', 'image/jpeg'),
-(292, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(293, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(294, 'images/1398515647192.jpg', 'image/jpeg'),
-(295, 'images/3702102233458977864.jpg', 'image/jpeg'),
-(296, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(297, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(298, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(299, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(300, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(301, 'images/-5071688982451818767.jpg', 'image/jpeg'),
-(302, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(303, 'images/1398524697012.jpg', 'image/jpeg'),
-(304, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(305, 'images/2014-04-2614.34.23.jpg', 'image/jpeg'),
-(306, 'images/1398524935873.jpg', 'image/jpeg'),
-(307, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(308, 'images/IMG-20140414-WA0004.jpg', 'image/jpeg'),
-(309, 'images/1398525838121.jpg', ''),
-(310, 'images/1398525941166.jpg', ''),
-(311, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(312, 'images/1398524935873_fact_1.jpg', 'image/jpeg'),
-(313, 'images/1398526112506.jpg', 'image/jpeg'),
-(314, 'images/1398526145470.jpg', 'image/jpeg'),
-(315, 'images/1398524935873_fact_1_fact_1.jpg', 'image/jpeg'),
-(316, 'images/1398526299487.jpg', 'image/jpeg'),
-(317, 'images/IMG-20140422-WA0000.jpg', 'image/jpeg'),
-(318, 'images/IMG-20140422-WA0000.jpg', 'image/jpeg'),
-(319, 'images/1398526460600.jpg', 'image/jpeg'),
-(320, 'images/1398526540477.jpg', 'image/jpeg'),
-(321, 'images/1398527183245.jpg', 'image/jpeg'),
-(322, 'images/1398527249246.jpg', 'image/jpeg'),
-(323, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(324, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(325, 'images/1398527481457.jpg', 'image/jpeg'),
-(326, 'images/1398527541988.jpg', 'image/jpeg'),
-(327, 'images/1398527728956.jpg', 'image/jpeg'),
-(328, 'images/1398527831281.jpg', 'image/jpeg'),
-(329, 'images/1398528082683.jpg', 'image/jpeg'),
-(330, 'images/1398528242992.jpg', 'image/jpeg'),
-(331, 'images/1398528290982.jpg', 'image/jpeg'),
-(332, 'images/1398528360904.jpg', 'image/jpeg'),
-(333, 'images/1398528946325.jpg', 'image/jpeg'),
-(334, 'images/1398529036561.jpg', 'image/jpeg'),
-(335, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(336, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(337, 'images/1398529263602.jpg', 'image/jpeg'),
-(338, 'images/IMG-20140414-WA0002.jpg', 'image/jpeg'),
-(339, 'images/1398529411829.jpg', 'image/jpeg'),
-(340, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(341, 'images/1398529263602_fact_1.jpg', 'image/jpeg'),
-(342, 'images/IMG-20140426-WA0006.jpg', 'image/jpeg'),
-(343, 'images/1398531559502.jpg', 'image/jpeg'),
-(344, 'images/1398531930888.jpg', 'image/jpeg'),
 (345, 'images/sam.h_name.jpg', 'image/jpeg'),
-(346, 'images/IMG-20140314-WA0002.jpg', 'image/jpeg'),
-(347, 'images/1399026800817.jpg', 'image/jpeg'),
-(348, 'images/1399027581589.jpg', 'image/jpeg'),
-(349, 'images/1399029811148.jpg', 'image/jpeg'),
-(350, 'images/1399301682734.jpg', 'image/jpeg'),
-(351, 'images/', ''),
-(352, 'images/android-logo.png', 'image/png'),
-(353, 'images/android-logo-small.gif', 'image/gif'),
-(354, 'images/1399503718040.jpg', ''),
-(355, 'images/1399503863821.jpg', ''),
-(356, 'images/1399503943266.jpg', ''),
-(357, 'images/1399504057311.jpg', ''),
-(358, 'images/1399504155261.jpg', ''),
-(359, 'images/1399504244195.jpg', ''),
-(360, 'images/1399504332292.jpg', 'image/jpeg'),
-(361, 'images/1399504547006.jpg', ''),
-(362, 'images/1399504972850.jpg', 'image/jpeg'),
-(363, 'images/1399505096521.jpg', ''),
-(364, 'images/1399505138845.jpg', ''),
-(365, 'images/1399505325394.jpg', ''),
-(366, 'images/1399505546029.jpg', 'image/jpeg'),
-(367, 'images/1399505779930.jpg', 'image/jpeg'),
-(368, 'images/1399505908171.jpg', 'image/jpeg'),
-(369, 'images/1399506070298.jpg', ''),
-(370, 'images/1399506363076.jpg', ''),
-(371, 'images/1399506452329.jpg', 'image/jpeg'),
-(372, 'images/1399506795058.jpg', 'image/jpeg'),
-(373, 'images/1399506913180.jpg', ''),
-(374, 'images/1399507256943.jpg', ''),
-(375, 'images/1399507385860.jpg', 'image/jpeg'),
-(376, 'images/1399504332292.jpg', ''),
-(377, 'images/1399504332292.jpg', ''),
-(378, 'images/1399504332292.jpg', ''),
-(379, 'images/1399504332292.jpg', ''),
-(380, 'images/1399508305504.jpg', 'image/jpeg'),
-(381, 'images/1399509018779.jpg', ''),
-(382, 'images/1399509167192.jpg', ''),
-(383, 'images/1399509322884.jpg', 'image/jpeg'),
-(384, 'images/1399531851429.jpg', ''),
-(385, 'images/1399531851429.jpg', ''),
-(386, 'images/1399532908503.jpg', 'image/jpeg'),
-(387, 'images/1399533347196.jpg', 'image/jpeg'),
-(388, 'images/1399533451751.jpg', ''),
-(389, 'images/1399534818318.jpg', ''),
-(390, 'images/1399534907150.jpg', ''),
-(391, 'images/1399535198411.jpg', ''),
-(392, 'images/1399535363077.jpg', ''),
-(393, 'images/1399535363077.jpg', ''),
-(394, 'images/1399535475959.jpg', ''),
-(395, 'images/1399536234144.jpg', ''),
-(396, 'images/1399536438961.jpg', ''),
-(397, 'images/1399536568350.jpg', 'image/jpeg'),
-(398, 'images/1399536747377.jpg', 'image/jpeg'),
-(399, 'images/1399536959934.jpg', ''),
-(400, 'images/1399536959934.jpg', ''),
-(401, 'images/1399537165678.jpg', ''),
-(402, 'images/1399537335004.jpg', ''),
-(403, 'images/1399537504345.jpg', ''),
-(404, 'images/1399537651236.jpg', ''),
-(405, 'images/1399537857302.jpg', 'image/jpeg'),
-(406, 'images/1399538111537.jpg', ''),
-(407, 'images/1399538455828.jpg', ''),
-(408, 'images/1399538592362.jpg', ''),
-(409, 'images/1399538787398.jpg', ''),
-(410, 'images/1399539058365.jpg', ''),
-(411, 'images/DSC_0017.jpg', ''),
-(412, 'images/DSC_0017.jpg', ''),
-(413, 'images/DSC_0017.jpg', ''),
-(414, 'images/DSC_0017.jpg', ''),
-(415, 'images/DSC_0017.jpg', ''),
-(416, 'images/dot_dot.png', 'image/png'),
-(417, 'images/button.png', 'image/png'),
-(418, 'images/DSC_0017.jpg', ''),
-(419, 'images/DSC_0017.jpg', ''),
-(420, 'images/DSC_0017.jpg', ''),
 (421, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(422, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(423, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(424, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(425, 'images/1399541867134_fact_1.jpg', 'image/jpeg'),
-(426, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(427, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(428, 'images/2014-05-0809_fact_1.08_fact_1.31_fact_1.jpg', 'image/jpeg'),
-(429, 'images/2014-05-0801_fact_1.12_fact_1.18_fact_1.jpg', 'image/jpeg'),
-(430, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(431, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(432, 'images/1399635502107_fact_1.jpg', 'image/jpeg'),
-(433, 'images/1399636595515_fact_1.jpg', 'image/jpeg'),
-(434, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(435, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
-(436, 'images/DSC_0017_fact_1.jpg', 'image/jpeg');
+(439, 'images/IMAG0001_fact_1.jpg', 'image/jpeg'),
+(442, 'images/1399934038766_fact_1.jpg', 'image/jpeg'),
+(443, 'images/IMG-20140513-WA0001_fact_1.jpg', 'image/jpeg'),
+(444, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
+(445, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(446, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(447, 'images/DSC_0017_fact_1.jpg', 'image/jpeg'),
+(448, 'images/fdi.gif', 'image/gif'),
+(449, 'images/', ''),
+(450, 'images/20041211215150_LanciaStratos03.jpg', 'image/jpeg'),
+(451, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(452, 'images/IMG-20140517-WA0001_fact_1.jpg', 'image/jpeg'),
+(453, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(454, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(455, 'images/IMG-20140517-WA0001_fact_1.jpg', 'image/jpeg'),
+(456, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(457, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(458, 'images/IMG-20140517-WA0000_fact_1.jpg', 'image/jpeg'),
+(459, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(460, 'images/IMG-20140517-WA0001_fact_1.jpg', 'image/jpeg'),
+(461, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(462, 'images/1024x600_05_fact_1.jpg', 'image/jpeg'),
+(463, 'images/IMG-20140518-WA0000_fact_1.jpg', 'image/jpeg'),
+(464, 'images/DSC_0017_fact_2_fact_1.jpg', 'image/jpeg'),
+(465, 'images/IMG-20140514-WA0000_fact_2_fact_1.jpg', 'image/jpeg'),
+(466, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(467, 'images/IMG-20140514-WA0000_fact_1.jpg', 'image/jpeg'),
+(468, 'images/1400655133136_fact_1.jpg', 'image/jpeg'),
+(469, 'images/edFdi.jpg', 'image/jpeg'),
+(470, 'images/demo.png', 'image/png');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
 --
--- Creación: 24-04-2014 a las 21:46:35
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IRCODES`;
@@ -12452,7 +15943,7 @@ INSERT INTO `IRCODES` (`IDCODE`, `TYPE`, `POWER`, `SETUP`, `MUTE`, `FUNCTION`, `
 --
 -- Estructura de tabla para la tabla `LOGED`
 --
--- Creación: 11-05-2014 a las 17:32:58
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `LOGED`;
@@ -12463,7 +15954,7 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
   `OS` varchar(50) NOT NULL,
   PRIMARY KEY (`IDLOG`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=169 ;
 
 --
 -- RELACIONES PARA LA TABLA `LOGED`:
@@ -12476,7 +15967,9 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
 --
 
 INSERT INTO `LOGED` (`IDLOG`, `IDUSER`, `REGID`, `OS`) VALUES
-(18, 128, 'APA91bHva6rb-wtKa9HqLgyKtPg1VTs573KvHb_hj3C9Xmo5X2jTnu7fgnG_pkmX90upvJMKJasWU8sXrezKy1OHxLrnbwm90SuNzZmBIumbHuY5tK3lMLYIwrcLhXn-tTf_qzKzAEDX1nWnsHi7iv1XyJu5OONjxA', 'Android');
+(145, 128, 'APA91bE6cN67bLSxDmzr0q6ObT5DJoE1Gn0iNAald5qc8C_6K_btDrATbj7YgHZvHZIpViIr-AJtjnEHblu67MktlyyoNpyWcC06Hg-bFqQfr9W6B1XbESHIiMilpB1PEYK6AaAfLY5pZWKu5feGYAPPihot46SkUQ', 'Android'),
+(160, 29, 'APA91bE8rOzEeelAj0Y2rxbc899NrP6cuR2LpQeGq_iOo90SAqV-MKtptf-YStmDUngHgkNQ6XpRtJcDeNcI1T__9dvjSQn6Pkr_0w9HX8SeK6_GDORTAQYRvgCw8FM6GG04w0MlnKv6pMylUb6W4YON7yfW2Gtdtg', 'Android'),
+(168, 128, 'APA91bG2wyFuJb-3SXtogfzDqZgbgOaqpLHGulTGfMOWTVAHNmqtzUsbHoN3W_0ypH0fAkNUjawEeo3cGRtRf80wSNtn92d8q2GataBB_shly1qAjN9N3ZCJaELq483WAWFxzxOVcPXZUFiItD8xQeADuD0MLDti_A', 'Android');
 
 -- --------------------------------------------------------
 
@@ -12514,7 +16007,7 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 --
 -- Estructura de tabla para la tabla `PERMISSIONS`
 --
--- Creación: 19-04-2014 a las 20:52:19
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PERMISSIONS`;
@@ -12558,7 +16051,7 @@ INSERT INTO `PERMISSIONS` (`IDUSER`, `IDSERVICE`, `PERMISSIONNUMBER`, `DATEBEGIN
 --
 -- Estructura de tabla para la tabla `PROGRAMACTIONS`
 --
--- Creación: 24-04-2014 a las 22:07:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PROGRAMACTIONS`;
@@ -12572,12 +16065,10 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`),
   KEY `IDACTION` (`IDACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=148 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDACTION`
 --       `ACTIONS` -> `IDACTION`
 --
@@ -12605,17 +16096,21 @@ INSERT INTO `PROGRAMACTIONS` (`IDPROGRAM`, `PROGRAMNAME`, `IDUSER`, `IDACTION`, 
 (123, 'Pillar al perro con la persiana.', 128, 232, 'DOWN', '2014-03-29 08:00:00', '2014-04-26 19:03:07'),
 (124, 'Pillar a la abuela con la persiana', 128, 232, 'DOWN', '2014-03-30 09:00:00', '2014-04-26 19:04:26'),
 (125, 'arobobo', 128, 252, 'ON', '2014-03-30 09:07:00', '2014-04-26 19:07:29'),
-(126, 'Pillar a la abuela con la persiana.', 128, 232, 'DOWN', '2014-04-30 09:00:00', '2014-04-26 19:09:04'),
 (129, 'asdasd', 29, 192, '10052014', '0000-00-00 00:00:00', '2014-05-11 15:47:24'),
-(132, 'testing', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:28'),
-(133, 'testinga', 29, 194, 'ON', '2014-05-11 06:55:00', '2014-05-11 17:56:34');
+(137, 'date update', 141, 274, 'ON', '2014-05-23 00:13:00', '2014-05-22 22:13:00'),
+(140, 'tesssst', 29, 196, 'DOWN', '2014-07-22 10:14:00', '2014-05-22 22:15:00'),
+(142, 'sadsad', 29, 190, 'TURN OFF', '2014-05-22 10:29:00', '2014-05-22 22:29:48'),
+(144, 'Telefonillo', 29, 192, 'ON', '2014-05-23 10:46:00', '2014-05-22 22:43:56'),
+(145, 'champions', 128, 255, 'TURN ON', '2014-05-24 22:32:00', '2014-05-23 08:31:53'),
+(146, 'F1', 128, 255, 'TURN ON', '2014-05-25 14:00:00', '2014-05-23 08:32:29'),
+(147, 'fiestuki', 128, 273, 'OFF', '2014-05-23 22:00:00', '2014-05-23 08:33:46');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `REGISTRATIONS`
 --
--- Creación: 17-04-2014 a las 18:32:39
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `REGISTRATIONS`;
@@ -12630,7 +16125,7 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
 
 --
 -- Volcado de datos para la tabla `REGISTRATIONS`
@@ -12638,14 +16133,15 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
 
 INSERT INTO `REGISTRATIONS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `DATEBEGIN`, `CODECONFIRM`) VALUES
 (32, 'lulu', 'lulu', 'djkluis@gmail.com', '', '2014-04-22 18:04:10', '3517605420'),
-(52, 'b', '08f8e0260c64418510cefb2b06eee5cd', 'b@', '', '2014-05-07 00:04:03', 'e8564041d28ffdae1400bffe6563e809');
+(52, 'b', '08f8e0260c64418510cefb2b06eee5cd', 'b@', '', '2014-05-07 00:04:03', 'e8564041d28ffdae1400bffe6563e809'),
+(55, 'yo', '6d0007e52f7afb7d5a0650b0ffb8a4d1', 'yo@', '', '2014-05-12 10:32:01', '31765c2ee76081d29c2c4aeb0d19771e');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ROOMS`
 --
--- Creación: 23-04-2014 a las 10:03:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `ROOMS`;
@@ -12659,12 +16155,10 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDHOUSE`
 --       `HOUSES` -> `IDHOUSE`
 --
@@ -12682,7 +16176,10 @@ INSERT INTO `ROOMS` (`IDROOM`, `IDHOUSE`, `IDUSER`, `ROOMNAME`, `TYPE`, `DATEBEG
 (9, 10, 2, 'Kitchen', 0, '2014-03-25 21:41:17'),
 (10, 10, 2, 'Garden', 4, '2014-03-25 21:41:31'),
 (27, 24, 29, 'kitchen', 0, '2014-04-23 10:22:36'),
-(28, 24, 29, 'party', 4, '2014-04-23 10:22:47');
+(28, 24, 29, 'party', 4, '2014-04-23 10:22:47'),
+(29, 26, 141, 'Room1', 0, '2014-05-14 23:06:30'),
+(30, 26, 141, 'Room2', 0, '2014-05-14 23:06:55'),
+(31, 26, 141, 'Room3', 0, '2014-05-14 23:07:08');
 
 -- --------------------------------------------------------
 
@@ -12709,7 +16206,7 @@ CREATE TABLE IF NOT EXISTS `scheduleVIEW` (
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
--- Creación: 18-04-2014 a las 15:51:21
+-- Creación: 14-05-2014 a las 23:47:53
 --
 
 DROP TABLE IF EXISTS `SERVICES`;
@@ -12724,9 +16221,9 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `ENGLISH` varchar(50) DEFAULT NULL,
   `SPANISH` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`IDSERVICE`),
-  UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
-  KEY `IDDEVICE` (`IDDEVICE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=201 ;
+  KEY `IDDEVICE` (`IDDEVICE`),
+  KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=219 ;
 
 --
 -- RELACIONES PARA LA TABLA `SERVICES`:
@@ -12745,15 +16242,19 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (1, NULL, 0, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (2, NULL, 0, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (3, NULL, 0, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(4, NULL, 0, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(4, NULL, 0, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (5, NULL, 0, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (6, NULL, 0, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
 (7, NULL, 0, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
+(8, NULL, 0, 'MOTION', NULL, 9, 'NULL', 'Motion sense.', 'Sensor de movimiento.'),
+(9, NULL, 0, 'RAIN', NULL, 10, 'NULL', 'Rain sensor.', 'Sensor de lluvia.'),
+(10, NULL, 0, 'TEMP', NULL, 11, '0', 'Temperature sense.', 'Sensor de temperatura.'),
+(11, NULL, 0, 'TV', 'TV LG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (161, NULL, 43, 'TV', 'TV NPG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (162, NULL, 43, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (163, NULL, 43, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (164, 7, 43, 'AIRCONDITIONING', NULL, 5, 'down', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(165, 10, 43, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(165, 10, 43, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (166, 9, 43, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (167, 8, 43, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
 (168, 10, 43, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
@@ -12761,34 +16262,48 @@ INSERT INTO `SERVICES` (`IDSERVICE`, `IDROOM`, `IDDEVICE`, `SERVICENAME`, `TYPE`
 (170, 1, 44, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (171, 1, 44, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (172, 1, 44, 'AIRCONDITIONING', 'FUGITSU', 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(173, 1, 44, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(173, 1, 44, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (174, 2, 44, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (175, 3, 44, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
 (176, 2, 44, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
-(177, NULL, 0, 'TV', 'TV NPG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (178, NULL, 45, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (179, NULL, 45, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (180, NULL, 45, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(181, NULL, 45, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(181, NULL, 45, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (182, NULL, 45, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (183, NULL, 45, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
 (184, 3, 45, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
-(185, 27, 46, 'TV', 'TV LG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
+(185, 27, 46, 'TV', 'TV LG', 1, '01321234567', 'Universal remote for TV.', 'Mando universal para televición.'),
 (186, NULL, 46, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (187, NULL, 46, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (188, NULL, 46, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(189, NULL, 46, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
-(190, 27, 46, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
+(189, NULL, 46, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(190, 27, 46, 'BLINDS', NULL, 7, 'UP', 'Blinds control.', 'Control de persianas.'),
 (191, NULL, 46, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
 (192, 27, 46, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
 (193, 28, 47, 'TV', 'TV NPG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
 (194, NULL, 47, 'INTERCOM', NULL, 3, 'OFF', 'For intercom.', 'Para el telefonillo.'),
 (195, NULL, 47, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
 (196, NULL, 47, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
-(197, NULL, 47, 'SENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(197, NULL, 47, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
 (198, NULL, 47, 'BLINDS', NULL, 7, 'OFF', 'Blinds control.', 'Control de persianas.'),
 (199, NULL, 47, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
-(200, 28, 47, 'LIGHTS', NULL, 2, 'DOWM', 'Control of lights.', 'Control de luces.');
+(200, 28, 47, 'LIGHTS', NULL, 2, 'ON', 'Control of lights.', 'Control de luces.'),
+(204, 29, 50, 'TV', 'TV LG', 1, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
+(205, 30, 49, 'INTERCOM', NULL, 3, 'INTERCOM', 'For intercom.', 'Para el telefonillo.'),
+(206, NULL, 48, 'PLUG', NULL, 4, 'OFF', 'Control strips.', 'Control de regletas.'),
+(207, NULL, 48, 'AIRCONDITIONING', NULL, 5, 'OFF', 'Control of air conditioning.', 'Control del aire acondicionado.'),
+(208, NULL, 48, 'LIGHTSENSOR', NULL, 6, 'OFF', 'Sensors.', 'Sensores.'),
+(209, 29, 50, 'BLINDS', NULL, 7, 'MEDIUM', 'Blinds control.', 'Control de persianas.'),
+(210, NULL, 48, 'DOOR', NULL, 8, 'OFF', 'Control gates.', 'Control de puertas.'),
+(211, NULL, 48, 'LIGHTS', NULL, 2, 'OFF', 'Control of lights.', 'Control de luces.'),
+(212, 31, 48, 'MOTION', NULL, 9, 'MOTION', 'Motion sense.', 'Sensor de movimiento.'),
+(213, 31, 48, 'RAIN', NULL, 10, 'LLuvia', 'Rain sensor.', 'Sensor de lluvia.'),
+(214, 31, 48, 'TEMP', NULL, 11, '24.90', 'Temperature sense.', 'Sensor de temperatura.'),
+(215, 30, 49, 'TV', 'TV NPG', 1, 'POWER', 'Universal remote for TV.', 'Mando universal para televición.'),
+(216, 31, 48, 'LIGHTSENSOR', NULL, 6, 'LOW', 'Universal remote for TV.', 'Mando universal para televición.'),
+(217, 30, 49, 'LIGHTS', NULL, 2, 'OFF', 'Universal remote for TV.', 'Mando universal para televición.'),
+(218, 29, 50, 'LIGHTS', NULL, 2, 'ON', 'Control of lights.', 'Control de luces.');
 
 -- --------------------------------------------------------
 
@@ -12816,7 +16331,7 @@ CREATE TABLE IF NOT EXISTS `singleProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `SOFTWARE`
 --
--- Creación: 15-04-2014 a las 19:54:17
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `SOFTWARE`;
@@ -12832,7 +16347,7 @@ CREATE TABLE IF NOT EXISTS `SOFTWARE` (
 --
 -- Estructura de tabla para la tabla `STADISTICS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `STADISTICS`;
@@ -12905,7 +16420,7 @@ INSERT INTO `STADISTICS` (`Y`, `X`) VALUES
 --
 -- Estructura de tabla para la tabla `TASKPROGRAM`
 --
--- Creación: 12-04-2014 a las 14:42:09
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKPROGRAM`;
@@ -12929,7 +16444,7 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
 --
 -- Estructura de tabla para la tabla `TASKS`
 --
--- Creación: 15-04-2014 a las 19:55:00
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKS`;
@@ -12986,9 +16501,117 @@ CREATE TABLE IF NOT EXISTS `taskVIEW` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `TEMP`
+--
+-- Creación: 14-05-2014 a las 19:16:13
+--
+
+DROP TABLE IF EXISTS `TEMP`;
+CREATE TABLE IF NOT EXISTS `TEMP` (
+  `IDIMAGE` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `TEMP`
+--
+
+INSERT INTO `TEMP` (`IDIMAGE`) VALUES
+(239),
+(240),
+(241),
+(242),
+(243),
+(244),
+(245),
+(246),
+(247),
+(248),
+(249),
+(251),
+(252),
+(253),
+(254),
+(255),
+(256),
+(257),
+(258),
+(259),
+(260),
+(261),
+(262),
+(264),
+(265),
+(267),
+(268),
+(269),
+(270),
+(271),
+(272),
+(273),
+(276),
+(277),
+(279),
+(282),
+(283),
+(284),
+(285),
+(286),
+(287),
+(288),
+(289),
+(290),
+(292),
+(293),
+(295),
+(298),
+(299),
+(300),
+(301),
+(302),
+(304),
+(305),
+(311),
+(318),
+(323),
+(324),
+(335),
+(336),
+(338),
+(340),
+(342),
+(376),
+(377),
+(378),
+(379),
+(385),
+(393),
+(400),
+(412),
+(413),
+(414),
+(415),
+(418),
+(419),
+(420),
+(422),
+(423),
+(424),
+(426),
+(427),
+(430),
+(431),
+(434),
+(435),
+(436),
+(440),
+(441);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `USERS`
 --
--- Creación: 22-04-2014 a las 22:14:12
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `USERS`;
@@ -13003,13 +16626,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
-
---
--- RELACIONES PARA LA TABLA `USERS`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=143 ;
 
 --
 -- Volcado de datos para la tabla `USERS`
@@ -13033,10 +16650,12 @@ INSERT INTO `USERS` (`IDUSER`, `USERNAME`, `PASSWORD`, `EMAIL`, `HINT`, `IDIMAGE
 (83, 'x', '7815696ecbf1c96e6894b779456d330e', 'z@f', ' ', NULL, '2014-04-09 13:33:28'),
 (97, 'alejandroladrondeguevara', '534b44a19bf18d20b71ecc4eb77c572f', 'lejandroladrondeguevara@gmail.com', 'about me.', NULL, '2014-04-15 10:45:56'),
 (103, 'w', '84e13febc22182a56f123e2c1ddbc47f', 'g', '', NULL, '2014-04-15 23:58:11'),
-(128, 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 'demo@gmail.es', ' ', 433, '2014-04-23 10:32:59'),
+(128, 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 'demo@gmail.es', ' ', 470, '2014-04-23 10:32:59'),
 (129, 'hlskhdlud', 'fa7f8233358e9b466effa1328168527', 'hlzlhdif@jfjfjf.cpm', 'caca', NULL, '2014-04-23 17:46:09'),
 (136, 'samer', 'f04210bd6070dce9de3442225124ef56', 'samer@fdi.ucm.es', 'al revés', 345, '2014-04-26 19:06:01'),
-(140, 'Miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguelalexandermaldonado@gmail.com', '', NULL, '2014-05-07 18:15:38');
+(140, 'Miguel', '9eb0c9605dc81a68731f61b3e0838937', 'miguelalexandermaldonado@gmail.com', '', NULL, '2014-05-07 18:15:38'),
+(141, 'q', '7694f4a66316e53c8cdd9d9954bd611d', 'q@yahoo.com', ' ', 445, '2014-05-12 10:28:17'),
+(142, 'cati', '137c73bbfae47722be52387e2ee2e4fd', 'caticmoreno@gmail.com', ' ', 442, '2014-05-12 22:27:57');
 
 --
 -- Disparadores `USERS`
@@ -13045,7 +16664,7 @@ DROP TRIGGER IF EXISTS `demoAccessHouse`;
 DELIMITER //
 CREATE TRIGGER `demoAccessHouse` AFTER INSERT ON `USERS`
  FOR EACH ROW BEGIN
-    INSERT INTO `ACCESSHOUSE`(`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES (NEW.IDUSER ,24 ,1 ,CURRENT_TIMESTAMP);
+    INSERT INTO `ACCESSHOUSE`(`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES (NEW.IDUSER ,26 ,1 ,CURRENT_TIMESTAMP);
   END
 //
 DELIMITER ;
@@ -13057,7 +16676,7 @@ DELIMITER ;
 --
 DROP TABLE IF EXISTS `commandVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 -- --------------------------------------------------------
 
@@ -13066,7 +16685,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `countHitsVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
 
 -- --------------------------------------------------------
 
@@ -13075,7 +16694,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `deviceVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
 
 -- --------------------------------------------------------
 
@@ -13084,7 +16703,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `eventProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13093,7 +16712,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `houseRoomServiceActionVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
 
 -- --------------------------------------------------------
 
@@ -13102,7 +16721,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 
@@ -13111,7 +16730,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `scheduleVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13120,7 +16739,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `singleProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -13129,7 +16748,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `taskVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 --
 -- Restricciones para tablas volcadas

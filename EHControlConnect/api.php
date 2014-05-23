@@ -866,7 +866,7 @@ function getweather($city, $country, $language){
 	$language = ($language == null || $language == '')? 'en':$language;
 	//exec('./clima '.$city.','.$country.' '. $language,$output);
 	
-	  $output=query("SELECT Salida FROM CRONACTIONS WHERE `city`='%s'
+	$output=query("SELECT Salida FROM CRONACTIONS WHERE `city`='%s'
                                               AND `country`='%s'
                                               AND `language`='%s' ", $city, $country, $language);
         
@@ -1838,10 +1838,10 @@ function updateservicestate($idservice, $data){
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	
-	$message = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
+	$sql = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
 	
 	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	$json['error'] =  array_map('utf8_encode', $sql['result'][0]);
 	
 	print json_encode($json);
 	
@@ -1856,6 +1856,10 @@ function updateservicestate($idservice, $data){
 								FROM loginVIEW 
 								WHERE IDSERVICE='%s' 
 								GROUP BY IDUSER);", $idservice);
+		//SEARCH all loged users
+		$SQLser = query("SELECT SERVICENAME
+							  FROM SERVICES
+							  WHERE IDSERVICE='%s';", $idservice);
 		
 		//send notification foreach mobile with access to the service
 		for ($i = 0 ; $i < count($SQLmobileID['result']); $i++ ){
@@ -1863,7 +1867,37 @@ function updateservicestate($idservice, $data){
 			$regID = $SQLmobileID['result'][$i]['REGID'];
 			
 			//MESSAGE TO THE MOBILE
-			$msg = 'relogin';
+			switch ($SQLser['result'][0]['SERVICENAME']){
+				case 'TV':
+					$msg = 'TV change.';
+					break;
+				case 'LIGHTS':
+					$msg = 'Lights switched.';
+					break;
+				case 'TEMP':
+					$msg = 'Temperature updated.';
+					break;
+				case 'MOTION':
+					$msg = 'Motion detected!';
+					break;
+				case 'BLINDS':
+					$msg = 'Blinds moved.';
+					break;
+				case 'INTERCOM':
+					$msg = 'Intercom: ring! RING!';
+					break;
+				case 'LIGHTSENSOR':
+					$msg = 'Light sensor updated.';
+					break;
+				case 'RAIN':
+					$msg = 'Rain detected.';
+					break;
+				default:
+					$msg = 'relogin';
+			}
+			
+			//concat mobile ID prevent nested notification
+			$msg .= '*'.$regID;
 			
 			//APP ANDROID VERSION
 			$api = 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0';

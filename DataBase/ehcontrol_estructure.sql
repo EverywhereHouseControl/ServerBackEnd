@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 12-05-2014 a las 01:14:32
+-- Tiempo de generación: 23-05-2014 a las 10:53:20
 -- Versión del servidor: 5.5.35
 -- Versión de PHP: 5.3.10-1ubuntu3.10
 
@@ -25,7 +25,7 @@ DELIMITER $$
 -- Procedimientos
 --
 DROP PROCEDURE IF EXISTS `addcommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addcommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'add an acction to a command.'
 begin
 
@@ -92,7 +92,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `addtaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addtaskprogram`( IN u VARCHAR(50), IN t VARCHAR(50),IN idpa INTEGER)
     COMMENT 'add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -153,7 +153,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator grant access somobody to a house.'
 begin
 
@@ -207,7 +207,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createcommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createcommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Create a new command (conjunto de mandatos)'
 begin
 
@@ -256,7 +256,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createdevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createdevice`( IN u VARCHAR(50), IN ip VARCHAR(500), IN s VARCHAR(50), IN d VARCHAR(50))
     COMMENT 'Create a new device.'
 begin
 
@@ -362,7 +362,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Create a new house if not exist.'
 begin
 
@@ -419,7 +419,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createpermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createpermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50), IN n INTEGER)
     COMMENT 'An admistrator give permission to somobody to a service.'
 begin
 
@@ -474,7 +474,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createprogramaction`( IN pa VARCHAR(50), IN u VARCHAR(50), IN h VARCHAR(50),IN r VARCHAR(50),IN s VARCHAR(50), IN a VARCHAR(50),IN dat VARCHAR(50), IN t timestamp, IN d timestamp)
     COMMENT 'Program an action to be done.'
 begin
 	DECLARE num, acc INTEGER DEFAULT 0;
@@ -561,7 +561,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createroom`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Create a new room if not exist.'
 begin
 
@@ -617,7 +617,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createtask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createtask`( IN u VARCHAR(50), IN ta VARCHAR(50),IN des VARCHAR(50),IN fre timestamp)
     COMMENT 'Create a task, will group programaction.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -668,7 +668,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `createuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN mail VARCHAR(50), h VARCHAR(50), c VARCHAR(50))
     COMMENT 'Create a new user if username not exist and email have not an account yet.'
 begin
 
@@ -736,7 +736,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteaccesshouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteaccesshouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'Delete the access to a house of an user.'
 begin
 
@@ -797,7 +797,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletecommand`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletecommand`( IN u VARCHAR(50), IN c VARCHAR(50))
     COMMENT 'Delete a command from an user (conjunto de mandatos)'
 begin
 
@@ -845,7 +845,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletedevice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletedevice`( IN u VARCHAR(50),IN p VARCHAR(50), IN idd INTEGER)
     COMMENT 'Delete a device.'
 begin
 
@@ -899,7 +899,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletehouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletehouse`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50))
     COMMENT 'Delete a house if exist and the user is an administrator.'
 begin
 
@@ -948,7 +948,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletepermissionservice`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletepermissionservice`( IN u VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50), IN s VARCHAR(50), IN u2 VARCHAR(50))
     COMMENT 'An admistrator delete permission to somobody to a service.'
 begin
 
@@ -999,7 +999,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteprogramaction`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteprogramaction`( IN u VARCHAR(50), IN pa VARCHAR(50))
     COMMENT 'Delete program action.'
 begin
 	DECLARE num, acc, per INTEGER DEFAULT 0;
@@ -1051,7 +1051,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteroom`( IN u VARCHAR(50),IN p VARCHAR(50), IN h VARCHAR(50), IN r VARCHAR(50))
     COMMENT 'Delete a room if exist.'
 begin
 
@@ -1100,7 +1100,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deletetask`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletetask`( IN u VARCHAR(50), IN ta VARCHAR(50))
     COMMENT 'Delete a user task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1151,7 +1151,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `deleteuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Delete user if posible by deleting all information restring.'
 begin
 
@@ -1196,7 +1196,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `linkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `linkserviceroom`( IN ids INTEGER, IN idr INTEGER)
     COMMENT 'Attach the service with the room.'
 begin
 
@@ -1246,7 +1246,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `loginJSON`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loginJSON`( in u VARCHAR(50))
 begin
 
 SELECT *
@@ -1256,7 +1256,7 @@ SELECT *
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyhouse`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyhouse`( IN u VARCHAR(50), IN h VARCHAR(50), IN n_h VARCHAR(50), IN im VARCHAR(50), IN c VARCHAR(50), IN ctry VARCHAR(50))
     COMMENT 'Modify house information.'
 begin
 
@@ -1319,7 +1319,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyservicetype`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyservicetype`( IN u VARCHAR(50), IN idd INTEGER, IN s VARCHAR(50), IN ty VARCHAR(50))
     COMMENT 'An admistrator modify the type of service instaled on the device.'
 begin
 
@@ -1359,7 +1359,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `modifyuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyuser`( IN u VARCHAR(50), IN p VARCHAR(50), IN n_u VARCHAR(50), IN n_p VARCHAR(50), IN n_mail VARCHAR(50), n_h VARCHAR(50), IN im VARCHAR(50))
     COMMENT 'Mdify the especcification of an existing user.'
 begin
 
@@ -1433,7 +1433,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `recoveryuser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recoveryuser`( IN u VARCHAR(50), IN p VARCHAR(50))
     COMMENT 'Generate a password to recovery user.'
 begin
 	DECLARE idu INTEGER DEFAULT NULL;
@@ -1454,7 +1454,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `removecommandprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removecommandprogram`( IN u VARCHAR(50), IN c VARCHAR(50), IN idpa INTEGER, IN n INTEGER)
     COMMENT 'Remove an acction of a command.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1518,7 +1518,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `removetaskprogram`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removetaskprogram`( IN u VARCHAR(50), IN idta INTEGER, IN idpa INTEGER)
     COMMENT 'Add an acction to a task.'
 begin
 	DECLARE num INTEGER DEFAULT 0;
@@ -1582,7 +1582,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `schedule`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `schedule`( IN h VARCHAR(15))
     COMMENT 'Request for all task afected to a house, by a user.'
 begin
 
@@ -1601,7 +1601,7 @@ begin
 end$$
 
 DROP PROCEDURE IF EXISTS `selectiduser`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `selectiduser`( in u VARCHAR(20), out id integer)
 BEGIN
 DECLARE idu INTEGER;
 SELECT IDUSER into idu FROM USERS WHERE USERNAME=u;
@@ -1609,7 +1609,7 @@ set id = idu;
 END$$
 
 DROP PROCEDURE IF EXISTS `streaminghour`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `streaminghour`(ini TIMESTAMP, p INT)
 BEGIN
 DROP  TABLE IF EXISTS STADISTICS  ;
 CREATE TABLE STADISTICS SELECT COUNT(*) AS Y, X
@@ -1621,7 +1621,7 @@ ORDER BY X;
 END$$
 
 DROP PROCEDURE IF EXISTS `unlinkserviceroom`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unlinkserviceroom`( IN ids INTEGER)
     COMMENT 'Remove the room from a service.'
 begin
 
@@ -1662,12 +1662,13 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `updateservicestate`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
     COMMENT 'raspberry pi connect to update the state of the service.'
 begin
 
 	DECLARE num INTEGER DEFAULT 0;
 	DECLARE err INTEGER DEFAULT 0;
+	DECLARE s, st, boton VARCHAR(50);
 
 end_proc:begin
 	IF (ids IS NULL OR stat IS NULL) THEN 
@@ -1675,7 +1676,7 @@ end_proc:begin
 		LEAVE end_proc;
 	END IF;
 
-	SELECT COUNT(*) INTO num
+	SELECT COUNT(*),SERVICENAME, TYPE INTO num, s, st
 	FROM SERVICES
 	WHERE `IDSERVICE`= ids;
 			
@@ -1683,9 +1684,124 @@ end_proc:begin
 	WHEN 0 THEN
 		SET err = 64;
 	ELSE
-		UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
-		SET err = 78;
-
+		CASE
+		WHEN s = 'TV' THEN
+			
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND POWER = stat;
+			SET boton = 'POWER';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SETUP = stat;
+			SET boton = 'SETUP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND MUTE = stat;
+			SET boton = 'MUTE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FUNCTION = stat;
+			SET boton = 'FUNCTION';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ONE = stat;
+			SET boton = 'ONE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND TWO = stat;
+			SET boton = 'TWO';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND THREE = stat;
+			SET boton = 'THREE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FOUR = stat;
+			SET boton = 'FOUR';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FIVE = stat;
+			SET boton = 'FIVE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SIX = stat;
+			SET boton = 'SIX';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SEVEN = stat;
+			SET boton = 'SEVEN';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND EIGHT = stat;
+			SET boton = 'EIGHT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND NINE = stat;
+			SET boton = 'NINE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ZERO = stat;
+			SET boton = 'ZERO';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FAV = stat;
+			SET boton = 'FAV';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND UP = stat;
+			SET boton = 'UP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND DOWN = stat;
+			SET boton = 'DOWN';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `LEFT` = stat;
+			SET boton = 'LEFT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `RIGHT` = stat;
+			SET boton = 'RIGHT';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND OK = stat;
+			SET boton = 'OK';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PLAY = stat;
+			SET boton = 'PLAY';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PAUSE = stat;
+			SET boton = 'PAUSE';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND STOP = stat;
+			SET boton = 'STOP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FF = stat;
+			SET boton = 'FF';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FW = stat;
+			SET boton = 'FW';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEUP = stat;
+			SET boton = 'VOLUMEUP';
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEDOWN = stat;
+			SET boton = 'VOLUMEDOWN';
+			IF num = 0 THEN 
+			SET boton = stat;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			UPDATE `SERVICES` SET `STATUS`= boton WHERE `IDSERVICE`= ids;
+			SET err = 78;
+		ELSE
+			UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+			SET err = 78;
+		END CASE;
 	END CASE;
 end;
 
@@ -1699,7 +1815,7 @@ end;
 end$$
 
 DROP PROCEDURE IF EXISTS `userexist`$$
-CREATE DEFINER=`alex`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userexist`(u VARCHAR(15), p VARCHAR(40), error INTEGER)
 BEGIN 
 declare pass varchar(40);
 SELECT PASSWORD INTO pass FROM USERS WHERE USERNAME=u;
@@ -1717,14 +1833,14 @@ END$$
 -- Funciones
 --
 DROP FUNCTION IF EXISTS `ROUND_HOUR`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `ROUND_HOUR`(datestamp DATETIME) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'returns nearest hour'
 RETURN DATE_FORMAT(datestamp + INTERVAL 30 MINUTE, '%Y-%m-%d %H:00')$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_HOURS`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_HOURS`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N hour boundary. For example,\n           TRUNCATE_N_HOURS(sometime, 12) gives the nearest\n           preceding half-day (noon, or midnight'
@@ -1733,7 +1849,7 @@ RETURN DATE(datestamp) +
                           HOUR(datestamp) MOD n) HOUR$$
 
 DROP FUNCTION IF EXISTS `TRUNC_N_MINUTES`$$
-CREATE DEFINER=`alex`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
+CREATE DEFINER=`root`@`localhost` FUNCTION `TRUNC_N_MINUTES`(datestamp DATETIME, n INT) RETURNS datetime
     NO SQL
     DETERMINISTIC
     COMMENT 'truncate to N minute boundary. For example,\n           TRUNCATE_N_MINUTES(sometime, 15) gives the nearest\n           preceding quarter hour'
@@ -1748,7 +1864,7 @@ DELIMITER ;
 --
 -- Estructura de tabla para la tabla `ACCESSHOUSE`
 --
--- Creación: 13-04-2014 a las 22:59:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACCESSHOUSE`;
@@ -1774,7 +1890,7 @@ CREATE TABLE IF NOT EXISTS `ACCESSHOUSE` (
 --
 -- Estructura de tabla para la tabla `ACTIONMESSAGES`
 --
--- Creación: 15-04-2014 a las 19:48:45
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONMESSAGES`;
@@ -1800,7 +1916,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONMESSAGES` (
 --
 -- Estructura de tabla para la tabla `ACTIONS`
 --
--- Creación: 17-04-2014 a las 10:27:48
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `ACTIONS`;
@@ -1813,7 +1929,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
   `FCODE` varchar(20) NOT NULL,
   PRIMARY KEY (`IDACTION`),
   UNIQUE KEY `UNQ_ACTIONKEY` (`IDSERVICE`,`ACTIONNAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=253 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=275 ;
 
 --
 -- RELACIONES PARA LA TABLA `ACTIONS`:
@@ -1826,7 +1942,7 @@ CREATE TABLE IF NOT EXISTS `ACTIONS` (
 --
 -- Estructura de tabla para la tabla `COMMANDS`
 --
--- Creación: 15-04-2014 a las 19:49:30
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMANDS`;
@@ -1872,7 +1988,7 @@ CREATE TABLE IF NOT EXISTS `commandVIEW` (
 --
 -- Estructura de tabla para la tabla `COMMAND_PROGRAM`
 --
--- Creación: 15-04-2014 a las 14:24:32
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `COMMAND_PROGRAM`;
@@ -1927,7 +2043,7 @@ CREATE TABLE IF NOT EXISTS `countHitsVIEW` (
 --
 -- Estructura de tabla para la tabla `CRONACTIONS`
 --
--- Creación: 08-05-2014 a las 23:07:59
+-- Creación: 14-05-2014 a las 19:16:10
 --
 
 DROP TABLE IF EXISTS `CRONACTIONS`;
@@ -1939,14 +2055,14 @@ CREATE TABLE IF NOT EXISTS `CRONACTIONS` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `id` (`city`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `DEVICES`
 --
--- Creación: 17-04-2014 a las 01:10:04
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `DEVICES`;
@@ -1962,7 +2078,7 @@ CREATE TABLE IF NOT EXISTS `DEVICES` (
   `VERSION` int(11) NOT NULL,
   PRIMARY KEY (`IDDEVICE`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
 
 --
 -- RELACIONES PARA LA TABLA `DEVICES`:
@@ -1998,7 +2114,7 @@ CREATE TABLE IF NOT EXISTS `deviceVIEW` (
 --
 -- Estructura de tabla para la tabla `ERRORS`
 --
--- Creación: 17-04-2014 a las 21:28:34
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `ERRORS`;
@@ -2036,7 +2152,7 @@ CREATE TABLE IF NOT EXISTS `eventProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `FUNCTIONS`
 --
--- Creación: 15-04-2014 a las 19:50:51
+-- Creación: 14-05-2014 a las 19:16:11
 --
 
 DROP TABLE IF EXISTS `FUNCTIONS`;
@@ -2052,7 +2168,7 @@ CREATE TABLE IF NOT EXISTS `FUNCTIONS` (
 --
 -- Estructura de tabla para la tabla `HISTORYACCESS`
 --
--- Creación: 13-04-2014 a las 22:08:26
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `HISTORYACCESS`;
@@ -2066,14 +2182,10 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
   PRIMARY KEY (`IDHISTORY`),
   KEY `ERROR` (`ERROR`),
   KEY `FUNCT` (`FUNCT`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8793 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11749 ;
 
 --
 -- RELACIONES PARA LA TABLA `HISTORYACCESS`:
---   `IDHOUSE`
---       `HOUSES` -> `IDHOUSE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `ERROR`
 --       `ERRORS` -> `ERRORCODE`
 --   `FUNCT`
@@ -2085,7 +2197,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACCESS` (
 --
 -- Estructura de tabla para la tabla `HISTORYACTION`
 --
--- Creación: 15-04-2014 a las 19:51:13
+-- Creación: 14-05-2014 a las 19:16:12
 --
 
 DROP TABLE IF EXISTS `HISTORYACTION`;
@@ -2097,15 +2209,7 @@ CREATE TABLE IF NOT EXISTS `HISTORYACTION` (
   `RETURNCODE` varchar(50) NOT NULL,
   `DATESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHISTORYACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1041 ;
-
---
--- RELACIONES PARA LA TABLA `HISTORYACTION`:
---   `IDACTION`
---       `ACTIONS` -> `IDACTION`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1614 ;
 
 -- --------------------------------------------------------
 
@@ -2129,7 +2233,7 @@ CREATE TABLE IF NOT EXISTS `houseRoomServiceActionVIEW` (
 --
 -- Estructura de tabla para la tabla `HOUSES`
 --
--- Creación: 16-04-2014 a las 00:24:52
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `HOUSES`;
@@ -2144,22 +2248,14 @@ CREATE TABLE IF NOT EXISTS `HOUSES` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDHOUSE`),
   UNIQUE KEY `HOUSENAME` (`HOUSENAME`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
---
--- RELACIONES PARA LA TABLA `HOUSES`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---   `IDUSER`
---       `USERS` -> `IDUSER`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IMAGES`
 --
--- Creación: 22-04-2014 a las 09:21:16
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IMAGES`;
@@ -2168,14 +2264,14 @@ CREATE TABLE IF NOT EXISTS `IMAGES` (
   `URL` varchar(500) DEFAULT NULL,
   `TYPE` varchar(50) NOT NULL,
   PRIMARY KEY (`IDIMAGE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=437 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=471 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `IRCODES`
 --
--- Creación: 24-04-2014 a las 21:46:35
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `IRCODES`;
@@ -2217,7 +2313,7 @@ CREATE TABLE IF NOT EXISTS `IRCODES` (
 --
 -- Estructura de tabla para la tabla `LOGED`
 --
--- Creación: 11-05-2014 a las 17:32:58
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `LOGED`;
@@ -2228,7 +2324,7 @@ CREATE TABLE IF NOT EXISTS `LOGED` (
   `OS` varchar(50) NOT NULL,
   PRIMARY KEY (`IDLOG`),
   KEY `IDUSER` (`IDUSER`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=169 ;
 
 --
 -- RELACIONES PARA LA TABLA `LOGED`:
@@ -2272,7 +2368,7 @@ CREATE TABLE IF NOT EXISTS `loginVIEW` (
 --
 -- Estructura de tabla para la tabla `PERMISSIONS`
 --
--- Creación: 19-04-2014 a las 20:52:19
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PERMISSIONS`;
@@ -2298,7 +2394,7 @@ CREATE TABLE IF NOT EXISTS `PERMISSIONS` (
 --
 -- Estructura de tabla para la tabla `PROGRAMACTIONS`
 --
--- Creación: 24-04-2014 a las 22:07:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `PROGRAMACTIONS`;
@@ -2312,12 +2408,10 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
   `DATEBEGIN` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`IDPROGRAM`),
   KEY `IDACTION` (`IDACTION`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=148 ;
 
 --
 -- RELACIONES PARA LA TABLA `PROGRAMACTIONS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDACTION`
 --       `ACTIONS` -> `IDACTION`
 --
@@ -2327,7 +2421,7 @@ CREATE TABLE IF NOT EXISTS `PROGRAMACTIONS` (
 --
 -- Estructura de tabla para la tabla `REGISTRATIONS`
 --
--- Creación: 17-04-2014 a las 18:32:39
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `REGISTRATIONS`;
@@ -2342,14 +2436,14 @@ CREATE TABLE IF NOT EXISTS `REGISTRATIONS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ROOMS`
 --
--- Creación: 23-04-2014 a las 10:03:52
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `ROOMS`;
@@ -2363,12 +2457,10 @@ CREATE TABLE IF NOT EXISTS `ROOMS` (
   PRIMARY KEY (`IDROOM`),
   UNIQUE KEY `ROOMNAME` (`ROOMNAME`,`IDHOUSE`),
   KEY `IDHOUSE` (`IDHOUSE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
 
 --
 -- RELACIONES PARA LA TABLA `ROOMS`:
---   `IDUSER`
---       `USERS` -> `IDUSER`
 --   `IDHOUSE`
 --       `HOUSES` -> `IDHOUSE`
 --
@@ -2398,7 +2490,7 @@ CREATE TABLE IF NOT EXISTS `scheduleVIEW` (
 --
 -- Estructura de tabla para la tabla `SERVICES`
 --
--- Creación: 18-04-2014 a las 15:51:21
+-- Creación: 14-05-2014 a las 23:47:53
 --
 
 DROP TABLE IF EXISTS `SERVICES`;
@@ -2413,9 +2505,9 @@ CREATE TABLE IF NOT EXISTS `SERVICES` (
   `ENGLISH` varchar(50) DEFAULT NULL,
   `SPANISH` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`IDSERVICE`),
-  UNIQUE KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`,`IDDEVICE`,`SERVICENAME`),
-  KEY `IDDEVICE` (`IDDEVICE`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=201 ;
+  KEY `IDDEVICE` (`IDDEVICE`),
+  KEY `UNQ_IDROOM_IDDEVICE_SERVICENAME` (`IDROOM`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=219 ;
 
 --
 -- RELACIONES PARA LA TABLA `SERVICES`:
@@ -2451,7 +2543,7 @@ CREATE TABLE IF NOT EXISTS `singleProgramVIEW` (
 --
 -- Estructura de tabla para la tabla `SOFTWARE`
 --
--- Creación: 15-04-2014 a las 19:54:17
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `SOFTWARE`;
@@ -2467,7 +2559,7 @@ CREATE TABLE IF NOT EXISTS `SOFTWARE` (
 --
 -- Estructura de tabla para la tabla `STADISTICS`
 --
--- Creación: 12-04-2014 a las 14:42:06
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `STADISTICS`;
@@ -2481,7 +2573,7 @@ CREATE TABLE IF NOT EXISTS `STADISTICS` (
 --
 -- Estructura de tabla para la tabla `TASKPROGRAM`
 --
--- Creación: 12-04-2014 a las 14:42:09
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKPROGRAM`;
@@ -2505,7 +2597,7 @@ CREATE TABLE IF NOT EXISTS `TASKPROGRAM` (
 --
 -- Estructura de tabla para la tabla `TASKS`
 --
--- Creación: 15-04-2014 a las 19:55:00
+-- Creación: 14-05-2014 a las 19:16:14
 --
 
 DROP TABLE IF EXISTS `TASKS`;
@@ -2553,9 +2645,22 @@ CREATE TABLE IF NOT EXISTS `taskVIEW` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `TEMP`
+--
+-- Creación: 14-05-2014 a las 19:16:13
+--
+
+DROP TABLE IF EXISTS `TEMP`;
+CREATE TABLE IF NOT EXISTS `TEMP` (
+  `IDIMAGE` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `USERS`
 --
--- Creación: 22-04-2014 a las 22:14:12
+-- Creación: 14-05-2014 a las 19:16:13
 --
 
 DROP TABLE IF EXISTS `USERS`;
@@ -2570,13 +2675,7 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   PRIMARY KEY (`IDUSER`),
   UNIQUE KEY `USERNAME` (`USERNAME`),
   UNIQUE KEY `EMAIL` (`EMAIL`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
-
---
--- RELACIONES PARA LA TABLA `USERS`:
---   `IDIMAGE`
---       `IMAGES` -> `IDIMAGE`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=143 ;
 
 --
 -- Disparadores `USERS`
@@ -2585,7 +2684,7 @@ DROP TRIGGER IF EXISTS `demoAccessHouse`;
 DELIMITER //
 CREATE TRIGGER `demoAccessHouse` AFTER INSERT ON `USERS`
  FOR EACH ROW BEGIN
-    INSERT INTO `ACCESSHOUSE`(`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES (NEW.IDUSER ,24 ,1 ,CURRENT_TIMESTAMP);
+    INSERT INTO `ACCESSHOUSE`(`IDUSER`, `IDHOUSE`, `ACCESSNUMBER`, `DATEBEGIN`) VALUES (NEW.IDUSER ,26 ,1 ,CURRENT_TIMESTAMP);
   END
 //
 DELIMITER ;
@@ -2597,7 +2696,7 @@ DELIMITER ;
 --
 DROP TABLE IF EXISTS `commandVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `commandVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`COMMANDS`.`IDCOMMAND` AS `IDCOMMAND`,`COMMANDS`.`COMMANDNAME` AS `COMMANDNAME`,`COMMAND_PROGRAM`.`POS` AS `POS`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `COMMANDS` on((`USERS`.`IDUSER` = `COMMANDS`.`IDUSER`))) left join `COMMAND_PROGRAM` on((`COMMANDS`.`IDCOMMAND` = `COMMAND_PROGRAM`.`IDCOMMAND`))) left join `PROGRAMACTIONS` on((`COMMAND_PROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`COMMANDS`.`COMMANDNAME`,`COMMAND_PROGRAM`.`POS`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 -- --------------------------------------------------------
 
@@ -2606,7 +2705,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `countHitsVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `countHitsVIEW` AS select `USERS`.`USERNAME` AS `USERNAME`,`FUNCTIONS`.`FUNCTION` AS `FUNCTION`,count(0) AS `TOTAL`,sum(if((`HISTORYACCESS`.`ERROR` = 0),1,0)) AS `SUCCESS`,sum(if((`HISTORYACCESS`.`ERROR` <> 0),1,0)) AS `ERROR`,sum(if((`HISTORYACCESS`.`ERROR` = 2),1,0)) AS `PASSWORD`,sum(if((`HISTORYACCESS`.`ERROR` = 4),1,0)) AS `INTEGRITY` from (((`HISTORYACCESS` left join `USERS` on((`USERS`.`IDUSER` = `HISTORYACCESS`.`IDUSER`))) left join `FUNCTIONS` on((`HISTORYACCESS`.`FUNCT` = `FUNCTIONS`.`FUNCT`))) join `ERRORS` on((`ERRORS`.`ERRORCODE` = `HISTORYACCESS`.`ERROR`))) group by `USERS`.`USERNAME`,`FUNCTIONS`.`FUNCTION` order by count(0) desc;
 
 -- --------------------------------------------------------
 
@@ -2615,7 +2714,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `deviceVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deviceVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`DEVICENAME` AS `DEVICENAME`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`DEVICES`.`SERIAL` AS `SERIAL`,`DEVICES`.`ENGLISH` AS `ENGLISH`,`DEVICES`.`SPANISH` AS `SPANISH`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME` from ((((`DEVICES` join `USERS` on((`DEVICES`.`IDUSER` = `USERS`.`IDUSER`))) left join `SERVICES` on((`DEVICES`.`IDDEVICE` = `SERVICES`.`IDDEVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`IDUSER`,`DEVICES`.`IDDEVICE`;
 
 -- --------------------------------------------------------
 
@@ -2624,7 +2723,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `eventProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `eventProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`PROGRAMNAME` AS `PROGRAMNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `HOUSES`.`HOUSENAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -2633,7 +2732,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `houseRoomServiceActionVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `houseRoomServiceActionVIEW` AS select `HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((`HOUSES` join `ROOMS` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) order by `HOUSES`.`IDHOUSE`,`ROOMS`.`IDROOM`,`SERVICES`.`IDSERVICE`,`ACTIONS`.`IDACTION`;
 
 -- --------------------------------------------------------
 
@@ -2642,7 +2741,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `loginVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `loginVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`USERS`.`PASSWORD` AS `PASSWORD`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`IMAGES`.`URL` AS `URL`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`ROOMS`.`TYPE` AS `ROOMTYPE`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`SERVICES`.`TYPE` AS `TYPE`,`SERVICES`.`STATUS` AS `STATUS`,`SERVICES`.`SERVICEINTERFACE` AS `SERVICEINTERFACE`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`ACTIONS`.`FCODE` AS `FCODE`,`ACCESSHOUSE`.`ACCESSNUMBER` AS `ACCESSNUMBER`,`PERMISSIONS`.`PERMISSIONNUMBER` AS `PERMISSIONNUMBER`,`DEVICES`.`IDDEVICE` AS `IDDEVICE`,`DEVICES`.`IPADDRESS` AS `IPADDRESS`,`HOUSES`.`CITY` AS `CITY`,`HOUSES`.`COUNTRY` AS `COUNTRY` from ((((((((`USERS` left join `ACCESSHOUSE` on((`USERS`.`IDUSER` = `ACCESSHOUSE`.`IDUSER`))) left join `HOUSES` on((`ACCESSHOUSE`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) left join `IMAGES` on((`HOUSES`.`IDIMAGE` = `IMAGES`.`IDIMAGE`))) left join `ROOMS` on((`ACCESSHOUSE`.`IDHOUSE` = `ROOMS`.`IDHOUSE`))) left join `SERVICES` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) left join `DEVICES` on((`SERVICES`.`IDDEVICE` = `DEVICES`.`IDDEVICE`))) left join `ACTIONS` on((`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`))) left join `PERMISSIONS` on(((`PERMISSIONS`.`IDUSER` = `USERS`.`IDUSER`) and (`PERMISSIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`)))) where 1 order by `USERS`.`USERNAME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME` desc;
 
 -- --------------------------------------------------------
 
@@ -2651,7 +2750,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `scheduleVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `scheduleVIEW` AS select `TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`IDACTION` AS `IDACTION`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME` from (`ACTIONS` join ((((`PROGRAMACTIONS` left join (`TASKPROGRAM` join `TASKS`) on(((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`) and (`TASKPROGRAM`.`IDTASK` = `TASKS`.`IDTASK`)))) join `SERVICES`) join `ROOMS` on((`ROOMS`.`IDROOM` = `SERVICES`.`IDROOM`))) join `HOUSES` on((`HOUSES`.`IDHOUSE` = `ROOMS`.`IDHOUSE`)))) where ((`ACTIONS`.`IDACTION` = `PROGRAMACTIONS`.`IDACTION`) and (`SERVICES`.`IDSERVICE` = `ACTIONS`.`IDSERVICE`)) order by `TASKS`.`TASKNAME` desc,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -2660,7 +2759,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `singleProgramVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `singleProgramVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`PROGRAMACTIONS`.`DATA` AS `DATA`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME` from (((((((`USERS` join `PROGRAMACTIONS` on((`USERS`.`IDUSER` = `PROGRAMACTIONS`.`IDUSER`))) left join `TASKPROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `TASKPROGRAM`.`IDPROGRAM`))) left join `COMMAND_PROGRAM` on((`PROGRAMACTIONS`.`IDPROGRAM` = `COMMAND_PROGRAM`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) where (isnull(`TASKPROGRAM`.`IDPROGRAM`) and isnull(`COMMAND_PROGRAM`.`IDPROGRAM`)) order by `USERS`.`USERNAME`,`PROGRAMACTIONS`.`IDPROGRAM`;
 
 -- --------------------------------------------------------
 
@@ -2669,7 +2768,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `taskVIEW`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`alex`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `taskVIEW` AS select `USERS`.`IDUSER` AS `IDUSER`,`USERS`.`USERNAME` AS `USERNAME`,`TASKS`.`IDTASK` AS `IDTASK`,`TASKS`.`TASKNAME` AS `TASKNAME`,`TASKS`.`DESCRIPTION` AS `DESCRIPTION`,`PROGRAMACTIONS`.`STARTTIME` AS `STARTTIME`,`PROGRAMACTIONS`.`IDPROGRAM` AS `IDPROGRAM`,`HOUSES`.`IDHOUSE` AS `IDHOUSE`,`HOUSES`.`HOUSENAME` AS `HOUSENAME`,`ROOMS`.`IDROOM` AS `IDROOM`,`ROOMS`.`ROOMNAME` AS `ROOMNAME`,`SERVICES`.`IDSERVICE` AS `IDSERVICE`,`SERVICES`.`SERVICENAME` AS `SERVICENAME`,`ACTIONS`.`IDACTION` AS `IDACTION`,`ACTIONS`.`ACTIONNAME` AS `ACTIONNAME`,`PROGRAMACTIONS`.`DATA` AS `DATA` from (((((((`USERS` left join `TASKS` on((`USERS`.`IDUSER` = `TASKS`.`IDUSER`))) left join `TASKPROGRAM` on((`TASKS`.`IDTASK` = `TASKPROGRAM`.`IDTASK`))) left join `PROGRAMACTIONS` on((`TASKPROGRAM`.`IDPROGRAM` = `PROGRAMACTIONS`.`IDPROGRAM`))) left join `ACTIONS` on((`PROGRAMACTIONS`.`IDACTION` = `ACTIONS`.`IDACTION`))) left join `SERVICES` on((`ACTIONS`.`IDSERVICE` = `SERVICES`.`IDSERVICE`))) left join `ROOMS` on((`SERVICES`.`IDROOM` = `ROOMS`.`IDROOM`))) left join `HOUSES` on((`ROOMS`.`IDHOUSE` = `HOUSES`.`IDHOUSE`))) order by `USERS`.`USERNAME`,`TASKS`.`TASKNAME`,`PROGRAMACTIONS`.`STARTTIME`,`HOUSES`.`HOUSENAME`,`ROOMS`.`ROOMNAME`,`SERVICES`.`SERVICENAME`,`ACTIONS`.`ACTIONNAME`;
 
 --
 -- Restricciones para tablas volcadas
