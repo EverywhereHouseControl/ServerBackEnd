@@ -1815,6 +1815,156 @@ end;
 end$$
 
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateservicestate`( IN ids INTEGER, IN stat VARCHAR(50))
+    COMMENT 'raspberry pi connect to update the state of the service.'
+begin
+
+	DECLARE num INTEGER DEFAULT 0;
+	DECLARE err INTEGER DEFAULT 0;
+	DECLARE s, st, boton VARCHAR(50);
+
+end_proc:begin
+	IF (ids IS NULL OR stat IS NULL) THEN 
+		SET err = 61;
+		LEAVE end_proc;
+	END IF;
+
+	SELECT COUNT(*), SERVICETYPE INTO num, st
+	FROM SERVICES
+	WHERE `IDSERVICE`= ids;
+			
+	CASE num 
+	WHEN 0 THEN
+		SET err = 64;
+	ELSE
+		CASE
+		WHEN s = 'TV'
+			
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `POWER` = stat;
+			SET boton = `POWER`;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SETUP = stat;
+			SET boton = SETUP;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND MUTE = stat;
+			SET boton = MUTE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `FUNCTION` = stat;
+			SET boton = `FUNCTION`;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ONE = stat;
+			SET boton = ONE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND TWO = stat;
+			SET boton = TWO;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND THREE = stat;
+			SET boton = THREE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FOUR = stat;
+			SET boton = FOUR;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FIVE = stat;
+			SET boton = FIVE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SIX = stat;
+			SET boton = SIX;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND SEVEN = stat;
+			SET boton = SEVEN;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND EIGHT = stat;
+			SET boton = EIGHT;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND NINE = stat;
+			SET boton = NINE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND ZERO = stat;
+			SET boton = ZERO;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FAV = stat;
+			SET boton = FAV;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND UP = stat;
+			SET boton = UP;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND DOWN = stat;
+			SET boton = DOWN;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `LEFT` = stat;
+			SET boton = `LEFT`;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND `RIGHT` = stat;
+			SET boton = `RIGHT`;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND OK = stat;
+			SET boton = OK;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PLAY = stat;
+			SET boton = PLAY;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND PAUSE = stat;
+			SET boton = PAUSE;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND STOP = stat;
+			SET boton = STOP;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FF = stat;
+			SET boton = FF;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND FW = stat;
+			SET boton = FW;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEUP = stat;
+			SET boton = VOLUMEUP;
+			IF num = 0 THEN 
+			SELECT COUNT(*) INTO num FROM IRCODES WHERE TYPE = st AND VOLUMEDOWN = stat;
+			SET boton = VOLUMEDOWN;
+			IF num = 0 THEN 
+			SET boton = stat;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+			END IF;
+		ELSE
+			UPDATE `SERVICES` SET `STATUS`= stat WHERE `IDSERVICE`= ids;
+			SET err = 78;
+		END CASE;
+	END CASE;
+end;
+
+	INSERT INTO HISTORYACCESS
+						(IDHISTORY, IDUSER, IDHOUSE, ERROR, FUNCT, DATESTAMP        )
+				VALUES  (     NULL,    NULL,   NULL,  IF(err = 78, 0, err),  39, CURRENT_TIMESTAMP);
+				
+	SELECT IF(ERRORCODE = 78, 0, ERRORCODE) AS ERROR, ENGLISH, SPANISH
+	FROM ERRORS
+	WHERE ERRORCODE = err;
+end$$
+
 
 
 

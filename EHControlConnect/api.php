@@ -864,39 +864,14 @@ function getweather($city, $country, $language){
 			, $iduser, $error, $funct);
 	*/
 	$language = ($language == null || $language == '')? 'en':$language;
-	exec('./clima '.$city.','.$country.' '. $language,$output);
+	//exec('./clima '.$city.','.$country.' '. $language,$output);
 	
-	/*********************************************/
-	/**UNCOMMENT this for localhost service      */
-	/*********************************************/
-	/*
-	switch ($city){
-		case "madrid":
-			print '{"description": "Sky is Clear", "main": "Clear", 
-					"sunrise": 1398403266, "temp min": 280.93000000000001, 
-					"sunset": 1398452657, "temp max": 283.70999999999998, 
-					"temperature": 282.38999999999999, "humidity": 75, 
-					"speed": 3.0800000000000001}';
-			break;
-			
-		case "colonia":
-			print '{"description": "few clouds", "main": "Clouds",
-					 "sunrise": 1398399353, "temp min": 290.37, 
-					"sunset": 1398451455, "temp max": 294.25999999999999,
-					 "temperature": 292.43000000000001, "humidity": 75,
-					 "speed": 2.0600000000000001}';
-			break;
-			
-		default:
-			print '{"description": "moderate rain", "main": "Rain",
-					 "sunrise": 1398401189, "temp min": 280.93000000000001,
-					 "sunset": 1398453561, "temp max": 282.58999999999997, 
-					"temperature": 281.69, "humidity": 95, 
-					"speed": 4.2599999999999998}';
-			break;
-	}*/
+	$output=query("SELECT Salida FROM CRONACTIONS WHERE `city`='%s'
+                                              AND `country`='%s'
+                                              AND `language`='%s' ", $city, $country, $language);
+        
 	
-	print $output[0];
+	print $output['result'][0]['Salida'];
 }
 
 //--------------------------------------------------------------------------------------
@@ -1863,10 +1838,10 @@ function updateservicestate($idservice, $data){
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	
-	$message = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
+	$sql = query("CALL updateservicestate(%s, '%s')", $idservice, $data);
 	
 	// take de error message
-	$json['error'] =  array_map('utf8_encode', $message['result'][0]);
+	$json['error'] =  array_map('utf8_encode', $sql['result'][0]);
 	
 	print json_encode($json);
 	
@@ -1881,6 +1856,10 @@ function updateservicestate($idservice, $data){
 								FROM loginVIEW 
 								WHERE IDSERVICE='%s' 
 								GROUP BY IDUSER);", $idservice);
+		//SEARCH all loged users
+		$SQLser = query("SELECT SERVICENAME
+							  FROM SERVICES
+							  WHERE IDSERVICE='%s';", $idservice);
 		
 		//send notification foreach mobile with access to the service
 		for ($i = 0 ; $i < count($SQLmobileID['result']); $i++ ){
@@ -1888,7 +1867,37 @@ function updateservicestate($idservice, $data){
 			$regID = $SQLmobileID['result'][$i]['REGID'];
 			
 			//MESSAGE TO THE MOBILE
-			$msg = 'relogin';
+			switch ($SQLser['result'][0]['SERVICENAME']){
+				case 'TV':
+					$msg = 'TV change.';
+					break;
+				case 'LIGHTS':
+					$msg = 'Lights switched.';
+					break;
+				case 'TEMP':
+					$msg = 'Temperature updated.';
+					break;
+				case 'MOTION':
+					$msg = 'Motion detected!';
+					break;
+				case 'BLINDS':
+					$msg = 'Blinds moved.';
+					break;
+				case 'INTERCOM':
+					$msg = 'Intercom: ring! RING!';
+					break;
+				case 'LIGHTSENSOR':
+					$msg = 'Light sensor updated.';
+					break;
+				case 'RAIN':
+					$msg = 'Rain detected.';
+					break;
+				default:
+					$msg = 'relogin';
+			}
+			
+			//concat mobile ID prevent nested notification
+			$msg .= '*'.$regID;
 			
 			//APP ANDROID VERSION
 			$api = 'AIzaSyA6_HOqzLfxsDTRCI9eSHsiCY24ggVmzP0';
