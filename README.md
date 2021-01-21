@@ -1,8 +1,9 @@
 Repository BackEnd from server EHC.
 ===================================
-[<div align="center">
-<img src="http://ehcontrol.net/images/logo.png">
-</div>](http://ehcontrol.net/)
+<div align="center">
+<img src="https://avatars.githubusercontent.com/u/5992872?s=200&v=4">
+</div>
+
 ## Purpose
 
 The purpose is to give online  service monitoring to application domotico EHC. This repository contains all the files needed to replicate the server. This being the most stable version to date.
